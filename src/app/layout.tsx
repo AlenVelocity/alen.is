@@ -18,7 +18,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <html lang="en" className={`${GeistSans.variable}`}>
             <body>
                 <TRPCReactProvider>
-                    <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+                    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
                         <CustomCursor />
                         <div className="flex min-h-[100dvh] flex-col transition-colors duration-200">
                             <AnimatedNavbar />
