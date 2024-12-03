@@ -1,4 +1,5 @@
 import { createCallerFactory, createTRPCRouter, publicProcedure } from '@/server/api/trpc'
+import { pollRouter } from './routers/poll'
 
 /**
  * This is the primary router for your server.
@@ -6,9 +7,7 @@ import { createCallerFactory, createTRPCRouter, publicProcedure } from '@/server
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-    test: publicProcedure.query(() => {
-        return 'Hello, world!'
-    })
+    poll: pollRouter
 })
 
 // export type definition of API

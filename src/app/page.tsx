@@ -7,6 +7,8 @@ import { NameAnimation } from '@/components/NameAnimation'
 import TechStackCard from '@/components/TechStackCard'
 import InterestsCard from '@/components/InterestsCard'
 import { ExperienceTimeline } from '@/components/ExperienceTimeline'
+import { api } from '@/trpc/server'
+import CoolPoll from '@/components/CoolPoll'
 
 const cardVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -36,7 +38,7 @@ const clientData = [
     }
 ] as const
 
-export default function Home() {
+export default async function Home() {
     return (
         <section className="min-h-screen px-6 pb-16 pt-32 md:px-8">
             <div className="mx-auto max-w-7xl">
