@@ -58,16 +58,18 @@ const TechStackCard = () => {
         >
             <h2 className="mb-8 text-2xl font-bold">I mostly work with...</h2>
             <div className="grid grid-cols-3 gap-6 md:grid-cols-4 lg:grid-cols-5">
-                {technologies.slice(0, window.innerWidth < 768 ? 6 : technologies.length).map((tech, index) => (
-                    <motion.div
-                        key={index}
-                        variants={itemVariants}
-                        className="flex flex-col items-center justify-center rounded-xl bg-muted/50 p-5 transition-colors hover:bg-muted md:p-4"
-                    >
-                        <tech.icon className="mb-2 h-8 w-8" />
-                        <span className="text-center text-sm text-muted-foreground">{tech.name}</span>
-                    </motion.div>
-                ))}
+                {technologies
+                    .slice(0, typeof window !== 'undefined' && window.innerWidth < 768 ? 6 : technologies.length)
+                    .map((tech, index) => (
+                        <motion.div
+                            key={index}
+                            variants={itemVariants}
+                            className="flex flex-col items-center justify-center rounded-xl bg-muted/50 p-5 transition-colors hover:bg-muted md:p-4"
+                        >
+                            <tech.icon className="mb-2 h-8 w-8" />
+                            <span className="text-center text-sm text-muted-foreground">{tech.name}</span>
+                        </motion.div>
+                    ))}
             </div>
         </motion.div>
     )
