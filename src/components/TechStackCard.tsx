@@ -17,12 +17,11 @@ const TechStackCard = () => {
         { icon: SiNextdotjs, name: 'Next.js' },
         { icon: FaReact, name: 'React' },
         { icon: SiTailwindcss, name: 'Tailwind' },
-        { icon: FaRust, name: 'Rust' },
-        { icon: FaPython, name: 'Python' },
+        { icon: SiPrisma, name: 'Prisma' },
         { icon: SiTrpc, name: 'Trpc' },
+        { icon: FaRust, name: 'Rust' },
         { icon: SiDocker, name: 'Docker' },
-        { icon: SiAmazonwebservices, name: 'AWS' },
-        { icon: SiPrisma, name: 'Prisma' }
+        { icon: SiAmazonwebservices, name: 'AWS' }
     ]
 
     const containerVariants = {
@@ -59,7 +58,7 @@ const TechStackCard = () => {
         >
             <h2 className="mb-8 text-2xl font-bold">I mostly work with...</h2>
             <div className="grid grid-cols-3 gap-6 md:grid-cols-4 lg:grid-cols-5">
-                {technologies.map((tech, index) => (
+                {technologies.slice(0, window.innerWidth < 768 ? 6 : technologies.length).map((tech, index) => (
                     <motion.div
                         key={index}
                         variants={itemVariants}
