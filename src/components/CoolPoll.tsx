@@ -105,13 +105,13 @@ export default function CoolPoll({ initialData }: CoolPollProps) {
                             className="absolute inset-y-0 left-0 flex w-1/2 cursor-pointer items-center justify-center border-r border-background bg-primary hover:opacity-90"
                             onClick={() => handleVote('positive')}
                         >
-                            <span className="z-10 text-xl font-bold text-primary-foreground">Yes</span>
+                            <span className="z-10 text-xl font-bold text-primary-foreground">Indeed</span>
                         </div>
                         <div
                             className="absolute inset-y-0 right-0 flex w-1/2 cursor-pointer items-center justify-center border-l border-background bg-secondary hover:opacity-90"
                             onClick={() => handleVote('negative')}
                         >
-                            <span className="z-10 text-xl font-bold text-secondary-foreground">No</span>
+                            <span className="z-10 text-xl font-bold text-secondary-foreground">Erm</span>
                         </div>
                     </>
                 ) : (
