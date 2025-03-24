@@ -7,6 +7,7 @@ import "./globals.css"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
+import { Toaster } from "sonner"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -47,39 +48,27 @@ export default function ClientLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <div className="flex min-h-screen flex-col">
-          <header className="sticky top-0 z-50 w-full border-b bg-background">
-            <div className="container flex h-16 items-center justify-between">
-              <div className="mr-4 font-semibold">
-                <Link href="/">Alen.Is</Link>
-              </div>
-              <MainNav />
+    <div className={inter.className}>
+      <div className="flex min-h-screen flex-col">
+        <header className="sticky top-0 z-50 w-full border-b bg-background">
+          <div className="container flex h-16 items-center justify-between">
+            <div className="mr-4 font-semibold">
+              <Link href="/">Alen.Is</Link>
             </div>
-          </header>
-          <main className="flex-1">{children}</main>
-          <footer className="border-t py-6 md:py-0">
-            <div className="container flex flex-col items-center justify-between gap-4 md:h-16 md:flex-row">
-              <p className="text-sm text-muted-foreground">
-                &copy; {new Date().getFullYear()} Alen.Is. All rights reserved.
-              </p>
-              <div className="flex gap-4">
-                <Link href="#" className="text-sm text-muted-foreground hover:underline hover:decoration-green-500">
-                  LinkedIn
-                </Link>
-                <Link href="#" className="text-sm text-muted-foreground hover:underline hover:decoration-green-500">
-                  GitHub
-                </Link>
-                <Link href="#" className="text-sm text-muted-foreground hover:underline hover:decoration-green-500">
-                  Twitter
-                </Link>
-              </div>
-            </div>
-          </footer>
-        </div>
-      </body>
-    </html>
+            <MainNav />
+          </div>
+        </header>
+        <main className="flex-1">{children}</main>
+        <footer className="border-t py-6 md:py-0">
+          <div className="container flex flex-col items-center justify-between gap-4 md:h-16 md:flex-row">
+            <p className="text-sm text-muted-foreground">
+              &copy; {new Date().getFullYear()} Alen.Is. All rights reserved.
+            </p>
+          </div>
+        </footer>
+      </div>
+      <Toaster position="top-right" />
+    </div>
   )
 }
 

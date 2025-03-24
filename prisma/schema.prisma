@@ -1,0 +1,17 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model BinaryPoll {
+  id        String   @id
+  name      String   @unique
+  positive  Int      @default(0)
+  negative  Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+}

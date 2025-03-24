@@ -1,5 +1,6 @@
 import type React from "react"
 import ClientLayout from "./ClientLayout"
+import { TRPCReactProvider } from '@/trpc/react'
 
 export const metadata = {
   title: "Portfolio",
@@ -12,9 +13,15 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  return <ClientLayout>{children}</ClientLayout>
+  return (
+    <html lang="en">
+      <body>
+        <TRPCReactProvider>
+          <ClientLayout>{children}</ClientLayout>
+        </TRPCReactProvider>
+      </body>
+    </html>
+  )
 }
-
-
 
 import './globals.css'

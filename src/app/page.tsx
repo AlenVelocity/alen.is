@@ -1,5 +1,9 @@
 import { LinkButton } from "@/components/ui/link-button"
 import { PageTransition } from "@/components/ui/page-transition"
+import { Link } from "lucide-react"
+import { Suspense } from "react"
+import { DiscordCopy } from "@/components/ui/discord-copy"
+import { Toaster } from "@/components/ui/sonner"
 
 export default function Home() {
   return (
@@ -11,46 +15,46 @@ export default function Home() {
               <h1 className="text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:text-6xl lg:leading-[1.1]">
                 Hi, I'm Alen
               </h1>
-              <h2 className="text-xl text-muted-foreground md:text-2xl">Full Stack Developer</h2>
+              <h2 className="text-xl text-muted-foreground md:text-2xl">
+                Software Engineer
+              </h2>
               <p className="max-w-[700px] text-lg text-muted-foreground">
-                I build accessible, responsive, and performant web applications with modern technologies, specializing in AI, LLMs, and cloud infrastructure.
+                I build <LinkButton href="/cool" className="text-lg">cool</LinkButton> stuff.
               </p>
               <div className="flex gap-4">
-                <LinkButton href="/experience">View Experience</LinkButton>
-                <LinkButton href="/projects">View Projects</LinkButton>
+
+                <LinkButton href="mailto:alenyohannan71@gmail.com">Email</LinkButton>
+                <LinkButton href="https://www.linkedin.com/in/alen-%F0%9F%8E%B6-yohannan-6794a81ba/" target="_blank">LinkedIn</LinkButton>
+                <LinkButton href="https://github.com/AlenVelocity" target="_blank">GitHub</LinkButton>
               </div>
             </div>
           </div>
         </section>
 
         <hr className="my-8 border-muted" />
-
         <section className="space-y-6">
           <h2 className="text-2xl font-bold tracking-tight">About Me</h2>
           <p className="text-muted-foreground">
-            I'm a passionate developer with over 5 years of experience building web applications and AI solutions. I specialize in React, Next.js, Node.js, and AI technologies, with a focus on creating clean, accessible, and performant user interfaces.
+            I mostly work on web applications, AI related projects, and cloud infrastructure. 
+            I would say I'm proficient in TS (both server and client w/ NextJS and Vue), Rust, anyhing LLMs and Transformers related, AWS and GCP.
+            I'm currently working as an Engineer at <LinkButton href="https://frappe.io" target="_blank" className="text-base">Frappe</LinkButton>s, in the <LinkButton href="https://frappe.cloud" target="_blank" className="text-base">Frappe Cloud</LinkButton> team.
           </p>
           <p className="text-muted-foreground">
-            Currently working as an Engineer at Frappe, leading AWS Bare Metal Migration and providing L2 Support for Frappe Cloud. Previously worked on AI platforms at xAGI and Plazza, where I built dynamic AI Agent Platforms and Quick Commerce systems.
+            As for my personal life, I'm a huge fan of video games. If I'm not working, I'd be playing some <LinkButton href="https://en.wikipedia.org/wiki/Role-playing_video_game#Japanese_role-playing_games" target="_blank" className="text-base">JRPG</LinkButton>, <LinkButton href="https://overwatch.blizzard.com" target="_blank" className="text-base">Overwatch</LinkButton> or listening to <LinkButton href="https://en.wikipedia.org/wiki/Sumika_(band)" target="_blank" className="text-base">sumika</LinkButton>, or all of them at the same time (don't ask me how or why).
+            I'm currently playing <LinkButton href="https://www.atlus.com/smt5v/" target="_blank" className="text-base">SMTV:V</LinkButton> if you're interested.
           </p>
-        </section>
+          </section>
 
         <hr className="my-8 border-muted" />
 
         <section className="space-y-6">
           <h2 className="text-2xl font-bold tracking-tight">Contact</h2>
           <div className="space-y-2 text-muted-foreground">
-            <p>📍 Kochi, Kerala, India</p>
-            <p>📱 +91 90741-61917</p>
-            <div className="flex gap-4">
-              <LinkButton href="mailto:alenyohannan71@gmail.com">Email</LinkButton>
-              <LinkButton href="https://www.linkedin.com/in/alen-%F0%9F%8E%B6-yohannan-6794a81ba/" target="_blank">LinkedIn</LinkButton>
-              <LinkButton href="https://github.com/AlenVelocity" target="_blank">GitHub</LinkButton>
-            </div>
+            The easiest way to reach me is via <LinkButton href="https://wa.me/919744375687" target="_blank" className="text-base">Whatsapp</LinkButton> or <DiscordCopy username="notalen" className="text-base">Discord</DiscordCopy>.
+            Otherwise, you can reach me via <LinkButton href="mailto:alenyohannan71@gmail.com" className="text-base">email</LinkButton>.
           </div>
         </section>
       </div>
     </PageTransition>
   )
 }
-
