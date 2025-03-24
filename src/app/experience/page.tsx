@@ -78,7 +78,7 @@ export default function Experience() {
 
   return (
     <PageTransition>
-      <div className="container py-12">
+      <div className="container py-12 max-w-4xl">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold tracking-tight">Experience</h1>
           <LinkButton href="/Alen-Resume.pdf" target="_blank">View Resume</LinkButton>

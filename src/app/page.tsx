@@ -1,23 +1,18 @@
 import { LinkButton } from "@/components/ui/link-button"
 import { PageTransition } from "@/components/ui/page-transition"
-import { Link } from "lucide-react"
-import { Suspense } from "react"
 import { DiscordCopy } from "@/components/ui/discord-copy"
 import { Signature } from "@/components/ui/signature"
 
 export default function Home() {
   return (
     <PageTransition>
-      <div className="container py-12">
-        <section className="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-16">
+      <div className="container py-12 max-w-4xl">
+        <section className="space-y-6 pb-4 pt-6 md:pb-12 md:pt-10 lg:py-16">
           <div className="flex flex-col items-start gap-4 md:flex-row md:justify-between">
             <div className="flex-1 space-y-4">
               <h1 className="text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:text-6xl lg:leading-[1.1]">
                 Hi, I'm Alen
               </h1>
-              <h2 className="text-xl text-muted-foreground md:text-2xl">
-                Software Engineer
-              </h2>
               <p className="max-w-[700px] text-lg text-muted-foreground">
                 I build <LinkButton href="/cool" className="text-lg">cool</LinkButton> stuff.
               </p>
@@ -37,7 +32,7 @@ export default function Home() {
           <p className="text-muted-foreground">
             I mostly work on web applications, AI related projects, and cloud infrastructure. 
             I would say I'm proficient in TS (both server and client w/ NextJS and Vue), Rust, anyhing LLMs and Transformers related, AWS and GCP.
-            I'm currently working as an Engineer at <LinkButton href="https://frappe.io" target="_blank" className="text-base">Frappe</LinkButton>s, in the <LinkButton href="https://frappe.cloud" target="_blank" className="text-base">Frappe Cloud</LinkButton> team.
+            I'm currently working as an Engineer at <LinkButton href="https://frappe.io" target="_blank" className="text-base">Frappe</LinkButton>, in the <LinkButton href="https://frappe.cloud" target="_blank" className="text-base">Frappe Cloud</LinkButton> team.
           </p>
           <p className="text-muted-foreground">
             As for my personal life, I'm a huge fan of video games. If I'm not working, I'd be playing some <LinkButton href="https://en.wikipedia.org/wiki/Role-playing_video_game#Japanese_role-playing_games" target="_blank" className="text-base">JRPG</LinkButton>, <LinkButton href="https://overwatch.blizzard.com" target="_blank" className="text-base">Overwatch</LinkButton> or listening to <LinkButton href="https://en.wikipedia.org/wiki/Sumika_(band)" target="_blank" className="text-base">sumika</LinkButton>, or all of them at the same time (don't ask me how or why).

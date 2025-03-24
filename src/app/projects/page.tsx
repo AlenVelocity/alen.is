@@ -88,7 +88,7 @@ export default function Projects() {
 
   return (
     <PageTransition>
-      <div className="container py-12">
+      <div className="container py-12 max-w-4xl">
         <h1 className="text-3xl font-bold tracking-tight mb-8">Projects</h1>
         <div className="grid gap-6 md:grid-cols-2">
           {projects.map((project, index) => (

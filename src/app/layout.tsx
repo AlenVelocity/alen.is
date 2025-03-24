@@ -3,8 +3,15 @@ import ClientLayout from "./ClientLayout"
 import { TRPCReactProvider } from '@/trpc/react'
 
 export const metadata = {
-  title: "Alen.is",
-  description: "",
+  title: "Alen.is a developer",
+  description: "My Personal Website",
+  openGraph: {
+    title: "Alen.is a developer",
+    description: "My Personal Website",
+    images: [
+      { url: "/og.jpg" },
+    ],
+  },
 }
 
 export default function RootLayout({
