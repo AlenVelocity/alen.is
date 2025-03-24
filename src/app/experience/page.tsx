@@ -7,7 +7,7 @@ export default function Experience() {
     {
       company: "Frappe",
       position: "Software Engineer",
-      period: "June 2022 - Present",
+      period: "November 2024 - Present",
       location: "Remote, Mumbai, India",
       description: [
         "Worked on Frappe Cloud, primarily on the infrastructure automation and managing AWS infrastructure.",
