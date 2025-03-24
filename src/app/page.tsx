@@ -3,7 +3,7 @@ import { PageTransition } from "@/components/ui/page-transition"
 import { Link } from "lucide-react"
 import { Suspense } from "react"
 import { DiscordCopy } from "@/components/ui/discord-copy"
-import { Toaster } from "@/components/ui/sonner"
+import { Signature } from "@/components/ui/signature"
 
 export default function Home() {
   return (
@@ -43,7 +43,10 @@ export default function Home() {
             As for my personal life, I'm a huge fan of video games. If I'm not working, I'd be playing some <LinkButton href="https://en.wikipedia.org/wiki/Role-playing_video_game#Japanese_role-playing_games" target="_blank" className="text-base">JRPG</LinkButton>, <LinkButton href="https://overwatch.blizzard.com" target="_blank" className="text-base">Overwatch</LinkButton> or listening to <LinkButton href="https://en.wikipedia.org/wiki/Sumika_(band)" target="_blank" className="text-base">sumika</LinkButton>, or all of them at the same time (don't ask me how or why).
             I'm currently playing <LinkButton href="https://www.atlus.com/smt5v/" target="_blank" className="text-base">SMTV:V</LinkButton> if you're interested.
           </p>
-          </section>
+          <div className="flex justify-start mt-6 mb-2 pr-4">
+            <Signature name="Alen" />
+          </div>
+        </section>
 
         <hr className="my-8 border-muted" />
 

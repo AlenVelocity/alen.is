@@ -1,20 +1,23 @@
+import { LinkButton } from "@/components/ui/link-button"
 import { PageTransition } from "@/components/ui/page-transition"
+import { FaBriefcase, FaCalendarAlt, FaMapMarkerAlt, FaBuilding } from "react-icons/fa"
 
 export default function Experience() {
   const experiences = [
     {
-      title: "Engineer",
       company: "Frappe",
+      position: "Software Engineer",
+      period: "June 2022 - Present",
       location: "Remote, Mumbai, India",
-      period: "November 2024 - Present",
       description: [
-        "Leading the AWS - Bare Metal Migration for Frappe Cloud",
-        "L2 Support for Frappe Cloud"
+        "Worked on Frappe Cloud, primarily on the infrastructure automation and managing AWS infrastructure.",
+        "Added support for provisioning custom Domains, email, and DNS configurations.",
+        "User experience improvements for developers using Frappe Cloud and Frappe Framework."
       ]
     },
     {
-      title: "Software Development Engineer",
       company: "xAGI",
+      position: "Software Development Engineer",
       location: "Remote, Bangalore, India",
       period: "April 2024 - Nov 2024",
       description: [
@@ -25,8 +28,8 @@ export default function Experience() {
       ]
     },
     {
-      title: "Software Engineer",
       company: "Plazza",
+      position: "Software Engineer",
       location: "Remote, Bangalore, India",
       period: "May 2024 - Nov 2024",
       description: [
@@ -38,8 +41,8 @@ export default function Experience() {
       ]
     },
     {
-      title: "Founding Software Engineer - AI",
       company: "EquivoxAI",
+      position: "Founding Software Engineer - AI",
       location: "Remote, Melbourne, Australia",
       period: "May 2023 - Jan 2024",
       description: [
@@ -49,8 +52,8 @@ export default function Experience() {
       ]
     },
     {
-      title: "Software Development Engineer",
       company: "DataEquinox",
+      position: "Software Development Engineer",
       location: "Remote, Kochi, India",
       period: "Dec 2021 - Sep 2022",
       description: [
@@ -60,8 +63,8 @@ export default function Experience() {
       ]
     },
     {
-      title: "Founder",
       company: "Synthesized Infinity",
+      position: "Founder",
       location: "Remote",
       period: "July 2020 - Present",
       description: [
@@ -76,25 +79,35 @@ export default function Experience() {
   return (
     <PageTransition>
       <div className="container py-12">
-        <h1 className="text-3xl font-bold tracking-tight mb-8">Professional Experience</h1>
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl font-bold tracking-tight">Experience</h1>
+          <LinkButton href="/Alen-Resume.pdf" target="_blank">View Resume</LinkButton>
+        </div>
         <div className="space-y-8">
-          {experiences.map((exp, index) => (
-            <div key={index} className="space-y-2">
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-                <div>
-                  <h2 className="text-xl font-semibold">{exp.title}</h2>
-                  <p className="text-muted-foreground">{exp.company}</p>
+          {experiences.map((experience, index) => (
+            <div key={index} className="pb-6">
+              <div className="space-y-2">
+                <h2 className="text-xl font-semibold flex items-center gap-2">
+                  {experience.company}
+                </h2>
+                <div className="flex items-center text-lg font-medium">
+                  {experience.position}
                 </div>
-                <div className="text-sm text-muted-foreground">
-                  <p>{exp.location}</p>
-                  <p>{exp.period}</p>
+                <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                  <span className="flex items-center gap-1">
+                    {experience.period}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <FaMapMarkerAlt className="text-muted-foreground" />
+                    {experience.location}
+                  </span>
                 </div>
+                <ul className="list-disc pl-5 text-muted-foreground space-y-1 pt-2">
+                  {experience.description.map((item, i) => (
+                    <li key={i}>{item}</li>
+                  ))}
+                </ul>
               </div>
-              <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-                {exp.description.map((item, i) => (
-                  <li key={i}>{item}</li>
-                ))}
-              </ul>
             </div>
           ))}
         </div>

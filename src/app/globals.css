@@ -2,6 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Better Signature';
+  src: url('/Better Signature Font.otf') format('opentype'),
+       url('/Better Signature Font.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+.signature-text {
+  font-family: 'Better Signature', cursive;
+  font-weight: normal;
+  font-style: normal;
+}
+
+@keyframes signatureCursorMove {
+  0% { right: 100%; }
+  100% { right: -5%; opacity: 0; }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -23,7 +43,7 @@
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
     --ring: 142.1 76.2% 36.3%;
-    --radius: 0.5rem;
+    --radius: 0.75rem;
   }
 
   .dark {
