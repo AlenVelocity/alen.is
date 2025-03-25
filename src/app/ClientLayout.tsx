@@ -89,10 +89,15 @@ export default function ClientLayout({
   const pathname = usePathname()
   const [isMobile, setIsMobile] = useState(false)
   
-  // Get current page name for mobile view
+  // Get current page name with proper formatting
   const getPageName = () => {
     if (pathname === "/") return ""
-    return pathname.slice(1).charAt(0).toUpperCase() + pathname.slice(2)
+    
+    // Remove trailing slash if present and get the part after the first slash
+    let pagePath = pathname.endsWith("/") ? pathname.slice(1, -1) : pathname.slice(1)
+    
+    // Capitalize first letter
+    return pagePath.charAt(0).toUpperCase() + pagePath.slice(1)
   }
 
   // Check if current path is experience or projects
@@ -133,7 +138,7 @@ export default function ClientLayout({
                   >
                     <span className="ml-1">/</span>
                     <motion.span 
-                      className="ml-1"
+                      className="ml-1 text-green-500"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ duration: 0.5, delay: 0.4 }}
