@@ -34,13 +34,7 @@ function MainNav() {
     }
   }, [])
 
-  // For mobile: if not on main paths, hide nav completely
-  if (isMobile && !isMainPath) {
-    return null
-  }
-  
-  // For desktop: always show links
-  // For mobile: only show links on main paths
+  // For mobile, always show nav
   return (
     <nav className="flex gap-6">
       <motion.div
@@ -100,8 +94,8 @@ export default function ClientLayout({
     return pagePath.charAt(0).toUpperCase() + pagePath.slice(1)
   }
 
-  // Check if current path is experience or projects
-  const isMainNavPath = pathname === "/experience" || pathname === "/projects"
+  // Check if current path is main nav path (home, experience or projects)
+  const isMainPath = pathname === "/" || pathname === "/experience" || pathname === "/projects"
   
   // Handle responsive detection
   useEffect(() => {
@@ -130,7 +124,7 @@ export default function ClientLayout({
             >
               <Link href="/">
                 <span className="transition-all duration-300 hover:text-green-500">Alen.Is</span>
-                {pathname !== "/" && !isMainNavPath && (
+                {pathname !== "/" && !isMainPath && (
                   <motion.span
                     initial={{ opacity: 0, x: -5 }}
                     animate={{ opacity: 1, x: 0 }}
