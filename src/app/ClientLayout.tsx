@@ -34,7 +34,11 @@ function MainNav() {
     }
   }, [])
 
-  // For mobile, always show nav
+  // Hide nav on mobile for non-main pages
+  if (isMobile && !isMainPath) {
+    return null
+  }
+
   return (
     <nav className="flex gap-6">
       <motion.div
