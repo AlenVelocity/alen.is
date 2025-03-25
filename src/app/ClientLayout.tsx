@@ -128,7 +128,7 @@ export default function ClientLayout({
             >
               <Link href="/">
                 <span className="transition-all duration-300 hover:text-green-500">Alen.Is</span>
-                {pathname !== "/" && !isMainPath && (
+                {!isMainPath && (
                   <motion.span
                     initial={{ opacity: 0, x: -5 }}
                     animate={{ opacity: 1, x: 0 }}
