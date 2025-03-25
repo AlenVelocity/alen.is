@@ -1,6 +1,21 @@
 import { LinkButton } from "@/components/ui/link-button"
 import { PageTransition } from "@/components/ui/page-transition"
 import { FaBriefcase, FaCalendarAlt, FaMapMarkerAlt, FaBuilding } from "react-icons/fa"
+import { Metadata } from "next"
+import JsonLd from "@/components/JsonLd"
+
+export const metadata: Metadata = {
+  title: "Professional Experience | Alen.is",
+  description: "My professional experience so far",
+  openGraph: {
+    title: "Professional Experience | Alen.is",
+    description: "My professional experience so far",
+    url: 'https://alen.is/experience',
+  },
+  alternates: {
+    canonical: '/experience',
+  },
+}
 
 export default function Experience() {
   const experiences = [
@@ -76,8 +91,30 @@ export default function Experience() {
     }
   ]
 
+  const experienceSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "itemListElement": experiences.map((experience, index) => ({
+      "@type": "WorkExperience",
+      "position": index + 1,
+      "name": experience.position,
+      "description": experience.description.join(". "),
+      "worksFor": {
+        "@type": "Organization",
+        "name": experience.company
+      },
+      "startDate": experience.period.split(' - ')[0],
+      "endDate": experience.period.split(' - ')[1] || "Present",
+      "jobLocation": {
+        "@type": "Place",
+        "address": experience.location
+      }
+    }))
+  }
+
   return (
     <PageTransition>
+      <JsonLd data={experienceSchema} />
       <div className="container py-12 max-w-4xl">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold tracking-tight">Experience</h1>

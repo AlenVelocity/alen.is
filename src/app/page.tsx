@@ -2,10 +2,44 @@ import { LinkButton } from "@/components/ui/link-button"
 import { PageTransition } from "@/components/ui/page-transition"
 import { DiscordCopy } from "@/components/ui/discord-copy"
 import { Signature } from "@/components/ui/signature"
+import { Metadata } from "next"
+import JsonLd from "@/components/JsonLd"
+
+export const metadata: Metadata = {
+  title: "Alen.is",
+  description: "Engineer, developer and creator of cool stuff",
+  openGraph: {
+    title: "Alen.is",
+    description: "Engineer, developer and creator of cool stuff",
+    url: 'https://alen.is',
+  },
+  alternates: {
+    canonical: '/',
+  },
+}
 
 export default function Home() {
+  const personSchema = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Alen.is",
+    "url": "https://alen.is",
+    "image": "https://alen.is/og.jpg",
+    "jobTitle": "Software Engineer",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Frappe"
+    },
+    "sameAs": [
+      "https://github.com/AlenVelocity",
+      "https://www.linkedin.com/in/alen-%F0%9F%8E%B6-yohannan-6794a81ba/"
+    ],
+    "knowsAbout": ["Web Development", "TypeScript", "Rust", "AI", "LLM", "NextJS", "Vue"]
+  }
+
   return (
     <PageTransition>
+      <JsonLd data={personSchema} />
       <div className="container py-12 max-w-4xl">
         <section className="space-y-6 pb-4 pt-6 md:pb-12 md:pt-10 lg:py-16">
           <div className="flex flex-col items-start gap-4 md:flex-row md:justify-between">

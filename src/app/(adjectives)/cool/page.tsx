@@ -1,10 +1,27 @@
 import Image from 'next/image'
 import CoolPoll from '@/components/CoolPoll'
 import { api } from '@/trpc/server'
+import { Metadata } from 'next'
 
-export const metadata = {
-    title: 'Cool',
-    description: 'Am I?'
+export const metadata: Metadata = {
+    title: 'Alen is Cool',
+    description: 'Am I cool?',
+    openGraph: {
+        title: 'Alen is Cool',
+        description: 'Am I cool?',
+        url: 'https://alen.is/cool',
+        images: [
+            {
+                url: '/rinu-cool.webp',
+                width: 250,
+                height: 250,
+                alt: 'Rinu Cool'
+            }
+        ]
+    },
+    alternates: {
+        canonical: '/cool',
+    }
 }
 
 export default async function Cool() {

@@ -1,5 +1,20 @@
 import { PageTransition } from "@/components/ui/page-transition"
 import { TechBadge, TechType } from "@/components/ui/tech-badge"
+import { Metadata } from "next"
+import JsonLd from "@/components/JsonLd"
+
+export const metadata: Metadata = {
+  title: "Projects | Alen.is",
+  description: "A list of projects I've worked on",
+  openGraph: {
+    title: "Projects | Alen.is",
+    description: "A list of projects I've worked on",
+    url: 'https://alen.is/projects',
+  },
+  alternates: {
+    canonical: '/projects',
+  },
+}
 
 interface Project {
   title: string
@@ -86,8 +101,23 @@ export default function Projects() {
     },
   ]
 
+  const projectsSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "itemListElement": projects.map((project, index) => ({
+      "@type": "SoftwareSourceCode",
+      "position": index + 1,
+      "name": project.title,
+      "description": project.description,
+      "codeRepository": project.link,
+      "programmingLanguage": project.technologies.join(", "),
+      "dateCreated": project.period
+    }))
+  }
+
   return (
     <PageTransition>
+      <JsonLd data={projectsSchema} />
       <div className="container py-12 max-w-4xl">
         <h1 className="text-3xl font-bold tracking-tight mb-8">Projects</h1>
         <div className="grid gap-6 md:grid-cols-2">

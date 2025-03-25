@@ -6,17 +6,58 @@ import Image from "next/image"
 import { MusicVisualizer } from "./music-visualizer"
 import { LinkButton } from "@/components/ui/link-button"
 import { SumikaDialog } from "./sumika-dialog"
+import JsonLd from "@/components/JsonLd"
 
 export const metadata: Metadata = {
   title: "Alen is Listening",
-  description: "My recent listening history"
+  description: "My music listening history",
+  openGraph: {
+    title: "Alen is Listening",
+    description: "My music listening history",
+    url: 'https://alen.is/listening',
+    images: [
+      "/og.jpg",
+      {
+        url: "/sumika-wrapped.png",
+        width: 250,
+        height: 250,
+        alt: "Alen's Year of Sumika Listening Statistics"
+      }
+    ],
+  },
+  alternates: {
+    canonical: '/listening',
+  },
 }
 
 export default async function Listening() {
   const lastFmData = await api.lastfm.getRecentTracks();
   
+  const musicProfileSchema = {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "mainEntity": {
+      "@type": "Person",
+      "name": "Alen.is",
+      "description": "Music listening profile featuring video game OSTs and Japanese rock",
+      "knowsAbout": ["Video Game OSTs", "Japanese Rock", "Persona Series", "sumika"],
+      "subjectOf": {
+        "@type": "MusicPlaylist",
+        "name": "Current Playlist",
+        "numTracks": lastFmData.recentlyPlayed.length,
+        "track": lastFmData.recentlyPlayed.map(track => ({
+          "@type": "MusicRecording",
+          "name": track.name,
+          "byArtist": track.artist,
+          "inAlbum": track.album
+        }))
+      }
+    }
+  }
+  
   return (
     <PageTransition>
+      <JsonLd data={musicProfileSchema} />
       <div className="container py-12">
         <div className="flex flex-col items-center justify-center min-h-[70vh]">
           <div className="w-full max-w-3xl">
