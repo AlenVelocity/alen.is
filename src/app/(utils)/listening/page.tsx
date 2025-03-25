@@ -1,9 +1,11 @@
 import { Metadata } from "next"
 import { PageTransition } from "@/components/ui/page-transition"
 import { api } from "@/trpc/server"
-import { FaHeadphones, FaHistory, FaUserAlt } from "react-icons/fa"
+import { FaHeadphones } from "react-icons/fa"
 import Image from "next/image"
 import { MusicVisualizer } from "./music-visualizer"
+import { LinkButton } from "@/components/ui/link-button"
+import { SumikaDialog } from "./sumika-dialog"
 
 export const metadata: Metadata = {
   title: "Alen is Listening",
@@ -17,14 +19,39 @@ export default async function Listening() {
     <PageTransition>
       <div className="container py-12">
         <div className="flex flex-col items-center justify-center min-h-[70vh]">
-          <div className="w-full max-w-3xl"> 
+          <div className="w-full max-w-3xl">
+            <h1 className="text-2xl font-semibold mb-4">Listening</h1>
+            <p className="text-muted-foreground mb-3 text-base">
+              I usually only listen to Video Game OSTs (especially from the Persona series) and Japanese Rock. I&apos;m open to suggestions. 
+            </p>
+            <p className="text-muted-foreground mb-3 text-base">
+              There was a time where I went through <SumikaDialog />.
+            </p>
+            <p className="text-muted-foreground mb-8 text-base">
+              Then <LinkButton href="https://open.spotify.com/track/29OHAngqPMvOrDPfl3s9x7?si=ae88719df17c4c95" target="_blank" className="text-base">I faced out, I held out, I reached out to the truth of my life, seeking to seize the whole moment to break away.</LinkButton>
+            </p>
+
+            <div className="mb-8">
+              <h2 className="text-xl font-semibold mb-4">My recommendations</h2>
+              <iframe 
+                style={{borderRadius: "12px"}} 
+                src="https://open.spotify.com/embed/playlist/7qX8YIOXFWCX4mXgryZrDa?utm_source=generator&theme=0" 
+                width="100%" 
+                height="152" 
+                frameBorder="0" 
+                allowFullScreen 
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                loading="lazy"
+              />
+            </div>
+
             {lastFmData.nowPlaying && (
-              <div className="p-6 rounded-lg mb-8 border border-green-500/20">
+              <>
                 <h2 className="flex items-center text-xl font-semibold mb-4 space-x-2">
-                    <MusicVisualizer />
-                    <span>Now Playing</span>
+                    <span>I&apos;m currently listening to</span>
+                    <FaHeadphones className="text-muted-foreground" />
                 </h2>
-                <div className="flex items-center">
+                <div className="flex items-center mb-8">
                   {lastFmData.nowPlaying.image ? (
                     <div className="relative w-24 h-24 mr-4 rounded overflow-hidden shadow-md group">
                       <Image 
@@ -38,7 +65,7 @@ export default async function Listening() {
                           href={lastFmData.nowPlaying.url} 
                           target="_blank" 
                           rel="noopener noreferrer" 
-                          className="text-white hover:text-green-400 transition-colors"
+                          className="text-center text-white hover:text-green-400 transition-colors"
                         >
                           View on Last.fm
                         </a>
@@ -46,24 +73,22 @@ export default async function Listening() {
                     </div>
                   ) : (
                     <div className="w-24 h-24 mr-4 rounded bg-neutral-800 flex items-center justify-center">
-                      <FaHeadphones className="text-3xl text-neutral-500" />
                     </div>
                   )}
                   <div>
                     <h3 className="font-medium">{lastFmData.nowPlaying.name}</h3>
                     <p className="text-muted-foreground">{lastFmData.nowPlaying.artist}</p>
                     {lastFmData.nowPlaying.album && (
-                      <p className="text-sm text-muted-foreground mt-1">Album: {lastFmData.nowPlaying.album}</p>
+                      <p className="text-sm text-muted-foreground mt-1">{lastFmData.nowPlaying.album}</p>
                     )}
                   </div>
                 </div>
-              </div>
+              </>
             )}
             
             {lastFmData.recentlyPlayed.length > 0 && (
               <div>
                 <h2 className="flex items-center text-xl font-semibold mb-4">
-                  <FaHistory className="mr-2 text-muted-foreground" />
                   Recently Played
                 </h2>
                 <div className="space-y-4">
@@ -114,4 +139,4 @@ export default async function Listening() {
       </div>
     </PageTransition>
   )
-} 
+}

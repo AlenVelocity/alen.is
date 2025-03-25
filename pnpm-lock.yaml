@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@calcom/embed-react': ^1.5.2
   '@hookform/resolvers': ^3.9.1
   '@prisma/client': 6.5.0
   '@radix-ui/react-accordion': ^1.2.2
@@ -68,6 +69,7 @@ specifiers:
   zod: ^3.24.2
 
 dependencies:
+  '@calcom/embed-react': 1.5.2_upmzqgzhjrquwzo2dphtigtdgi
   '@hookform/resolvers': 3.10.0_react-hook-form@7.54.2
   '@prisma/client': 6.5.0_6mbtgtueiiim63j5jl4m6aefya
   '@radix-ui/react-accordion': 1.2.3_xbentco4yhcq7bx74fuavtyp7y
@@ -147,6 +149,28 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       regenerator-runtime: 0.14.1
+    dev: false
+
+  /@calcom/embed-core/1.5.2:
+    resolution: {integrity: sha512-y1mpVDfcaVdLJ/CN17c7N2SyJAMiM3u9NYvL5mWFDBe4aa5HLTDc5g/DBbO2oCq859W3bxs11voC/E3KkJH3Iw==}
+    dev: false
+
+  /@calcom/embed-react/1.5.2_upmzqgzhjrquwzo2dphtigtdgi:
+    resolution: {integrity: sha512-DgY3RySiXOrbIVX1LiV/ucKilG+TkvqhP4/0nLlKPLOlk642cSO30xSu4nOmVgR60FLqMyp7Vlg/Xd6J5ijETg==}
+    peerDependencies:
+      react: ^18.2.0
+      react-dom: ^18.2.0
+    dependencies:
+      '@calcom/embed-core': 1.5.2
+      '@calcom/embed-snippet': 1.3.2
+      react: 19.0.0
+      react-dom: 19.0.0_react@19.0.0
+    dev: false
+
+  /@calcom/embed-snippet/1.3.2:
+    resolution: {integrity: sha512-EmW/ZjaQD0HjLI8yFNA5Mtb8zCOQQnj9RhChujuMijUK8EVyE1KtU9t3xIxm1hBMNHr4R1qMaBo2QYaZqQhzsw==}
+    dependencies:
+      '@calcom/embed-core': 1.5.2
     dev: false
 
   /@emnapi/runtime/1.3.1:

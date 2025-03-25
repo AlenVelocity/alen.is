@@ -29,13 +29,13 @@ export default function Home() {
         <hr className="my-8 border-muted" />
         <section className="space-y-6">
           <h2 className="text-2xl font-bold tracking-tight">About Me</h2>
-          <p className="text-muted-foreground">
-            I mostly work on web applications, AI related projects, and cloud infrastructure. 
+          <p className="text-muted-foreground text-base">
+            I mostly work on web apps, AI projects, and infrastructure. 
             I would say I'm proficient in TS (both server and client w/ NextJS and Vue), Rust, anyhing LLMs and Transformers related, AWS and GCP.
             I'm currently working as an Engineer at <LinkButton href="https://frappe.io" target="_blank" className="text-base">Frappe</LinkButton>, in the <LinkButton href="https://frappe.cloud" target="_blank" className="text-base">Frappe Cloud</LinkButton> team.
           </p>
-          <p className="text-muted-foreground">
-            As for my personal life, I'm a huge fan of video games. If I'm not working, I'd be playing some <LinkButton href="https://en.wikipedia.org/wiki/Role-playing_video_game#Japanese_role-playing_games" target="_blank" className="text-base">JRPG</LinkButton>, <LinkButton href="https://overwatch.blizzard.com" target="_blank" className="text-base">Overwatch</LinkButton> or <LinkButton href="/listening">listening</LinkButton> to <LinkButton href="https://en.wikipedia.org/wiki/Sumika_(band)" target="_blank" className="text-base">sumika</LinkButton>, or all of them at the same time (don't ask me how or why).
+          <p className="text-muted-foreground text-base">
+            As for my personal life, I'm a huge fan of video games. If I'm not working, I'd be playing some <LinkButton href="https://en.wikipedia.org/wiki/Role-playing_video_game#Japanese_role-playing_games" target="_blank" className="text-base">JRPG</LinkButton>, <LinkButton href="https://overwatch.blizzard.com" target="_blank" className="text-base">Overwatch</LinkButton> or <LinkButton href="/listening" className="text-base">listening</LinkButton> to <LinkButton href="https://en.wikipedia.org/wiki/Sumika_(band)" target="_blank" className="text-base">sumika</LinkButton>, or all of them at the same time (don't ask me how or why).
             I'm currently playing <LinkButton href="https://www.atlus.com/smt5v/" target="_blank" className="text-base">SMTV:V</LinkButton> if you're interested.
           </p>
           <div className="flex justify-start mt-6 mb-2 pr-4">
@@ -47,9 +47,9 @@ export default function Home() {
 
         <section className="space-y-6">
           <h2 className="text-2xl font-bold tracking-tight">Contact</h2>
-          <div className="space-y-2 text-muted-foreground">
+          <div className="text-muted-foreground text-base">
             The easiest way to reach me is via <LinkButton href="https://wa.me/919744375687" target="_blank" className="text-base">Whatsapp</LinkButton> or <DiscordCopy username="notalen" className="text-base">Discord</DiscordCopy>.
-            Otherwise, you can reach me via <LinkButton href="mailto:alenyohannan71@gmail.com" className="text-base">email</LinkButton>.
+            Otherwise, you can reach me via <LinkButton href="mailto:alenyohannan71@gmail.com" className="text-base">email</LinkButton> or <LinkButton href="/meeting" className="text-base">schedule a meeting</LinkButton>.
           </div>
         </section>
       </div>
