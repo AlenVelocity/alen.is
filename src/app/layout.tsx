@@ -3,8 +3,11 @@ import ClientLayout from "./ClientLayout"
 import { TRPCReactProvider } from '@/trpc/react'
 
 export const metadata = {
-  title: "Alen's Personal Website",
-  description: "Engineer, developer and creator of cool stuff",
+  title: {
+    default: "Alen's Personal Website",
+    template: "Alen is %s",
+  },
+  description: "Engineer, developer and creator of cool™ stuff",
   metadataBase: new URL('https://alen.is'),
   manifest: "/manifest.json",
   themeColor: "#000000",
@@ -38,7 +41,7 @@ export const metadata = {
     locale: 'en_US',
     url: 'https://alen.is',
     title: "Alen.is",
-    description: "Engineer, developer and creator of cool stuff",
+    description: "Engineer, developer and creator of cool™ stuff",
     siteName: 'Alen Yohannan',
     images: [
       { 
@@ -52,7 +55,7 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title: "Alen.is",
-    description: "Engineer, developer and creator of cool stuff",
+    description: "Engineer, developer and creator of cool™ stuff",
     images: ["/og.jpg"],
   },
 }

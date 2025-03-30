@@ -4,6 +4,7 @@ import { DiscordCopy } from "@/components/ui/discord-copy"
 import { Signature } from "@/components/ui/signature"
 import { Metadata } from "next"
 import JsonLd from "@/components/JsonLd"
+import Image from "next/image"
 
 export const metadata: Metadata = {
   title: "Alen.is",
@@ -63,6 +64,7 @@ export default function Home() {
         <hr className="my-8 border-muted" />
         <section className="space-y-6">
           <h2 className="text-2xl font-bold tracking-tight">About Me</h2>
+
           <p className="text-muted-foreground text-base">
             I mostly work on web apps, AI projects, and infrastructure. 
             I would say I'm proficient in TS (both server and client w/ NextJS and Vue), Rust, anyhing LLMs and Transformers related, AWS and GCP.
@@ -72,9 +74,14 @@ export default function Home() {
             As for my personal life, I'm a huge fan of video games. If I'm not working, I'd be playing some <LinkButton href="https://en.wikipedia.org/wiki/Role-playing_video_game#Japanese_role-playing_games" target="_blank" className="text-base">JRPG</LinkButton>, <LinkButton href="https://overwatch.blizzard.com" target="_blank" className="text-base">Overwatch</LinkButton> or <LinkButton href="/listening" className="text-base">listening</LinkButton> to <LinkButton href="https://en.wikipedia.org/wiki/Sumika_(band)" target="_blank" className="text-base">sumika</LinkButton>, or all of them at the same time (don't ask me how or why).
             I'm currently playing <LinkButton href="https://www.atlus.com/smt5v/" target="_blank" className="text-base">SMTV:V</LinkButton> if you're interested.
           </p>
-          <div className="flex justify-start mt-6 mb-2 pr-4">
+
+          <div className="flex items-center justify-between gap-4">
+          <div className="flex justify-start">
             <Signature name="Alen" />
           </div>
+            {/* <Image src="/me-rakko.jpg" alt="Pusheen typing on computer" width={100} height={100} className="rounded-lg" /> */}
+          </div>
+
         </section>
 
         <hr className="my-8 border-muted" />
@@ -86,6 +93,9 @@ export default function Home() {
             Otherwise, you can reach me via <LinkButton href="mailto:alenyohannan71@gmail.com" className="text-base">email</LinkButton> or <LinkButton href="/meeting" className="text-base">schedule a meeting</LinkButton>.
           </div>
         </section>
+
+        <hr className="my-8 border-muted" />
+
       </div>
     </PageTransition>
   )

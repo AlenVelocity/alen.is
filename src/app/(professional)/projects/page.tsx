@@ -4,10 +4,10 @@ import { Metadata } from "next"
 import JsonLd from "@/components/JsonLd"
 
 export const metadata: Metadata = {
-  title: "Projects | Alen.is",
+  title: "Projects",
   description: "A list of projects I've worked on",
   openGraph: {
-    title: "Projects | Alen.is",
+    title: "Projects",
     description: "A list of projects I've worked on",
     url: 'https://alen.is/projects',
   },

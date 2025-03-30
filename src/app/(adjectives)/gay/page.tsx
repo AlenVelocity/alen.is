@@ -2,19 +2,11 @@ import { api } from '@/trpc/server'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-    title: 'Is Alen Gay?',
-    description: 'Am I gay?',
-    openGraph: {
-        title: 'Is Alen Gay?',
-        description: 'Celebrating diversity and inclusion - I don\'t discriminate',
-        url: 'https://alen.is/gay',
-    },
-    alternates: {
-        canonical: '/gay',
-    }
+    title: 'Gay',
+    description: 'Am I gay?'
 }
 
-export default async function Cool() {
+export default async function Gay() {
 
     return (
         <div className="flex flex-col items-center justify-center gap-8 py-12 pt-24">

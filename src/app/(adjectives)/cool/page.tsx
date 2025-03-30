@@ -4,10 +4,10 @@ import { api } from '@/trpc/server'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-    title: 'Alen is Cool',
+    title: 'cool',
     description: 'Am I cool?',
     openGraph: {
-        title: 'Alen is Cool',
+        title: 'cool',
         description: 'Am I cool?',
         url: 'https://alen.is/cool',
         images: [
