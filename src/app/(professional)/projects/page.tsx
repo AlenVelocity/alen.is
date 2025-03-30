@@ -45,6 +45,14 @@ export default function Projects() {
             technologies: ['typescript', 'mediapipe', 'tensorflow']
         },
         {
+            title: 'MeowScript',
+            period: 'August 2023',
+            description: 'The Purr-fect programming language for cat lovers',
+            link: 'https://meow.alen.is',
+            type: 'Website',
+            technologies: ['typescript', 'node']
+        },
+        {
             title: 'Wa-Sticker-Formatter',
             period: 'March 2021',
             description:
