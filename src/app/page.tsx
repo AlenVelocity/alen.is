@@ -56,6 +56,7 @@ export default function Home() {
                 <LinkButton href="mailto:alenyohannan71@gmail.com">Email</LinkButton>
                 <LinkButton href="https://www.linkedin.com/in/alen-%F0%9F%8E%B6-yohannan-6794a81ba/" target="_blank">LinkedIn</LinkButton>
                 <LinkButton href="https://github.com/AlenVelocity" target="_blank">GitHub</LinkButton>
+                <LinkButton href="/meeting">Meeting</LinkButton>
               </div>
             </div>
           </div>
