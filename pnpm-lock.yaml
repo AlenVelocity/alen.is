@@ -51,6 +51,7 @@ specifiers:
   next: 15.1.0
   next-themes: ^0.4.4
   postcss: ^8
+  prettier: ^3.5.3
   prisma: 6.5.0
   react: ^19
   react-day-picker: 8.10.1
@@ -115,6 +116,7 @@ dependencies:
   lucide-react: 0.454.0_react@19.0.0
   next: 15.1.0_upmzqgzhjrquwzo2dphtigtdgi
   next-themes: 0.4.6_upmzqgzhjrquwzo2dphtigtdgi
+  prettier: 3.5.3
   react: 19.0.0
   react-day-picker: 8.10.1_5vlmilqvirgxbnzwi54oexhrqa
   react-dom: 19.0.0_react@19.0.0
@@ -3038,6 +3040,12 @@ packages:
       nanoid: 3.3.11
       picocolors: 1.1.1
       source-map-js: 1.2.1
+
+  /prettier/3.5.3:
+    resolution: {integrity: sha512-QQtaxnoDJeAkDvDKWCLiwIXkTgRhwYDEQCghU9Z6q03iyek/rxRh/2lC3HB7P8sWT2xC/y5JDctPLBIGzHKbhw==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dev: false
 
   /prisma/6.5.0_typescript@5.8.2:
     resolution: {integrity: sha512-yUGXmWqv5F4PByMSNbYFxke/WbnyTLjnJ5bKr8fLkcnY7U5rU9rUTh/+Fja+gOrRxEgtCbCtca94IeITj4j/pg==}
