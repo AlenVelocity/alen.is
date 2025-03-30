@@ -11,7 +11,7 @@ export function SumikaDialog() {
     <>
       <span 
         onClick={() => setIsOpen(true)}
-        className="inline mx-1 font-medium underline decoration-green-500 decoration-2 underline-offset-4 hover:text-green-500 transition-colors cursor-pointer"
+        className="inline font-medium underline decoration-green-500 decoration-2 underline-offset-4 hover:text-green-500 transition-colors cursor-pointer"
       >
         a whole year only listening to sumika
       </span>

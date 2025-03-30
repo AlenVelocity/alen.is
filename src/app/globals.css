@@ -22,6 +22,42 @@
   100% { right: -5%; opacity: 0; }
 }
 
+@keyframes musicBar1 {
+  0%, 100% { height: 0.75rem; }
+  50% { height: 1.25rem; }
+}
+
+@keyframes musicBar2 {
+  0%, 100% { height: 1rem; }
+  50% { height: 0.5rem; }
+}
+
+@keyframes musicBar3 {
+  0%, 100% { height: 0.5rem; }
+  50% { height: 1.5rem; }
+}
+
+@keyframes musicBar4 {
+  0%, 100% { height: 1.25rem; }
+  50% { height: 0.75rem; }
+}
+
+.animate-music-bar-1 {
+  animation: musicBar1 1s ease-in-out infinite;
+}
+
+.animate-music-bar-2 {
+  animation: musicBar2 1.2s ease-in-out infinite;
+}
+
+.animate-music-bar-3 {
+  animation: musicBar3 0.8s ease-in-out infinite;
+}
+
+.animate-music-bar-4 {
+  animation: musicBar4 1.5s ease-in-out infinite;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

@@ -3,10 +3,21 @@ import { PageTransition } from "@/components/ui/page-transition"
 import { api } from "@/trpc/server"
 import { FaHeadphones } from "react-icons/fa"
 import Image from "next/image"
-import { MusicVisualizer } from "./music-visualizer"
 import { LinkButton } from "@/components/ui/link-button"
 import { SumikaDialog } from "./sumika-dialog"
 import JsonLd from "@/components/JsonLd"
+import { formatDistanceToNow, fromUnixTime, parse } from 'date-fns'
+
+const MusicVisualizer = () => {
+  return (
+    <div className="flex items-center gap-0.5 ml-2">
+      <div className="w-1 h-3 bg-green-500 animate-music-bar-1"></div>
+      <div className="w-1 h-3 bg-green-500 animate-music-bar-2"></div>
+      <div className="w-1 h-3 bg-green-500 animate-music-bar-3"></div>
+      <div className="w-1 h-3 bg-green-500 animate-music-bar-4"></div>
+    </div>
+  )
+}
 
 export const metadata: Metadata = {
   title: "Alen is Listening",
@@ -62,35 +73,11 @@ export default async function Listening() {
         <div className="flex flex-col items-center justify-center min-h-[70vh]">
           <div className="w-full max-w-3xl">
             <h1 className="text-2xl font-semibold mb-4">Listening</h1>
-            <p className="text-muted-foreground mb-3 text-base">
-              I usually only listen to Video Game OSTs (especially from the Persona series) and Japanese Rock. I&apos;m open to suggestions. 
-            </p>
-            <p className="text-muted-foreground mb-3 text-base">
-              There was a time where I went through <SumikaDialog />.
-            </p>
-            <p className="text-muted-foreground mb-8 text-base">
-              Then <LinkButton href="https://open.spotify.com/track/29OHAngqPMvOrDPfl3s9x7?si=ae88719df17c4c95" target="_blank" className="text-base">I faced out, I held out, I reached out to the truth of my life, seeking to seize the whole moment to break away.</LinkButton>
-            </p>
-
-            <div className="mb-8">
-              <h2 className="text-xl font-semibold mb-4">My recommendations</h2>
-              <iframe 
-                style={{borderRadius: "12px"}} 
-                src="https://open.spotify.com/embed/playlist/7qX8YIOXFWCX4mXgryZrDa?utm_source=generator&theme=0" 
-                width="100%" 
-                height="152" 
-                frameBorder="0" 
-                allowFullScreen 
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-                loading="lazy"
-              />
-            </div>
-
             {lastFmData.nowPlaying && (
               <>
                 <h2 className="flex items-center text-xl font-semibold mb-4 space-x-2">
                     <span>I&apos;m currently listening to</span>
-                    <FaHeadphones className="text-muted-foreground" />
+                    <MusicVisualizer />
                 </h2>
                 <div className="flex items-center mb-8">
                   {lastFmData.nowPlaying.image ? (
@@ -127,6 +114,30 @@ export default async function Listening() {
               </>
             )}
             
+            <p className="text-muted-foreground mb-3 text-base">
+              I usually only listen to Video Game OSTs (especially from the Persona series) and Japanese Rock. I&apos;m open to suggestions. 
+            </p>
+            <p className="text-muted-foreground mb-3 text-base">
+              There was a time where I went through <SumikaDialog />.
+            </p>
+            <p className="text-muted-foreground mb-8 text-base">
+              Then <LinkButton href="https://open.spotify.com/track/29OHAngqPMvOrDPfl3s9x7?si=ae88719df17c4c95" target="_blank" className="text-base">I faced out, I held out, I reached out to the truth of my life, seeking to seize the whole moment to break away.</LinkButton>
+            </p>
+
+            <div className="mb-8">
+              <h2 className="text-xl font-semibold mb-4">My recommendations</h2>
+              <iframe 
+                style={{borderRadius: "12px"}} 
+                src="https://open.spotify.com/embed/playlist/7qX8YIOXFWCX4mXgryZrDa?utm_source=generator&theme=0" 
+                width="100%" 
+                height="152" 
+                frameBorder="0" 
+                allowFullScreen 
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                loading="lazy"
+              />
+            </div>
+
             {lastFmData.recentlyPlayed.length > 0 && (
               <div>
                 <h2 className="flex items-center text-xl font-semibold mb-4">
@@ -161,7 +172,18 @@ export default async function Listening() {
                       </div>
                       {track.date && (
                         <span className="text-xs text-muted-foreground ml-2 hidden sm:block">
-                          {track.date}
+                          {(() => {
+                            try {
+                              // Parse the UTC date string
+                              const utcDate = parse(track.date, 'dd MMM yyyy, HH:mm', new Date());
+                              // Convert UTC to local time
+                              const localDate = new Date(utcDate.getTime() - utcDate.getTimezoneOffset() * 60000);
+                              return formatDistanceToNow(localDate, { addSuffix: true });
+                            } catch (error) {
+                              console.error('Date parsing error:', track.date);
+                              return 'Invalid date';
+                            }
+                          })()}
                         </span>
                       )}
                     </a>
