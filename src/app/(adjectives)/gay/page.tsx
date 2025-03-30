@@ -7,7 +7,6 @@ export const metadata: Metadata = {
 }
 
 export default async function Gay() {
-
     return (
         <div className="flex flex-col items-center justify-center gap-8 py-12 pt-24">
             <div className="flex flex-col items-center mb-8">
@@ -24,8 +23,12 @@ export default async function Gay() {
                     </div>
                 </div>
                 <div className="mt-6 text-2xl font-bold">
-                    <span className="bg-gradient-to-r from-[#D60270] via-[#9B4F96] to-[#0038A8] bg-clip-text text-transparent">I don't </span>
-                    <span className="bg-gradient-to-r from-[#FF218C] via-[#FFD800] to-[#21B1FF] bg-clip-text text-transparent">discriminate</span>
+                    <span className="bg-gradient-to-r from-[#D60270] via-[#9B4F96] to-[#0038A8] bg-clip-text text-transparent">
+                        I don't{' '}
+                    </span>
+                    <span className="bg-gradient-to-r from-[#FF218C] via-[#FFD800] to-[#21B1FF] bg-clip-text text-transparent">
+                        discriminate
+                    </span>
                 </div>
             </div>
         </div>

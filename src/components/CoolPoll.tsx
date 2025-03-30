@@ -81,7 +81,7 @@ export default function CoolPoll({ initialData }: CoolPollProps) {
         const isClose = diff < 5 // Within 5% difference
         const isPositiveMajority = positivePercentage > negativePercentage
         if (!voteData.vote) {
-            return isPositiveMajority ? 'Hee-ho! Everyone\'s feeling lucky!' : 'Looks like we hit a weakness...'
+            return isPositiveMajority ? "Hee-ho! Everyone's feeling lucky!" : 'Looks like we hit a weakness...'
         }
 
         if (isClose) {
@@ -90,9 +90,9 @@ export default function CoolPoll({ initialData }: CoolPollProps) {
         }
 
         if (voteData.vote === 'positive') {
-            return isPositiveMajority ? "ONE MORE GOD REJECTED!" : 'A lone Samurai stands against the horde...'
+            return isPositiveMajority ? 'ONE MORE GOD REJECTED!' : 'A lone Samurai stands against the horde...'
         } else {
-            return isPositiveMajority ? 'I mean, I guess it\'s not that bad...' : 'The negotiations were short...'
+            return isPositiveMajority ? "I mean, I guess it's not that bad..." : 'The negotiations were short...'
         }
     }
 
@@ -119,26 +119,30 @@ export default function CoolPoll({ initialData }: CoolPollProps) {
                         <div className="text-green-500 font-medium">Yes</div>
                         <div className="text-red-500 font-medium">No</div>
                     </div>
-                    
+
                     <div className="relative h-8 bg-muted rounded-lg overflow-hidden">
-                        <motion.div 
+                        <motion.div
                             className="absolute h-full bg-green-500 left-0"
                             initial={{ width: '0%' }}
                             animate={{ width: `${positivePercentage}%` }}
-                            transition={{ duration: 0.8, ease: "easeOut" }}
+                            transition={{ duration: 0.8, ease: 'easeOut' }}
                         />
-                        <motion.div 
+                        <motion.div
                             className="absolute h-full bg-red-500 right-0"
                             initial={{ width: '0%' }}
                             animate={{ width: `${negativePercentage}%` }}
-                            transition={{ duration: 0.8, ease: "easeOut" }}
+                            transition={{ duration: 0.8, ease: 'easeOut' }}
                         />
                         <div className="absolute inset-0 flex justify-between px-3 items-center text-xs font-medium">
-                            <span className="text-white">{pollData.positive} ({positivePercentage.toFixed(1)}%)</span>
-                            <span className="text-white">{pollData.negative} ({negativePercentage.toFixed(1)}%)</span>
+                            <span className="text-white">
+                                {pollData.positive} ({positivePercentage.toFixed(1)}%)
+                            </span>
+                            <span className="text-white">
+                                {pollData.negative} ({negativePercentage.toFixed(1)}%)
+                            </span>
                         </div>
                     </div>
-                    
+
                     <div className="space-y-1">
                         <p className="text-center text-sm text-muted-foreground">Total votes: {totalVotes}</p>
                         <p className="text-center text-xl font-bold">{getResultMessage()}</p>

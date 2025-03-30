@@ -3,114 +3,139 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'Better Signature';
-  src: url('/Better Signature Font.otf') format('opentype'),
-       url('/Better Signature Font.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: block;
+    font-family: 'Better Signature';
+    src:
+        url('/Better Signature Font.otf') format('opentype'),
+        url('/Better Signature Font.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
 }
 
 .signature-text {
-  font-family: 'Better Signature', cursive;
-  font-weight: normal;
-  font-style: normal;
+    font-family: 'Better Signature', cursive;
+    font-weight: normal;
+    font-style: normal;
 }
 
 @keyframes signatureCursorMove {
-  0% { right: 100%; }
-  100% { right: -5%; opacity: 0; }
+    0% {
+        right: 100%;
+    }
+    100% {
+        right: -5%;
+        opacity: 0;
+    }
 }
 
 @keyframes musicBar1 {
-  0%, 100% { height: 0.75rem; }
-  50% { height: 1.25rem; }
+    0%,
+    100% {
+        height: 0.75rem;
+    }
+    50% {
+        height: 1.25rem;
+    }
 }
 
 @keyframes musicBar2 {
-  0%, 100% { height: 1rem; }
-  50% { height: 0.5rem; }
+    0%,
+    100% {
+        height: 1rem;
+    }
+    50% {
+        height: 0.5rem;
+    }
 }
 
 @keyframes musicBar3 {
-  0%, 100% { height: 0.5rem; }
-  50% { height: 1.5rem; }
+    0%,
+    100% {
+        height: 0.5rem;
+    }
+    50% {
+        height: 1.5rem;
+    }
 }
 
 @keyframes musicBar4 {
-  0%, 100% { height: 1.25rem; }
-  50% { height: 0.75rem; }
+    0%,
+    100% {
+        height: 1.25rem;
+    }
+    50% {
+        height: 0.75rem;
+    }
 }
 
 .animate-music-bar-1 {
-  animation: musicBar1 1s ease-in-out infinite;
+    animation: musicBar1 1s ease-in-out infinite;
 }
 
 .animate-music-bar-2 {
-  animation: musicBar2 1.2s ease-in-out infinite;
+    animation: musicBar2 1.2s ease-in-out infinite;
 }
 
 .animate-music-bar-3 {
-  animation: musicBar3 0.8s ease-in-out infinite;
+    animation: musicBar3 0.8s ease-in-out infinite;
 }
 
 .animate-music-bar-4 {
-  animation: musicBar4 1.5s ease-in-out infinite;
+    animation: musicBar4 1.5s ease-in-out infinite;
 }
 
 @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 142.1 76.2% 36.3%;
-    --primary-foreground: 355.7 100% 97.3%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 142.1 76.2% 36.3%;
-    --radius: 0.75rem;
-  }
+    :root {
+        --background: 0 0% 100%;
+        --foreground: 240 10% 3.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 240 10% 3.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 240 10% 3.9%;
+        --primary: 142.1 76.2% 36.3%;
+        --primary-foreground: 355.7 100% 97.3%;
+        --secondary: 240 4.8% 95.9%;
+        --secondary-foreground: 240 5.9% 10%;
+        --muted: 240 4.8% 95.9%;
+        --muted-foreground: 240 3.8% 46.1%;
+        --accent: 240 4.8% 95.9%;
+        --accent-foreground: 240 5.9% 10%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 240 5.9% 90%;
+        --input: 240 5.9% 90%;
+        --ring: 142.1 76.2% 36.3%;
+        --radius: 0.75rem;
+    }
 
-  .dark {
-    --background: 20 14.3% 4.1%;
-    --foreground: 0 0% 95%;
-    --card: 24 9.8% 10%;
-    --card-foreground: 0 0% 95%;
-    --popover: 0 0% 9%;
-    --popover-foreground: 0 0% 95%;
-    --primary: 142.1 70.6% 45.3%;
-    --primary-foreground: 144.9 80.4% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 15%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 12 6.5% 15.1%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 85.7% 97.3%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 142.4 71.8% 29.2%;
-  }
+    .dark {
+        --background: 20 14.3% 4.1%;
+        --foreground: 0 0% 95%;
+        --card: 24 9.8% 10%;
+        --card-foreground: 0 0% 95%;
+        --popover: 0 0% 9%;
+        --popover-foreground: 0 0% 95%;
+        --primary: 142.1 70.6% 45.3%;
+        --primary-foreground: 144.9 80.4% 10%;
+        --secondary: 240 3.7% 15.9%;
+        --secondary-foreground: 0 0% 98%;
+        --muted: 0 0% 15%;
+        --muted-foreground: 240 5% 64.9%;
+        --accent: 12 6.5% 15.1%;
+        --accent-foreground: 0 0% 98%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 0 85.7% 97.3%;
+        --border: 240 3.7% 15.9%;
+        --input: 240 3.7% 15.9%;
+        --ring: 142.4 71.8% 29.2%;
+    }
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-background text-foreground;
+    }
 }
-

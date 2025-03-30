@@ -20,7 +20,7 @@ export const metadata: Metadata = {
         ]
     },
     alternates: {
-        canonical: '/cool',
+        canonical: '/cool'
     }
 }
 
