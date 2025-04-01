@@ -87,11 +87,11 @@ export default function Projects() {
             technologies: ['typescript', 'node', 'langchain', 'llm']
         },
         {
-            title: 'Auerolin',
+            title: 'Aureolin',
             period: 'November 2021',
             description:
                 "Superfast TS Web Framework for Node. Utilized Reflect metadata's decorators to allow users to easily create APIs and platforms",
-            link: 'https://github.com/AlenVelocity/auerolin',
+            link: 'https://github.com/AlenVelocity/aureolin',
             type: 'GitHub',
             technologies: ['typescript', 'node']
         },
