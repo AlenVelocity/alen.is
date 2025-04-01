@@ -29,7 +29,7 @@ export default async function Cool() {
 
     return (
         <div className="flex flex-col items-center justify-center gap-8 py-12 pt-24">
-            <Image src="/rinu-cool.webp" alt="Rinu Cool" width={250} height={250} className="rounded-lg" priority />
+            <Image src="/images/rinu-cool.webp" alt="Rinu Cool" width={250} height={250} className="rounded-lg" priority />
             <p className="text-xl font-medium text-muted-foreground">am I?</p>
             <CoolPoll initialData={initialPollData} />
         </div>

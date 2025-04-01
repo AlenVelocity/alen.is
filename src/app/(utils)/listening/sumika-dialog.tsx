@@ -19,7 +19,7 @@ export function SumikaDialog() {
                 <DialogContent className="max-w-[300px] m-0">
                     <DialogTitle className="text-lg font-semibold mb-4">Sumika Wrapped</DialogTitle>
                     <Image
-                        src="/sumika-wrapped.png"
+                        src="/images/sumika-wrapped.png"
                         alt="My year of sumika listening statistics"
                         width={250}
                         height={250}

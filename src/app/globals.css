@@ -5,8 +5,8 @@
 @font-face {
     font-family: 'Better Signature';
     src:
-        url('/Better Signature Font.otf') format('opentype'),
-        url('/Better Signature Font.ttf') format('truetype');
+        url('/fonts/Better Signature Font.otf') format('opentype'),
+        url('/fonts/Better Signature Font.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
     font-display: block;
