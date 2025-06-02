@@ -114,9 +114,9 @@ export default function Home() {
                         >
                             sumika
                         </LinkButton>
-                        , or all of them at the same time (don't ask me how or why). I'm currently playing{' '}
+                        , or all of them at the same time (don't ask me how or why). I'm currently playing the{' '}
                         <LinkButton href="https://en.wikipedia.org/wiki/Final_Fantasy_VII" target="_blank" className="text-base">
-                            the Final Fantasy 7 Remake Trilogy
+                            Final Fantasy 7 Remake Trilogy
                         </LinkButton>{' '}
                         if you're interested.
                     </p>
