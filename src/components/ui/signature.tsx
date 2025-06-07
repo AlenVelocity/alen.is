@@ -2,6 +2,7 @@
 
 import { cn } from '@/lib/utils'
 import { useEffect, useState, useRef } from 'react'
+import { useTheme } from 'next-themes'
 
 interface SignatureProps {
     name: string
@@ -12,8 +13,16 @@ export function Signature({ name, className }: SignatureProps) {
     const [writing, setWriting] = useState(false)
     const [visible, setVisible] = useState(false)
     const containerRef = useRef<HTMLDivElement>(null)
+    const { theme } = useTheme()
 
     useEffect(() => {
+        // Skip animation in dark mode
+        if (theme === 'dark') {
+            setVisible(true)
+            setWriting(true)
+            return
+        }
+
         // First make the element visible with opacity
         const visibleTimer = setTimeout(() => {
             setVisible(true)
@@ -28,7 +37,7 @@ export function Signature({ name, className }: SignatureProps) {
             clearTimeout(visibleTimer)
             clearTimeout(writingTimer)
         }
-    }, [])
+    }, [theme])
 
     return (
         <div
@@ -49,17 +58,19 @@ export function Signature({ name, className }: SignatureProps) {
             <div className="relative inline-block">
                 <span className="relative">{name}</span>
                 {/* Masking overlay that hides then reveals the text from right to left */}
-                <span
-                    className="absolute top-0 right-0 bg-background h-full transition-all ease-out"
-                    style={{
-                        width: writing ? '0%' : '100%',
-                        transitionDuration: '1.8s',
-                        transformOrigin: 'right',
-                        transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)'
-                    }}
-                ></span>
+                {theme !== 'dark' && (
+                    <span
+                        className="absolute top-0 right-0 h-full transition-all ease-out bg-white dark:bg-gray-900"
+                        style={{
+                            width: writing ? '0%' : '100%',
+                            transitionDuration: '1.8s',
+                            transformOrigin: 'right',
+                            transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)'
+                        }}
+                    ></span>
+                )}
                 {/* Cursor effect that follows the text appearing */}
-                {writing && (
+                {writing && theme !== 'dark' && (
                     <span
                         className="absolute top-1 w-[3px] h-[80%] bg-green-500/70 rounded-full"
                         style={{

@@ -2,6 +2,7 @@ import { PageTransition } from '@/components/ui/page-transition'
 import { TechBadge, TechType } from '@/components/ui/tech-badge'
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
+import { FaExternalLinkAlt, FaGithub, FaGlobe, FaNpm, FaCalendarAlt } from 'react-icons/fa'
 
 export const metadata: Metadata = {
     title: 'Projects',
@@ -23,6 +24,7 @@ interface Project {
     link: string
     type: string
     technologies: TechType[]
+    featured?: boolean
 }
 
 export default function Projects() {
@@ -30,10 +32,11 @@ export default function Projects() {
         {
             title: 'Press',
             period: 'December 2024',
-            description: 'Worked on Frappe/Press, Bare Metal Providder integration',
+            description: 'Worked on Frappe/Press, Bare Metal Provider integration',
             link: 'https://github.com/frappe/press',
             type: 'GitHub',
-            technologies: ['typescript', 'vue', 'frappe', 'mariadb']
+            technologies: ['typescript', 'vue', 'frappe', 'mariadb'],
+            featured: true
         },
         {
             title: 'Kalidokit',
@@ -42,7 +45,8 @@ export default function Projects() {
                 'Blendshape and kinematics solver for Mediapipe/Tensorflow.js face, eyes, pose, and hand tracking models',
             link: 'https://www.npmjs.com/package/kalidokit',
             type: 'NPM',
-            technologies: ['typescript', 'mediapipe', 'tensorflow']
+            technologies: ['typescript', 'mediapipe', 'tensorflow'],
+            featured: true
         },
         {
             title: 'MeowScript',
@@ -68,7 +72,8 @@ export default function Projects() {
                 'Worked with Paragon w/ official Valorant Discord to create a Valorant arcade game for the web',
             link: 'https://valdle.com',
             type: 'Website',
-            technologies: ['typescript', 'react', 'next', 'prisma', 'postgres', 'valorant', 'discord']
+            technologies: ['typescript', 'react', 'next', 'prisma', 'postgres', 'valorant', 'discord'],
+            featured: true
         },
         {
             title: 'OWCSLE',
@@ -113,6 +118,19 @@ export default function Projects() {
         }
     ]
 
+    const getTypeIcon = (type: string) => {
+        switch (type) {
+            case 'GitHub':
+                return <FaGithub className="w-4 h-4" />
+            case 'NPM':
+                return <FaNpm className="w-4 h-4" />
+            case 'Website':
+                return <FaGlobe className="w-4 h-4" />
+            default:
+                return <FaExternalLinkAlt className="w-4 h-4" />
+        }
+    }
+
     const projectsSchema = {
         '@context': 'https://schema.org',
         '@type': 'ItemList',
@@ -130,38 +148,124 @@ export default function Projects() {
     return (
         <PageTransition>
             <JsonLd data={projectsSchema} />
-            <div className="container py-12 max-w-4xl">
-                <h1 className="text-3xl font-bold tracking-tight mb-8">Projects</h1>
-                <div className="grid gap-6 md:grid-cols-2">
-                    {projects.map((project, index) => (
-                        <div
-                            key={index}
-                            className="group relative rounded-lg border p-6 hover:border-foreground transition-colors"
-                        >
-                            <div className="flex flex-col space-y-3">
-                                <div className="flex items-center justify-between">
-                                    <h2 className="text-xl font-semibold">{project.title}</h2>
-                                    <span className="text-sm text-muted-foreground">{project.period}</span>
-                                </div>
-                                <p className="text-muted-foreground">{project.description}</p>
-                                <div className="flex flex-wrap gap-1.5 pt-1">
-                                    {project.technologies.map((tech) => (
-                                        <TechBadge key={tech} tech={tech} />
-                                    ))}
-                                </div>
-                                <div className="flex items-center gap-2 pt-1">
+            <div className="container mx-auto max-w-6xl px-4 py-8">
+                {/* Header Section */}
+                <div className="mb-12">
+                    <div>
+                        <h1 className="text-3xl font-bold tracking-tight mb-4">
+                            Projects
+                        </h1>
+                        <p className="text-lg text-muted-foreground">
+                            Things I've built over the years
+                        </p>
+                    </div>
+                </div>
+
+                {/* Featured Projects */}
+                <div className="mb-16">
+                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-8 flex items-center gap-3">
+                        <span className="w-3 h-3 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full"></span>
+                        Featured Projects
+                    </h2>
+                    <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                        {projects.filter(project => project.featured).map((project, index) => (
+                            <div
+                                key={index}
+                                className="group bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-900/80 dark:to-slate-800/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl shadow-slate-200/20 dark:shadow-slate-950/20 border border-slate-200/50 dark:border-slate-800/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+                            >
+                                <div className="flex flex-col h-full">
+                                    <div className="flex items-start justify-between mb-4">
+                                        <div className="flex-1">
+                                            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
+                                                {project.title}
+                                            </h3>
+                                            <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 mb-3">
+                                                <FaCalendarAlt className="w-3 h-3" />
+                                                <span>{project.period}</span>
+                                            </div>
+                                        </div>
+                                        <span className="bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 px-2 py-1 rounded-full text-xs font-medium">
+                                            Featured
+                                        </span>
+                                    </div>
+                                    
+                                    <p className="text-slate-600 dark:text-slate-400 mb-4 flex-1 leading-relaxed">
+                                        {project.description}
+                                    </p>
+                                    
+                                    <div className="flex flex-wrap gap-2 mb-4">
+                                        {project.technologies.map((tech) => (
+                                            <TechBadge key={tech} tech={tech} />
+                                        ))}
+                                    </div>
+                                    
                                     <a
                                         href={project.link}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-sm font-medium text-primary hover:underline"
+                                        className="inline-flex items-center gap-2 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white font-medium transition-colors group-hover:text-blue-600 dark:group-hover:text-blue-400"
                                     >
-                                        View {project.type} →
+                                        {getTypeIcon(project.type)}
+                                        <span>View {project.type}</span>
+                                        <FaExternalLinkAlt className="w-3 h-3 opacity-60" />
                                     </a>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
+                </div>
+
+                {/* All Projects */}
+                <div>
+                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-8 flex items-center gap-3">
+                        <span className="w-3 h-3 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full"></span>
+                        All Projects
+                    </h2>
+                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        {projects.map((project, index) => (
+                            <div
+                                key={index}
+                                className="group bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm rounded-2xl p-6 shadow-lg shadow-slate-200/10 dark:shadow-slate-950/10 border border-slate-200/50 dark:border-slate-800/50 transition-all duration-300 hover:scale-102 hover:shadow-xl"
+                            >
+                                <div className="flex flex-col h-full">
+                                    <div className="flex items-start justify-between mb-3">
+                                        <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                                            {project.title}
+                                        </h3>
+                                        {project.featured && (
+                                            <span className="w-2 h-2 bg-yellow-400 rounded-full"></span>
+                                        )}
+                                    </div>
+                                    
+                                    <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 mb-3">
+                                        <FaCalendarAlt className="w-3 h-3" />
+                                        <span>{project.period}</span>
+                                    </div>
+                                    
+                                    <p className="text-slate-600 dark:text-slate-400 mb-4 flex-1 text-sm leading-relaxed">
+                                        {project.description}
+                                    </p>
+                                    
+                                    <div className="flex flex-wrap gap-1.5 mb-4">
+                                        {project.technologies.map((tech) => (
+                                            <TechBadge key={tech} tech={tech} />
+                                        ))}
+                                    </div>
+                                    
+                                    <a
+                                        href={project.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white text-sm font-medium transition-colors group-hover:text-blue-600 dark:group-hover:text-blue-400"
+                                    >
+                                        {getTypeIcon(project.type)}
+                                        <span>View {project.type}</span>
+                                        <FaExternalLinkAlt className="w-3 h-3 opacity-60" />
+                                    </a>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </PageTransition>

@@ -81,12 +81,12 @@ export default function CoolPoll({ initialData }: CoolPollProps) {
         const isClose = diff < 5 // Within 5% difference
         const isPositiveMajority = positivePercentage > negativePercentage
         if (!voteData.vote) {
-            return isPositiveMajority ? "Hee-ho! Everyone's feeling lucky!" : 'Looks like we hit a weakness...'
+            return isPositiveMajority ? "Hee-ho!" : 'Looks like we hit a weakness...'
         }
 
         if (isClose) {
             if (voteData.vote === 'positive') return 'Jack Frost approves'
-            return 'Mara would be proud of that criticism!'
+            return 'Mara would be proud of that criticism.'
         }
 
         if (voteData.vote === 'positive') {
@@ -97,7 +97,7 @@ export default function CoolPoll({ initialData }: CoolPollProps) {
     }
 
     return (
-        <div className="w-full max-w-sm space-y-6 rounded-xl bg-background p-6">
+        <div className="w-full max-w-sm space-y-6 rounded-xl p-6">
             {canVote ? (
                 <div className="flex justify-center gap-8">
                     <button
