@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { PageTransition } from '@/components/ui/page-transition'
 import { api } from '@/trpc/server'
-import { FaHeadphones } from 'react-icons/fa'
+import { FaHeadphones, FaSpotify, FaExternalLinkAlt } from 'react-icons/fa'
 import Image from 'next/image'
 import { LinkButton } from '@/components/ui/link-button'
 import { SumikaDialog } from './sumika-dialog'
@@ -9,14 +9,27 @@ import { formatDistanceToNow, parse } from 'date-fns'
 
 const MusicVisualizer = () => {
     return (
-        <div className="flex items-center gap-0.5 ml-2">
-            <div className="w-1 h-3 bg-green-500 animate-music-bar-1"></div>
-            <div className="w-1 h-3 bg-green-500 animate-music-bar-2"></div>
-            <div className="w-1 h-3 bg-green-500 animate-music-bar-3"></div>
-            <div className="w-1 h-3 bg-green-500 animate-music-bar-4"></div>
+        <div className="flex items-center gap-1 ml-3 group">
+            <div className="w-1 h-4 bg-gradient-to-t from-green-500 to-green-400 rounded-full animate-music-bar-1 group-hover:from-green-400 group-hover:to-green-300 transition-colors duration-300"></div>
+            <div className="w-1 h-4 bg-gradient-to-t from-green-500 to-green-400 rounded-full animate-music-bar-2 group-hover:from-green-400 group-hover:to-green-300 transition-colors duration-300"></div>
+            <div className="w-1 h-4 bg-gradient-to-t from-green-500 to-green-400 rounded-full animate-music-bar-3 group-hover:from-green-400 group-hover:to-green-300 transition-colors duration-300"></div>
+            <div className="w-1 h-4 bg-gradient-to-t from-green-500 to-green-400 rounded-full animate-music-bar-4 group-hover:from-green-400 group-hover:to-green-300 transition-colors duration-300"></div>
         </div>
     )
 }
+
+const FloatingNote = ({ delay }: { delay: number }) => (
+    <div 
+        className="absolute text-green-400/20 text-sm animate-float"
+        style={{ 
+            animationDelay: `${delay}s`,
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`
+        }}
+    >
+        ♪
+    </div>
+)
 
 export const metadata: Metadata = {
     title: 'Alen is Listening',
@@ -44,75 +57,110 @@ export default async function Listening() {
 
     return (
         <PageTransition>
-            <div className="container py-12">
-                <div className="flex flex-col items-center justify-center min-h-[70vh]">
-                    <div className="w-full max-w-3xl">
-                        <h1 className="text-2xl font-semibold mb-4">Listening</h1>
-                        {lastFmData.nowPlaying && (
-                            <>
-                                <h2 className="flex items-center text-xl font-semibold mb-4 space-x-2">
-                                    <span>I&apos;m currently listening to</span>
-                                    <MusicVisualizer />
-                                </h2>
-                                <div className="flex items-center mb-8">
-                                    {lastFmData.nowPlaying.image ? (
-                                        <div className="relative w-24 h-24 mr-4 rounded overflow-hidden shadow-md group">
-                                            <Image
-                                                src={lastFmData.nowPlaying.image}
-                                                alt={`${lastFmData.nowPlaying.name} album art`}
-                                                fill
-                                                className="object-cover"
-                                            />
-                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <div className="container mx-auto max-w-4xl px-4 py-8 relative">
+                {/* Floating musical notes background */}
+                <div className="fixed inset-0 pointer-events-none overflow-hidden">
+                    {Array.from({ length: 8 }).map((_, i) => (
+                        <FloatingNote key={i} delay={i * 0.5} />
+                    ))}
+                </div>
+
+                <div className="space-y-12">
+                    {/* Header */}
+                    <div className="text-center space-y-4">
+                        <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-green-600 via-blue-600 to-purple-600 bg-clip-text text-transparent animate-fade-in-up">
+                            Listening
+                        </h1>
+                        <div className="w-20 h-1 bg-gradient-to-r from-green-400 to-blue-500 mx-auto rounded-full"></div>
+                    </div>
+
+                    {/* Currently Playing */}
+                    {lastFmData.nowPlaying && (
+                        <div className="animate-slide-in-top">
+                            <h2 className="flex items-center justify-center text-xl font-semibold mb-6 group cursor-default">
+                                <span className="bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
+                                    I'm currently listening to
+                                </span>
+                                <MusicVisualizer />
+                            </h2>
+                            
+                            <div className="flex flex-col sm:flex-row items-center gap-6 p-6 rounded-2xl bg-gradient-to-r from-green-50/50 to-blue-50/50 dark:from-green-950/20 dark:to-blue-950/20 border border-green-200/30 dark:border-green-800/30 backdrop-blur-sm transition-all duration-500 hover:shadow-lg hover:shadow-green-500/10 group">
+                                {lastFmData.nowPlaying.image ? (
+                                    <div className="relative w-24 h-24 rounded-xl overflow-hidden shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+                                        <Image
+                                            src={lastFmData.nowPlaying.image}
+                                            alt={`${lastFmData.nowPlaying.name} album art`}
+                                            fill
+                                            className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300">
+                                            <div className="absolute bottom-2 left-2 right-2">
                                                 <a
                                                     href={lastFmData.nowPlaying.url}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="text-center text-white hover:text-green-400 transition-colors"
+                                                    className="text-white text-xs flex items-center gap-1 hover:text-green-400 transition-colors"
                                                 >
-                                                    View on Last.fm
+                                                    <FaExternalLinkAlt className="w-3 h-3" />
+                                                    Last.fm
                                                 </a>
                                             </div>
                                         </div>
-                                    ) : (
-                                        <div className="w-24 h-24 mr-4 rounded bg-neutral-800 flex items-center justify-center"></div>
-                                    )}
-                                    <div>
-                                        <h3 className="font-medium">{lastFmData.nowPlaying.name}</h3>
-                                        <p className="text-muted-foreground">{lastFmData.nowPlaying.artist}</p>
-                                        {lastFmData.nowPlaying.album && (
-                                            <p className="text-sm text-muted-foreground mt-1">
-                                                {lastFmData.nowPlaying.album}
-                                            </p>
-                                        )}
                                     </div>
+                                ) : (
+                                    <div className="w-24 h-24 rounded-xl bg-gradient-to-br from-green-100 to-blue-100 dark:from-green-900/30 dark:to-blue-900/30 flex items-center justify-center">
+                                        <FaHeadphones className="text-2xl text-green-600/70" />
+                                    </div>
+                                )}
+                                
+                                <div className="text-center sm:text-left space-y-1">
+                                    <h3 className="font-semibold text-lg leading-snug">{lastFmData.nowPlaying.name}</h3>
+                                    <p className="text-muted-foreground font-medium">{lastFmData.nowPlaying.artist}</p>
+                                    {lastFmData.nowPlaying.album && (
+                                        <p className="text-sm text-muted-foreground/80">
+                                            {lastFmData.nowPlaying.album}
+                                        </p>
+                                    )}
                                 </div>
-                            </>
-                        )}
+                            </div>
+                        </div>
+                    )}
 
-                        <p className="text-muted-foreground mb-3 text-base">
-                            I usually only listen to Video Game OSTs (especially from the Persona series) and Japanese
-                            Rock. I&apos;m open to suggestions.
-                        </p>
-                        <p className="text-muted-foreground mb-3 text-base">
-                            There was a time where I went through <SumikaDialog />.
-                        </p>
-                        <p className="text-muted-foreground mb-8 text-base">
-                            Then{' '}
-                            <LinkButton
-                                href="https://open.spotify.com/track/29OHAngqPMvOrDPfl3s9x7?si=ae88719df17c4c95"
-                                target="_blank"
-                                className="text-base"
-                            >
-                                I faced out, I held out, I reached out to the truth of my life, seeking to seize the
-                                whole moment to break away.
-                            </LinkButton>
-                        </p>
+                    {/* About Section */}
+                    <div className="space-y-6 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                        <div className="space-y-4 text-base leading-relaxed text-muted-foreground">
+                            <p className="hover:text-foreground transition-colors duration-300">
+                                I usually only listen to Video Game OSTs (especially from the Persona series) and Japanese
+                                Rock. I'm open to suggestions.
+                            </p>
+                            <p className="hover:text-foreground transition-colors duration-300">
+                                There was a time where I went through <SumikaDialog />.
+                            </p>
+                            <p className="hover:text-foreground transition-colors duration-300">
+                                Then{' '}
+                                <LinkButton
+                                    href="https://open.spotify.com/track/29OHAngqPMvOrDPfl3s9x7?si=ae88719df17c4c95"
+                                    target="_blank"
+                                    className="text-base font-medium bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent hover:from-blue-500 hover:to-purple-500 transition-all duration-300"
+                                >
+                                    I faced out, I held out, I reached out to the truth of my life, seeking to seize the
+                                    whole moment to break away.
+                                </LinkButton>
+                            </p>
+                        </div>
+                    </div>
 
-                        <div className="mb-8">
-                            <h2 className="text-xl font-semibold mb-4">My recommendations</h2>
+                    {/* Spotify Playlist */}
+                    <div className="space-y-6 animate-scale-in" style={{ animationDelay: '0.4s' }}>
+                        <h2 className="text-2xl font-bold flex items-center gap-3">
+                            <FaSpotify className="text-green-500" />
+                            <span className="bg-gradient-to-r from-green-600 to-green-500 bg-clip-text text-transparent">
+                                My recommendations
+                            </span>
+                        </h2>
+                        <div className="rounded-2xl overflow-hidden shadow-xl transition-all duration-500 hover:shadow-2xl hover:shadow-green-500/10 group">
                             <iframe
-                                style={{ borderRadius: '12px' }}
+                                style={{ borderRadius: '16px' }}
                                 src="https://open.spotify.com/embed/playlist/7qX8YIOXFWCX4mXgryZrDa?utm_source=generator&theme=0"
                                 width="100%"
                                 height="152"
@@ -120,73 +168,78 @@ export default async function Listening() {
                                 allowFullScreen
                                 allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                                 loading="lazy"
+                                className="transition-transform duration-500 group-hover:scale-[1.02]"
                             />
                         </div>
-
-                        {lastFmData.recentlyPlayed.length > 0 && (
-                            <div>
-                                <h2 className="flex items-center text-xl font-semibold mb-4">Recently Played</h2>
-                                <div className="space-y-4">
-                                    {lastFmData.recentlyPlayed.map((track, index) => (
-                                        <a
-                                            key={`${track.name}-${index}`}
-                                            href={track.url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex items-center p-4 rounded-lg hover:bg-foreground/5 transition-colors border border-transparent hover:border-foreground/10"
-                                        >
-                                            {track.image ? (
-                                                <div className="relative w-16 h-16 mr-4 rounded overflow-hidden shadow-sm">
-                                                    <Image
-                                                        src={track.image}
-                                                        alt={`${track.name} album art`}
-                                                        fill
-                                                        className="object-cover"
-                                                    />
-                                                </div>
-                                            ) : (
-                                                <div className="w-16 h-16 mr-4 rounded bg-neutral-800 flex items-center justify-center">
-                                                    <FaHeadphones className="text-xl text-neutral-500" />
-                                                </div>
-                                            )}
-                                            <div className="flex-1 min-w-0">
-                                                <h3 className="font-medium truncate">{track.name}</h3>
-                                                <p className="text-muted-foreground truncate">{track.artist}</p>
-                                            </div>
-                                            {track.date && (
-                                                <span className="text-xs text-muted-foreground ml-2 hidden sm:block">
-                                                    {(() => {
-                                                        try {
-                                                            // Parse the UTC date string
-                                                            const utcDate = parse(
-                                                                track.date,
-                                                                'dd MMM yyyy, HH:mm',
-                                                                new Date()
-                                                            )
-                                                            // Convert UTC to local time
-                                                            const localDate = new Date(
-                                                                utcDate.getTime() - utcDate.getTimezoneOffset() * 60000
-                                                            )
-                                                            return formatDistanceToNow(localDate, { addSuffix: true })
-                                                        } catch (error) {
-                                                            console.error('Date parsing error:', track.date)
-                                                            return 'Invalid date'
-                                                        }
-                                                    })()}
-                                                </span>
-                                            )}
-                                        </a>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {lastFmData.recentlyPlayed.length === 0 && !lastFmData.nowPlaying && (
-                            <div className="p-6 text-center bg-foreground/5 rounded-lg">
-                                <p className="text-muted-foreground">No recently played tracks found.</p>
-                            </div>
-                        )}
                     </div>
+
+                    {/* Recently Played */}
+                    {lastFmData.recentlyPlayed.length > 0 && (
+                        <div className="space-y-6 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+                            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Recently Played</h2>
+                            <div className="space-y-3">
+                                {lastFmData.recentlyPlayed.map((track, index) => (
+                                    <a
+                                        key={`${track.name}-${index}`}
+                                        href={track.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-4 p-4 rounded-xl hover:bg-slate-50/80 dark:hover:bg-slate-800/30 transition-all duration-300 border border-transparent hover:border-slate-200/50 dark:hover:border-slate-700/50 group hover:shadow-lg hover:shadow-slate-200/20 dark:hover:shadow-slate-950/20 hover:scale-[1.01]"
+                                        style={{ animationDelay: `${0.1 * index}s` }}
+                                    >
+                                        {track.image ? (
+                                            <div className="relative w-14 h-14 rounded-lg overflow-hidden shadow-md group-hover:shadow-lg transition-all duration-300">
+                                                <Image
+                                                    src={track.image}
+                                                    alt={`${track.name} album art`}
+                                                    fill
+                                                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                                />
+                                            </div>
+                                        ) : (
+                                            <div className="w-14 h-14 rounded-lg bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+                                                <FaHeadphones className="text-xl text-slate-400" />
+                                            </div>
+                                        )}
+                                        
+                                        <div className="flex-1 min-w-0 space-y-1">
+                                            <h3 className="font-medium truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+                                                {track.name}
+                                            </h3>
+                                            <p className="text-muted-foreground truncate text-sm">{track.artist}</p>
+                                        </div>
+                                        
+                                        {track.date && (
+                                            <span className="text-xs text-muted-foreground hidden sm:block opacity-70 group-hover:opacity-100 transition-opacity duration-300">
+                                                {(() => {
+                                                    try {
+                                                        const utcDate = parse(track.date, 'dd MMM yyyy, HH:mm', new Date())
+                                                        const localDate = new Date(utcDate.getTime() - utcDate.getTimezoneOffset() * 60000)
+                                                        return formatDistanceToNow(localDate, { addSuffix: true })
+                                                    } catch (error) {
+                                                        console.error('Date parsing error:', track.date)
+                                                        return 'Invalid date'
+                                                    }
+                                                })()}
+                                            </span>
+                                        )}
+                                        
+                                        <FaExternalLinkAlt className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:text-blue-500" />
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Empty State */}
+                    {lastFmData.recentlyPlayed.length === 0 && !lastFmData.nowPlaying && (
+                        <div className="text-center py-12 animate-fade-in-up">
+                            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 flex items-center justify-center mx-auto mb-4">
+                                <FaHeadphones className="text-2xl text-slate-400" />
+                            </div>
+                            <p className="text-muted-foreground">No recently played tracks found.</p>
+                        </div>
+                    )}
                 </div>
             </div>
         </PageTransition>

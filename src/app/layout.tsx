@@ -1,6 +1,7 @@
 import type React from 'react'
 import ClientLayout from './ClientLayout'
 import { TRPCReactProvider } from '@/trpc/react'
+import { ThemeProvider } from '@/components/theme-provider'
 
 export const metadata = {
     title: {
@@ -73,7 +74,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
             <head>
                 <link
                     rel="preload"
@@ -94,7 +95,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </head>
             <body>
                 <TRPCReactProvider>
-                    <ClientLayout>{children}</ClientLayout>
+                    <ThemeProvider
+                        attribute="class"
+                        defaultTheme="light"
+                        enableSystem
+                        disableTransitionOnChange
+                    >
+                        <ClientLayout>{children}</ClientLayout>
+                    </ThemeProvider>
                 </TRPCReactProvider>
             </body>
         </html>

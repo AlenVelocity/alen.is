@@ -1,6 +1,6 @@
 import { LinkButton } from '@/components/ui/link-button'
 import { PageTransition } from '@/components/ui/page-transition'
-import { FaBriefcase, FaCalendarAlt, FaMapMarkerAlt, FaBuilding } from 'react-icons/fa'
+import { FaBriefcase, FaCalendarAlt, FaMapMarkerAlt, FaBuilding, FaDownload } from 'react-icons/fa'
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
 
@@ -28,7 +28,8 @@ export default function Experience() {
                 'Worked on Frappe Cloud, primarily on the infrastructure automation and managing AWS infrastructure.',
                 'Added support for provisioning custom Domains, email, and DNS configurations.',
                 'User experience improvements for developers using Frappe Cloud and Frappe Framework.'
-            ]
+            ],
+            current: true
         },
         {
             company: 'xAGI',
@@ -87,7 +88,8 @@ export default function Experience() {
                 "Created organization's mission and vision statements for use by the members",
                 'Built and contributed to 12+ OSS Projects',
                 'Conducted lessons on NodeJS and TypeScript for the members of the community'
-            ]
+            ],
+            current: true
         }
     ]
 
@@ -115,31 +117,82 @@ export default function Experience() {
     return (
         <PageTransition>
             <JsonLd data={experienceSchema} />
-            <div className="container py-12 max-w-4xl">
-                <div className="flex items-center justify-between mb-8">
-                    <h1 className="text-3xl font-bold tracking-tight">Experience</h1>
-                    <LinkButton href="/Alen-Resume.pdf" target="_blank">
-                        View Resume
-                    </LinkButton>
+            <div className="container mx-auto max-w-4xl px-4 py-8">
+                {/* Header Section */}
+                <div className="mb-12">
+                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                        <div>
+                            <h1 className="text-3xl font-bold tracking-tight mb-2">
+                                Experience
+                            </h1>
+                        </div>
+                        <LinkButton 
+                            href="/Alen-Resume.pdf" 
+                            target="_blank"
+                            className="flex items-center gap-2"
+                        >
+                            <FaDownload className="w-4 h-4" />
+                            Resume
+                        </LinkButton>
+                    </div>
                 </div>
+
+                {/* Experience Timeline */}
                 <div className="space-y-8">
                     {experiences.map((experience, index) => (
-                        <div key={index} className="pb-6">
-                            <div className="space-y-2">
-                                <h2 className="text-xl font-semibold flex items-center gap-2">{experience.company}</h2>
-                                <div className="flex items-center text-lg font-medium">{experience.position}</div>
-                                <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                                    <span className="flex items-center gap-1">{experience.period}</span>
-                                    <span className="flex items-center gap-1">
-                                        <FaMapMarkerAlt className="text-muted-foreground" />
-                                        {experience.location}
-                                    </span>
+                        <div key={index} className="group">
+                            <div className={`
+                                bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm rounded-3xl p-8 shadow-xl shadow-slate-200/20 dark:shadow-slate-950/20 border border-slate-200/50 dark:border-slate-800/50
+                                transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl
+                                ${experience.current ? 'ring-2 ring-green-500/20' : ''}
+                            `}>
+                                <div className="flex flex-col gap-6">
+                                    {/* Company Header */}
+                                    <div className="flex flex-col md:flex-row justify-between items-start gap-4">
+                                        <div className="space-y-2">
+                                            <div className="flex items-center gap-3">
+                                                <FaBuilding className="text-slate-600 dark:text-slate-400 w-5 h-5" />
+                                                <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+                                                    {experience.company}
+                                                </h2>
+                                                {experience.current && (
+                                                    <span className="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-3 py-1 rounded-full text-sm font-medium">
+                                                        Current
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <FaBriefcase className="text-slate-500 dark:text-slate-500 w-4 h-4" />
+                                                <span className="text-lg font-semibold text-slate-700 dark:text-slate-300">
+                                                    {experience.position}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="flex flex-col gap-2 text-sm text-slate-600 dark:text-slate-400">
+                                            <div className="flex items-center gap-2">
+                                                <FaCalendarAlt className="w-4 h-4" />
+                                                <span className="font-medium">{experience.period}</span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <FaMapMarkerAlt className="w-4 h-4" />
+                                                <span>{experience.location}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Description */}
+                                    <div className="border-t border-slate-200/50 dark:border-slate-700/50 pt-6">
+                                        <ul className="space-y-3">
+                                            {experience.description.map((item, i) => (
+                                                <li key={i} className="flex items-start gap-3 text-slate-600 dark:text-slate-400 leading-relaxed">
+                                                    <span className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></span>
+                                                    <span>{item}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
                                 </div>
-                                <ul className="list-disc pl-5 text-muted-foreground space-y-1 pt-2">
-                                    {experience.description.map((item, i) => (
-                                        <li key={i}>{item}</li>
-                                    ))}
-                                </ul>
                             </div>
                         </div>
                     ))}
