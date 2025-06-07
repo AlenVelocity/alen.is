@@ -11,8 +11,6 @@ export const metadata = {
     description: 'Engineer, developer and creator of cool™ stuff',
     metadataBase: new URL('https://alen.is'),
     manifest: '/manifest.json',
-    themeColor: '#000000',
-    viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
     applicationName: 'Alen.is',
     appleWebApp: {
         capable: true,
@@ -75,24 +73,6 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en" suppressHydrationWarning>
-            <head>
-                <link
-                    rel="preload"
-                    href="/Better Signature Font.otf"
-                    as="font"
-                    type="font/otf"
-                    crossOrigin="anonymous"
-                />
-                <link
-                    rel="preload"
-                    href="/Better Signature Font.ttf"
-                    as="font"
-                    type="font/ttf"
-                    crossOrigin="anonymous"
-                />
-                <link rel="icon" href="/favicon.ico" sizes="any" />
-                <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-            </head>
             <body>
                 <TRPCReactProvider>
                     <ThemeProvider

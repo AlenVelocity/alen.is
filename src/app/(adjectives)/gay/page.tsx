@@ -25,16 +25,28 @@ const PrideFlag = () => (
     <div className="group cursor-default">
         <div className="flex shadow-2xl shadow-purple-500/20 rounded-2xl overflow-hidden transition-all duration-500 hover:shadow-3xl hover:shadow-purple-500/30 hover:scale-105">
             {/* Bisexual Pride Flag */}
-            <div className="flex flex-col w-32 transition-all duration-500 group-hover:w-36">
-                <div className="w-full h-3 bg-[#D60270] transition-all duration-500 group-hover:h-4"></div>
-                <div className="w-full h-3 bg-[#9B4F96] transition-all duration-500 group-hover:h-4"></div>
-                <div className="w-full h-3 bg-[#0038A8] transition-all duration-500 group-hover:h-4"></div>
+            <div className="flex flex-col w-32 transition-all duration-500 group-hover:w-36 relative">
+                <div className="w-full h-3 bg-gray-200 dark:bg-gray-700 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-[#D60270] animate-fill-right" style={{ animationDelay: '0s' }}></div>
+                </div>
+                <div className="w-full h-3 bg-gray-200 dark:bg-gray-700 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-[#9B4F96] animate-fill-right" style={{ animationDelay: '0.5s' }}></div>
+                </div>
+                <div className="w-full h-3 bg-gray-200 dark:bg-gray-700 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-[#0038A8] animate-fill-right" style={{ animationDelay: '1s' }}></div>
+                </div>
             </div>
             {/* Pansexual Pride Flag */}
-            <div className="flex flex-col w-32 transition-all duration-500 group-hover:w-36">
-                <div className="w-full h-3 bg-[#FF218C] transition-all duration-500 group-hover:h-4"></div>
-                <div className="w-full h-3 bg-[#FFD800] transition-all duration-500 group-hover:h-4"></div>
-                <div className="w-full h-3 bg-[#21B1FF] transition-all duration-500 group-hover:h-4"></div>
+            <div className="flex flex-col w-32 transition-all duration-500 group-hover:w-36 relative">
+                <div className="w-full h-3 bg-gray-200 dark:bg-gray-700 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-[#FF218C] animate-fill-right" style={{ animationDelay: '1.5s' }}></div>
+                </div>
+                <div className="w-full h-3 bg-gray-200 dark:bg-gray-700 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-[#FFD800] animate-fill-right" style={{ animationDelay: '2s' }}></div>
+                </div>
+                <div className="w-full h-3 bg-gray-200 dark:bg-gray-700 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-[#21B1FF] animate-fill-right" style={{ animationDelay: '2.5s' }}></div>
+                </div>
             </div>
         </div>
     </div>
@@ -55,17 +67,14 @@ export default async function Gay() {
                     <FloatingHeart delay={1.5} x="70%" y="75%" />
                 </div>
 
-                <div className="flex flex-col items-center gap-8 animate-fade-in-up">
+                <div className="flex flex-col items-center gap-8">
                     {/* Pride Flag */}
-                    <div className="animate-scale-in" style={{ animationDelay: '0.2s' }}>
+                    <div>
                         <PrideFlag />
                     </div>
                     
                     {/* Main Message */}
-                    <div 
-                        className="text-center space-y-4 animate-slide-in-top"
-                        style={{ animationDelay: '0.4s' }}
-                    >
+                    <div className="text-center space-y-4">
                         <div className="text-3xl md:text-4xl font-bold leading-tight">
                             <div className="mb-2">
                                 <span className="bg-gradient-to-r from-[#D60270] via-[#9B4F96] to-[#0038A8] bg-clip-text text-transparent">
@@ -73,13 +82,13 @@ export default async function Gay() {
                                 </span>
                             </div>
                             <div>
-                                <span className="bg-gradient-to-r from-[#FF218C] via-[#FFD800] to-[#21B1FF] bg-clip-text text-transparent" style={{ animationDelay: '0.5s' }}>
+                                <span className="bg-gradient-to-r from-[#FF218C] via-[#FFD800] to-[#21B1FF] bg-clip-text text-transparent">
                                     discriminate
                                 </span>
                             </div>
                         </div>
                         
-                        <div className="w-24 h-1 bg-gradient-to-r from-pink-400 via-yellow-400 to-blue-400 mx-auto rounded-full animate-pulse" style={{ animationDelay: '0.6s' }}></div>
+                        <div className="w-24 h-1 bg-gradient-to-r from-pink-400 via-yellow-400 to-blue-400 mx-auto rounded-full animate-pulse"></div>
                     </div>                   
                 </div>
 

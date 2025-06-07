@@ -82,55 +82,55 @@ function DynamicIslandNav() {
                             Alen.Is
                         </Link>
                         
-                        {/* Navigation items - remove unused ones gradually */}
+                        {/* Navigation items - smooth fade and scale transitions */}
                         <div className="flex items-center gap-4">
-                            {/* Experience link - hide if not current page when scrolled */}
-                            {(!isFullyScrolled || currentPath === '/experience') && (
-                                <div
-                                    className="transition-all duration-300 ease-out"
-                                    style={{ 
-                                        opacity: currentPath !== '/experience' && isScrolled ? 1 - scrollProgress : 1,
-                                        transform: `scale(${currentPath !== '/experience' && isScrolled ? 0.95 + (0.05 * (1 - scrollProgress)) : 1})`
-                                    }}
+                            {/* Experience link - smooth fade out when not current */}
+                            <div
+                                className="transition-all duration-300 ease-out overflow-hidden"
+                                style={{ 
+                                    opacity: currentPath === '/experience' ? 1 : Math.max(0, 1 - (scrollProgress * 1.5)),
+                                    transform: `scale(${currentPath === '/experience' ? 1 : Math.max(0.8, 1 - (scrollProgress * 0.3))})`,
+                                    maxWidth: currentPath === '/experience' ? '200px' : `${Math.max(0, 200 - (scrollProgress * 200))}px`,
+                                    marginRight: currentPath === '/experience' ? '0px' : `${Math.max(-16, -16 * scrollProgress)}px`
+                                }}
+                            >
+                                <Link
+                                    href="/experience"
+                                    className={cn(
+                                        'text-sm transition-all duration-300 hover:text-green-400 px-3 py-1.5 rounded-full flex items-center gap-2 whitespace-nowrap',
+                                        currentPath === '/experience'
+                                            ? 'text-green-400 bg-green-400/10'
+                                            : 'text-white/80 hover:bg-white/5'
+                                    )}
                                 >
-                                    <Link
-                                        href="/experience"
-                                        className={cn(
-                                            'text-sm transition-all duration-300 hover:text-green-400 px-3 py-1.5 rounded-full flex items-center gap-2',
-                                            currentPath === '/experience'
-                                                ? 'text-green-400 bg-green-400/10'
-                                                : 'text-white/80 hover:bg-white/5'
-                                        )}
-                                    >
-                                        <FaBriefcase className="w-4 h-4 sm:hidden" />
-                                        <span className="hidden sm:inline">Experience</span>
-                                    </Link>
-                                </div>
-                            )}
+                                    <FaBriefcase className="w-4 h-4 sm:hidden" />
+                                    <span className="hidden sm:inline">Experience</span>
+                                </Link>
+                            </div>
                             
-                            {/* Projects link - hide if not current page when scrolled */}
-                            {(!isFullyScrolled || currentPath === '/projects') && (
-                                <div
-                                    className="transition-all duration-300 ease-out"
-                                    style={{ 
-                                        opacity: currentPath !== '/projects' && isScrolled ? 1 - scrollProgress : 1,
-                                        transform: `scale(${currentPath !== '/projects' && isScrolled ? 0.95 + (0.05 * (1 - scrollProgress)) : 1})`
-                                    }}
+                            {/* Projects link - smooth fade out when not current */}
+                            <div
+                                className="transition-all duration-300 ease-out overflow-hidden"
+                                style={{ 
+                                    opacity: currentPath === '/projects' ? 1 : Math.max(0, 1 - (scrollProgress * 1.5)),
+                                    transform: `scale(${currentPath === '/projects' ? 1 : Math.max(0.8, 1 - (scrollProgress * 0.3))})`,
+                                    maxWidth: currentPath === '/projects' ? '200px' : `${Math.max(0, 200 - (scrollProgress * 200))}px`,
+                                    marginRight: currentPath === '/projects' ? '0px' : `${Math.max(-16, -16 * scrollProgress)}px`
+                                }}
+                            >
+                                <Link
+                                    href="/projects"
+                                    className={cn(
+                                        'text-sm transition-all duration-300 hover:text-green-400 px-3 py-1.5 rounded-full flex items-center gap-2 whitespace-nowrap',
+                                        currentPath === '/projects'
+                                            ? 'text-green-400 bg-green-400/10'
+                                            : 'text-white/80 hover:bg-white/5'
+                                    )}
                                 >
-                                    <Link
-                                        href="/projects"
-                                        className={cn(
-                                            'text-sm transition-all duration-300 hover:text-green-400 px-3 py-1.5 rounded-full flex items-center gap-2',
-                                            currentPath === '/projects'
-                                                ? 'text-green-400 bg-green-400/10'
-                                                : 'text-white/80 hover:bg-white/5'
-                                        )}
-                                    >
-                                        <FaCode className="w-4 h-4 sm:hidden" />
-                                        <span className="hidden sm:inline">Projects</span>
-                                    </Link>
-                                </div>
-                            )}
+                                    <FaCode className="w-4 h-4 sm:hidden" />
+                                    <span className="hidden sm:inline">Projects</span>
+                                </Link>
+                            </div>
                         </div>
 
                         <button
