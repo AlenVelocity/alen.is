@@ -5,38 +5,62 @@ import { Signature } from '@/components/ui/signature'
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
 import { FaEnvelope, FaLinkedin, FaGithub, FaCalendarCheck, FaWhatsapp } from 'react-icons/fa'
+import { getPersonalInfoFromDB, getSocialLinksFromDB } from '@/lib/cms-db'
 
-export const metadata: Metadata = {
-    title: 'Alen.is',
-    description: 'Engineer, developer and creator of cool stuff',
-    openGraph: {
-        title: 'Alen.is',
-        description: 'Engineer, developer and creator of cool stuff',
-        url: 'https://alen.is'
-    },
-    alternates: {
-        canonical: '/'
+export async function generateMetadata(): Promise<Metadata> {
+    const personalInfo = await getPersonalInfoFromDB()
+    
+    return {
+        title: personalInfo.meta_title,
+        description: personalInfo.meta_description,
+        openGraph: {
+            title: personalInfo.meta_title,
+            description: personalInfo.meta_description,
+            url: 'https://alen.is'
+        },
+        alternates: {
+            canonical: '/'
+        }
     }
 }
 
-export default function Home() {
+// Icon mapping for social links
+const IconMap: { [key: string]: React.ComponentType<{ className?: string }> } = {
+    FaEnvelope,
+    FaLinkedin,
+    FaGithub,
+    FaCalendarCheck,
+    FaWhatsapp
+}
+
+export default async function Home() {
+    const [personalInfo, socialLinks] = await Promise.all([
+        getPersonalInfoFromDB(),
+        getSocialLinksFromDB()
+    ])
+
     const personSchema = {
         '@context': 'https://schema.org',
         '@type': 'Person',
-        name: 'Alen.is',
+        name: personalInfo.meta_title,
         url: 'https://alen.is',
         image: 'https://alen.is/og.jpg',
-        jobTitle: 'Software Engineer',
+        jobTitle: personalInfo.job_title,
         worksFor: {
             '@type': 'Organization',
-            name: 'Frappe'
+            name: personalInfo.company
         },
         sameAs: [
             'https://github.com/AlenVelocity',
             'https://www.linkedin.com/in/alen-%F0%9F%8E%B6-yohannan-6794a81ba/'
         ],
-        knowsAbout: ['Web Development', 'TypeScript', 'Rust', 'AI', 'LLM', 'NextJS', 'Vue']
+        knowsAbout: personalInfo.skills
     }
+
+    // Filter social links for hero section (first 4)
+    const heroSocialLinks = socialLinks.filter(link => 
+        ['email', 'linkedin', 'github', 'meeting'].includes(link.id)
+    )
 
     return (
         <PageTransition>
@@ -47,46 +71,35 @@ export default function Home() {
                     <div className="flex flex-col items-start gap-4 md:flex-row md:justify-between">
                         <div className="flex-1 space-y-4">
                             <h1 className="text-3xl font-bold leading-tight tracking-tighter md:text-5xl lg:text-6xl lg:leading-[1.1]">
-                                Hi, I'm Alen
+                                {personalInfo.hero_title}
                             </h1>
                             <p className="max-w-[700px] text-lg text-muted-foreground">
-                                I build{' '}
-                                <LinkButton href="/cool" className="text-lg">
-                                    cool
-                                </LinkButton>{' '}
-                                stuff.
+                                {personalInfo.hero_description.split('cool').map((part, index, array) => (
+                                    <span key={index}>
+                                        {part}
+                                        {index < array.length - 1 && (
+                                            <LinkButton href="/cool" className="text-lg">
+                                                cool
+                                            </LinkButton>
+                                        )}
+                                    </span>
+                                ))}
                             </p>
                             <div className="flex flex-wrap gap-4">
-                                <LinkButton 
-                                    href="mailto:alenyohannan71@gmail.com"
-                                    className="flex items-center gap-2"
-                                >
-                                    <FaEnvelope className="w-4 h-4" />
-                                    Email
-                                </LinkButton>
-                                <LinkButton
-                                    href="https://www.linkedin.com/in/alen-%F0%9F%8E%B6-yohannan-6794a81ba/"
-                                    target="_blank"
-                                    className="flex items-center gap-2"
-                                >
-                                    <FaLinkedin className="w-4 h-4" />
-                                    LinkedIn
-                                </LinkButton>
-                                <LinkButton 
-                                    href="https://github.com/AlenVelocity" 
-                                    target="_blank"
-                                    className="flex items-center gap-2"
-                                >
-                                    <FaGithub className="w-4 h-4" />
-                                    GitHub
-                                </LinkButton>
-                                <LinkButton 
-                                    href="/meeting"
-                                    className="flex items-center gap-2"
-                                >
-                                    <FaCalendarCheck className="w-4 h-4" />
-                                    Meeting
-                                </LinkButton>
+                                {heroSocialLinks.map((link) => {
+                                    const IconComponent = IconMap[link.icon as keyof typeof IconMap]
+                                    return (
+                                        <LinkButton 
+                                            key={link.id}
+                                            href={link.url}
+                                            target={link.url.startsWith('http') ? "_blank" : undefined}
+                                            className="flex items-center gap-2"
+                                        >
+                                            {IconComponent && <IconComponent className="w-4 h-4" />}
+                                            {link.name}
+                                        </LinkButton>
+                                    )
+                                })}
                             </div>
                         </div>
                     </div>
@@ -100,54 +113,99 @@ export default function Home() {
                     
                     <div className="space-y-4 text-muted-foreground text-base leading-relaxed">
                         <p>
-                            I mostly work on web apps, AI projects, and infrastructure. I would say I'm proficient in TS
-                            (both server and client w/ NextJS and Vue), Rust, anything LLMs and Transformers related, AWS and
-                            GCP. I'm currently working as an Engineer at{' '}
-                            <LinkButton href="https://frappe.io" target="_blank" className="text-base">
-                                Frappe
-                            </LinkButton>
-                            , in the{' '}
-                            <LinkButton href="https://frappe.cloud" target="_blank" className="text-base">
-                                Frappe Cloud
-                            </LinkButton>{' '}
-                            team.
+                            {personalInfo.about_me_paragraph_1
+                                .replace(/Frappe/g, '|||Frappe|||')
+                                .replace(/FC/g, '|||FC|||')
+                                .split('|||')
+                                .map((part, index) => {
+                                    switch (part) {
+                                        case 'Frappe':
+                                            return (
+                                                <LinkButton
+                                                    key={index}
+                                                    href="https://frappe.io"
+                                                    target="_blank"
+                                                    className="text-base"
+                                                >
+                                                    Frappe
+                                                </LinkButton>
+                                            )
+                                        case 'FC':
+                                            return (
+                                                <LinkButton
+                                                    key={index}
+                                                    href="https://frappe.cloud"
+                                                    target="_blank"
+                                                    className="text-base"
+                                                >
+                                                    FC
+                                                </LinkButton>
+                                            )
+                                        default:
+                                            return part
+                                    }
+                                })}
                         </p>
                         <p>
-                            As for my personal life, I'm a huge fan of video games. If I'm not working, I'd be playing some{' '}
-                            <LinkButton
-                                href="https://en.wikipedia.org/wiki/Role-playing_video_game#Japanese_role-playing_games"
-                                target="_blank"
-                                className="text-base"
-                            >
-                                JRPG
-                            </LinkButton>
-                            ,{' '}
-                            <LinkButton href="https://overwatch.blizzard.com" target="_blank" className="text-base">
-                                Overwatch
-                            </LinkButton>{' '}
-                            or{' '}
-                            <LinkButton href="/listening" className="text-base">
-                                listening
-                            </LinkButton>{' '}
-                            to{' '}
-                            <LinkButton
-                                href="https://en.wikipedia.org/wiki/Sumika_(band)"
-                                target="_blank"
-                                className="text-base"
-                            >
-                                sumika
-                            </LinkButton>
-                            , or all of them at the same time (don't ask me how or why). I'm currently playing the{' '}
-                            <LinkButton href="https://en.wikipedia.org/wiki/Final_Fantasy_VII" target="_blank" className="text-base">
-                                Final Fantasy 7 Remake Trilogy
-                            </LinkButton>{' '}
-                            if you're interested.
+                            {personalInfo.about_me_paragraph_2
+                                .replace(/JRPG/g, '|||JRPG|||')
+                                .replace(/Overwatch/g, '|||Overwatch|||')
+                                .replace(/listening/g, '|||listening|||')
+                                .replace(/sumika/g, '|||sumika|||')
+                                .replace(/Final Fantasy 7 Remake Trilogy/g, '|||Final Fantasy 7 Remake Trilogy|||')
+                                .split('|||')
+                                .map((part, index) => {
+                                    switch (part) {
+                                        case 'JRPG':
+                                            return (
+                                                <LinkButton
+                                                    key={index}
+                                                    href="https://en.wikipedia.org/wiki/Role-playing_video_game#Japanese_role-playing_games"
+                                                    target="_blank"
+                                                    className="text-base"
+                                                >
+                                                    JRPG
+                                                </LinkButton>
+                                            )
+                                        case 'Overwatch':
+                                            return (
+                                                <LinkButton key={index} href="https://overwatch.blizzard.com" target="_blank" className="text-base">
+                                                    Overwatch
+                                                </LinkButton>
+                                            )
+                                        case 'listening':
+                                            return (
+                                                <LinkButton key={index} href="/listening" className="text-base">
+                                                    listening
+                                                </LinkButton>
+                                            )
+                                        case 'sumika':
+                                            return (
+                                                <LinkButton
+                                                    key={index}
+                                                    href="https://en.wikipedia.org/wiki/Sumika_(band)"
+                                                    target="_blank"
+                                                    className="text-base"
+                                                >
+                                                    sumika
+                                                </LinkButton>
+                                            )
+                                        case 'Final Fantasy 7 Remake Trilogy':
+                                            return (
+                                                <LinkButton key={index} href="https://en.wikipedia.org/wiki/Final_Fantasy_VII" target="_blank" className="text-base">
+                                                    Final Fantasy 7 Remake Trilogy
+                                                </LinkButton>
+                                            )
+                                        default:
+                                            return <span key={index}>{part}</span>
+                                    }
+                                })}
                         </p>
                     </div>
 
                     <div className="flex items-center justify-between gap-4 mt-8">
                         <div className="flex justify-start">
-                            <Signature name="Alen" />
+                            <Signature name={personalInfo.signature_name} />
                         </div>
                     </div>
                 </section>
@@ -158,33 +216,59 @@ export default function Home() {
                 <section className="space-y-6">
                     <h2 className="text-2xl font-bold tracking-tight">Contact</h2>
                     <div className="text-muted-foreground text-base leading-relaxed">
-                        The easiest way to reach me is via{' '}
-                        <LinkButton 
-                            href="https://wa.me/919744375687" 
-                            target="_blank" 
-                            className="text-base"
-                        >
-                            Whatsapp
-                        </LinkButton>{' '}
-                        or{' '}
-                        <DiscordCopy username="notalen" className="text-base">
-                            Discord
-                        </DiscordCopy>
-                        . Otherwise, you can reach me via{' '}
-                        <LinkButton 
-                            href="mailto:alenyohannan71@gmail.com" 
-                            className="text-base"
-                        >
-                            email
-                        </LinkButton>{' '}
-                        or{' '}
-                        <LinkButton 
-                            href="/meeting" 
-                            className="text-base"
-                        >
-                            schedule a meeting
-                        </LinkButton>
-                        .
+                        {personalInfo.contact_description
+                            .replace(/Whatsapp/g, '|||Whatsapp|||')
+                            .replace(/Discord/g, '|||Discord|||')
+                            .replace(/email/g, '|||email|||')
+                            .replace(/schedule a meeting/g, '|||schedule a meeting|||')
+                            .split('|||')
+                            .map((part, index) => {
+                                const whatsappLink = socialLinks.find(link => link.id === 'whatsapp')
+                                const emailLink = socialLinks.find(link => link.id === 'email')
+                                const meetingLink = socialLinks.find(link => link.id === 'meeting')
+                                
+                                switch (part) {
+                                    case 'Whatsapp':
+                                        return whatsappLink ? (
+                                            <LinkButton 
+                                                key={index}
+                                                href={whatsappLink.url} 
+                                                target="_blank" 
+                                                className="text-base"
+                                            >
+                                                Whatsapp
+                                            </LinkButton>
+                                        ) : <span key={index}>Whatsapp</span>
+                                    case 'Discord':
+                                        return (
+                                            <DiscordCopy key={index} username="notalen" className="text-base">
+                                                Discord
+                                            </DiscordCopy>
+                                        )
+                                    case 'email':
+                                        return emailLink ? (
+                                            <LinkButton 
+                                                key={index}
+                                                href={emailLink.url} 
+                                                className="text-base"
+                                            >
+                                                email
+                                            </LinkButton>
+                                        ) : <span key={index}>email</span>
+                                    case 'schedule a meeting':
+                                        return meetingLink ? (
+                                            <LinkButton 
+                                                key={index}
+                                                href={meetingLink.url} 
+                                                className="text-base"
+                                            >
+                                                schedule a meeting
+                                            </LinkButton>
+                                        ) : <span key={index}>schedule a meeting</span>
+                                    default:
+                                        return <span key={index}>{part}</span>
+                                }
+                            })}
                     </div>
                 </section>
             </div>

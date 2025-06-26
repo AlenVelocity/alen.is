@@ -15,3 +15,56 @@ model BinaryPoll {
   createdAt DateTime @default(now())
   updatedAt DateTime
 }
+
+// CMS Models
+model Experience {
+  id          String   @id @default(cuid())
+  company     String
+  position    String
+  period      String
+  location    String
+  description String[] // Array of strings for bullet points
+  current     Boolean  @default(false)
+  order       Int      @default(0)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Project {
+  id           String   @id @default(cuid())
+  title        String
+  period       String
+  description  String
+  link         String
+  type         String   // GitHub, NPM, Website
+  technologies String[] // Array of technology strings
+  image        String?
+  icon         String?
+  featured     Boolean  @default(false)
+  order        Int      @default(0)
+  published    Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model PersonalInfo {
+  id          String   @id @default(cuid())
+  key         String   @unique // e.g., "hero_title", "hero_description", "about_me"
+  value       String
+  type        String   @default("text") // text, json, markdown
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SocialLink {
+  id        String   @id @default(cuid())
+  name      String
+  url       String
+  icon      String?  // Icon name or class
+  order     Int      @default(0)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

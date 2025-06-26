@@ -1,0 +1,96 @@
+[
+  {
+    "id": "frappe-2024",
+    "company": "Frappe",
+    "position": "Software Engineer",
+    "period": "November 2024 - Present",
+    "location": "Remote, Mumbai, India",
+    "description": [
+      "Worked on Frappe Cloud, primarily on the infrastructure automation and managing AWS infrastructure.",
+      "Added support for provisioning custom Domains, email, and DNS configurations.",
+      "User experience improvements for developers using Frappe Cloud and Frappe Framework."
+    ],
+    "current": true,
+    "order": 0,
+    "published": true
+  },
+  {
+    "id": "xagi-2024",
+    "company": "xAGI",
+    "position": "Software Development Engineer",
+    "location": "Remote, Bangalore, India",
+    "period": "April 2024 - Nov 2024",
+    "description": [
+      "Built a dynamic AI Agent Platform and an AI Course Generation Platform",
+      "Spearheaded infrastructure for deploying multiple edge apps on various providers",
+      "Built Multiple AI Web apps including an AI voice survey platform",
+      "Developed AI agents for various clients from the ground up"
+    ],
+    "current": false,
+    "order": 1,
+    "published": true
+  },
+  {
+    "id": "plazza-2024",
+    "company": "Plazza",
+    "position": "Software Engineer",
+    "location": "Remote, Bangalore, India",
+    "period": "May 2024 - Nov 2024",
+    "description": [
+      "Built the first version of Plazza's Quick Commerce system",
+      "Designed and developed a Whatsapp Bot based medicine delivery system for the APR region",
+      "Implemented infrastructure and backend solutions for Plazza",
+      "Designed and developed various microservices using NestJS, RabbitMQ, and PostgreSQL",
+      "Utilized AWS services including EC2, EKS, Amazon MQ, and RDS for robust and scalable cloud infrastructure"
+    ],
+    "current": false,
+    "order": 2,
+    "published": true
+  },
+  {
+    "id": "equivoxai-2023",
+    "company": "EquivoxAI",
+    "position": "Founding Software Engineer - AI",
+    "location": "Remote, Melbourne, Australia",
+    "period": "May 2023 - Jan 2024",
+    "description": [
+      "Developed and implemented dataset parsing algorithms to be used as LoRA training data for LLMs such as Vicuna-13b and LLaMa-2-7b",
+      "Implemented methods to streamline fine-tuning of diffusion models on human faces",
+      "Built highly interactive AI-first chat playground/chat UIs"
+    ],
+    "current": false,
+    "order": 3,
+    "published": true
+  },
+  {
+    "id": "dataequinox-2021",
+    "company": "DataEquinox",
+    "position": "Software Development Engineer",
+    "location": "Remote, Kochi, India",
+    "period": "Dec 2021 - Sep 2022",
+    "description": [
+      "Designed and developed CRM web apps by piecing together multiple different feedback and customer sources/portals",
+      "Created proofs of concept for multi-threaded solutions for Node based Backends",
+      "Collaborated with multiple teams of over 7 members"
+    ],
+    "current": false,
+    "order": 4,
+    "published": true
+  },
+  {
+    "id": "synthesized-infinity-2020",
+    "company": "Synthesized Infinity",
+    "position": "Founder",
+    "location": "Remote",
+    "period": "July 2020 - Present",
+    "description": [
+      "Managed multiple development teams with over 10 people",
+      "Created organization's mission and vision statements for use by the members",
+      "Built and contributed to 12+ OSS Projects",
+      "Conducted lessons on NodeJS and TypeScript for the members of the community"
+    ],
+    "current": true,
+    "order": 5,
+    "published": true
+  }
+] 

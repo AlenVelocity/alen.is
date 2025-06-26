@@ -1,0 +1,50 @@
+[
+  {
+    "id": "email",
+    "name": "Email",
+    "url": "mailto:alenyohannan71@gmail.com",
+    "icon": "FaEnvelope",
+    "order": 0,
+    "published": true
+  },
+  {
+    "id": "linkedin",
+    "name": "LinkedIn",
+    "url": "https://www.linkedin.com/in/alen-%F0%9F%8E%B6-yohannan-6794a81ba/",
+    "icon": "FaLinkedin",
+    "order": 1,
+    "published": true
+  },
+  {
+    "id": "github",
+    "name": "GitHub",
+    "url": "https://github.com/AlenVelocity",
+    "icon": "FaGithub",
+    "order": 2,
+    "published": true
+  },
+  {
+    "id": "meeting",
+    "name": "Meeting",
+    "url": "/meeting",
+    "icon": "FaCalendarCheck",
+    "order": 3,
+    "published": true
+  },
+  {
+    "id": "whatsapp",
+    "name": "Whatsapp",
+    "url": "https://wa.me/919744375687",
+    "icon": "FaWhatsapp",
+    "order": 4,
+    "published": true
+  },
+  {
+    "id": "discord",
+    "name": "Discord",
+    "url": "discord:notalen",
+    "icon": "FaDiscord",
+    "order": 5,
+    "published": true
+  }
+] 

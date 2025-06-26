@@ -169,20 +169,33 @@ function DynamicIslandNav() {
 }
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
+
+    const pathname = usePathname()
+    const isLandingPage = pathname === '/'
+    const isProfessional = pathname.startsWith('/experience') || pathname.startsWith('/projects')
+
     return (
         <div className={inter.className}>
             <div className="flex min-h-screen flex-col bg-gradient-to-br from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
                 <DynamicIslandNav />
                 <main className="flex-1 mt-20">{children}</main>
-                <footer className="border-t border-slate-200/50 dark:border-slate-800/50 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
+                { (isLandingPage || isProfessional) && <footer className="border-t border-slate-200/50 dark:border-slate-800/50 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
                     <div className="container mx-auto max-w-4xl px-4 py-6">
                         <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
                             <p className="text-sm text-slate-600 dark:text-slate-400">
                                 &copy; {new Date().getFullYear()} Alen.Is. All rights reserved.
                             </p>
+                            <button
+                                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                                className="text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors duration-300 flex items-center gap-2"
+                            >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                                </svg>
+                            </button>
                         </div>
                     </div>
-                </footer>
+                </footer>}
             </div>
             <Toaster position="top-right" />
         </div>

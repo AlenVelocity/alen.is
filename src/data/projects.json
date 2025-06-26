@@ -1,0 +1,140 @@
+[
+  {
+    "id": "t2chat-2025",
+    "title": "T2Chat",
+    "period": "January 2025",
+    "description": "Open Source Multi-Model AI Chat Platform",
+    "link": "https://chat.kmr.tech",
+    "type": "Website",
+    "image": "/projects/t2chat.jpg",
+    "technologies": ["typescript", "next", "convex", "tailwind", "shadcn", "ai"],
+    "featured": true,
+    "order": 0,
+    "published": true
+  },
+  {
+    "id": "valdle-2024",
+    "title": "Valdle",
+    "period": "October 2024",
+    "description": "Valorant arcade game for the official Valorant Discord",
+    "link": "https://valdle.com",
+    "type": "Website",
+    "image": "/projects/valdle.jpg",
+    "technologies": ["typescript", "next", "prisma", "postgres", "valorant", "discord", "tailwind", "shadcn"],
+    "featured": true,
+    "order": 1,
+    "published": true
+  },
+  {
+    "id": "kalidokit-2021",
+    "title": "Kalidokit",
+    "period": "November 2021",
+    "description": "Blendshape and kinematics solver for Mediapipe/Tensorflow.js tracking models",
+    "link": "https://www.npmjs.com/package/kalidokit",
+    "type": "NPM",
+    "icon": "unicorn",
+    "technologies": ["typescript", "mediapipe", "tensorflow"],
+    "featured": true,
+    "order": 2,
+    "published": true
+  },
+
+  { 
+    "id": "press-2024",
+    "title": "Press",
+    "period": "December 2024",
+    "description": "Bare Metal Provider integration for Frappe/Press",
+    "link": "https://github.com/frappe/press",
+    "type": "GitHub",
+    "icon": "cloud",
+    "technologies": ["typescript", "vue", "frappe", "mariadb", "scaleway"],
+    "featured": true,
+    "order": 3,
+    "published": true
+  },
+
+  {
+    "id": "meowscript-2023",
+    "title": "MeowScript",
+    "period": "August 2023",
+    "description": "The Purrfect Programming Language",
+    "link": "https://meow.alen.is",
+    "type": "Website",
+    "technologies": ["rust", "next", "wasm", "tailwind"],
+    "featured": false,
+    "order": 4,
+    "published": true
+  },
+  {
+    "id": "wa-sticker-formatter-2021",
+    "title": "Wa-Sticker-Formatter",
+    "period": "March 2021",
+    "description": "WhatsApp sticker creator with webp parsers and editable exif metadata",
+    "link": "https://www.npmjs.com/package/wa-sticker-formatter",
+    "type": "NPM",
+    "technologies": ["typescript", "node", "npm"],
+    "featured": false,
+    "order": 5,
+    "published": true
+  },
+  {
+    "id": "owcsle-2024",
+    "title": "OWCSLE",
+    "period": "April 2024",
+    "description": "Overwatch Championship Series League Esports Arcade Game",
+    "link": "https://owcsle.com",
+    "type": "Website",
+    "technologies": ["typescript", "next", "prisma", "postgres", "overwatch"],
+    "featured": false,
+    "order": 6,
+    "published": true
+  },
+  {
+    "id": "langchain-llama-2023",
+    "title": "Langchain-Llama/Vicuna-TS",
+    "period": "April 2023",
+    "description": "Llama LLM compatibility for Langchain NodeJS",
+    "link": "https://github.com/AlenVelocity/langchain-llama",
+    "type": "GitHub",
+    "technologies": ["typescript", "node", "langchain", "llm"],
+    "featured": false,
+    "order": 7,
+    "published": true
+  },
+  {
+    "id": "aureolin-2021",
+    "title": "Aureolin",
+    "period": "November 2021",
+    "description": "Superfast TS Web Framework with decorator-based API creation",
+    "link": "https://github.com/AlenVelocity/aureolin",
+    "type": "GitHub",
+    "technologies": ["typescript", "node"],
+    "featured": false,
+    "order": 8,
+    "published": true
+  },
+  {
+    "id": "infinity-2020",
+    "title": "Infinity",
+    "period": "July 2020",
+    "description": "First ever utility WhatsApp Bot",
+    "link": "https://alen.infinity.is",
+    "type": "Website",
+    "technologies": ["typescript", "node", "mongodb"],
+    "featured": false,
+    "order": 9,
+    "published": true
+  },
+  {
+    "id": "gyan-pro-2024",
+    "title": "Gyan.Pro",
+    "period": "March 2024",
+    "description": "AI Voice Note Taking app built with Llama3-8b GROQ",
+    "link": "https://gyan.pro",
+    "type": "Website",
+    "technologies": ["typescript", "react", "next", "ai", "llm"],
+    "featured": false,
+    "order": 10,
+    "published": true
+  }
+] 

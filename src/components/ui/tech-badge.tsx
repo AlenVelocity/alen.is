@@ -12,11 +12,16 @@ import {
     SiPostgresql,
     SiPrisma,
     SiMongodb,
-    SiMariadb
+    SiMariadb,
+    SiTailwindcss,
+    SiScaleway,
+    SiLangchain,
+    SiValorant
 } from 'react-icons/si'
 import { TbBrandOpenai } from 'react-icons/tb'
 import { BiLogoGoLang } from 'react-icons/bi'
 import { BsDatabaseFill } from 'react-icons/bs'
+import { SiShadcnui } from 'react-icons/si'
 
 // Define tech stack types and their properties
 export type TechType =
@@ -46,6 +51,11 @@ export type TechType =
     | 'mongodb'
     | 'mariadb'
     | 'frappe'
+    | 'convex'
+    | 'tailwind'
+    | 'shadcn'
+    | 'scaleway'
+    | 'wasm'
 
 interface TechConfig {
     name: string
@@ -119,7 +129,7 @@ const techConfigs: Record<TechType, TechConfig> = {
         name: 'LangChain',
         color: 'bg-emerald-100 dark:bg-emerald-900/30',
         textColor: 'text-emerald-700 dark:text-emerald-300',
-        icon: '🔗'
+        icon: <SiLangchain className="text-emerald-600 dark:text-emerald-400" />
     },
     tensorflow: {
         name: 'TensorFlow',
@@ -143,7 +153,7 @@ const techConfigs: Record<TechType, TechConfig> = {
         name: 'Valorant',
         color: 'bg-red-100 dark:bg-red-900/30',
         textColor: 'text-red-700 dark:text-red-300',
-        icon: '🎯'
+        icon: <SiValorant className="text-red-600 dark:text-red-400" />
     },
     web: {
         name: 'Web',
@@ -210,6 +220,36 @@ const techConfigs: Record<TechType, TechConfig> = {
         color: 'bg-blue-100 dark:bg-blue-900/30',
         textColor: 'text-blue-700 dark:text-blue-300',
         icon: 'F'
+    },
+    convex: {
+        name: 'Convex',
+        color: 'bg-blue-100 dark:bg-blue-900/30',
+        textColor: 'text-blue-700 dark:text-blue-300',
+        icon: <BsDatabaseFill className="text-blue-600 dark:text-blue-400" />
+    },
+    tailwind: {
+        name: 'Tailwind CSS',
+        color: 'bg-cyan-100 dark:bg-cyan-900/30',
+        textColor: 'text-cyan-700 dark:text-cyan-300',
+        icon: <SiTailwindcss className="text-cyan-500 dark:text-cyan-400" />
+    },
+    shadcn: {
+        name: 'shadcn/ui',
+        color: 'bg-neutral-100 dark:bg-neutral-800/50',
+        textColor: 'text-neutral-700 dark:text-neutral-300',
+        icon: <SiShadcnui className="text-black dark:text-white" />
+    },
+    scaleway: {
+        name: 'Scaleway',
+        color: 'bg-purple-100 dark:bg-purple-900/30',
+        textColor: 'text-purple-700 dark:text-purple-300',
+        icon: <SiScaleway className="text-purple-600 dark:text-purple-400" />
+    },
+    wasm: {
+        name: 'WebAssembly',
+        color: 'bg-indigo-100 dark:bg-indigo-900/30',
+        textColor: 'text-indigo-700 dark:text-indigo-300',
+        icon: '🔧'
     }
 }
 

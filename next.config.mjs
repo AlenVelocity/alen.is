@@ -7,6 +7,10 @@ try {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Enable static export for CMS pages (can be toggled)
+  // output: 'export',
+  // trailingSlash: true,
+  
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -21,6 +25,8 @@ const nextConfig = {
         hostname: '**',
       },
     ],
+    // For static export, you might need to configure this
+    // unoptimized: true,
   },
   experimental: {
     webpackBuildWorker: true,

@@ -3,6 +3,7 @@ import { PageTransition } from '@/components/ui/page-transition'
 import { FaBriefcase, FaCalendarAlt, FaMapMarkerAlt, FaBuilding, FaDownload } from 'react-icons/fa'
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
+import { getExperiencesFromDB } from '@/lib/cms-db'
 
 export const metadata: Metadata = {
     title: 'Experience',
@@ -17,81 +18,8 @@ export const metadata: Metadata = {
     }
 }
 
-export default function Experience() {
-    const experiences = [
-        {
-            company: 'Frappe',
-            position: 'Software Engineer',
-            period: 'November 2024 - Present',
-            location: 'Remote, Mumbai, India',
-            description: [
-                'Worked on Frappe Cloud, primarily on the infrastructure automation and managing AWS infrastructure.',
-                'Added support for provisioning custom Domains, email, and DNS configurations.',
-                'User experience improvements for developers using Frappe Cloud and Frappe Framework.'
-            ],
-            current: true
-        },
-        {
-            company: 'xAGI',
-            position: 'Software Development Engineer',
-            location: 'Remote, Bangalore, India',
-            period: 'April 2024 - Nov 2024',
-            description: [
-                'Built a dynamic AI Agent Platform and an AI Course Generation Platform',
-                'Spearheaded infrastructure for deploying multiple edge apps on various providers',
-                'Built Multiple AI Web apps including an AI voice survey platform',
-                'Developed AI agents for various clients from the ground up'
-            ]
-        },
-        {
-            company: 'Plazza',
-            position: 'Software Engineer',
-            location: 'Remote, Bangalore, India',
-            period: 'May 2024 - Nov 2024',
-            description: [
-                "Built the first version of Plazza's Quick Commerce system",
-                'Designed and developed a Whatsapp Bot based medicine delivery system for the APR region',
-                'Implemented infrastructure and backend solutions for Plazza',
-                'Designed and developed various microservices using NestJS, RabbitMQ, and PostgreSQL',
-                'Utilized AWS services including EC2, EKS, Amazon MQ, and RDS for robust and scalable cloud infrastructure'
-            ]
-        },
-        {
-            company: 'EquivoxAI',
-            position: 'Founding Software Engineer - AI',
-            location: 'Remote, Melbourne, Australia',
-            period: 'May 2023 - Jan 2024',
-            description: [
-                'Developed and implemented dataset parsing algorithms to be used as LoRA training data for LLMs such as Vicuna-13b and LLaMa-2-7b',
-                'Implemented methods to streamline fine-tuning of diffusion models on human faces',
-                'Built highly interactive AI-first chat playground/chat UIs'
-            ]
-        },
-        {
-            company: 'DataEquinox',
-            position: 'Software Development Engineer',
-            location: 'Remote, Kochi, India',
-            period: 'Dec 2021 - Sep 2022',
-            description: [
-                'Designed and developed CRM web apps by piecing together multiple different feedback and customer sources/portals',
-                'Created proofs of concept for multi-threaded solutions for Node based Backends',
-                'Collaborated with multiple teams of over 7 members'
-            ]
-        },
-        {
-            company: 'Synthesized Infinity',
-            position: 'Founder',
-            location: 'Remote',
-            period: 'July 2020 - Present',
-            description: [
-                'Managed multiple development teams with over 10 people',
-                "Created organization's mission and vision statements for use by the members",
-                'Built and contributed to 12+ OSS Projects',
-                'Conducted lessons on NodeJS and TypeScript for the members of the community'
-            ],
-            current: true
-        }
-    ]
+export default async function Experience() {
+    const experiences = await getExperiencesFromDB()
 
     const experienceSchema = {
         '@context': 'https://schema.org',
@@ -140,7 +68,7 @@ export default function Experience() {
                 {/* Experience Timeline */}
                 <div className="space-y-8">
                     {experiences.map((experience, index) => (
-                        <div key={index} className="group">
+                        <div key={experience.id} className="group">
                             <div className={`
                                 bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm rounded-3xl p-8 shadow-xl shadow-slate-200/20 dark:shadow-slate-950/20 border border-slate-200/50 dark:border-slate-800/50
                                 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl

@@ -68,15 +68,14 @@ export default async function Listening() {
                 <div className="space-y-12">
                     {/* Header */}
                     <div className="text-center space-y-4">
-                        <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-green-600 via-blue-600 to-purple-600 bg-clip-text text-transparent animate-fade-in-up">
+                        <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-green-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
                             Listening
                         </h1>
-                        <div className="w-20 h-1 bg-gradient-to-r from-green-400 to-blue-500 mx-auto rounded-full"></div>
                     </div>
 
                     {/* Currently Playing */}
                     {lastFmData.nowPlaying && (
-                        <div className="animate-slide-in-top">
+                        <div>
                             <h2 className="flex items-center justify-center text-xl font-semibold mb-6 group cursor-default">
                                 <span className="bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
                                     I'm currently listening to
@@ -127,7 +126,7 @@ export default async function Listening() {
                     )}
 
                     {/* About Section */}
-                    <div className="space-y-6 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                    <div className="space-y-6">
                         <div className="space-y-4 text-base leading-relaxed text-muted-foreground">
                             <p className="hover:text-foreground transition-colors duration-300">
                                 I usually only listen to Video Game OSTs (especially from the Persona series) and Japanese
@@ -151,7 +150,7 @@ export default async function Listening() {
                     </div>
 
                     {/* Spotify Playlist */}
-                    <div className="space-y-6 animate-scale-in" style={{ animationDelay: '0.4s' }}>
+                    <div className="space-y-6">
                         <h2 className="text-2xl font-bold flex items-center gap-3">
                             <FaSpotify className="text-green-500" />
                             <span className="bg-gradient-to-r from-green-600 to-green-500 bg-clip-text text-transparent">
@@ -175,7 +174,7 @@ export default async function Listening() {
 
                     {/* Recently Played */}
                     {lastFmData.recentlyPlayed.length > 0 && (
-                        <div className="space-y-6 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+                        <div className="space-y-6">
                             <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Recently Played</h2>
                             <div className="space-y-3">
                                 {lastFmData.recentlyPlayed.map((track, index) => (
@@ -233,7 +232,7 @@ export default async function Listening() {
 
                     {/* Empty State */}
                     {lastFmData.recentlyPlayed.length === 0 && !lastFmData.nowPlaying && (
-                        <div className="text-center py-12 animate-fade-in-up">
+                        <div className="text-center py-12">
                             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 flex items-center justify-center mx-auto mb-4">
                                 <FaHeadphones className="text-2xl text-slate-400" />
                             </div>
