@@ -12,10 +12,18 @@ interface SignatureProps {
 export function Signature({ name, className }: SignatureProps) {
     const [writing, setWriting] = useState(false)
     const [visible, setVisible] = useState(false)
+    const [mounted, setMounted] = useState(false)
     const containerRef = useRef<HTMLDivElement>(null)
     const { theme } = useTheme()
 
+    // Ensure component is mounted on client before using theme
     useEffect(() => {
+        setMounted(true)
+    }, [])
+
+    useEffect(() => {
+        if (!mounted) return
+
         // Skip animation in dark mode
         if (theme === 'dark') {
             setVisible(true)
@@ -37,7 +45,31 @@ export function Signature({ name, className }: SignatureProps) {
             clearTimeout(visibleTimer)
             clearTimeout(writingTimer)
         }
-    }, [theme])
+    }, [theme, mounted])
+
+    // Show a basic version until mounted to prevent hydration mismatch
+    if (!mounted) {
+        return (
+            <div
+                ref={containerRef}
+                className={cn(
+                    'signature-text text-6xl relative overflow-hidden',
+                    'text-foreground/80 mt-4 pr-2',
+                    'opacity-100',
+                    className
+                )}
+                style={{
+                    fontFamily: "'Better Signature', cursive",
+                    fontWeight: 'normal',
+                    fontStyle: 'normal'
+                }}
+            >
+                <div className="relative inline-block">
+                    <span className="relative">{name}</span>
+                </div>
+            </div>
+        )
+    }
 
     return (
         <div
