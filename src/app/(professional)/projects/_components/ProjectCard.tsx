@@ -46,7 +46,7 @@ const getTypeIcon = (type: string) => {
 
 export function FeaturedProjectCard({ project }: ProjectCardProps) {
     return (
-        <div className="group bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-900/80 dark:to-slate-800/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl shadow-slate-200/20 dark:shadow-slate-950/20 border border-slate-200/50 dark:border-slate-800/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl w-full h-[520px]">
+        <div className="group bg-gradient-to-br from-white/80 to-slate-50/80 dark:from-slate-900/80 dark:to-slate-800/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl shadow-slate-200/20 dark:shadow-slate-950/20 border border-slate-200/50 dark:border-slate-800/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl w-full">
             <div className="flex flex-col h-full">
                 {/* Project Image or Icon */}
                 <div className="relative w-full h-48 mb-4 rounded-2xl overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700">
@@ -102,7 +102,7 @@ export function FeaturedProjectCard({ project }: ProjectCardProps) {
 
 export function RegularProjectCard({ project }: ProjectCardProps) {
     return (
-        <div className="group bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm rounded-2xl p-6 shadow-lg shadow-slate-200/10 dark:shadow-slate-950/10 border border-slate-200/50 dark:border-slate-800/50 transition-all duration-300 hover:scale-102 hover:shadow-xl w-full h-[280px]">
+        <div className="group bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm rounded-2xl p-6 shadow-lg shadow-slate-200/10 dark:shadow-slate-950/10 border border-slate-200/50 dark:border-slate-800/50 transition-all duration-300 hover:scale-102 hover:shadow-xl w-full">
             <div className="flex flex-col h-full">
                 <div className="flex items-start justify-between mb-3">
                     <h3 className="text-lg font-bold text-slate-900 dark:text-white">

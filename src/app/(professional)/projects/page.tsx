@@ -45,7 +45,7 @@ export default async function Projects() {
                     <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-8 flex items-center gap-3">
                         Featured Projects
                     </h2>
-                    <div className="grid gap-8 md:grid-cols-2">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {featuredProjects.map((project) => (
                             <FeaturedProjectCard key={project.id} project={project} />
                         ))}
@@ -53,11 +53,11 @@ export default async function Projects() {
                 </section>
 
                 {/* All Projects */}
-                <section className="space-y-6 pb-8 pt-6 md:pb-12 lg:py-12">
+                <section className="space-y-6 pb-8 pt-6 md:pb-12 lg:py-12 max-w-4xl mx-auto">
                     <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-8 flex items-center gap-3">
                         All Projects
                     </h2>
-                    <div className="grid gap-6 md:grid-cols-2">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {allProjects.filter(project => !project.featured).map((project) => (
                             <RegularProjectCard key={project.id} project={project} />
                         ))}
