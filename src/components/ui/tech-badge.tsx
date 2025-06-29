@@ -257,15 +257,13 @@ interface TechBadgeProps {
     tech: TechType
     className?: string
 }
-
 export function TechBadge({ tech, className }: TechBadgeProps) {
     const config = techConfigs[tech]
 
     return (
         <span
             className={cn(
-                'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium transition-colors',
-                'border border-transparent hover:border-foreground/10',
+                'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium transition-colors border border-transparent hover:border-foreground/10 whitespace-nowrap',
                 config.color,
                 config.textColor,
                 className
