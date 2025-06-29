@@ -5,10 +5,10 @@ import { Signature } from '@/components/ui/signature'
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
 import { FaEnvelope, FaLinkedin, FaGithub, FaCalendarCheck, FaWhatsapp } from 'react-icons/fa'
-import { getPersonalInfoFromDB, getSocialLinksFromDB } from '@/lib/cms-db'
+import { runGetPersonalInfo, runGetSocialLinks } from '@/lib/cms-db'
 
 export async function generateMetadata(): Promise<Metadata> {
-    const personalInfo = await getPersonalInfoFromDB()
+    const personalInfo = await runGetPersonalInfo()
     
     return {
         title: personalInfo.meta_title,
@@ -35,8 +35,8 @@ const IconMap: { [key: string]: React.ComponentType<{ className?: string }> } = 
 
 export default async function Home() {
     const [personalInfo, socialLinks] = await Promise.all([
-        getPersonalInfoFromDB(),
-        getSocialLinksFromDB()
+        runGetPersonalInfo(),
+        runGetSocialLinks()
     ])
 
     const personSchema = {

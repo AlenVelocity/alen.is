@@ -1,7 +1,7 @@
 import { PageTransition } from '@/components/ui/page-transition'
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
-import { getProjectsFromDB } from '@/lib/cms-db'
+import { runGetProjects } from '@/lib/cms-db'
 import { FeaturedProjectCard, RegularProjectCard } from './_components/ProjectCard'
 
 export const metadata: Metadata = {
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 }
 
 export default async function Projects() {
-    const allProjects = await getProjectsFromDB()
+    const allProjects = await runGetProjects()
 
     const featuredProjects = allProjects.filter(project => project.featured)
 

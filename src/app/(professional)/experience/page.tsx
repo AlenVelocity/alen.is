@@ -3,7 +3,7 @@ import { PageTransition } from '@/components/ui/page-transition'
 import { FaBriefcase, FaCalendarAlt, FaMapMarkerAlt, FaBuilding, FaDownload } from 'react-icons/fa'
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
-import { getExperiencesFromDB } from '@/lib/cms-db'
+import { runGetExperiences } from '@/lib/cms-db'
 
 export const metadata: Metadata = {
     title: 'Experience',
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 }
 
 export default async function Experience() {
-    const experiences = await getExperiencesFromDB()
+    const experiences = await runGetExperiences()
 
     const experienceSchema = {
         '@context': 'https://schema.org',
