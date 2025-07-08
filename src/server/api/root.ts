@@ -1,6 +1,8 @@
 import { createCallerFactory, createTRPCRouter, publicProcedure } from '@/server/api/trpc'
 import { pollRouter } from './routers/poll'
 import { lastFmRouter } from './routers/lastfm'
+import { spotifyRouter } from './routers/spotify'
+import { gamingRouter } from './routers/gaming'
 
 /**
  * This is the primary router for your server.
@@ -8,8 +10,10 @@ import { lastFmRouter } from './routers/lastfm'
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
+    lastfm: lastFmRouter,
     poll: pollRouter,
-    lastfm: lastFmRouter
+    spotify: spotifyRouter,
+    gaming: gamingRouter,
 })
 
 // export type definition of API
