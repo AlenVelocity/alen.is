@@ -135,6 +135,15 @@
     }
 }
 
+@keyframes spinSlow {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 .animate-fade-in-up {
     animation: fadeInUp 0.6s ease-out;
 }
@@ -153,6 +162,10 @@
 
 .animate-glow {
     animation: glow 2s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+    animation: spinSlow 3s linear infinite;
 }
 
 .glass {

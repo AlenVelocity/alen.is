@@ -24,6 +24,7 @@ model Experience {
   period      String
   location    String
   description String[] // Array of strings for bullet points
+  link        String?
   current     Boolean  @default(false)
   order       Int      @default(0)
   published   Boolean  @default(true)

@@ -31,6 +31,7 @@ async function migrateExperiences() {
         current: exp.current,
         order: exp.order,
         published: exp.published,
+        link: exp.link,
       }
     })
   }

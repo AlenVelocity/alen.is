@@ -31,7 +31,8 @@ export const getExperiencesFromDB = Effect.tryPromise({
       description: exp.description,
       current: exp.current,
       order: exp.order,
-      published: exp.published
+      published: exp.published,
+      link: exp.link
     }))
   },
   catch: (error: unknown) => new DatabaseError(`Failed to fetch experiences: ${error}`)
@@ -129,7 +130,8 @@ export const getExperienceByIdFromDB = (id: string) => Effect.tryPromise({
       description: experience.description,
       current: experience.current,
       order: experience.order,
-      published: experience.published
+      published: experience.published,
+      link: experience.link
     }
   },
   catch: (error: unknown) => new DatabaseError(`Failed to fetch experience by ID: ${error}`)

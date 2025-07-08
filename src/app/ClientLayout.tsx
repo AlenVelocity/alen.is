@@ -208,14 +208,6 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
                             <p className="text-sm text-slate-600 dark:text-slate-400">
                                 &copy; {new Date().getFullYear()} Alen.Is. All rights reserved.
                             </p>
-                            <button
-                                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                                className="text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors duration-300 flex items-center gap-2"
-                            >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
-                                </svg>
-                            </button>
                         </div>
                     </div>
                 </footer>}

@@ -6,6 +6,7 @@ import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
 import { FaEnvelope, FaLinkedin, FaGithub, FaCalendarCheck, FaWhatsapp } from 'react-icons/fa'
 import { runGetPersonalInfo, runGetSocialLinks } from '@/lib/cms-db'
+import { CurrentlyListening } from './_components/CurrentlyListening'
 
 export async function generateMetadata(): Promise<Metadata> {
     const personalInfo = await runGetPersonalInfo()
@@ -31,6 +32,60 @@ const IconMap: { [key: string]: React.ComponentType<{ className?: string }> } = 
     FaGithub,
     FaCalendarCheck,
     FaWhatsapp
+}
+
+// Parser function to handle markdown links and special Discord syntax
+function parseTextWithLinks(text: string, className: string = "text-base"): React.ReactNode[] {
+    const parts: React.ReactNode[] = []
+    let currentIndex = 0
+    
+    // Regex to match [text](url) and [text]{COPY:username}
+    const linkRegex = /\[([^\]]+)\](?:\(([^)]+)\)|\{COPY:([^}]+)\})/g
+    let match
+    
+    while ((match = linkRegex.exec(text)) !== null) {
+        const [fullMatch, linkText, url, discordUsername] = match
+        const startIndex = match.index
+        
+        // Add text before the link
+        if (startIndex > currentIndex) {
+            parts.push(text.slice(currentIndex, startIndex))
+        }
+        
+        // Add the link component
+        if (discordUsername) {
+            // Discord copy component
+            parts.push(
+                <DiscordCopy key={startIndex} username={discordUsername} className={className}>
+                    {linkText}
+                </DiscordCopy>
+            )
+        } else if (url) {
+            // Regular link
+            const isExternal = url.startsWith('http')
+            parts.push(
+                <LinkButton 
+                    key={startIndex}
+                    href={url}
+                    target={isExternal ? "_blank" : undefined}
+                    className={className}
+                >
+                    {linkText}
+                </LinkButton>
+            )
+        }
+        
+        currentIndex = startIndex + fullMatch.length
+    }
+    
+    // Add remaining text
+    if (currentIndex < text.length) {
+        parts.push(text.slice(currentIndex))
+    }
+    
+    return parts.map((part, index) => (
+        <span key={index}>{part}</span>
+    ))
 }
 
 export default async function Home() {
@@ -74,16 +129,7 @@ export default async function Home() {
                                 {personalInfo.hero_title}
                             </h1>
                             <p className="max-w-[700px] text-lg text-muted-foreground">
-                                {personalInfo.hero_description.split('cool').map((part, index, array) => (
-                                    <span key={index}>
-                                        {part}
-                                        {index < array.length - 1 && (
-                                            <LinkButton href="/cool" className="text-lg">
-                                                cool
-                                            </LinkButton>
-                                        )}
-                                    </span>
-                                ))}
+                                {parseTextWithLinks(personalInfo.hero_description, "text-lg")}
                             </p>
                             <div className="flex flex-wrap gap-4">
                                 {heroSocialLinks.map((link) => {
@@ -113,93 +159,10 @@ export default async function Home() {
                     
                     <div className="space-y-4 text-muted-foreground text-base leading-relaxed">
                         <p>
-                            {personalInfo.about_me_paragraph_1
-                                .replace(/Frappe/g, '|||Frappe|||')
-                                .replace(/FC/g, '|||FC|||')
-                                .split('|||')
-                                .map((part, index) => {
-                                    switch (part) {
-                                        case 'Frappe':
-                                            return (
-                                                <LinkButton
-                                                    key={index}
-                                                    href="https://frappe.io"
-                                                    target="_blank"
-                                                    className="text-base"
-                                                >
-                                                    Frappe
-                                                </LinkButton>
-                                            )
-                                        case 'FC':
-                                            return (
-                                                <LinkButton
-                                                    key={index}
-                                                    href="https://frappe.cloud"
-                                                    target="_blank"
-                                                    className="text-base"
-                                                >
-                                                    FC
-                                                </LinkButton>
-                                            )
-                                        default:
-                                            return part
-                                    }
-                                })}
+                            {parseTextWithLinks(personalInfo.about_me_paragraph_1)}
                         </p>
                         <p>
-                            {personalInfo.about_me_paragraph_2
-                                .replace(/JRPG/g, '|||JRPG|||')
-                                .replace(/Overwatch/g, '|||Overwatch|||')
-                                .replace(/listening/g, '|||listening|||')
-                                .replace(/sumika/g, '|||sumika|||')
-                                .replace(/Final Fantasy 7 Remake Trilogy/g, '|||Final Fantasy 7 Remake Trilogy|||')
-                                .split('|||')
-                                .map((part, index) => {
-                                    switch (part) {
-                                        case 'JRPG':
-                                            return (
-                                                <LinkButton
-                                                    key={index}
-                                                    href="https://en.wikipedia.org/wiki/Role-playing_video_game#Japanese_role-playing_games"
-                                                    target="_blank"
-                                                    className="text-base"
-                                                >
-                                                    JRPG
-                                                </LinkButton>
-                                            )
-                                        case 'Overwatch':
-                                            return (
-                                                <LinkButton key={index} href="https://overwatch.blizzard.com" target="_blank" className="text-base">
-                                                    Overwatch
-                                                </LinkButton>
-                                            )
-                                        case 'listening':
-                                            return (
-                                                <LinkButton key={index} href="/listening" className="text-base">
-                                                    listening
-                                                </LinkButton>
-                                            )
-                                        case 'sumika':
-                                            return (
-                                                <LinkButton
-                                                    key={index}
-                                                    href="https://en.wikipedia.org/wiki/Sumika_(band)"
-                                                    target="_blank"
-                                                    className="text-base"
-                                                >
-                                                    sumika
-                                                </LinkButton>
-                                            )
-                                        case 'Final Fantasy 7 Remake Trilogy':
-                                            return (
-                                                <LinkButton key={index} href="https://en.wikipedia.org/wiki/Final_Fantasy_VII" target="_blank" className="text-base">
-                                                    Final Fantasy 7 Remake Trilogy
-                                                </LinkButton>
-                                            )
-                                        default:
-                                            return <span key={index}>{part}</span>
-                                    }
-                                })}
+                            {parseTextWithLinks(personalInfo.about_me_paragraph_2)}
                         </p>
                     </div>
 
@@ -212,63 +175,17 @@ export default async function Home() {
 
                 <hr className="my-8 border-muted" />
 
+                <div className="space-y-6">
+                    <CurrentlyListening />
+                </div>
+
+                <hr className="my-8 border-muted" />
+
                 {/* Contact Section */}
                 <section className="space-y-6">
                     <h2 className="text-2xl font-bold tracking-tight">Contact</h2>
                     <div className="text-muted-foreground text-base leading-relaxed">
-                        {personalInfo.contact_description
-                            .replace(/Whatsapp/g, '|||Whatsapp|||')
-                            .replace(/Discord/g, '|||Discord|||')
-                            .replace(/email/g, '|||email|||')
-                            .replace(/schedule a meeting/g, '|||schedule a meeting|||')
-                            .split('|||')
-                            .map((part, index) => {
-                                const whatsappLink = socialLinks.find(link => link.id === 'whatsapp')
-                                const emailLink = socialLinks.find(link => link.id === 'email')
-                                const meetingLink = socialLinks.find(link => link.id === 'meeting')
-                                
-                                switch (part) {
-                                    case 'Whatsapp':
-                                        return whatsappLink ? (
-                                            <LinkButton 
-                                                key={index}
-                                                href={whatsappLink.url} 
-                                                target="_blank" 
-                                                className="text-base"
-                                            >
-                                                Whatsapp
-                                            </LinkButton>
-                                        ) : <span key={index}>Whatsapp</span>
-                                    case 'Discord':
-                                        return (
-                                            <DiscordCopy key={index} username="notalen" className="text-base">
-                                                Discord
-                                            </DiscordCopy>
-                                        )
-                                    case 'email':
-                                        return emailLink ? (
-                                            <LinkButton 
-                                                key={index}
-                                                href={emailLink.url} 
-                                                className="text-base"
-                                            >
-                                                email
-                                            </LinkButton>
-                                        ) : <span key={index}>email</span>
-                                    case 'schedule a meeting':
-                                        return meetingLink ? (
-                                            <LinkButton 
-                                                key={index}
-                                                href={meetingLink.url} 
-                                                className="text-base"
-                                            >
-                                                schedule a meeting
-                                            </LinkButton>
-                                        ) : <span key={index}>schedule a meeting</span>
-                                    default:
-                                        return <span key={index}>{part}</span>
-                                }
-                            })}
+                        {parseTextWithLinks(personalInfo.contact_description)}
                     </div>
                 </section>
             </div>

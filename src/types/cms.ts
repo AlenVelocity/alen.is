@@ -8,6 +8,7 @@ export interface Experience {
   current: boolean
   order: number
   published: boolean
+  link: string
 }
 
 export interface Project {

@@ -1,13 +1,13 @@
 {
   "hero_title": "Hi, I'm Alen",
   "hero_description": "I build cool stuff.",
-  "about_me_paragraph_1": "I mostly work on web apps, AI projects, and infrastructure. I would say I'm proficient in TS (both server and client w/ NextJS and Vue), Rust, anything LLMs and Transformers related, AWS and GCP. My most recent role was as an Engineer at Frappe, in the FC team.",
-  "about_me_paragraph_2": "As for my personal life, I'm a huge fan of video games. If I'm not working, I'd be playing some JRPG, Overwatch or listening to sumika, or all of them at the same time (don't ask me how or why). I'm currently playing the Final Fantasy 7 Remake Trilogy if you're interested.",
-  "contact_description": "The easiest way to reach me is via Whatsapp or Discord. Otherwise, you can reach me via email or schedule a meeting.",
+  "about_me_paragraph_1": "I mostly work on web apps, AI projects, and infrastructure. I would say I'm proficient in TS (both server and client w/ NextJS and Vue), Rust, anything LLMs/Transformers related, and everything Cloud. I'm currently building things at [Komorebi](https://kmrb.tech).",
+  "about_me_paragraph_2": "As for my personal life, I'm a huge fan of video games and [sumika](https://en.wikipedia.org/wiki/Sumika). I'm currently playing [Final Fantasy XVI](https://en.wikipedia.org/wiki/Final_Fantasy_XVI) if you're interested.",
+  "contact_description": "The easiest way to reach me is via [Whatsapp](https://wa.me/919744375687?text=hii) or [Discord]{COPY:notalen}. Otherwise, you can reach me via [email](mailto:alenyohannan71@gmail.com) or [schedule a meeting](/meeting).",
   "signature_name": "Alen",
   "meta_title": "Alen.is",
   "meta_description": "Engineer, developer and creator of cool stuff",
   "job_title": "Software Engineer",
-  "company": "Frappe",
+  "company": "Komorebi",
   "skills": ["Web Development", "TypeScript", "Rust", "AI", "LLM", "NextJS", "Vue"]
 } 

@@ -4,6 +4,7 @@ import { FaBriefcase, FaCalendarAlt, FaMapMarkerAlt, FaBuilding, FaDownload } fr
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
 import { runGetExperiences } from '@/lib/cms-db'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
     title: 'Experience',
@@ -79,9 +80,8 @@ export default async function Experience() {
                                     <div className="flex flex-col md:flex-row justify-between items-start gap-4">
                                         <div className="space-y-2">
                                             <div className="flex items-center gap-3">
-                                                <FaBuilding className="text-slate-600 dark:text-slate-400 w-5 h-5" />
                                                 <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
-                                                    {experience.company}
+                                                    {experience.link ? <LinkButton href={experience.link} target="_blank" className="text-2xl font-bold">{experience.company}</LinkButton> : experience.company}
                                                 </h2>
                                                 {experience.current && (
                                                     <span className="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-3 py-1 rounded-full text-sm font-medium">

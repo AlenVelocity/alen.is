@@ -1,18 +1,36 @@
 [
   {
+    "id": "kmrb-2025",
+    "company": "Komorebi",
+    "position": "Co-Founder",
+    "period": "October 2024 - Present",
+    "location": "Remote, India",
+    "description": [
+      "Building the future of Employee Identity Management with innovative solutions",
+      "Leading product development and technical architecture decisions",
+      "Providing services to clients while also building our own innovative products",
+      "Driving strategic vision and execution for next-generation identity solutions"
+    ],
+    "current": true,
+    "order": 0,
+    "published": true,
+    "link": "https://kmrb.tech"
+  },
+  {
     "id": "frappe-2024",
     "company": "Frappe",
     "position": "Software Engineer",
-    "period": "November 2024 - Present",
+    "period": "November 2024 - June 2025",
     "location": "Remote, Mumbai, India",
     "description": [
       "Worked on Frappe Cloud, primarily on the infrastructure automation and managing AWS infrastructure.",
       "Added support for provisioning custom Domains, email, and DNS configurations.",
       "User experience improvements for developers using Frappe Cloud and Frappe Framework."
     ],
-    "current": true,
+    "current": false,
     "order": 0,
-    "published": true
+    "published": true,
+    "link": "https://frappe.io"
   },
   {
     "id": "xagi-2024",
@@ -28,7 +46,8 @@
     ],
     "current": false,
     "order": 1,
-    "published": true
+    "published": true,
+    "link": "https://xagi.in"
   },
   {
     "id": "plazza-2024",
@@ -45,11 +64,12 @@
     ],
     "current": false,
     "order": 2,
-    "published": true
+    "published": true,
+    "link": "https://plazza.in"
   },
   {
     "id": "equivoxai-2023",
-    "company": "EquivoxAI",
+    "company": "EquivoxAI (now Shuriken)",
     "position": "Founding Software Engineer - AI",
     "location": "Remote, Melbourne, Australia",
     "period": "May 2023 - Jan 2024",
@@ -60,7 +80,8 @@
     ],
     "current": false,
     "order": 3,
-    "published": true
+    "published": true,
+    "link": "hhttps://shuriken.trade/"
   },
   {
     "id": "dataequinox-2021",
@@ -75,7 +96,8 @@
     ],
     "current": false,
     "order": 4,
-    "published": true
+    "published": true,
+    "link": "https://dataequinox.com/"
   },
   {
     "id": "synthesized-infinity-2020",
@@ -91,6 +113,7 @@
     ],
     "current": true,
     "order": 5,
-    "published": true
+    "published": true,
+    "link": "https://github.com/Synthesized-Infinity"
   }
 ] 
