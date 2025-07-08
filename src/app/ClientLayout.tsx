@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils'
 import { Toaster } from 'sonner'
 import { useState, useEffect } from 'react'
 import { useTheme } from 'next-themes'
-import { FaSun, FaMoon, FaBriefcase, FaCode } from 'react-icons/fa'
+import { FaSun, FaMoon, FaBriefcase, FaCode, FaArrowUp } from 'react-icons/fa'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -55,7 +55,7 @@ function DynamicIslandNav() {
     
     // Interpolated values
     const paddingX = 24 - (8 * scrollProgress) // 24px to 16px (px-6 to px-4)
-    const gap = 24 - (8 * scrollProgress) // 24px to 16px (gap-6 to gap-4)
+    const gap = 16 - (4 * scrollProgress) // 16px to 12px (smaller gap)
     const shadowIntensity = 0.1 + (0.1 * scrollProgress) // 0.1 to 0.2
 
     return (
@@ -131,15 +131,38 @@ function DynamicIslandNav() {
                                     <span className="hidden sm:inline">Projects</span>
                                 </Link>
                             </div>
+                            
                         </div>
 
-                        <button
-                            onClick={toggleTheme}
-                            className="text-white/80 hover:text-white transition-all duration-300 hover:bg-white/5 p-2 rounded-full"
-                            aria-label="Toggle theme"
-                        >
-                            {theme === 'dark' ? <FaSun className="w-4 h-4" /> : <FaMoon className="w-4 h-4" />}
-                        </button>
+                        <div className="flex items-center">
+                            <button
+                                onClick={toggleTheme}
+                                className="text-white/80 hover:text-white transition-all duration-300 hover:bg-white/5 p-2 rounded-full"
+                                aria-label="Toggle theme"
+                            >
+                                {theme === 'dark' ? <FaSun className="w-4 h-4" /> : <FaMoon className="w-4 h-4" />}
+                            </button>
+
+                            {/* Up arrow - appears when links fade out */}
+                            <div
+                                className="transition-all duration-300 ease-out overflow-hidden"
+                                style={{ 
+                                    opacity: scrollProgress > 0.5 ? Math.min(1, (scrollProgress - 0.5) * 2) : 0,
+                                    transform: `scale(${scrollProgress > 0.5 ? Math.min(1, 0.8 + ((scrollProgress - 0.5) * 0.4)) : 0.8})`,
+                                    width: scrollProgress > 0.5 ? '40px' : '0px',
+                                    marginLeft: scrollProgress > 0.5 ? `${Math.min(gap, 8)}px` : '0px',
+                                    pointerEvents: scrollProgress > 0.5 ? 'auto' : 'none'
+                                }}
+                            >
+                                <button
+                                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                                    className="text-white/80 hover:text-green-400 transition-all duration-300 hover:bg-white/5 p-2 rounded-full whitespace-nowrap"
+                                    aria-label="Scroll to top"
+                                >
+                                    <FaArrowUp className="w-4 h-4" />
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 ) : (
                     // Other pages: Alen.is / Page name, Mode toggle
