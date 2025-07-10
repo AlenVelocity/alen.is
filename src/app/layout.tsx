@@ -2,6 +2,7 @@ import type React from 'react'
 import ClientLayout from './ClientLayout'
 import { TRPCReactProvider } from '@/trpc/react'
 import { ThemeProvider } from '@/components/theme-provider'
+import { Databuddy } from '@databuddy/sdk';
 
 export const metadata = {
     title: {
@@ -84,6 +85,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         <ClientLayout>{children}</ClientLayout>
                     </ThemeProvider>
                 </TRPCReactProvider>
+                <Databuddy
+                    clientId="zqwjrmeJFRJrzTzszsnvV"
+                    trackHashChanges={true}
+                    trackInteractions={true}
+                    trackEngagement={true}
+                    enableBatching={true}
+                />
             </body>
         </html>
     )

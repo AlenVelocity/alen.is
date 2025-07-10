@@ -15,6 +15,9 @@ importers:
       '@calcom/embed-react':
         specifier: ^1.5.2
         version: 1.5.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@databuddy/sdk':
+        specifier: ^1.4.0
+        version: 1.4.0
       '@hookform/resolvers':
         specifier: ^3.9.1
         version: 3.10.0(react-hook-form@7.56.3(react@19.1.0))
@@ -248,6 +251,9 @@ packages:
 
   '@calcom/embed-snippet@1.3.3':
     resolution: {integrity: sha512-pqqKaeLB8R6BvyegcpI9gAyY6Xyx1bKYfWvIGOvIbTpguWyM1BBBVcT9DCeGe8Zw7Ujp5K56ci7isRUrT2Uadg==}
+
+  '@databuddy/sdk@1.4.0':
+    resolution: {integrity: sha512-D942LEorC1W6vp2qDK8LSJYAlLOW3CUo4RDihTx+V6KfmhdOB7JqltZbHAnneB9G91z7gMT0kj2Cu2BWcrPu4A==}
 
   '@emnapi/runtime@1.4.3':
     resolution: {integrity: sha512-pBPWdu6MLKROBX05wSNKcNb++m5Er+KQ9QkB+WVM+pW2Kx9hoSrVTnu3BdkI5eBLZoKu/J6mW/B6i6bJB2ytXQ==}
@@ -2715,6 +2721,8 @@ snapshots:
   '@calcom/embed-snippet@1.3.3':
     dependencies:
       '@calcom/embed-core': 1.5.3
+
+  '@databuddy/sdk@1.4.0': {}
 
   '@emnapi/runtime@1.4.3':
     dependencies:
