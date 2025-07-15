@@ -8,7 +8,7 @@
     "build:static": "next build && next export",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate",
+    "postinstall": "prisma generate --no-engine",
     "format": "prettier --write ./src",
     "format:check": "prettier --check ./src",
     "db:push": "prisma db push",
