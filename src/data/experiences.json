@@ -1,5 +1,19 @@
 [
   {
+    "id": "mercor-2025",
+    "company": "Mercor",
+    "position": "Software Engineer",
+    "period": "July 2025 - Present",
+    "location": "Remote, San Francisco, USA",
+    "description": [
+      "Building Mercor Work Platform"
+    ],
+    "current": true,
+    "order": 0,
+    "published": true,
+    "link": "https://mercor.com"
+  },
+  {
     "id": "kmrb-2025",
     "company": "Komorebi",
     "position": "Co-Founder",
