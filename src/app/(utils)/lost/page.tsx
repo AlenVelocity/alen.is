@@ -6,6 +6,7 @@ import { useTheme } from 'next-themes'
 import { FiSun, FiMoon, FiArrowRight, FiPlay, FiPause, FiTrash2 } from 'react-icons/fi'
 import { cn } from '@/lib/utils'
 import { motion, AnimatePresence } from 'framer-motion'
+import { posthog } from '@/components/posthog-provider'
 
 const CELL_SIZE = 16
 const SPEED = 120 // ms between generations
@@ -359,6 +360,7 @@ export default function Lost() {
         setIsPlaying(true)
         setShowQuote(false)
         setTimeout(() => setIsNavCollapsed(true), 300)
+        posthog.capture('game_started', { game: 'game_of_life' })
     }
     
     const handlePause = () => {
@@ -375,6 +377,7 @@ export default function Lost() {
             setIsNavCollapsed(false)
             setHasDrawn(false)
             setShowQuote(true)
+            posthog.capture('game_cleared', { game: 'game_of_life' })
             // Trigger immediate redraw
             gameRef.current?.redraw()
         }

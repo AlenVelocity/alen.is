@@ -9,6 +9,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useTheme } from 'next-themes'
 import { FiSun, FiMoon, FiArrowUp, FiBriefcase, FiCode } from 'react-icons/fi'
 import { motion, AnimatePresence } from 'framer-motion'
+import { posthog } from '@/components/posthog-provider'
 
 const NAV_ITEMS = [
     { href: '/', label: 'Alen.is', icon: null },
@@ -56,13 +57,15 @@ function Navigation() {
     }, [showScrollBtn])
 
     const toggleTheme = () => {
+        const newTheme = theme === 'dark' ? 'light' : 'dark'
         if (!document.startViewTransition) {
-            setTheme(theme === 'dark' ? 'light' : 'dark')
+            setTheme(newTheme)
         } else {
             document.startViewTransition(() => {
-                setTheme(theme === 'dark' ? 'light' : 'dark')
+                setTheme(newTheme)
             })
         }
+        posthog.capture('theme_toggle', { theme: newTheme })
     }
 
     const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -98,10 +101,10 @@ function Navigation() {
                                 const Icon = item.icon
                                 
                                 return (
-                                    <Link
+                                <Link
                                         key={item.href}
                                         href={item.href}
-                                        className={cn(
+                                    className={cn(
                                             "relative px-3 py-1.5 text-sm rounded-full transition-colors duration-200",
                                             isHome ? "font-bold" : "font-medium",
                                             isActive
@@ -133,7 +136,7 @@ function Navigation() {
                                                 </>
                                             )}
                                         </span>
-                                    </Link>
+                                </Link>
                                 )
                             })}
                         </motion.div>
@@ -144,43 +147,43 @@ function Navigation() {
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.9 }}
                             transition={{ duration: 0.2 }}
-                        >
-                            <Link
+                            >
+                                <Link
                                 href="/"
                                 className="px-3 py-1.5 text-sm font-medium hover:text-foreground transition-colors flex items-center gap-2"
                             >
                                 <span className="text-muted-foreground font-bold">Alen.is</span>
                                 <span className="text-muted-foreground/50">/</span>
                                 <span className="text-foreground capitalize">{currentPageLabel}</span>
-                            </Link>
+                                </Link>
                         </motion.div>
                     )}
                 </AnimatePresence>
-                
+
                 <div className="w-px h-4 bg-border mx-1" />
                 
-                <button
-                    onClick={toggleTheme}
+                            <button
+                                onClick={toggleTheme}
                     className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200"
-                    aria-label="Toggle theme"
-                >
+                                aria-label="Toggle theme"
+                            >
                     {theme === 'dark' ? <FiSun className="w-4 h-4" /> : <FiMoon className="w-4 h-4" />}
-                </button>
+                            </button>
 
-                <div 
+                            <div
                     className={cn(
                         "transition-all duration-300 ease-out overflow-hidden",
                         showScrollBtn ? "w-10 opacity-100" : "w-0 opacity-0"
                     )}
-                >
-                    <button
+                            >
+                                <button
                         onClick={scrollToTop}
                         className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors duration-200"
-                        aria-label="Scroll to top"
-                    >
+                                    aria-label="Scroll to top"
+                                >
                         <FiArrowUp className="w-4 h-4" />
-                    </button>
-                </div>
+                                </button>
+                            </div>
             </motion.nav>
         </header>
     )
@@ -201,7 +204,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
                     <div className="container max-w-4xl">
                         <p className="text-sm text-muted-foreground text-center">
                             © {new Date().getFullYear()} Alen Yohannan
-                        </p>
+                            </p>
                     </div>
                 </footer>
             )}

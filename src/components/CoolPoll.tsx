@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { api } from '@/trpc/react'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
+import { posthog } from '@/components/posthog-provider'
 
 interface PollData {
     positive: number
@@ -50,6 +51,7 @@ export default function CoolPoll({ initialData }: CoolPollProps) {
         setOptimisticData(newData)
         setVoteData({ hasVoted: true, timestamp: Date.now(), vote: option })
         vote({ option })
+        posthog.capture('poll_vote', { poll: 'cool', vote: option === 'positive' ? 'yes' : 'no' })
     }
 
     const { mutate: vote } = api.poll.coolVote.useMutation({

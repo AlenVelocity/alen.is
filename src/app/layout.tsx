@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import ClientLayout from './ClientLayout'
 import { TRPCReactProvider } from '@/trpc/react'
 import { ThemeProvider } from '@/components/theme-provider'
+import { PostHogProvider } from '@/components/posthog-provider'
 import { Databuddy } from '@databuddy/sdk'
 import './globals.css'
 
@@ -80,16 +81,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="en" suppressHydrationWarning>
             <body className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
-                <TRPCReactProvider>
-                    <ThemeProvider
-                        attribute="class"
-                        defaultTheme="dark"
-                        enableSystem
-                        disableTransitionOnChange
-                    >
-                        <ClientLayout>{children}</ClientLayout>
-                    </ThemeProvider>
-                </TRPCReactProvider>
+                <PostHogProvider>
+                    <TRPCReactProvider>
+                        <ThemeProvider
+                            attribute="class"
+                            defaultTheme="dark"
+                            enableSystem
+                            disableTransitionOnChange
+                        >
+                            <ClientLayout>{children}</ClientLayout>
+                        </ThemeProvider>
+                    </TRPCReactProvider>
+                </PostHogProvider>
                 <Databuddy
                     clientId="zqwjrmeJFRJrzTzszsnvV"
                     trackHashChanges={true}
