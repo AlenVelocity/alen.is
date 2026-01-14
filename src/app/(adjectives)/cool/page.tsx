@@ -10,27 +10,25 @@ export const metadata: Metadata = {
         title: 'cool',
         description: 'Am I cool?',
         url: 'https://alen.is/cool',
-        images: [
-            {
-                url: '/rinu-cool.webp',
-                width: 250,
-                height: 250,
-                alt: 'Rinu Cool'
-            }
-        ]
+        images: [{ url: '/rinu-cool.webp', width: 250, height: 250, alt: 'Rinu Cool' }]
     },
-    alternates: {
-        canonical: '/cool'
-    }
+    alternates: { canonical: '/cool' }
 }
 
 export default async function Cool() {
     const initialPollData = await api.poll.getCoolPoll()
 
     return (
-        <div className="flex flex-col items-center justify-center gap-8 py-12 pt-24">
-            <Image src="/images/rinu-cool.webp" alt="Rinu Cool" width={250} height={250} className="rounded-lg" priority />
-            <p className="text-xl font-medium text-muted-foreground">am I?</p>
+        <div className="min-h-[80vh] flex flex-col items-center justify-center gap-8 py-12">
+            <Image 
+                src="/images/rinu-cool.webp" 
+                alt="Rinu Cool" 
+                width={200} 
+                height={200} 
+                className="rounded-2xl hover:scale-105 transition-transform duration-300" 
+                priority 
+            />
+            <p className="text-xl text-muted-foreground">am I?</p>
             <CoolPoll initialData={initialPollData} />
         </div>
     )

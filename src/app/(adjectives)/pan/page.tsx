@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 
-export default function Gay() {
+export default function Pan() {
     redirect('/bi')
 }
+

@@ -5,9 +5,9 @@ export const metadata: Metadata = {
         default: '',
         template: '%s | Alen.is'
     },
-    description: 'Engineer, developer and creator of cool™ stuff'
+    description: 'Engineer, developer and creator of cool stuff'
 }
 
 export default function ProfessionalLayout({ children }: { children: React.ReactNode }) {
-    return <div>{children}</div>
+    return <>{children}</>
 }

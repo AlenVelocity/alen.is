@@ -16,261 +16,192 @@ import {
     SiTailwindcss,
     SiScaleway,
     SiLangchain,
-    SiValorant
+    SiValorant,
+    SiShadcnui,
+    SiDjango,
+    SiFastapi,
+    SiGo,
+    SiMysql,
+    SiRedis
 } from 'react-icons/si'
-import { TbBrandOpenai } from 'react-icons/tb'
-import { BiLogoGoLang } from 'react-icons/bi'
+import { TbBrandOpenai, TbSparkles } from 'react-icons/tb'
 import { BsDatabaseFill } from 'react-icons/bs'
-import { SiShadcnui } from 'react-icons/si'
+import { HiSparkles } from 'react-icons/hi2'
 
-// Define tech stack types and their properties
 export type TechType =
-    | 'typescript'
-    | 'javascript'
-    | 'react'
-    | 'next'
-    | 'node'
-    | 'vue'
-    | 'rust'
-    | 'python'
-    | 'aws'
-    | 'gcp'
-    | 'langchain'
-    | 'tensorflow'
-    | 'mediapipe'
-    | 'llm'
-    | 'valorant'
-    | 'web'
-    | 'discord'
-    | 'npm'
-    | 'github'
-    | 'overwatch'
-    | 'ai'
-    | 'postgres'
-    | 'prisma'
-    | 'mongodb'
-    | 'mariadb'
-    | 'frappe'
-    | 'convex'
-    | 'tailwind'
-    | 'shadcn'
-    | 'scaleway'
-    | 'wasm'
+    | 'typescript' | 'javascript' | 'react' | 'next' | 'node' | 'vue' | 'rust'
+    | 'python' | 'aws' | 'gcp' | 'langchain' | 'tensorflow' | 'mediapipe' | 'llm'
+    | 'valorant' | 'web' | 'discord' | 'npm' | 'github' | 'overwatch' | 'ai'
+    | 'postgres' | 'prisma' | 'mongodb' | 'mariadb' | 'frappe' | 'convex'
+    | 'tailwind' | 'shadcn' | 'scaleway' | 'wasm' | 'django' | 'fastapi' | 'go' | 'mysql' | 'redis'
 
-interface TechConfig {
-    name: string
-    color: string
-    textColor: string
-    icon: React.ReactNode
+const techIcons: Record<TechType, React.ReactNode> = {
+    typescript: <SiTypescript />,
+    javascript: <SiJavascript />,
+    react: <FaReact />,
+    next: <SiNextdotjs />,
+    node: <FaNodeJs />,
+    vue: <FaVuejs />,
+    rust: <FaRust />,
+    python: <FaPython />,
+    aws: <FaAws />,
+    gcp: <span>☁️</span>,
+    langchain: <SiLangchain />,
+    tensorflow: <SiTensorflow />,
+    mediapipe: <SiMediapipe />,
+    llm: <TbBrandOpenai />,
+    valorant: <SiValorant />,
+    web: <span>🌐</span>,
+    discord: <FaDiscord />,
+    npm: <FaNpm />,
+    github: <FaGithub />,
+    overwatch: <span>🔶</span>,
+    ai: <HiSparkles />,
+    postgres: <SiPostgresql />,
+    prisma: <SiPrisma />,
+    mongodb: <SiMongodb />,
+    mariadb: <SiMariadb />,
+    frappe: <span className="font-bold">F</span>,
+    convex: <BsDatabaseFill />,
+    tailwind: <SiTailwindcss />,
+    shadcn: <SiShadcnui />,
+    scaleway: <SiScaleway />,
+    wasm: <span>⚙️</span>,
+    django: <SiDjango />,
+    fastapi: <SiFastapi />,
+    go: <SiGo />,
+    mysql: <SiMysql />,
+    redis: <SiRedis />
 }
 
-const techConfigs: Record<TechType, TechConfig> = {
-    typescript: {
-        name: 'TypeScript',
-        color: 'bg-blue-100 dark:bg-blue-900/30',
-        textColor: 'text-blue-700 dark:text-blue-300',
-        icon: <SiTypescript className="text-blue-600 dark:text-blue-400" />
-    },
-    javascript: {
-        name: 'JavaScript',
-        color: 'bg-yellow-100 dark:bg-yellow-900/30',
-        textColor: 'text-yellow-700 dark:text-yellow-300',
-        icon: <SiJavascript className="text-yellow-500 dark:text-yellow-400" />
-    },
-    react: {
-        name: 'React',
-        color: 'bg-cyan-100 dark:bg-cyan-900/30',
-        textColor: 'text-cyan-700 dark:text-cyan-300',
-        icon: <FaReact className="text-cyan-500 dark:text-cyan-400" />
-    },
-    next: {
-        name: 'Next.js',
-        color: 'bg-neutral-100 dark:bg-neutral-800/50',
-        textColor: 'text-neutral-700 dark:text-neutral-300',
-        icon: <SiNextdotjs className="text-black dark:text-white" />
-    },
-    node: {
-        name: 'Node.js',
-        color: 'bg-green-100 dark:bg-green-900/30',
-        textColor: 'text-green-700 dark:text-green-300',
-        icon: <FaNodeJs className="text-green-600 dark:text-green-400" />
-    },
-    vue: {
-        name: 'Vue',
-        color: 'bg-emerald-100 dark:bg-emerald-900/30',
-        textColor: 'text-emerald-700 dark:text-emerald-300',
-        icon: <FaVuejs className="text-emerald-600 dark:text-emerald-400" />
-    },
-    rust: {
-        name: 'Rust',
-        color: 'bg-orange-100 dark:bg-orange-900/30',
-        textColor: 'text-orange-700 dark:text-orange-300',
-        icon: <FaRust className="text-orange-600 dark:text-orange-400" />
-    },
-    python: {
-        name: 'Python',
-        color: 'bg-blue-100 dark:bg-blue-900/30',
-        textColor: 'text-blue-700 dark:text-blue-300',
-        icon: <FaPython className="text-blue-600 dark:text-blue-400" />
-    },
-    aws: {
-        name: 'AWS',
-        color: 'bg-amber-100 dark:bg-amber-900/30',
-        textColor: 'text-amber-700 dark:text-amber-300',
-        icon: <FaAws className="text-amber-600 dark:text-amber-400" />
-    },
-    gcp: {
-        name: 'GCP',
-        color: 'bg-red-100 dark:bg-red-900/30',
-        textColor: 'text-red-700 dark:text-red-300',
-        icon: '☁️'
-    },
-    langchain: {
-        name: 'LangChain',
-        color: 'bg-emerald-100 dark:bg-emerald-900/30',
-        textColor: 'text-emerald-700 dark:text-emerald-300',
-        icon: <SiLangchain className="text-emerald-600 dark:text-emerald-400" />
-    },
-    tensorflow: {
-        name: 'TensorFlow',
-        color: 'bg-orange-100 dark:bg-orange-900/30',
-        textColor: 'text-orange-700 dark:text-orange-300',
-        icon: <SiTensorflow className="text-orange-600 dark:text-orange-400" />
-    },
-    mediapipe: {
-        name: 'MediaPipe',
-        color: 'bg-purple-100 dark:bg-purple-900/30',
-        textColor: 'text-purple-700 dark:text-purple-300',
-        icon: <SiMediapipe className="text-purple-600 dark:text-purple-400" />
-    },
-    llm: {
-        name: 'LLM',
-        color: 'bg-indigo-100 dark:bg-indigo-900/30',
-        textColor: 'text-indigo-700 dark:text-indigo-300',
-        icon: <TbBrandOpenai className="text-indigo-600 dark:text-indigo-400" />
-    },
-    valorant: {
-        name: 'Valorant',
-        color: 'bg-red-100 dark:bg-red-900/30',
-        textColor: 'text-red-700 dark:text-red-300',
-        icon: <SiValorant className="text-red-600 dark:text-red-400" />
-    },
-    web: {
-        name: 'Web',
-        color: 'bg-sky-100 dark:bg-sky-900/30',
-        textColor: 'text-sky-700 dark:text-sky-300',
-        icon: '🌐'
-    },
-    discord: {
-        name: 'Discord',
-        color: 'bg-indigo-100 dark:bg-indigo-900/30',
-        textColor: 'text-indigo-700 dark:text-indigo-300',
-        icon: <FaDiscord className="text-indigo-600 dark:text-indigo-400" />
-    },
-    npm: {
-        name: 'NPM',
-        color: 'bg-red-100 dark:bg-red-900/30',
-        textColor: 'text-red-700 dark:text-red-300',
-        icon: <FaNpm className="text-red-600 dark:text-red-400" />
-    },
-    github: {
-        name: 'GitHub',
-        color: 'bg-neutral-100 dark:bg-neutral-800/50',
-        textColor: 'text-neutral-700 dark:text-neutral-300',
-        icon: <FaGithub className="text-neutral-800 dark:text-neutral-200" />
-    },
-    overwatch: {
-        name: 'Overwatch',
-        color: 'bg-orange-100 dark:bg-orange-900/30',
-        textColor: 'text-orange-700 dark:text-orange-300',
-        icon: '🔶'
-    },
-    ai: {
-        name: 'AI',
-        color: 'bg-violet-100 dark:bg-violet-900/30',
-        textColor: 'text-violet-700 dark:text-violet-300',
-        icon: '🧠'
-    },
-    postgres: {
-        name: 'PostgreSQL',
-        color: 'bg-blue-100 dark:bg-blue-900/30',
-        textColor: 'text-blue-700 dark:text-blue-300',
-        icon: <SiPostgresql className="text-blue-600 dark:text-blue-400" />
-    },
-    prisma: {
-        name: 'Prisma',
-        color: 'bg-teal-100 dark:bg-teal-900/30',
-        textColor: 'text-teal-700 dark:text-teal-300',
-        icon: <SiPrisma className="text-teal-600 dark:text-teal-400" />
-    },
-    mongodb: {
-        name: 'MongoDB',
-        color: 'bg-green-100 dark:bg-green-900/30',
-        textColor: 'text-green-700 dark:text-green-300',
-        icon: <SiMongodb className="text-green-600 dark:text-green-400" />
-    },
-    mariadb: {
-        name: 'MariaDB',
-        color: 'bg-amber-100 dark:bg-amber-900/30',
-        textColor: 'text-amber-700 dark:text-amber-300',
-        icon: <SiMariadb className="text-amber-600 dark:text-amber-400" />
-    },
-    frappe: {
-        name: 'Frappe',
-        color: 'bg-blue-100 dark:bg-blue-900/30',
-        textColor: 'text-blue-700 dark:text-blue-300',
-        icon: 'F'
-    },
-    convex: {
-        name: 'Convex',
-        color: 'bg-blue-100 dark:bg-blue-900/30',
-        textColor: 'text-blue-700 dark:text-blue-300',
-        icon: <BsDatabaseFill className="text-blue-600 dark:text-blue-400" />
-    },
-    tailwind: {
-        name: 'Tailwind CSS',
-        color: 'bg-cyan-100 dark:bg-cyan-900/30',
-        textColor: 'text-cyan-700 dark:text-cyan-300',
-        icon: <SiTailwindcss className="text-cyan-500 dark:text-cyan-400" />
-    },
-    shadcn: {
-        name: 'shadcn/ui',
-        color: 'bg-neutral-100 dark:bg-neutral-800/50',
-        textColor: 'text-neutral-700 dark:text-neutral-300',
-        icon: <SiShadcnui className="text-black dark:text-white" />
-    },
-    scaleway: {
-        name: 'Scaleway',
-        color: 'bg-purple-100 dark:bg-purple-900/30',
-        textColor: 'text-purple-700 dark:text-purple-300',
-        icon: <SiScaleway className="text-purple-600 dark:text-purple-400" />
-    },
-    wasm: {
-        name: 'WebAssembly',
-        color: 'bg-indigo-100 dark:bg-indigo-900/30',
-        textColor: 'text-indigo-700 dark:text-indigo-300',
-        icon: '🔧'
-    }
+const techNames: Record<TechType, string> = {
+    typescript: 'TypeScript', javascript: 'JavaScript', react: 'React', next: 'Next.js',
+    node: 'Node.js', vue: 'Vue', rust: 'Rust', python: 'Python', aws: 'AWS', gcp: 'GCP',
+    langchain: 'LangChain', tensorflow: 'TensorFlow', mediapipe: 'MediaPipe', llm: 'LLM',
+    valorant: 'Valorant', web: 'Web', discord: 'Discord', npm: 'NPM', github: 'GitHub',
+    overwatch: 'Overwatch', ai: 'AI', postgres: 'PostgreSQL', prisma: 'Prisma',
+    mongodb: 'MongoDB', mariadb: 'MariaDB', frappe: 'Frappe', convex: 'Convex',
+    tailwind: 'Tailwind', shadcn: 'shadcn/ui', scaleway: 'Scaleway', wasm: 'WASM',
+    django: 'Django', fastapi: 'FastAPI', go: 'Go', mysql: 'MySQL', redis: 'Redis'
+}
+
+// Active colors for each tech (shown on group hover)
+const techColors: Record<TechType, string> = {
+    typescript: 'text-blue-500',
+    javascript: 'text-yellow-500',
+    react: 'text-cyan-400',
+    next: 'text-foreground',
+    node: 'text-green-500',
+    vue: 'text-emerald-500',
+    rust: 'text-orange-500',
+    python: 'text-blue-400',
+    aws: 'text-amber-500',
+    gcp: 'text-red-500',
+    langchain: 'text-emerald-400',
+    tensorflow: 'text-orange-400',
+    mediapipe: 'text-purple-500',
+    llm: 'text-emerald-400',
+    valorant: 'text-red-500',
+    web: 'text-sky-400',
+    discord: 'text-indigo-500',
+    npm: 'text-red-500',
+    github: 'text-foreground',
+    overwatch: 'text-orange-500',
+    ai: 'text-violet-500',
+    postgres: 'text-blue-500',
+    prisma: 'text-teal-500',
+    mongodb: 'text-green-500',
+    mariadb: 'text-amber-500',
+    frappe: 'text-blue-500',
+    convex: 'text-orange-500',
+    tailwind: 'text-cyan-400',
+    shadcn: 'text-foreground',
+    scaleway: 'text-purple-500',
+    wasm: 'text-purple-400',
+    django: 'text-green-600',
+    fastapi: 'text-teal-500',
+    go: 'text-cyan-500',
+    mysql: 'text-blue-500',
+    redis: 'text-red-500'
+}
+
+// Group-hover colors (for parent card hover activation)
+const techGroupHoverColors: Record<TechType, string> = {
+    typescript: 'group-hover:text-blue-500',
+    javascript: 'group-hover:text-yellow-500',
+    react: 'group-hover:text-cyan-400',
+    next: 'group-hover:text-foreground',
+    node: 'group-hover:text-green-500',
+    vue: 'group-hover:text-emerald-500',
+    rust: 'group-hover:text-orange-500',
+    python: 'group-hover:text-blue-400',
+    aws: 'group-hover:text-amber-500',
+    gcp: 'group-hover:text-red-500',
+    langchain: 'group-hover:text-emerald-400',
+    tensorflow: 'group-hover:text-orange-400',
+    mediapipe: 'group-hover:text-purple-500',
+    llm: 'group-hover:text-emerald-400',
+    valorant: 'group-hover:text-red-500',
+    web: 'group-hover:text-sky-400',
+    discord: 'group-hover:text-indigo-500',
+    npm: 'group-hover:text-red-500',
+    github: 'group-hover:text-foreground',
+    overwatch: 'group-hover:text-orange-500',
+    ai: 'group-hover:text-violet-500',
+    postgres: 'group-hover:text-blue-500',
+    prisma: 'group-hover:text-teal-500',
+    mongodb: 'group-hover:text-green-500',
+    mariadb: 'group-hover:text-amber-500',
+    frappe: 'group-hover:text-blue-500',
+    convex: 'group-hover:text-orange-500',
+    tailwind: 'group-hover:text-cyan-400',
+    shadcn: 'group-hover:text-foreground',
+    scaleway: 'group-hover:text-purple-500',
+    wasm: 'group-hover:text-purple-400',
+    django: 'group-hover:text-green-600',
+    fastapi: 'group-hover:text-teal-500',
+    go: 'group-hover:text-cyan-500',
+    mysql: 'group-hover:text-blue-500',
+    redis: 'group-hover:text-red-500'
 }
 
 interface TechBadgeProps {
     tech: TechType
+    showName?: boolean
     className?: string
+    colorOnGroupHover?: boolean
 }
-export function TechBadge({ tech, className }: TechBadgeProps) {
-    const config = techConfigs[tech]
 
+export function TechBadge({ tech, showName = false, className, colorOnGroupHover = false }: TechBadgeProps) {
     return (
         <span
             className={cn(
-                'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium transition-colors border border-transparent hover:border-foreground/10 whitespace-nowrap',
-                config.color,
-                config.textColor,
+                'inline-flex items-center gap-1.5 text-muted-foreground transition-colors duration-200',
+                colorOnGroupHover ? techGroupHoverColors[tech] : '',
+                showName && 'px-2 py-1 rounded-md bg-muted/50 text-xs font-medium',
                 className
             )}
+            title={techNames[tech]}
         >
-            <span className="mr-1.5 flex items-center justify-center">{config.icon}</span>
-            {config.name}
+            <span className="text-sm">{techIcons[tech]}</span>
+            {showName && <span>{techNames[tech]}</span>}
         </span>
+    )
+}
+
+interface TechStackProps {
+    technologies: string[]
+    showNames?: boolean
+    className?: string
+    colorOnGroupHover?: boolean
+}
+
+export function TechStack({ technologies, showNames = false, className, colorOnGroupHover = false }: TechStackProps) {
+    return (
+        <div className={cn('flex flex-wrap gap-2', className)}>
+            {technologies.map((tech) => (
+                <TechBadge key={tech} tech={tech as TechType} showName={showNames} colorOnGroupHover={colorOnGroupHover} />
+            ))}
+        </div>
     )
 }

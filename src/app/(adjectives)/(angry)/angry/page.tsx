@@ -6,20 +6,17 @@ export const metadata: Metadata = {
     description: 'Probably not but who knows'
 }
 
-export default async function Cool() {
+export default function Angry() {
     return (
-        <div className="flex flex-col items-center justify-center gap-8 py-12 pt-24">
+        <div className="min-h-[80vh] flex flex-col items-center justify-center gap-6 py-12">
             <Image
                 src="/pusheen/pusheen-not-talking.gif"
                 alt="pusheen not talking"
-                width={250}
-                height={250}
-                className="hover:scale-105 transition-transform duration-300"
+                width={200}
+                height={200}
+                className="rounded-2xl hover:scale-105 transition-transform duration-300"
             />
-
-            <div className="flex flex-col items-center justify-center gap-4">
-                <p className="text-lg">Don't talk to me ( ｡ •`ᴖ´• ｡)</p>
-            </div>
+            <p className="text-lg text-muted-foreground">Don't talk to me ( ｡ •`ᴖ´• ｡)</p>
         </div>
     )
 }

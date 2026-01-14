@@ -1,17 +1,22 @@
-import { PageTransition } from "@/components/ui/page-transition";
-import Image from "next/image";
+import Image from "next/image"
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+    title: 'thinking',
+    description: 'Thinking about stuff'
+}
 
 export default function Thinking() {
-    return <PageTransition>
-        <div className="flex flex-col items-center justify-center gap-8 py-12 pt-24">
+    return (
+        <div className="min-h-[80vh] flex flex-col items-center justify-center py-12">
             <Image 
                 src="/thinking.gif" 
                 alt="Thinking" 
-                width={500} 
-                height={500}
-                className="md:max-w-[500px] max-w-[250px] h-auto"
+                width={400} 
+                height={400}
+                className="max-w-[250px] md:max-w-[400px] h-auto rounded-2xl"
                 priority
             />
         </div>
-    </PageTransition>
+    )
 }

@@ -11,12 +11,12 @@ export function SumikaDialog() {
         <>
             <span
                 onClick={() => setIsOpen(true)}
-                className="inline font-medium underline decoration-green-500 decoration-2 underline-offset-4 hover:text-green-500 transition-colors cursor-pointer"
+                className="font-medium underline decoration-accent/50 decoration-2 underline-offset-4 hover:decoration-accent transition-colors cursor-pointer"
             >
                 a whole year only listening to sumika
             </span>
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
-                <DialogContent className="max-w-[300px] m-0">
+                <DialogContent className="max-w-[300px] p-6">
                     <DialogTitle className="text-lg font-semibold mb-4">Sumika Wrapped</DialogTitle>
                     <Image
                         src="/images/sumika-wrapped.png"

@@ -13,6 +13,18 @@
     "published": true
   },
   {
+    "id": "mercor-work-2025",
+    "title": "Mercor Work",
+    "period": "July 2025",
+    "description": "AI talent marketplace connecting companies with global talent",
+    "link": "https://work.mercor.com",
+    "type": "Website",
+    "technologies": ["next", "typescript", "python", "django", "ai", "mongodb", "postgres"],
+    "featured": true,
+    "order": 1,
+    "published": true
+  },
+  {
     "id": "valdle-2024",
     "title": "Valdle",
     "period": "October 2024",
@@ -22,7 +34,7 @@
     "image": "/projects/valdle.jpg",
     "technologies": ["typescript", "next", "prisma", "postgres", "valorant", "discord", "tailwind", "shadcn"],
     "featured": true,
-    "order": 1,
+    "order": 2,
     "published": true
   },
   {
@@ -35,10 +47,9 @@
     "icon": "unicorn",
     "technologies": ["typescript", "mediapipe", "tensorflow"],
     "featured": true,
-    "order": 2,
+    "order": 3,
     "published": true
   },
-
   { 
     "id": "press-2024",
     "title": "Press",
@@ -49,10 +60,9 @@
     "icon": "cloud",
     "technologies": ["typescript", "vue", "frappe", "mariadb", "scaleway"],
     "featured": true,
-    "order": 3,
+    "order": 4,
     "published": true
   },
-
   {
     "id": "meowscript-2023",
     "title": "MeowScript",
@@ -62,7 +72,7 @@
     "type": "Website",
     "technologies": ["rust", "next", "wasm", "tailwind"],
     "featured": false,
-    "order": 4,
+    "order": 5,
     "published": true
   },
   {
@@ -74,7 +84,7 @@
     "type": "NPM",
     "technologies": ["typescript", "node", "npm"],
     "featured": false,
-    "order": 5,
+    "order": 6,
     "published": true
   },
   {
@@ -86,7 +96,7 @@
     "type": "Website",
     "technologies": ["typescript", "next", "prisma", "postgres", "overwatch"],
     "featured": false,
-    "order": 6,
+    "order": 7,
     "published": true
   },
   {
@@ -98,7 +108,7 @@
     "type": "GitHub",
     "technologies": ["typescript", "node", "langchain", "llm"],
     "featured": false,
-    "order": 7,
+    "order": 8,
     "published": true
   },
   {
@@ -110,7 +120,7 @@
     "type": "GitHub",
     "technologies": ["typescript", "node"],
     "featured": false,
-    "order": 8,
+    "order": 9,
     "published": true
   },
   {
@@ -119,10 +129,10 @@
     "period": "July 2020",
     "description": "First ever utility WhatsApp Bot",
     "link": "https://alen.infinity.is",
-    "type": "Website",
+    "type": "Bot",
     "technologies": ["typescript", "node", "mongodb"],
     "featured": false,
-    "order": 9,
+    "order": 10,
     "published": true
   },
   {
@@ -134,7 +144,7 @@
     "type": "Website",
     "technologies": ["typescript", "react", "next", "ai", "llm"],
     "featured": false,
-    "order": 10,
+    "order": 11,
     "published": true
   }
-] 
+]

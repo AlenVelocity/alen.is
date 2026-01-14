@@ -1,217 +1,208 @@
 'use client'
 
 import type React from 'react'
-import { Inter } from 'next/font/google'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { Toaster } from 'sonner'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useTheme } from 'next-themes'
-import { FaSun, FaMoon, FaBriefcase, FaCode, FaArrowUp } from 'react-icons/fa'
-import './globals.css'
+import { FiSun, FiMoon, FiArrowUp, FiBriefcase, FiCode } from 'react-icons/fi'
+import { motion, AnimatePresence } from 'framer-motion'
 
-const inter = Inter({ subsets: ['latin'] })
+const NAV_ITEMS = [
+    { href: '/', label: 'Alen.is', icon: null },
+    { href: '/experience', label: 'Experience', icon: FiBriefcase },
+    { href: '/building', label: 'Projects', icon: FiCode },
+]
 
-function DynamicIslandNav() {
+function Navigation() {
     const pathname = usePathname()
-    const currentPath = pathname.endsWith('/') ? pathname.slice(0, -1) : pathname
-    const isMainPath = pathname === '/' || currentPath === '/experience' || currentPath === '/projects'
-    const [scrollY, setScrollY] = useState(0)
     const { theme, setTheme } = useTheme()
     const [mounted, setMounted] = useState(false)
+    const [scrolled, setScrolled] = useState(false)
+    const [showScrollBtn, setShowScrollBtn] = useState(false)
+    const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+    
+    // Normalize path - remove trailing slash except for root
+    const currentPath = pathname === '/' ? '/' : pathname.replace(/\/$/, '')
+    
+    // Get page name for breadcrumb (from normalized path)
+    const currentPageLabel = currentPath.split('/').filter(Boolean).pop() || ''
+    
+    // Check if we're on a main nav page (home, experience, projects)
+    const isMainNav = NAV_ITEMS.some(item => item.href === currentPath)
     
     useEffect(() => {
         setMounted(true)
         const handleScroll = () => {
-            setScrollY(window.scrollY)
+            const isScrolled = window.scrollY > 50
+            setScrolled(isScrolled)
+            
+            // Smooth delayed show/hide for scroll button
+            if (isScrolled && !showScrollBtn) {
+                if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current)
+                scrollTimeoutRef.current = setTimeout(() => setShowScrollBtn(true), 100)
+            } else if (!isScrolled && showScrollBtn) {
+                if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current)
+                scrollTimeoutRef.current = setTimeout(() => setShowScrollBtn(false), 100)
+            }
         }
-        
         window.addEventListener('scroll', handleScroll, { passive: true })
-        return () => window.removeEventListener('scroll', handleScroll)
-    }, [])
-
-    const currentPathSegment = currentPath.split('/').pop()
+        return () => {
+            window.removeEventListener('scroll', handleScroll)
+            if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current)
+        }
+    }, [showScrollBtn])
 
     const toggleTheme = () => {
         if (!document.startViewTransition) {
-			setTheme(theme === 'dark' ? 'light' : 'dark')
-		} else {
-			document.startViewTransition(() => {
-				setTheme(theme === 'dark' ? 'light' : 'dark')
-			})
-		}
+            setTheme(theme === 'dark' ? 'light' : 'dark')
+        } else {
+            document.startViewTransition(() => {
+                setTheme(theme === 'dark' ? 'light' : 'dark')
+            })
+        }
     }
 
-    if (!mounted) {
-        return null // Avoid hydration mismatch
-    }
+    const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
 
-    // Smooth scroll calculations
-    const maxScroll = 60 // Max scroll distance for full transition
-    const scrollProgress = Math.min(scrollY / maxScroll, 1) // 0 to 1
-    const isScrolled = scrollY > 10
-    const isFullyScrolled = scrollProgress > 0.7 // When to fully switch layouts
-    
-    // Interpolated values
-    const paddingX = 24 - (8 * scrollProgress) // 24px to 16px (px-6 to px-4)
-    const gap = 16 - (4 * scrollProgress) // 16px to 12px (smaller gap)
-    const shadowIntensity = 0.1 + (0.1 * scrollProgress) // 0.1 to 0.2
+    if (!mounted) return null
 
     return (
-        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300">
-            <nav 
-                className="bg-black/80 backdrop-blur-xl border border-white/10 rounded-full py-2.5 transition-all duration-300 ease-out"
-                style={{
-                    paddingLeft: `${paddingX}px`,
-                    paddingRight: `${paddingX}px`,
-                    boxShadow: `0 ${4 + scrollProgress * 8}px ${20 + scrollProgress * 20}px rgba(0, 0, 0, ${shadowIntensity})`
+        <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50">
+            <motion.nav 
+                layout
+                transition={{
+                    layout: { type: "spring", stiffness: 500, damping: 35 }
                 }}
-            >
-                {isMainPath ? (
-                    // Main pages: Home, Experience, Projects
-                    <div 
-                        className="flex items-center transition-all duration-300 ease-out"
-                        style={{ gap: `${gap}px` }}
-                    >
-                        <Link 
-                            href="/" 
-                            className="font-semibold text-white transition-all duration-300 hover:text-green-400 flex items-center gap-2"
-                        >
-                            <span className="text-green-400">●</span>
-                            Alen.Is
-                        </Link>
-                        
-                        {/* Navigation items - smooth fade and scale transitions */}
-                        <div className="flex items-center gap-4">
-                            {/* Experience link - smooth fade out when not current */}
-                            <div
-                                className="transition-all duration-300 ease-out overflow-hidden"
-                                style={{ 
-                                    opacity: currentPath === '/experience' ? 1 : Math.max(0, 1 - (scrollProgress * 1.5)),
-                                    transform: `scale(${currentPath === '/experience' ? 1 : Math.max(0.8, 1 - (scrollProgress * 0.3))})`,
-                                    maxWidth: currentPath === '/experience' ? '200px' : `${Math.max(0, 200 - (scrollProgress * 200))}px`,
-                                    marginRight: currentPath === '/experience' ? '0px' : `${Math.max(-16, -16 * scrollProgress)}px`
-                                }}
-                            >
-                                <Link
-                                    href="/experience"
-                                    className={cn(
-                                        'text-sm transition-all duration-300 hover:text-green-400 px-3 py-1.5 rounded-full flex items-center gap-2 whitespace-nowrap',
-                                        currentPath === '/experience'
-                                            ? 'text-green-400 bg-green-400/10'
-                                            : 'text-white/80 hover:bg-white/5'
-                                    )}
-                                >
-                                    <FaBriefcase className="w-4 h-4 sm:hidden" />
-                                    <span className="hidden sm:inline">Experience</span>
-                                </Link>
-                            </div>
-                            
-                            {/* Projects link - smooth fade out when not current */}
-                            <div
-                                className="transition-all duration-300 ease-out overflow-hidden"
-                                style={{ 
-                                    opacity: currentPath === '/projects' ? 1 : Math.max(0, 1 - (scrollProgress * 1.5)),
-                                    transform: `scale(${currentPath === '/projects' ? 1 : Math.max(0.8, 1 - (scrollProgress * 0.3))})`,
-                                    maxWidth: currentPath === '/projects' ? '200px' : `${Math.max(0, 200 - (scrollProgress * 200))}px`,
-                                    marginRight: currentPath === '/projects' ? '0px' : `${Math.max(-16, -16 * scrollProgress)}px`
-                                }}
-                            >
-                                <Link
-                                    href="/projects"
-                                    className={cn(
-                                        'text-sm transition-all duration-300 hover:text-green-400 px-3 py-1.5 rounded-full flex items-center gap-2 whitespace-nowrap',
-                                        currentPath === '/projects'
-                                            ? 'text-green-400 bg-green-400/10'
-                                            : 'text-white/80 hover:bg-white/5'
-                                    )}
-                                >
-                                    <FaCode className="w-4 h-4 sm:hidden" />
-                                    <span className="hidden sm:inline">Projects</span>
-                                </Link>
-                            </div>
-                            
-                        </div>
-
-                        <div className="flex items-center">
-                            <button
-                                onClick={toggleTheme}
-                                className="text-white/80 hover:text-white transition-all duration-300 hover:bg-white/5 p-2 rounded-full"
-                                aria-label="Toggle theme"
-                            >
-                                {theme === 'dark' ? <FaSun className="w-4 h-4" /> : <FaMoon className="w-4 h-4" />}
-                            </button>
-
-                            {/* Up arrow - appears when links fade out */}
-                            <div
-                                className="transition-all duration-300 ease-out overflow-hidden"
-                                style={{ 
-                                    opacity: scrollProgress > 0.5 ? Math.min(1, (scrollProgress - 0.5) * 2) : 0,
-                                    transform: `scale(${scrollProgress > 0.5 ? Math.min(1, 0.8 + ((scrollProgress - 0.5) * 0.4)) : 0.8})`,
-                                    width: scrollProgress > 0.5 ? '40px' : '0px',
-                                    marginLeft: scrollProgress > 0.5 ? `${Math.min(gap, 8)}px` : '0px',
-                                    pointerEvents: scrollProgress > 0.5 ? 'auto' : 'none'
-                                }}
-                            >
-                                <button
-                                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                                    className="text-white/80 hover:text-green-400 transition-all duration-300 hover:bg-white/5 p-2 rounded-full whitespace-nowrap"
-                                    aria-label="Scroll to top"
-                                >
-                                    <FaArrowUp className="w-4 h-4" />
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                ) : (
-                    // Other pages: Alen.is / Page name, Mode toggle
-                    <div className="flex items-center gap-6">
-                        <Link 
-                            href="/" 
-                            className="font-semibold text-white transition-all duration-300 hover:text-green-400 flex items-center gap-2"
-                        >
-                            <span className="text-green-400">●</span>
-                            Alen.Is
-                            <span className="text-white/60">/</span>
-                            <span className="capitalize text-green-400">{currentPathSegment}</span>
-                        </Link>
-
-                        <button
-                            onClick={toggleTheme}
-                            className="text-white/80 hover:text-white transition-all duration-300 hover:bg-white/5 p-2 rounded-full"
-                            aria-label="Toggle theme"
-                        >
-                            {theme === 'dark' ? <FaSun className="w-4 h-4" /> : <FaMoon className="w-4 h-4" />}
-                        </button>
-                    </div>
+                className={cn(
+                    "flex items-center gap-1 px-2 py-1.5 rounded-full border",
+                    "bg-background/80 backdrop-blur-xl border-border/50",
+                    scrolled && "shadow-lg shadow-black/5 dark:shadow-black/20"
                 )}
-            </nav>
-        </div>
+            >
+                <AnimatePresence mode="popLayout" initial={false}>
+                    {isMainNav ? (
+                        <motion.div
+                            key="main-nav"
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            transition={{ duration: 0.2 }}
+                            className="flex items-center gap-1"
+                        >
+                            {NAV_ITEMS.map((item) => {
+                                const isActive = currentPath === item.href
+                                const isHome = item.href === '/'
+                                const Icon = item.icon
+                                
+                                return (
+                                    <Link
+                                        key={item.href}
+                                        href={item.href}
+                                        className={cn(
+                                            "relative px-3 py-1.5 text-sm rounded-full transition-colors duration-200",
+                                            isHome ? "font-bold" : "font-medium",
+                                            isActive
+                                                ? "text-background"
+                                                : "text-muted-foreground hover:text-foreground"
+                                        )}
+                                    >
+                                        {/* Animated pill background */}
+                                        {isActive && (
+                                            <motion.span
+                                                layoutId="nav-pill"
+                                                className="absolute inset-0 bg-foreground rounded-full"
+                                                transition={{
+                                                    type: "spring",
+                                                    stiffness: 400,
+                                                    damping: 30
+                                                }}
+                                            />
+                                        )}
+                                        
+                                        {/* Content */}
+                                        <span className="relative z-10">
+                                            {isHome ? (
+                                                item.label
+                                            ) : (
+                                                <>
+                                                    {Icon && <Icon className="w-4 h-4 sm:hidden" />}
+                                                    <span className="hidden sm:inline">{item.label}</span>
+                                                </>
+                                            )}
+                                        </span>
+                                    </Link>
+                                )
+                            })}
+                        </motion.div>
+                    ) : (
+                        <motion.div
+                            key="breadcrumb"
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            transition={{ duration: 0.2 }}
+                        >
+                            <Link
+                                href="/"
+                                className="px-3 py-1.5 text-sm font-medium hover:text-foreground transition-colors flex items-center gap-2"
+                            >
+                                <span className="text-muted-foreground font-bold">Alen.is</span>
+                                <span className="text-muted-foreground/50">/</span>
+                                <span className="text-foreground capitalize">{currentPageLabel}</span>
+                            </Link>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+                
+                <div className="w-px h-4 bg-border mx-1" />
+                
+                <button
+                    onClick={toggleTheme}
+                    className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200"
+                    aria-label="Toggle theme"
+                >
+                    {theme === 'dark' ? <FiSun className="w-4 h-4" /> : <FiMoon className="w-4 h-4" />}
+                </button>
+
+                <div 
+                    className={cn(
+                        "transition-all duration-300 ease-out overflow-hidden",
+                        showScrollBtn ? "w-10 opacity-100" : "w-0 opacity-0"
+                    )}
+                >
+                    <button
+                        onClick={scrollToTop}
+                        className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors duration-200"
+                        aria-label="Scroll to top"
+                    >
+                        <FiArrowUp className="w-4 h-4" />
+                    </button>
+                </div>
+            </motion.nav>
+        </header>
     )
 }
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
-
     const pathname = usePathname()
-    const isLandingPage = pathname === '/'
-    const isProfessional = pathname.startsWith('/experience') || pathname.startsWith('/projects')
+    const showFooter = pathname === '/' || pathname.startsWith('/experience') || pathname.startsWith('/building')
 
     return (
-        <div className={inter.className}>
-            <div className="flex min-h-screen flex-col bg-gradient-to-br from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
-                <DynamicIslandNav />
-                <main className="flex-1 mt-20">{children}</main>
-                { (isLandingPage || isProfessional) && <footer className="border-t border-slate-200/50 dark:border-slate-800/50 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
-                    <div className="container mx-auto max-w-4xl px-4 py-6">
-                        <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-                            <p className="text-sm text-slate-600 dark:text-slate-400">
-                                &copy; {new Date().getFullYear()} Alen.Is. All rights reserved.
-                            </p>
-                        </div>
+        <div className="min-h-screen flex flex-col">
+            <Navigation />
+            <main className="flex-1 pt-20">{children}</main>
+            {showFooter && (
+                <footer className="border-t border-border/50 py-8">
+                    <div className="container max-w-4xl">
+                        <p className="text-sm text-muted-foreground text-center">
+                            © {new Date().getFullYear()} Alen Yohannan
+                        </p>
                     </div>
-                </footer>}
-            </div>
+                </footer>
+            )}
             <Toaster position="top-right" />
         </div>
     )

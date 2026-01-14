@@ -1,17 +1,16 @@
 import { LinkButton } from '@/components/ui/link-button'
 import { PageTransition } from '@/components/ui/page-transition'
-import { FaBriefcase, FaCalendarAlt, FaMapMarkerAlt, FaBuilding, FaDownload } from 'react-icons/fa'
+import { FiDownload, FiMapPin } from 'react-icons/fi'
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
 import { runGetExperiences } from '@/lib/cms-db'
-import Link from 'next/link'
 
 export const metadata: Metadata = {
     title: 'Experience',
-    description: 'My professional experience so far',
+    description: 'My professional experience',
     openGraph: {
         title: 'Experience',
-        description: 'My professional experience so far',
+        description: 'My professional experience',
         url: 'https://alen.is/experience'
     },
     alternates: {
@@ -46,84 +45,88 @@ export default async function Experience() {
     return (
         <PageTransition>
             <JsonLd data={experienceSchema} />
-            <div className="container mx-auto max-w-4xl px-4 py-8">
-                {/* Header Section */}
-                <div className="mb-12">
-                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-                        <div>
-                            <h1 className="text-3xl font-bold tracking-tight mb-2">
-                                Experience
-                            </h1>
-                        </div>
-                        <LinkButton 
-                            href="/Alen-Resume.pdf" 
-                            target="_blank"
-                            className="flex items-center gap-2"
-                        >
-                            <FaDownload className="w-4 h-4" />
-                            Resume
-                        </LinkButton>
+            <div className="container max-w-2xl py-12 md:py-20">
+                {/* Header */}
+                <div className="flex items-start justify-between gap-4 mb-12">
+                    <div>
+                        <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+                            Experience
+                        </h1>
+                        <p className="text-lg text-muted-foreground">
+                            My professional journey so far.
+                        </p>
                     </div>
+                    <a
+                        href="/Alen-Resume.pdf"
+                        target="_blank"
+                        className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full border border-border hover:bg-muted hover:border-foreground/20 transition-all duration-200"
+                    >
+                        <FiDownload className="w-4 h-4" />
+                        <span className="hidden sm:inline">Resume</span>
+                    </a>
                 </div>
 
-                {/* Experience Timeline */}
-                <div className="space-y-8">
-                    {experiences.map((experience, index) => (
-                        <div key={experience.id} className="group">
-                            <div className={`
-                                bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm rounded-3xl p-8 shadow-xl shadow-slate-200/20 dark:shadow-slate-950/20 border border-slate-200/50 dark:border-slate-800/50
-                                transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl
-                                ${experience.current ? 'ring-2 ring-green-500/20' : ''}
-                            `}>
-                                <div className="flex flex-col gap-6">
-                                    {/* Company Header */}
-                                    <div className="flex flex-col md:flex-row justify-between items-start gap-4">
-                                        <div className="space-y-2">
-                                            <div className="flex items-center gap-3">
-                                                <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
-                                                    {experience.link ? <LinkButton href={experience.link} target="_blank" className="text-2xl font-bold">{experience.company}</LinkButton> : experience.company}
+                {/* Timeline */}
+                <div className="relative">
+                    {/* Timeline line */}
+                    <div className="absolute left-0 top-2 bottom-2 w-px bg-border" />
+                    
+                    <div className="space-y-12">
+                        {experiences.map((experience, index) => (
+                            <div key={experience.id} className="relative pl-8">
+                                {/* Timeline dot */}
+                                <div className={`absolute left-0 top-2 w-2 h-2 rounded-full -translate-x-[3px] ${
+                                    experience.current 
+                                        ? 'bg-accent ring-4 ring-accent/20' 
+                                        : 'bg-muted-foreground/50'
+                                }`} />
+                                
+                                {/* Card */}
+                                <div className="group">
+                                    <div className="flex items-start justify-between gap-4 mb-2">
+                                        <div>
+                                            <div className="flex items-center gap-2">
+                                                <h2 className="text-lg font-semibold">
+                                                    {experience.link ? (
+                                                        <LinkButton href={experience.link} target="_blank" className="text-lg">
+                                                            {experience.company}
+                                                        </LinkButton>
+                                                    ) : (
+                                                        experience.company
+                                                    )}
                                                 </h2>
                                                 {experience.current && (
-                                                    <span className="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-3 py-1 rounded-full text-sm font-medium">
+                                                    <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-accent/10 text-accent">
                                                         Current
                                                     </span>
                                                 )}
                                             </div>
-                                            <div className="flex items-center gap-2">
-                                                <FaBriefcase className="text-slate-500 dark:text-slate-500 w-4 h-4" />
-                                                <span className="text-lg font-semibold text-slate-700 dark:text-slate-300">
-                                                    {experience.position}
-                                                </span>
-                                            </div>
-                                        </div>
-                                        
-                                        <div className="flex flex-col gap-2 text-sm text-slate-600 dark:text-slate-400">
-                                            <div className="flex items-center gap-2">
-                                                <FaCalendarAlt className="w-4 h-4" />
-                                                <span className="font-medium">{experience.period}</span>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <FaMapMarkerAlt className="w-4 h-4" />
-                                                <span>{experience.location}</span>
-                                            </div>
+                                            <p className="text-muted-foreground font-medium">
+                                                {experience.position}
+                                            </p>
                                         </div>
                                     </div>
-
-                                    {/* Description */}
-                                    <div className="border-t border-slate-200/50 dark:border-slate-700/50 pt-6">
-                                        <ul className="space-y-3">
-                                            {experience.description.map((item, i) => (
-                                                <li key={i} className="flex items-start gap-3 text-slate-600 dark:text-slate-400 leading-relaxed">
-                                                    <span className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></span>
-                                                    <span>{item}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
+                                    
+                                    <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
+                                        <span>{experience.period}</span>
+                                        <span className="flex items-center gap-1">
+                                            <FiMapPin className="w-3 h-3" />
+                                            {experience.location}
+                                        </span>
                                     </div>
+                                    
+                                    <ul className="space-y-2">
+                                        {experience.description.map((item, i) => (
+                                            <li key={i} className="flex items-start gap-3 text-muted-foreground text-sm">
+                                                <span className="w-1 h-1 rounded-full bg-muted-foreground/50 mt-2 flex-shrink-0" />
+                                                <span>{item}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
             </div>
         </PageTransition>

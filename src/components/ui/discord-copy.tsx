@@ -35,8 +35,8 @@ export function DiscordCopy({ username, className, children }: DiscordCopyProps)
         <button
             onClick={handleCopyToClipboard}
             className={cn(
-                'text-sm font-medium underline decoration-green-500 decoration-2 underline-offset-4 hover:text-green-500 transition-colors',
-                copied && 'text-green-500',
+                'font-medium text-foreground underline decoration-accent/50 decoration-2 underline-offset-4 hover:decoration-accent transition-colors cursor-pointer',
+                copied && 'decoration-accent',
                 className
             )}
         >

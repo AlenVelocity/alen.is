@@ -2,11 +2,16 @@
   {
     "id": "mercor-2025",
     "company": "Mercor",
-    "position": "Software Engineer",
+    "position": "Software Engineer II",
     "period": "July 2025 - Present",
     "location": "Remote, San Francisco, USA",
     "description": [
-      "Building Mercor Work Platform"
+      "Building the Mercor Work Platform, an AI-powered talent marketplace",
+      "Built a survey system that helped thousands of users give feedback, driving product insights",
+      "Created an availability collection system for contractors that helped the company make better decisions on talent allocation",
+      "Improved code quality through better testing and code review standards",
+      "Built location and work authorization collection flows for better user verification",
+      "Added phone verification as a fraud signal to improve platform security"
     ],
     "current": true,
     "order": 0,
@@ -17,15 +22,15 @@
     "id": "kmrb-2025",
     "company": "Komorebi",
     "position": "Co-Founder",
-    "period": "October 2024 - Present",
+    "period": "October 2024 - December 2025",
     "location": "Remote, India",
     "description": [
-      "Building the future of Employee Identity Management with innovative solutions",
-      "Leading product development and technical architecture decisions",
-      "Providing services to clients while also building our own innovative products",
-      "Driving strategic vision and execution for next-generation identity solutions"
+      "Built Employee Identity Management solutions",
+      "Led product development and technical architecture decisions",
+      "Provided services to clients while building our own products",
+      "Drove strategic vision for next-gen identity solutions"
     ],
-    "current": true,
+    "current": false,
     "order": 0,
     "published": true,
     "link": "https://kmrb.tech"
@@ -37,9 +42,9 @@
     "period": "November 2024 - June 2025",
     "location": "Remote, Mumbai, India",
     "description": [
-      "Worked on Frappe Cloud, primarily on the infrastructure automation and managing AWS infrastructure.",
-      "Added support for provisioning custom Domains, email, and DNS configurations.",
-      "User experience improvements for developers using Frappe Cloud and Frappe Framework."
+      "Worked on Frappe Cloud, mainly on infrastructure automation and AWS management",
+      "Added support for custom domains, email, and DNS configurations",
+      "Made developer experience improvements for Frappe Cloud and Framework users"
     ],
     "current": false,
     "order": 0,
@@ -54,9 +59,9 @@
     "period": "April 2024 - Nov 2024",
     "description": [
       "Built a dynamic AI Agent Platform and an AI Course Generation Platform",
-      "Spearheaded infrastructure for deploying multiple edge apps on various providers",
-      "Built Multiple AI Web apps including an AI voice survey platform",
-      "Developed AI agents for various clients from the ground up"
+      "Set up infrastructure for deploying edge apps on multiple providers",
+      "Built AI web apps including a voice survey platform",
+      "Developed AI agents for various clients from scratch"
     ],
     "current": false,
     "order": 1,
@@ -71,10 +76,10 @@
     "period": "May 2024 - Nov 2024",
     "description": [
       "Built the first version of Plazza's Quick Commerce system",
-      "Designed and developed a Whatsapp Bot based medicine delivery system for the APR region",
-      "Implemented infrastructure and backend solutions for Plazza",
-      "Designed and developed various microservices using NestJS, RabbitMQ, and PostgreSQL",
-      "Utilized AWS services including EC2, EKS, Amazon MQ, and RDS for robust and scalable cloud infrastructure"
+      "Made a WhatsApp Bot medicine delivery system for the APR region",
+      "Implemented infrastructure and backend solutions",
+      "Built microservices using NestJS, RabbitMQ, and PostgreSQL",
+      "Used AWS services like EC2, EKS, Amazon MQ, and RDS"
     ],
     "current": false,
     "order": 2,
@@ -88,14 +93,14 @@
     "location": "Remote, Melbourne, Australia",
     "period": "May 2023 - Jan 2024",
     "description": [
-      "Developed and implemented dataset parsing algorithms to be used as LoRA training data for LLMs such as Vicuna-13b and LLaMa-2-7b",
-      "Implemented methods to streamline fine-tuning of diffusion models on human faces",
-      "Built highly interactive AI-first chat playground/chat UIs"
+      "Built dataset parsing algorithms for LoRA training data for LLMs like Vicuna-13b and LLaMa-2-7b",
+      "Made methods to streamline fine-tuning of diffusion models on faces",
+      "Built interactive AI-first chat playground UIs"
     ],
     "current": false,
     "order": 3,
     "published": true,
-    "link": "hhttps://shuriken.trade/"
+    "link": "https://shuriken.trade/"
   },
   {
     "id": "dataequinox-2021",
@@ -104,9 +109,9 @@
     "location": "Remote, Kochi, India",
     "period": "Dec 2021 - Sep 2022",
     "description": [
-      "Designed and developed CRM web apps by piecing together multiple different feedback and customer sources/portals",
-      "Created proofs of concept for multi-threaded solutions for Node based Backends",
-      "Collaborated with multiple teams of over 7 members"
+      "Built CRM web apps by connecting multiple feedback and customer sources",
+      "Made proofs of concept for multi-threaded Node backends",
+      "Worked with teams of 7+ people"
     ],
     "current": false,
     "order": 4,
@@ -118,16 +123,16 @@
     "company": "Synthesized Infinity",
     "position": "Founder",
     "location": "Remote",
-    "period": "July 2020 - Present",
+    "period": "July 2020 - December 2025",
     "description": [
-      "Managed multiple development teams with over 10 people",
-      "Created organization's mission and vision statements for use by the members",
-      "Built and contributed to 12+ OSS Projects",
-      "Conducted lessons on NodeJS and TypeScript for the members of the community"
+      "Managed dev teams with 10+ people",
+      "Created the org's mission and vision statements",
+      "Built and contributed to 12+ OSS projects",
+      "Taught NodeJS and TypeScript to community members"
     ],
-    "current": true,
+    "current": false,
     "order": 5,
     "published": true,
     "link": "https://github.com/Synthesized-Infinity"
   }
-] 
+]
