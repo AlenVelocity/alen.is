@@ -188,12 +188,14 @@ function Navigation() {
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname()
+    // Hide main navbar on /lost page - it has its own custom navbar
+    const showNavbar = !pathname.startsWith('/lost')
     const showFooter = pathname === '/' || pathname.startsWith('/experience') || pathname.startsWith('/building')
 
     return (
         <div className="min-h-screen flex flex-col">
-            <Navigation />
-            <main className="flex-1 pt-20">{children}</main>
+            {showNavbar && <Navigation />}
+            <main className={cn("flex-1", showNavbar && "pt-20")}>{children}</main>
             {showFooter && (
                 <footer className="border-t border-border/50 py-8">
                     <div className="container max-w-4xl">

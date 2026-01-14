@@ -3,6 +3,8 @@ import { pollRouter } from './routers/poll'
 import { lastFmRouter } from './routers/lastfm'
 import { spotifyRouter } from './routers/spotify'
 import { gamingRouter } from './routers/gaming'
+import { githubRouter } from './routers/github'
+import { fitnessRouter } from './routers/fitness'
 
 /**
  * This is the primary router for your server.
@@ -14,6 +16,8 @@ export const appRouter = createTRPCRouter({
     poll: pollRouter,
     spotify: spotifyRouter,
     gaming: gamingRouter,
+    github: githubRouter,
+    fitness: fitnessRouter,
 })
 
 // export type definition of API
