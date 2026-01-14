@@ -111,26 +111,26 @@ export default async function Home() {
                 {/* Hero */}
                 <section className="space-y-6 mb-16">
                     <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-                        {personalInfo.hero_title}
-                    </h1>
+                                {personalInfo.hero_title}
+                            </h1>
                     <p className="text-lg text-muted-foreground leading-relaxed">
                         {parseTextWithLinks(personalInfo.hero_description)}
-                    </p>
+                            </p>
                     <div className="flex flex-wrap gap-2 sm:gap-3 pt-2">
-                        {heroSocialLinks.map((link) => {
-                            const IconComponent = IconMap[link.icon as keyof typeof IconMap]
-                            return (
+                                {heroSocialLinks.map((link) => {
+                                    const IconComponent = IconMap[link.icon as keyof typeof IconMap]
+                                    return (
                                 <a
-                                    key={link.id}
-                                    href={link.url}
-                                    target={link.url.startsWith('http') ? "_blank" : undefined}
+                                            key={link.id}
+                                            href={link.url}
+                                            target={link.url.startsWith('http') ? "_blank" : undefined}
                                     className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium rounded-full border border-border hover:bg-muted hover:border-foreground/20 transition-all duration-200"
-                                >
-                                    {IconComponent && <IconComponent className="w-4 h-4" />}
+                                        >
+                                            {IconComponent && <IconComponent className="w-4 h-4" />}
                                     <span className="hidden sm:inline">{link.name}</span>
                                 </a>
-                            )
-                        })}
+                                    )
+                                })}
                     </div>
                 </section>
 
@@ -142,7 +142,7 @@ export default async function Home() {
                         <p>{parseTextWithLinks(personalInfo.about_me_paragraph_2)}</p>
                     </div>
                     <div className="pt-4">
-                        <Signature name={personalInfo.signature_name} />
+                            <Signature name={personalInfo.signature_name} />
                     </div>
                 </section>
 

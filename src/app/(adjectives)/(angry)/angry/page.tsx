@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
+import { CenteredPage } from '@/components/ui/centered-page'
 
 export const metadata: Metadata = {
     title: 'angry',
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function Angry() {
     return (
-        <div className="min-h-[80vh] flex flex-col items-center justify-center gap-6 py-12">
+        <CenteredPage className="gap-6">
             <Image
                 src="/pusheen/pusheen-not-talking.gif"
                 alt="pusheen not talking"
@@ -17,6 +18,6 @@ export default function Angry() {
                 className="rounded-2xl hover:scale-105 transition-transform duration-300"
             />
             <p className="text-lg text-muted-foreground">Don't talk to me ( ｡ •`ᴖ´• ｡)</p>
-        </div>
+        </CenteredPage>
     )
 }

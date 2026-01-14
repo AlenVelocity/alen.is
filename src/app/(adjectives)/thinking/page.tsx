@@ -1,5 +1,6 @@
 import Image from "next/image"
 import { Metadata } from "next"
+import { CenteredPage } from "@/components/ui/centered-page"
 
 export const metadata: Metadata = {
     title: 'thinking',
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function Thinking() {
     return (
-        <div className="min-h-[80vh] flex flex-col items-center justify-center py-12">
+        <CenteredPage>
             <Image 
                 src="/thinking.gif" 
                 alt="Thinking" 
@@ -17,6 +18,6 @@ export default function Thinking() {
                 className="max-w-[250px] md:max-w-[400px] h-auto rounded-2xl"
                 priority
             />
-        </div>
+        </CenteredPage>
     )
 }

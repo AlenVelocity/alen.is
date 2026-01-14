@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { CenteredPage } from '@/components/ui/centered-page'
 
 export const metadata: Metadata = {
     title: 'bi',
@@ -31,7 +32,7 @@ const PrideStripe = ({ color, delay, width = "w-full" }: { color: string; delay:
 
 export default function Bi() {
     return (
-        <div className="min-h-[80vh] flex flex-col items-center justify-center gap-10 py-12 px-4">
+        <CenteredPage className="gap-10">
             {/* Floating hearts */}
             <div className="flex gap-3 text-2xl">
                 <Heart delay="0s" color="#D60270" />
@@ -75,7 +76,7 @@ export default function Bi() {
                 
                 <div className="w-20 h-1.5 bg-gradient-to-r from-pink-400 via-yellow-400 to-blue-400 mx-auto rounded-full animate-pulse-subtle" />
             </div>
-        </div>
+        </CenteredPage>
     )
 }
 
