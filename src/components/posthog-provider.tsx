@@ -49,5 +49,3 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
 
 // Helper to track events from anywhere
 export { posthog }
-
-
