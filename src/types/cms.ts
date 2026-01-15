@@ -4,6 +4,7 @@ export interface Experience {
   position: string
   period: string
   location: string
+  workType: 'remote' | 'onsite' | 'hybrid'
   description: string[]
   current: boolean
   order: number

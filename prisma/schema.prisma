@@ -23,6 +23,7 @@ model Experience {
   position    String
   period      String
   location    String
+  workType    String   @default("remote") // "remote", "onsite", "hybrid"
   description String[] // Array of strings for bullet points
   link        String?
   current     Boolean  @default(false)

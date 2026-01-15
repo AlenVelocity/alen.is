@@ -34,6 +34,12 @@ function Navigation() {
     // Check if we're on a main nav page (home, experience, projects)
     const isMainNav = NAV_ITEMS.some(item => item.href === currentPath)
     
+    // Filter nav items based on scroll state and current page
+    // When scrolled: hide non-current pages (but keep home always visible)
+    const visibleNavItems = scrolled && isMainNav
+        ? NAV_ITEMS.filter(item => item.href === '/' || item.href === currentPath)
+        : NAV_ITEMS
+    
     useEffect(() => {
         setMounted(true)
         const handleScroll = () => {
@@ -88,14 +94,14 @@ function Navigation() {
                 <AnimatePresence mode="popLayout" initial={false}>
                     {isMainNav ? (
                         <motion.div
-                            key="main-nav"
+                            key={`main-nav-${visibleNavItems.length}`}
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.9 }}
                             transition={{ duration: 0.2 }}
                             className="flex items-center gap-1"
                         >
-                            {NAV_ITEMS.map((item) => {
+                            {visibleNavItems.map((item) => {
                                 const isActive = currentPath === item.href
                                 const isHome = item.href === '/'
                                 const Icon = item.icon

@@ -165,8 +165,18 @@ const GameOfLife = forwardRef<GameOfLifeRef, {
             const cols = Math.ceil(canvas.width / CELL_SIZE) + 20
             const rows = Math.ceil(canvas.height / CELL_SIZE) + 20
             
-            if (!gridRef.current || gridRef.current.length !== rows || gridRef.current[0]?.length !== cols) {
-                gridRef.current = createEmptyGrid(rows, cols)
+            const oldGrid = gridRef.current
+            if (!oldGrid || oldGrid.length !== rows || oldGrid[0]?.length !== cols) {
+                const newGrid = createEmptyGrid(rows, cols)
+                // Copy existing cells to new grid
+                if (oldGrid) {
+                    for (let i = 0; i < Math.min(oldGrid.length, rows); i++) {
+                        for (let j = 0; j < Math.min(oldGrid[0].length, cols); j++) {
+                            newGrid[i][j] = oldGrid[i][j]
+                        }
+                    }
+                }
+                gridRef.current = newGrid
             }
             draw()
         }

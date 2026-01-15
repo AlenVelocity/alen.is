@@ -4,7 +4,8 @@
     "company": "Mercor",
     "position": "Software Engineer II",
     "period": "July 2025 - Present",
-    "location": "Remote, San Francisco, USA",
+    "location": "San Francisco, USA",
+    "workType": "remote",
     "description": [
       "Building the Mercor Work Platform, an AI-powered talent marketplace",
       "Built a survey system that helped thousands of users give feedback, driving product insights",
@@ -23,7 +24,8 @@
     "company": "Komorebi",
     "position": "Co-Founder",
     "period": "October 2024 - December 2025",
-    "location": "Remote, India",
+    "location": "India",
+    "workType": "remote",
     "description": [
       "Built Employee Identity Management solutions",
       "Led product development and technical architecture decisions",
@@ -40,7 +42,8 @@
     "company": "Frappe",
     "position": "Software Engineer",
     "period": "November 2024 - June 2025",
-    "location": "Remote, Mumbai, India",
+    "location": "Mumbai, India",
+    "workType": "remote",
     "description": [
       "Worked on Frappe Cloud, mainly on infrastructure automation and AWS management",
       "Added support for custom domains, email, and DNS configurations",
@@ -55,7 +58,8 @@
     "id": "xagi-2024",
     "company": "xAGI",
     "position": "Software Development Engineer",
-    "location": "Remote, Bangalore, India",
+    "location": "Bangalore, India",
+    "workType": "remote",
     "period": "April 2024 - Nov 2024",
     "description": [
       "Built a dynamic AI Agent Platform and an AI Course Generation Platform",
@@ -72,7 +76,8 @@
     "id": "plazza-2024",
     "company": "Plazza",
     "position": "Software Engineer",
-    "location": "Remote, Bangalore, India",
+    "location": "Bangalore, India",
+    "workType": "remote",
     "period": "May 2024 - Nov 2024",
     "description": [
       "Built the first version of Plazza's Quick Commerce system",
@@ -90,7 +95,8 @@
     "id": "equivoxai-2023",
     "company": "EquivoxAI (now Shuriken)",
     "position": "Founding Software Engineer - AI",
-    "location": "Remote, Melbourne, Australia",
+    "location": "Melbourne, Australia",
+    "workType": "remote",
     "period": "May 2023 - Jan 2024",
     "description": [
       "Built dataset parsing algorithms for LoRA training data for LLMs like Vicuna-13b and LLaMa-2-7b",
@@ -106,7 +112,8 @@
     "id": "dataequinox-2021",
     "company": "DataEquinox",
     "position": "Software Development Engineer - Intern",
-    "location": "Remote, Kochi, India",
+    "location": "Kochi, India",
+    "workType": "remote",
     "period": "Dec 2021 - Sep 2022",
     "description": [
       "Built CRM web apps by connecting multiple feedback and customer sources",
@@ -122,7 +129,8 @@
     "id": "synthesized-infinity-2020",
     "company": "Synthesized Infinity",
     "position": "Founder",
-    "location": "Remote",
+    "location": "Worldwide",
+    "workType": "remote",
     "period": "July 2020 - December 2025",
     "description": [
       "Managed dev teams with 10+ people",
@@ -135,4 +143,4 @@
     "published": true,
     "link": "https://github.com/Synthesized-Infinity"
   }
-] 
+]

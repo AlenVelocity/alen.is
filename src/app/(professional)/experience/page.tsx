@@ -1,9 +1,22 @@
 import { LinkButton } from '@/components/ui/link-button'
 import { PageTransition } from '@/components/ui/page-transition'
-import { FiDownload, FiMapPin } from 'react-icons/fi'
+import { FiDownload, FiMapPin, FiWifi, FiHome, FiRepeat } from 'react-icons/fi'
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
 import { runGetExperiences } from '@/lib/cms-db'
+
+const getWorkTypeBadge = (workType: string) => {
+    switch (workType) {
+        case 'remote':
+            return { label: 'Remote', icon: FiWifi, className: 'bg-green-500/10 text-green-600 dark:text-green-400' }
+        case 'onsite':
+            return { label: 'Onsite', icon: FiHome, className: 'bg-blue-500/10 text-blue-600 dark:text-blue-400' }
+        case 'hybrid':
+            return { label: 'Hybrid', icon: FiRepeat, className: 'bg-purple-500/10 text-purple-600 dark:text-purple-400' }
+        default:
+            return { label: 'Remote', icon: FiWifi, className: 'bg-green-500/10 text-green-600 dark:text-green-400' }
+    }
+}
 
 export const metadata: Metadata = {
     title: 'Experience',
@@ -107,12 +120,22 @@ export default async function Experience() {
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
+                                    <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground mb-4">
                                         <span>{experience.period}</span>
                                         <span className="flex items-center gap-1">
                                             <FiMapPin className="w-3 h-3" />
                                             {experience.location}
                                         </span>
+                                        {(() => {
+                                            const badge = getWorkTypeBadge(experience.workType)
+                                            const Icon = badge.icon
+                                            return (
+                                                <span className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${badge.className}`}>
+                                                    <Icon className="w-3 h-3" />
+                                                    {badge.label}
+                                                </span>
+                                            )
+                                        })()}
                                     </div>
                                     
                                     <ul className="space-y-2">

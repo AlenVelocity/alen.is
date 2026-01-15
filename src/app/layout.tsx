@@ -82,16 +82,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <html lang="en" suppressHydrationWarning>
             <body className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
                 <PostHogProvider>
-                    <TRPCReactProvider>
-                        <ThemeProvider
-                            attribute="class"
+                <TRPCReactProvider>
+                    <ThemeProvider
+                        attribute="class"
                             defaultTheme="dark"
-                            enableSystem
-                            disableTransitionOnChange
-                        >
-                            <ClientLayout>{children}</ClientLayout>
-                        </ThemeProvider>
-                    </TRPCReactProvider>
+                        enableSystem
+                        disableTransitionOnChange
+                    >
+                        <ClientLayout>{children}</ClientLayout>
+                    </ThemeProvider>
+                </TRPCReactProvider>
                 </PostHogProvider>
                 <Databuddy
                     clientId="zqwjrmeJFRJrzTzszsnvV"
