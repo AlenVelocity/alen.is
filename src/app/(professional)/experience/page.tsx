@@ -70,10 +70,10 @@ export default async function Experience() {
                         </p>
                         </div>
                     <a
-                            href="/Alen-Resume.pdf" 
-                            target="_blank"
+                        href="/Alen_Resume.pdf" 
+                        download
                         className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full border border-border hover:bg-muted hover:border-foreground/20 transition-all duration-200"
-                        >
+                    >
                         <FiDownload className="w-4 h-4" />
                         <span className="hidden sm:inline">Resume</span>
                     </a>
