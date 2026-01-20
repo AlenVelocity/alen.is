@@ -94,57 +94,67 @@ function Navigation() {
                 <AnimatePresence mode="popLayout" initial={false}>
                     {isMainNav ? (
                         <motion.div
-                            key={`main-nav-${visibleNavItems.length}`}
+                            key="main-nav"
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.9 }}
                             transition={{ duration: 0.2 }}
                             className="flex items-center gap-1"
                         >
-                            {visibleNavItems.map((item) => {
-                                const isActive = currentPath === item.href
-                                const isHome = item.href === '/'
-                                const Icon = item.icon
-                                
-                                return (
-                                <Link
-                                        key={item.href}
-                                        href={item.href}
-                                    className={cn(
-                                            "relative px-3 py-1.5 text-sm rounded-full transition-colors duration-200",
-                                            isHome ? "font-bold" : "font-medium",
-                                            isActive
-                                                ? "text-background"
-                                                : "text-muted-foreground hover:text-foreground"
-                                        )}
-                                    >
-                                        {/* Animated pill background */}
-                                        {isActive && (
-                                            <motion.span
-                                                layoutId="nav-pill"
-                                                className="absolute inset-0 bg-foreground rounded-full"
-                                                transition={{
-                                                    type: "spring",
-                                                    stiffness: 400,
-                                                    damping: 30
-                                                }}
-                                            />
-                                        )}
-                                        
-                                        {/* Content */}
-                                        <span className="relative z-10">
-                                            {isHome ? (
-                                                item.label
-                                            ) : (
-                                                <>
-                                                    {Icon && <Icon className="w-4 h-4 sm:hidden" />}
-                                                    <span className="hidden sm:inline">{item.label}</span>
-                                                </>
-                                            )}
-                                        </span>
-                                </Link>
-                                )
-                            })}
+                            <AnimatePresence mode="popLayout" initial={false}>
+                                {visibleNavItems.map((item) => {
+                                    const isActive = currentPath === item.href
+                                    const isHome = item.href === '/'
+                                    const Icon = item.icon
+                                    
+                                    return (
+                                        <motion.div
+                                            key={item.href}
+                                            layout
+                                            initial={{ opacity: 0, scale: 0.8, width: 0 }}
+                                            animate={{ opacity: 1, scale: 1, width: 'auto' }}
+                                            exit={{ opacity: 0, scale: 0.8, width: 0 }}
+                                            transition={{ duration: 0.2 }}
+                                        >
+                                            <Link
+                                                href={item.href}
+                                                className={cn(
+                                                    "relative px-3 py-1.5 text-sm rounded-full transition-colors duration-200 block whitespace-nowrap",
+                                                    isHome ? "font-bold" : "font-medium",
+                                                    isActive
+                                                        ? "text-background"
+                                                        : "text-muted-foreground hover:text-foreground"
+                                                )}
+                                            >
+                                                {/* Animated pill background */}
+                                                {isActive && (
+                                                    <motion.span
+                                                        layoutId="nav-pill"
+                                                        className="absolute inset-0 bg-foreground rounded-full"
+                                                        transition={{
+                                                            type: "spring",
+                                                            stiffness: 400,
+                                                            damping: 30
+                                                        }}
+                                                    />
+                                                )}
+                                                
+                                                {/* Content */}
+                                                <span className="relative z-10">
+                                                    {isHome ? (
+                                                        item.label
+                                                    ) : (
+                                                        <>
+                                                            {Icon && <Icon className="w-4 h-4 sm:hidden" />}
+                                                            <span className="hidden sm:inline">{item.label}</span>
+                                                        </>
+                                                    )}
+                                                </span>
+                                            </Link>
+                                        </motion.div>
+                                    )
+                                })}
+                            </AnimatePresence>
                         </motion.div>
                     ) : (
                         <motion.div

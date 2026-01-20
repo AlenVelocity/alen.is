@@ -41,7 +41,7 @@ export default function Bi() {
     }
 
     return (
-        <div className="flex flex-col items-center gap-8 px-4">
+        <div className="flex flex-col items-center gap-4 sm:gap-8 px-4">
             {/* Floating hearts */}
             <div className="flex gap-3 text-2xl">
                 <Heart delay="0s" color="#D60270" />
@@ -76,7 +76,7 @@ export default function Bi() {
             </div>
             
             {/* Message */}
-            <div className="text-center space-y-4 animate-fade-in-up" style={{ animationDelay: '0.7s', animationFillMode: 'forwards', opacity: 0 }}>
+            <div className="text-center space-y-2 sm:space-y-4 animate-fade-in-up" style={{ animationDelay: '0.7s', animationFillMode: 'forwards', opacity: 0 }}>
                 <h1 className="text-3xl md:text-4xl font-bold">
                     <span className="bg-gradient-to-r from-[#D60270] via-[#9B4F96] to-[#0038A8] bg-clip-text text-transparent">
                         everyone's cute{' '}
