@@ -1,6 +1,5 @@
 'use client'
 
-import { CenteredPage } from '@/components/ui/centered-page'
 import { useState } from 'react'
 
 const Heart = ({ delay, color }: { delay: string; color: string }) => (
@@ -42,7 +41,7 @@ export default function Bi() {
     }
 
     return (
-        <CenteredPage className="gap-8 h-full">
+        <div className="flex flex-col items-center gap-8 px-4">
             {/* Floating hearts */}
             <div className="flex gap-3 text-2xl">
                 <Heart delay="0s" color="#D60270" />
@@ -92,9 +91,9 @@ export default function Bi() {
                 </p>
                 
                 <div className="flex items-center justify-center gap-2 text-muted-foreground/70 text-xs">
-                    <span>chronically indecisive</span>
+                    <span>can't sit straight</span>
                     <span>•</span>
-                    <span>cannot sit properly</span>
+                    <span>foldable phone for split screen (ykwim)</span>
                     <span>•</span>
                     <span>too many hoodies</span>
                 </div>
@@ -110,7 +109,7 @@ export default function Bi() {
                     )}
                 </div>
             </div>
-        </CenteredPage>
+        </div>
     )
 }
 

@@ -1,6 +1,6 @@
 export default function AdjectivesLayout({ children }: { children: React.ReactNode }) {
     return (
-        <div className="h-[calc(100svh-5rem)] overflow-hidden">
+        <div className="fixed inset-0 top-20 overflow-hidden flex items-center justify-center">
             {children}
         </div>
     )
