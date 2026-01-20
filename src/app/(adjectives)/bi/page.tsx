@@ -42,7 +42,7 @@ export default function Bi() {
     }
 
     return (
-        <CenteredPage className="gap-8 overflow-hidden !min-h-0 h-[calc(100dvh-5rem)]">
+        <CenteredPage className="gap-8 h-full">
             {/* Floating hearts */}
             <div className="flex gap-3 text-2xl">
                 <Heart delay="0s" color="#D60270" />
