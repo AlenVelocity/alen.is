@@ -42,7 +42,7 @@ export default function Bi() {
     }
 
     return (
-        <CenteredPage className="gap-8">
+        <CenteredPage className="gap-8 overflow-hidden !min-h-0 h-[calc(100dvh-5rem)]">
             {/* Floating hearts */}
             <div className="flex gap-3 text-2xl">
                 <Heart delay="0s" color="#D60270" />
@@ -64,15 +64,17 @@ export default function Bi() {
                 <PrideStripe color="#0038A8" delay="0.3s" />
             </div>
     
-            {/* Interactive phrase */}
-            {currentPhrase && (
-                <p 
-                    key={clickCount}
-                    className="text-lg font-medium animate-fade-in-up bg-gradient-to-r from-[#D60270] via-[#9B4F96] to-[#0038A8] bg-clip-text text-transparent"
-                >
-                    {currentPhrase}
-                </p>
-            )}
+            {/* Interactive phrase - fixed height to prevent layout shift */}
+            <div className="h-7 flex items-center justify-center">
+                {currentPhrase && (
+                    <p 
+                        key={clickCount}
+                        className="text-lg font-medium animate-fade-in-up bg-gradient-to-r from-[#D60270] via-[#9B4F96] to-[#0038A8] bg-clip-text text-transparent"
+                    >
+                        {currentPhrase}
+                    </p>
+                )}
+            </div>
             
             {/* Message */}
             <div className="text-center space-y-4 animate-fade-in-up" style={{ animationDelay: '0.7s', animationFillMode: 'forwards', opacity: 0 }}>
@@ -99,11 +101,14 @@ export default function Bi() {
                 
                 <div className="w-20 h-1.5 bg-gradient-to-r from-pink-400 via-yellow-400 to-blue-400 mx-auto rounded-full" />
                 
-                {clickCount > 0 && (
-                    <p className="text-xs text-muted-foreground/50 animate-fade-in">
-                        finger guns deployed: {clickCount}
-                    </p>
-                )}
+                {/* Fixed height to prevent layout shift */}
+                <div className="h-4">
+                    {clickCount > 0 && (
+                        <p className="text-xs text-muted-foreground/50 animate-fade-in">
+                            finger guns deployed: {clickCount}
+                        </p>
+                    )}
+                </div>
             </div>
         </CenteredPage>
     )
