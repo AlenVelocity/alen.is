@@ -23,44 +23,43 @@ function Navigation() {
     const [mounted, setMounted] = useState(false)
     const [scrolled, setScrolled] = useState(false)
     const [showScrollBtn, setShowScrollBtn] = useState(false)
-    const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-    
+    const showScrollBtnRef = useRef(false)
+
     // Normalize path - remove trailing slash except for root
     const currentPath = pathname === '/' ? '/' : pathname.replace(/\/$/, '')
-    
+
     // Get page name for breadcrumb (from normalized path)
     const currentPageLabel = currentPath.split('/').filter(Boolean).pop() || ''
-    
+
     // Check if we're on a main nav page (home, experience, projects)
     const isMainNav = NAV_ITEMS.some(item => item.href === currentPath)
-    
+
     // Filter nav items based on scroll state and current page
     // When scrolled: hide non-current pages (but keep home always visible)
     const visibleNavItems = scrolled && isMainNav
         ? NAV_ITEMS.filter(item => item.href === '/' || item.href === currentPath)
         : NAV_ITEMS
-    
+
     useEffect(() => {
         setMounted(true)
+    }, [])
+
+    useEffect(() => {
         const handleScroll = () => {
             const isScrolled = window.scrollY > 50
             setScrolled(isScrolled)
-            
-            // Smooth delayed show/hide for scroll button
-            if (isScrolled && !showScrollBtn) {
-                if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current)
-                scrollTimeoutRef.current = setTimeout(() => setShowScrollBtn(true), 100)
-            } else if (!isScrolled && showScrollBtn) {
-                if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current)
-                scrollTimeoutRef.current = setTimeout(() => setShowScrollBtn(false), 100)
+
+            if (isScrolled && !showScrollBtnRef.current) {
+                showScrollBtnRef.current = true
+                setShowScrollBtn(true)
+            } else if (!isScrolled && showScrollBtnRef.current) {
+                showScrollBtnRef.current = false
+                setShowScrollBtn(false)
             }
         }
         window.addEventListener('scroll', handleScroll, { passive: true })
-        return () => {
-            window.removeEventListener('scroll', handleScroll)
-            if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current)
-        }
-    }, [showScrollBtn])
+        return () => window.removeEventListener('scroll', handleScroll)
+    }, [])
 
     const toggleTheme = () => {
         const newTheme = theme === 'dark' ? 'light' : 'dark'
@@ -76,11 +75,9 @@ function Navigation() {
 
     const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
 
-    if (!mounted) return null
-
     return (
         <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50">
-            <motion.nav 
+            <motion.nav
                 layout
                 transition={{
                     layout: { type: "spring", stiffness: 500, damping: 35 }
@@ -106,14 +103,14 @@ function Navigation() {
                                     const isActive = currentPath === item.href
                                     const isHome = item.href === '/'
                                     const Icon = item.icon
-                                    
+
                                     return (
                                         <motion.div
                                             key={item.href}
                                             layout
-                                            initial={{ opacity: 0, scale: 0.8, width: 0 }}
-                                            animate={{ opacity: 1, scale: 1, width: 'auto' }}
-                                            exit={{ opacity: 0, scale: 0.8, width: 0 }}
+                                            initial={{ opacity: 0, scale: 0.8 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            exit={{ opacity: 0, scale: 0.8 }}
                                             transition={{ duration: 0.2 }}
                                         >
                                             <Link
@@ -138,7 +135,7 @@ function Navigation() {
                                                         }}
                                                     />
                                                 )}
-                                                
+
                                                 {/* Content */}
                                                 <span className="relative z-10">
                                                     {isHome ? (
@@ -177,29 +174,38 @@ function Navigation() {
                 </AnimatePresence>
 
                 <div className="w-px h-4 bg-border mx-1" />
-                
-                            <button
-                                onClick={toggleTheme}
-                    className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200"
-                                aria-label="Toggle theme"
-                            >
-                    {theme === 'dark' ? <FiSun className="w-4 h-4" /> : <FiMoon className="w-4 h-4" />}
-                            </button>
 
-                            <div
-                    className={cn(
-                        "transition-all duration-300 ease-out overflow-hidden",
-                        showScrollBtn ? "w-10 opacity-100" : "w-0 opacity-0"
-                    )}
+                {mounted ? (
+                    <button
+                        onClick={toggleTheme}
+                        className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200"
+                        aria-label="Toggle theme"
+                    >
+                        {theme === 'dark' ? <FiSun className="w-4 h-4" /> : <FiMoon className="w-4 h-4" />}
+                    </button>
+                ) : (
+                    <div className="p-2 w-8 h-8" />
+                )}
+
+                <AnimatePresence initial={false}>
+                    {showScrollBtn && (
+                        <motion.div
+                            initial={{ width: 0, opacity: 0 }}
+                            animate={{ width: 40, opacity: 1 }}
+                            exit={{ width: 0, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="overflow-hidden"
+                        >
+                            <button
+                                onClick={scrollToTop}
+                                className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors duration-200"
+                                aria-label="Scroll to top"
                             >
-                                <button
-                        onClick={scrollToTop}
-                        className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors duration-200"
-                                    aria-label="Scroll to top"
-                                >
-                        <FiArrowUp className="w-4 h-4" />
-                                </button>
-                            </div>
+                                <FiArrowUp className="w-4 h-4" />
+                            </button>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </motion.nav>
         </header>
     )
@@ -214,7 +220,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     return (
         <div className="min-h-screen flex flex-col">
             {showNavbar && <Navigation />}
-            <main className={cn("flex-1", showNavbar && "pt-20")}>{children}</main>
+            <main className={cn("flex-1", showNavbar && "pt-[var(--navbar-height)]")}>{children}</main>
             {showFooter && (
                 <footer className="border-t border-border/50 py-8">
                     <div className="container max-w-4xl">

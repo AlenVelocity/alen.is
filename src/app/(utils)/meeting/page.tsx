@@ -28,7 +28,7 @@ export default function MeetingPage() {
                     calLink="xlxnyx/1-hour-meeting"
                     style={{
                         width: '100%',
-                        height: 'calc(100vh - 8rem)',
+                        height: 'calc(100dvh - 8rem)',
                         borderRadius: '1rem'
                     }}
                     config={{

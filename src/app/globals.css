@@ -82,7 +82,9 @@
 
 /* Base styles */
 html {
+    --navbar-height: 5rem;
     scroll-behavior: smooth;
+    scrollbar-gutter: stable;
 }
 
 /* Minimal scrollbar */

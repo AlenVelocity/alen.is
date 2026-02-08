@@ -92,7 +92,7 @@ export function Signature({ name, className }: SignatureProps) {
                 {/* Masking overlay that hides then reveals the text from right to left */}
                 {theme !== 'dark' && (
                     <span
-                        className="absolute top-0 right-0 h-full transition-all ease-out bg-white dark:bg-gray-900"
+                        className="absolute top-0 right-0 h-full transition-all ease-out bg-background"
                         style={{
                             width: writing ? '0%' : '100%',
                             transitionDuration: '1.8s',
