@@ -1,16 +1,16 @@
 'use client'
 
-import React from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { Toaster } from 'sonner'
-import { useState, useEffect, useRef } from 'react'
 import { useTheme } from 'next-themes'
 import { FiSun, FiMoon, FiArrowUp, FiBriefcase, FiCode } from 'react-icons/fi'
 import { motion, AnimatePresence } from 'framer-motion'
 import { posthog } from '@/components/posthog-provider'
 
+// NAV ITEMS
 const NAV_ITEMS = [
     { href: '/', label: 'Alen.is', icon: null },
     { href: '/experience', label: 'Experience', icon: FiBriefcase },
@@ -50,6 +50,76 @@ function getBreadcrumbs(currentPath: string) {
         breadcrumbs.push({ href, label })
     }
     return breadcrumbs
+}
+
+// Marquee wrapper for breadcrumb label if too wide
+function MarqueeBreadcrumb({ children }: { children: React.ReactNode }) {
+    const outerRef = useRef<HTMLSpanElement>(null)
+    const innerRef = useRef<HTMLSpanElement>(null)
+    const [shouldMarquee, setShouldMarquee] = useState(false)
+
+    useEffect(() => {
+        if (!outerRef.current || !innerRef.current) {
+            setShouldMarquee(false)
+            return
+        }
+        const outer = outerRef.current
+        const inner = innerRef.current
+        // Margin of safety for slight overflow
+        setShouldMarquee(inner.scrollWidth > outer.offsetWidth + 4)
+    }, [children])
+
+    return (
+        <span
+            ref={outerRef}
+            className={cn(
+                'relative max-w-[10rem] sm:max-w-xs overflow-hidden inline-block align-middle',
+                shouldMarquee && 'will-change-transform'
+            )}
+            tabIndex={0}
+        >
+            <span
+                ref={innerRef}
+                className={cn(
+                    'block whitespace-nowrap',
+                    shouldMarquee
+                        ? 'animate-breadcrumb-marquee'
+                        : ''
+                )}
+                style={
+                    shouldMarquee
+                        ? {
+                              // Animation is defined in Tailwind later (see below)
+                              animation: 'breadcrumb-marquee 3.5s linear infinite'
+                          }
+                        : undefined
+                }
+                aria-label={typeof children === 'string' ? children : undefined}
+            >
+                {children}
+            </span>
+            {/* Tailwind custom style at page level for marquee if needed */}
+            <style jsx global>{`
+                @keyframes breadcrumb-marquee {
+                    0% {
+                        transform: translateX(0%);
+                    }
+                    10% {
+                        transform: translateX(0%);
+                    }
+                    90% {
+                        transform: translateX(calc(-100% + 100%));
+                    }
+                    100% {
+                        transform: translateX(calc(-100% + 100%));
+                    }
+                }
+                .animate-breadcrumb-marquee {
+                    animation: breadcrumb-marquee 3.5s linear infinite;
+                }
+            `}</style>
+        </span>
+    )
 }
 
 function Navigation() {
@@ -214,11 +284,18 @@ function Navigation() {
                                                             ? 'text-muted-foreground font-bold'
                                                             : 'text-muted-foreground hover:text-foreground'
                                                     )}
+                                                    tabIndex={0}
                                                 >
-                                                    {crumb.label}
+                                                    <MarqueeBreadcrumb>
+                                                        {crumb.label}
+                                                    </MarqueeBreadcrumb>
                                                 </Link>
                                             ) : (
-                                                <span className="text-foreground capitalize">{crumb.label}</span>
+                                                <span className="text-foreground capitalize">
+                                                    <MarqueeBreadcrumb>
+                                                        {crumb.label}
+                                                    </MarqueeBreadcrumb>
+                                                </span>
                                             )}
                                         </React.Fragment>
                                     )
