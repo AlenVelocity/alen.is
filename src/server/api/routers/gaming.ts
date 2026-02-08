@@ -1,5 +1,6 @@
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc'
 import { z } from 'zod'
+import { fetchGameDetails, fetchXboxGameAchievements } from '@/lib/steam'
 
 // Steam API configuration
 const STEAM_API_KEY = process.env.STEAM_API_KEY
@@ -150,23 +151,53 @@ export const gamingRouter = createTRPCRouter({
             let steamData = null
             if (STEAM_API_KEY && STEAM_ID_64) {
                 try {
-                    const url = `http://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid=${input.appid}&key=${STEAM_API_KEY}&steamid=${STEAM_ID_64}`
-                    const response = await fetch(url)
-                    if (!response.ok) {
-                        throw new Error(`Steam API failed with status ${response.status}`)
+                    // Fetch player achievements and game schema in parallel
+                    const [playerResponse, schemaResponse] = await Promise.all([
+                        fetch(`http://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid=${input.appid}&key=${STEAM_API_KEY}&steamid=${STEAM_ID_64}`),
+                        fetch(`http://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?appid=${input.appid}&key=${STEAM_API_KEY}`),
+                    ])
+
+                    if (!playerResponse.ok) {
+                        throw new Error(`Steam API failed with status ${playerResponse.status}`)
                     }
-                    const data = await response.json()
+
+                    const playerData = await playerResponse.json()
                     const parsedData = z.object({
                         playerstats: steamPlayerStatsSchema
-                    }).parse(data);
-                    
+                    }).parse(playerData)
+
+                    // Build a map of apiname → display name/description from schema
+                    const schemaMap = new Map<string, { displayName: string; description: string; icon: string; icongray: string }>()
+                    if (schemaResponse.ok) {
+                        try {
+                            const schemaData = await schemaResponse.json()
+                            const achievements = schemaData?.game?.availableGameStats?.achievements || []
+                            for (const a of achievements) {
+                                schemaMap.set(a.name, {
+                                    displayName: a.displayName || a.name,
+                                    description: a.description || '',
+                                    icon: a.icon || '',
+                                    icongray: a.icongray || '',
+                                })
+                            }
+                        } catch {
+                            // Schema fetch failed, we'll fall back to apiname
+                        }
+                    }
+
                     if (parsedData.playerstats.success && parsedData.playerstats.achievements) {
                         steamData = {
                             gameName: parsedData.playerstats.gameName,
-                            achievements: parsedData.playerstats.achievements.map(achievement => ({
-                                ...achievement,
-                                unlockDate: achievement.unlocktime > 0 ? new Date(achievement.unlocktime * 1000).toISOString() : null
-                            })),
+                            achievements: parsedData.playerstats.achievements.map(achievement => {
+                                const schema = schemaMap.get(achievement.apiname)
+                                return {
+                                    ...achievement,
+                                    name: schema?.displayName || achievement.name || achievement.apiname,
+                                    description: schema?.description || achievement.description || '',
+                                    icon: schema ? (achievement.achieved ? schema.icon : schema.icongray) : '',
+                                    unlockDate: achievement.unlocktime > 0 ? new Date(achievement.unlocktime * 1000).toISOString() : null,
+                                }
+                            }),
                             totalAchievements: parsedData.playerstats.achievements.length,
                             unlockedAchievements: parsedData.playerstats.achievements.filter(a => a.achieved === 1).length
                         }
@@ -177,6 +208,22 @@ export const gamingRouter = createTRPCRouter({
             }
 
             return { steam: steamData }
+        }),
+
+    // Get Xbox achievements for a specific game
+    getXboxGameAchievements: publicProcedure
+        .input(z.object({ titleId: z.string() }))
+        .query(async ({ input }) => {
+            const achievements = await fetchXboxGameAchievements(input.titleId)
+            return { xbox: achievements }
+        }),
+
+    // Get game details from Steam Store API
+    getGameDetails: publicProcedure
+        .input(z.object({ appid: z.number() }))
+        .query(async ({ input }) => {
+            const details = await fetchGameDetails(input.appid)
+            return { steam: details }
         }),
 
     // Get Xbox data (using OpenXBL API)

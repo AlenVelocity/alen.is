@@ -24,6 +24,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: '**',
       },
+      {
+        protocol: 'http',
+        hostname: '**',
+      },
     ],
     // For static export, you might need to configure this
     // unoptimized: true,
