@@ -83,9 +83,8 @@ function Navigation() {
                     layout: { type: "spring", stiffness: 500, damping: 35 }
                 }}
                 className={cn(
-                    "flex items-center gap-1 px-2 py-1.5 rounded-full border",
-                    "bg-background/80 backdrop-blur-xl border-border/50",
-                    scrolled && "shadow-lg shadow-black/5 dark:shadow-black/20"
+                    "flex items-center gap-1 px-2 py-1.5 rounded-xl border",
+                    "bg-card/90 backdrop-blur-sm border-border paper-shadow"
                 )}
             >
                 <AnimatePresence mode="popLayout" initial={false}>
@@ -116,18 +115,18 @@ function Navigation() {
                                             <Link
                                                 href={item.href}
                                                 className={cn(
-                                                    "relative px-3 py-1.5 text-sm rounded-full transition-colors duration-200 block whitespace-nowrap",
+                                                    "relative px-3 py-1.5 text-sm rounded-lg transition-colors duration-200 block whitespace-nowrap",
                                                     isHome ? "font-bold" : "font-medium",
                                                     isActive
-                                                        ? "text-background"
+                                                        ? "text-foreground"
                                                         : "text-muted-foreground hover:text-foreground"
                                                 )}
                                             >
-                                                {/* Animated pill background */}
+                                                {/* Animated underline indicator */}
                                                 {isActive && (
                                                     <motion.span
                                                         layoutId="nav-pill"
-                                                        className="absolute inset-0 bg-foreground rounded-full"
+                                                        className="absolute bottom-0 left-2 right-2 h-0.5 bg-accent rounded-full"
                                                         transition={{
                                                             type: "spring",
                                                             stiffness: 400,
@@ -166,14 +165,14 @@ function Navigation() {
                                 className="px-3 py-1.5 text-sm font-medium hover:text-foreground transition-colors flex items-center gap-2"
                             >
                                 <span className="text-muted-foreground font-bold">Alen.is</span>
-                                <span className="text-muted-foreground/50">/</span>
+                                <span className="text-accent/60">/</span>
                                 <span className="text-foreground capitalize">{currentPageLabel}</span>
                                 </Link>
                         </motion.div>
                     )}
                 </AnimatePresence>
 
-                <div className="w-px h-4 bg-border mx-1" />
+                <div className="w-px h-4 bg-accent/20 mx-1" />
 
                 {mounted ? (
                     <button
@@ -222,7 +221,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
             {showNavbar && <Navigation />}
             <main className={cn("flex-1", showNavbar && "pt-[var(--navbar-height)]")}>{children}</main>
             {showFooter && (
-                <footer className="border-t border-border/50 py-8">
+                <footer className="border-t border-dashed border-border py-8">
                     <div className="container max-w-4xl">
                         <p className="text-sm text-muted-foreground text-center">
                             © {new Date().getFullYear()} Alen Yohannan
