@@ -32,7 +32,7 @@ export const CurrentlyListening = () => {
     return (
                 <Link 
                     href="/listening" 
-            className="group flex items-center gap-4 p-4 rounded-xl border border-border bg-card hover:bg-muted/50 hover:border-foreground/20 transition-all duration-300"
+            className="group flex items-center gap-4 p-4 rounded-xl border border-border bg-card paper-shadow hover:bg-muted/50 hover:border-foreground/20 transition-all duration-300"
                 >
                     {currentTrack.image ? (
                 <div className="relative w-12 h-12 rounded-lg overflow-hidden">

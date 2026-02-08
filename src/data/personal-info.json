@@ -1,13 +1,13 @@
 {
   "hero_title": "Hi, I'm Alen",
   "hero_description": "I build [cool](/cool) stuff.",
-  "about_me_paragraph_1": "I spend most of my time building web apps, messing with AI, and sometimes breaking infra (I fix it tho). TypeScript is my main thing, Rust when I feel like it, and anything LLMs or Transformers related. Cloud stuff? I gotchu. Currently working on the [Mercor Work Platform](https://work.mercor.com).",
+  "about_me_paragraph_1": "I spend most of my time building web apps, messing with AI, and sometimes breaking infra (I fix it tho). TypeScript is my main thing, Rust when I feel like it, and anything LLMs or Transformers related. Cloud stuff? I gotchu. Currently working on life.",
   "about_me_paragraph_2": "Outside of code, I'm usually [thinking](/thinking) about random stuff that somehow always ends up as excalidraws or getting [lost](/lost) trying to figure things out. Big fan of story-driven games and [sumika](https://en.wikipedia.org/wiki/Sumika). Currently on my first playthrough of [FFVI](https://en.wikipedia.org/wiki/Final_Fantasy_VI).",
   "contact_description": "Wanna chat? Hit me up on [Whatsapp](https://wa.me/919744375687?text=hii) or [Discord]{COPY:notalen}. You could also go the formal route with [email](mailto:alenyohannan71@gmail.com) or [schedule a meeting](/meeting) if that's more your style.",
   "signature_name": "Alen",
   "meta_title": "Alen.is",
   "meta_description": "Engineer, developer and creator of cool stuff",
   "job_title": "Software Engineer",
-  "company": "Mercor",
+  "company": "",
   "skills": ["Web Development", "TypeScript", "Rust", "AI", "LLM", "NextJS", "Vue"]
 }

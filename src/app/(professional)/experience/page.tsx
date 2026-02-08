@@ -72,7 +72,7 @@ export default async function Experience() {
                     <a
                         href="/Alen_Resume.pdf" 
                         download
-                        className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full border border-border hover:bg-muted hover:border-foreground/20 transition-all duration-200"
+                        className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border border-border hover:bg-muted hover:border-foreground/20 transition-all duration-200"
                     >
                         <FiDownload className="w-4 h-4" />
                         <span className="hidden sm:inline">Resume</span>
@@ -82,16 +82,16 @@ export default async function Experience() {
                 {/* Timeline */}
                 <div className="relative">
                     {/* Timeline line */}
-                    <div className="absolute left-0 top-2 bottom-2 w-px bg-border" />
+                    <div className="absolute left-0 top-2 bottom-2 w-px border-l border-dashed border-border" />
                     
                     <div className="space-y-12">
                     {experiences.map((experience, index) => (
                             <div key={experience.id} className="relative pl-8">
                                 {/* Timeline dot */}
                                 <div className={`absolute left-0 top-2 w-2 h-2 rounded-full -translate-x-[3px] ${
-                                    experience.current 
-                                        ? 'bg-accent ring-4 ring-accent/20' 
-                                        : 'bg-muted-foreground/50'
+                                    experience.current
+                                        ? 'bg-accent ring-4 ring-accent/20'
+                                        : 'border-2 border-muted-foreground/50 bg-card'
                                 }`} />
                                 
                                 {/* Card */}
@@ -109,7 +109,7 @@ export default async function Experience() {
                                                     )}
                                                 </h2>
                                                 {experience.current && (
-                                                    <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-accent/10 text-accent">
+                                                    <span className="px-2 py-0.5 text-xs font-medium rounded-md bg-accent/10 text-accent">
                                                         Current
                                                     </span>
                                                 )}
@@ -130,7 +130,7 @@ export default async function Experience() {
                                             const badge = getWorkTypeBadge(experience.workType)
                                             const Icon = badge.icon
                                             return (
-                                                <span className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${badge.className}`}>
+                                                <span className={`flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium ${badge.className}`}>
                                                     <Icon className="w-3 h-3" />
                                                     {badge.label}
                                                 </span>

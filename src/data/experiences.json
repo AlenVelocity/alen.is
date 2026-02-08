@@ -3,18 +3,18 @@
     "id": "mercor-2025",
     "company": "Mercor",
     "position": "Software Engineer II",
-    "period": "July 2025 - Present",
+    "period": "July 2025 - January 2026",
     "location": "San Francisco, USA",
     "workType": "remote",
     "description": [
-      "Building the Mercor Work Platform, an AI-powered talent marketplace",
+      "Built the Mercor Work Platform, an AI-powered talent marketplace",
       "Built a survey system that helped thousands of users give feedback, driving product insights",
       "Created an availability collection system for contractors that helped the company make better decisions on talent allocation",
       "Improved code quality through better testing and code review standards",
       "Built location and work authorization collection flows for better user verification",
       "Added phone verification as a fraud signal to improve platform security"
     ],
-    "current": true,
+    "current": false,
     "order": 0,
     "published": true,
     "link": "https://mercor.com"

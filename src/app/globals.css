@@ -106,51 +106,51 @@ html {
     background: hsl(var(--muted-foreground) / 0.5);
 }
 
-/* Color scheme - clean monochrome with subtle green accent */
+/* Color scheme - warm organic palette with forest green accent */
 @layer base {
     :root {
-        --background: 0 0% 100%;
-        --foreground: 0 0% 9%;
-        --card: 0 0% 100%;
-        --card-foreground: 0 0% 9%;
-        --popover: 0 0% 100%;
-        --popover-foreground: 0 0% 9%;
-        --primary: 0 0% 9%;
-        --primary-foreground: 0 0% 98%;
-        --secondary: 0 0% 96%;
-        --secondary-foreground: 0 0% 9%;
-        --muted: 0 0% 96%;
-        --muted-foreground: 0 0% 45%;
-        --accent: 152 76% 40%;
-        --accent-foreground: 0 0% 98%;
+        --background: 40 40% 98%;
+        --foreground: 30 20% 14%;
+        --card: 40 30% 97%;
+        --card-foreground: 30 20% 14%;
+        --popover: 40 30% 97%;
+        --popover-foreground: 30 20% 14%;
+        --primary: 30 20% 14%;
+        --primary-foreground: 40 40% 98%;
+        --secondary: 40 25% 93%;
+        --secondary-foreground: 30 20% 14%;
+        --muted: 40 20% 94%;
+        --muted-foreground: 30 10% 46%;
+        --accent: 152 44% 36%;
+        --accent-foreground: 40 40% 98%;
         --destructive: 0 84% 60%;
         --destructive-foreground: 0 0% 98%;
-        --border: 0 0% 90%;
-        --input: 0 0% 90%;
-        --ring: 152 76% 40%;
-        --radius: 0.75rem;
+        --border: 35 15% 87%;
+        --input: 35 15% 87%;
+        --ring: 152 44% 36%;
+        --radius: 0.625rem;
     }
 
     .dark {
-        --background: 0 0% 4%;
-        --foreground: 0 0% 98%;
-        --card: 0 0% 7%;
-        --card-foreground: 0 0% 98%;
-        --popover: 0 0% 7%;
-        --popover-foreground: 0 0% 98%;
-        --primary: 0 0% 98%;
-        --primary-foreground: 0 0% 9%;
-        --secondary: 0 0% 12%;
-        --secondary-foreground: 0 0% 98%;
-        --muted: 0 0% 12%;
-        --muted-foreground: 0 0% 64%;
-        --accent: 152 76% 45%;
-        --accent-foreground: 0 0% 9%;
+        --background: 30 15% 6%;
+        --foreground: 35 15% 93%;
+        --card: 30 12% 9%;
+        --card-foreground: 35 15% 93%;
+        --popover: 30 12% 9%;
+        --popover-foreground: 35 15% 93%;
+        --primary: 35 15% 93%;
+        --primary-foreground: 30 15% 6%;
+        --secondary: 30 10% 13%;
+        --secondary-foreground: 35 15% 93%;
+        --muted: 30 8% 14%;
+        --muted-foreground: 30 8% 58%;
+        --accent: 152 40% 42%;
+        --accent-foreground: 30 15% 6%;
         --destructive: 0 62% 30%;
         --destructive-foreground: 0 0% 98%;
-        --border: 0 0% 15%;
-        --input: 0 0% 15%;
-        --ring: 152 76% 45%;
+        --border: 30 8% 17%;
+        --input: 30 8% 17%;
+        --ring: 152 40% 42%;
     }
 }
 
@@ -190,13 +190,39 @@ html {
     100% { mask-size: 80vmax; }
 	}
 
+/* Subtle noise texture for paper-like feel */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    pointer-events: none;
+}
+
 /* Utility classes */
 .glass {
-    @apply bg-background/80 backdrop-blur-xl;
+    @apply bg-card/90 backdrop-blur-md;
 }
 
 .hover-lift {
-    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-lg;
+    @apply transition-all duration-300 hover:-translate-y-0.5;
+    &:hover {
+        box-shadow: 0 2px 8px rgba(30, 20, 10, 0.08), 0 8px 24px rgba(30, 20, 10, 0.04);
+    }
+}
+
+.paper-shadow {
+    box-shadow: 0 1px 3px rgba(30, 20, 10, 0.06), 0 4px 12px rgba(30, 20, 10, 0.04);
+}
+
+.dark .paper-shadow {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.dark .hover-lift:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .link-hover {

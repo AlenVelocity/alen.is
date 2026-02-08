@@ -124,7 +124,7 @@ export default async function Home() {
                                             key={link.id}
                                             href={link.url}
                                             target={link.url.startsWith('http') ? "_blank" : undefined}
-                                    className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium rounded-full border border-border hover:bg-muted hover:border-foreground/20 transition-all duration-200"
+                                    className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium rounded-lg border border-border hover:bg-muted hover:border-foreground/20 transition-all duration-200"
                                         >
                                             {IconComponent && <IconComponent className="w-4 h-4" />}
                                     <span className="hidden sm:inline">{link.name}</span>
@@ -136,7 +136,7 @@ export default async function Home() {
 
                 {/* About */}
                 <section className="space-y-6 mb-16">
-                    <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">About</h2>
+                    <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider border-l-2 border-accent pl-3">About</h2>
                     <div className="space-y-4 text-muted-foreground leading-relaxed">
                         <p>{parseTextWithLinks(personalInfo.about_me_paragraph_1)}</p>
                         <p>{parseTextWithLinks(personalInfo.about_me_paragraph_2)}</p>
@@ -153,7 +153,7 @@ export default async function Home() {
 
                 {/* Contact */}
                 <section className="space-y-4">
-                    <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Contact</h2>
+                    <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider border-l-2 border-accent pl-3">Contact</h2>
                     <p className="text-muted-foreground leading-relaxed">
                         {parseTextWithLinks(personalInfo.contact_description)}
                     </p>

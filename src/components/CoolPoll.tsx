@@ -81,20 +81,21 @@ export default function CoolPoll({ initialData }: CoolPollProps) {
     }
 
     return (
-        <div className="w-full max-w-sm space-y-6 p-6">
+        <div className="w-full max-w-sm space-y-5">
             {canVote ? (
-                <div className="flex justify-center gap-8">
+                <div className="flex justify-center gap-6">
                     <button
                         onClick={() => handleVote('positive')}
-                        className="text-lg font-medium underline decoration-accent/50 decoration-2 underline-offset-4 hover:decoration-accent transition-colors"
+                        className="text-xl font-semibold text-accent hover:underline decoration-2 underline-offset-4 transition-all active:scale-95"
                     >
-                        Yes
+                        yes
                     </button>
+                    <span className="text-muted-foreground/30 text-xl">/</span>
                     <button
                         onClick={() => handleVote('negative')}
-                        className="text-lg font-medium underline decoration-accent/50 decoration-2 underline-offset-4 hover:decoration-accent transition-colors"
+                        className="text-xl font-semibold text-destructive hover:underline decoration-2 underline-offset-4 transition-all active:scale-95"
                     >
-                        No
+                        no
                     </button>
                 </div>
             ) : (
@@ -124,8 +125,8 @@ export default function CoolPoll({ initialData }: CoolPollProps) {
                     </div>
 
                     <div className="space-y-1 text-center">
-                        <p className="text-sm text-muted-foreground">Total votes: {totalVotes}</p>
-                        <p className="text-lg font-semibold">{getResultMessage()}</p>
+                        <p className="text-xs text-muted-foreground/60 italic">{totalVotes} votes</p>
+                        <p className="text-base font-semibold">{getResultMessage()}</p>
                     </div>
                 </div>
             )}

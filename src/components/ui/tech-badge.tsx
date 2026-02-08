@@ -170,14 +170,16 @@ interface TechBadgeProps {
     showName?: boolean
     className?: string
     colorOnGroupHover?: boolean
+    alwaysColor?: boolean
 }
 
-export function TechBadge({ tech, showName = false, className, colorOnGroupHover = false }: TechBadgeProps) {
+export function TechBadge({ tech, showName = false, className, colorOnGroupHover = false, alwaysColor = false }: TechBadgeProps) {
     return (
         <span
             className={cn(
-                'inline-flex items-center gap-1.5 text-muted-foreground transition-colors duration-200',
-                colorOnGroupHover ? techGroupHoverColors[tech] : '',
+                'inline-flex items-center gap-1.5 transition-colors duration-200',
+                alwaysColor ? techColors[tech] : 'text-muted-foreground',
+                colorOnGroupHover && !alwaysColor ? techGroupHoverColors[tech] : '',
                 showName && 'px-2 py-1 rounded-md bg-muted/50 text-xs font-medium',
                 className
             )}
@@ -194,13 +196,14 @@ interface TechStackProps {
     showNames?: boolean
     className?: string
     colorOnGroupHover?: boolean
+    alwaysColor?: boolean
 }
 
-export function TechStack({ technologies, showNames = false, className, colorOnGroupHover = false }: TechStackProps) {
+export function TechStack({ technologies, showNames = false, className, colorOnGroupHover = false, alwaysColor = false }: TechStackProps) {
     return (
         <div className={cn('flex flex-wrap gap-2', className)}>
             {technologies.map((tech) => (
-                <TechBadge key={tech} tech={tech as TechType} showName={showNames} colorOnGroupHover={colorOnGroupHover} />
+                <TechBadge key={tech} tech={tech as TechType} showName={showNames} colorOnGroupHover={colorOnGroupHover} alwaysColor={alwaysColor} />
             ))}
         </div>
     )

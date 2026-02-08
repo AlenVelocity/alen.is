@@ -19,16 +19,25 @@ export default async function Cool() {
     const initialPollData = await api.poll.getCoolPoll()
 
     return (
-        <div className="flex flex-col items-center gap-8 px-4">
-            <Image 
-                src="/images/rinu-cool.webp" 
-                alt="Rinu Cool" 
-                width={200} 
-                height={200} 
-                className="rounded-2xl hover:scale-105 transition-transform duration-300" 
-                priority 
-            />
-            <p className="text-xl text-muted-foreground">am I?</p>
+        <div className="flex flex-col items-center gap-6 px-4">
+            {/* Polaroid-style photo */}
+            <div
+                className="bg-card border border-border paper-shadow p-3 pb-6 rounded-lg"
+                style={{ rotate: '-2deg' }}
+            >
+                <Image
+                    src="/images/rinu-cool.webp"
+                    alt="Rinu Cool"
+                    width={200}
+                    height={200}
+                    className="rounded-sm hover:scale-105 transition-transform duration-300"
+                    priority
+                />
+                <p className="text-center text-xs text-muted-foreground mt-3 italic">exhibit A</p>
+            </div>
+            <p className="text-xl text-muted-foreground" style={{ rotate: '0.5deg' }}>
+                am I?
+            </p>
             <CoolPoll initialData={initialPollData} />
         </div>
     )

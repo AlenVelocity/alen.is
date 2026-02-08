@@ -2,7 +2,7 @@ import { PageTransition } from '@/components/ui/page-transition'
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
 import { runGetProjects } from '@/lib/cms-db'
-import { ProjectCard } from './_components/ProjectCard'
+import { ProjectDetail, ProjectRow } from './_components/ProjectCard'
 
 export const metadata: Metadata = {
     title: 'Building',
@@ -39,7 +39,7 @@ export default async function Building() {
     return (
         <PageTransition>
             <JsonLd data={projectsSchema} />
-            <div className="container max-w-4xl py-12 md:py-20">
+            <div className="container max-w-2xl py-12 md:py-20">
                 {/* Header */}
                 <div className="mb-12">
                     <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
@@ -50,26 +50,33 @@ export default async function Building() {
                     </p>
                 </div>
 
-                {/* Bento Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {/* Featured projects - larger cards */}
-                    {featuredProjects.map((project, index) => (
-                        <ProjectCard 
-                            key={project.id} 
-                            project={project} 
-                            size={index === 0 ? 'large' : 'medium'}
-                        />
-                    ))}
-                    
-                    {/* Other projects - smaller cards */}
-                    {otherProjects.map((project) => (
-                        <ProjectCard 
-                            key={project.id} 
-                            project={project} 
-                            size="small"
-                        />
-                    ))}
-                </div>
+                {/* Featured — expanded with descriptions */}
+                {featuredProjects.length > 0 && (
+                    <section className="mb-10">
+                        <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider border-l-2 border-accent pl-3 mb-4">
+                            Featured
+                        </h2>
+                        <div>
+                            {featuredProjects.map((project) => (
+                                <ProjectDetail key={project.id} project={project} />
+                            ))}
+                        </div>
+                    </section>
+                )}
+
+                {/* Everything else — compact directory listing */}
+                {otherProjects.length > 0 && (
+                    <section>
+                        <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider border-l-2 border-accent pl-3 mb-4">
+                            Other
+                        </h2>
+                        <div>
+                            {otherProjects.map((project) => (
+                                <ProjectRow key={project.id} project={project} />
+                            ))}
+                        </div>
+                    </section>
+                )}
             </div>
         </PageTransition>
     )

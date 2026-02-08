@@ -114,7 +114,7 @@ export default async function Coding() {
                         href={`https://github.com/${githubData.username}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-border hover:bg-muted transition-colors text-sm"
+                        className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border hover:bg-muted transition-colors text-sm"
                     >
                         <FiGithub className="w-4 h-4" />
                         <span>@{githubData.username}</span>
@@ -160,7 +160,7 @@ export default async function Coding() {
 
                 {/* Languages */}
                 <section>
-                    <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-4">
+                    <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider border-l-2 border-accent pl-3 mb-4">
                         Languages
                     </h2>
                     <LanguageBar languages={githubData.topLanguages} />
