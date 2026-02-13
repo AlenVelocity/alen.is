@@ -24,6 +24,9 @@ function humanize(slug: string) {
         .replace(/\b\w/g, c => c.toUpperCase())
 }
 
+// Segments to skip in breadcrumbs (still accumulate their href)
+const SKIP_SEGMENTS = new Set(['to'])
+
 function getBreadcrumbs(currentPath: string) {
     if (currentPath === '/') return []
 
@@ -35,6 +38,9 @@ function getBreadcrumbs(currentPath: string) {
     for (let i = 0; i < parts.length; i++) {
         href += '/' + parts[i]
 
+        // Skip noise segments like "to" but keep accumulating the href
+        if (SKIP_SEGMENTS.has(parts[i].toLowerCase())) continue
+
         // Try to use label from NAV_ITEMS for top-level pages
         const navMatch = NAV_ITEMS.find(
             nav =>
@@ -45,7 +51,7 @@ function getBreadcrumbs(currentPath: string) {
         if (navMatch && navMatch.label !== 'Alen.is') {
             label = navMatch.label
         } else {
-            label = humanize(parts[i])
+            label = humanize(decodeURIComponent(parts[i]))
         }
         breadcrumbs.push({ href, label })
     }
@@ -57,6 +63,7 @@ function MarqueeBreadcrumb({ children }: { children: React.ReactNode }) {
     const outerRef = useRef<HTMLSpanElement>(null)
     const innerRef = useRef<HTMLSpanElement>(null)
     const [shouldMarquee, setShouldMarquee] = useState(false)
+    const [marqueeOffset, setMarqueeOffset] = useState(0)
 
     useEffect(() => {
         if (!outerRef.current || !innerRef.current) {
@@ -65,57 +72,47 @@ function MarqueeBreadcrumb({ children }: { children: React.ReactNode }) {
         }
         const outer = outerRef.current
         const inner = innerRef.current
-        // Margin of safety for slight overflow
-        setShouldMarquee(inner.scrollWidth > outer.offsetWidth + 4)
+        const overflow = inner.scrollWidth - outer.offsetWidth
+        if (overflow > 4) {
+            setShouldMarquee(true)
+            setMarqueeOffset(overflow)
+        } else {
+            setShouldMarquee(false)
+        }
     }, [children])
 
     return (
         <span
             ref={outerRef}
             className={cn(
-                'relative max-w-[10rem] sm:max-w-xs overflow-hidden inline-block align-middle',
+                'relative max-w-[8rem] sm:max-w-[10rem] overflow-hidden inline-block align-middle',
                 shouldMarquee && 'will-change-transform'
             )}
             tabIndex={0}
         >
             <span
                 ref={innerRef}
-                className={cn(
-                    'block whitespace-nowrap',
-                    shouldMarquee
-                        ? 'animate-breadcrumb-marquee'
-                        : ''
-                )}
+                className="block whitespace-nowrap"
                 style={
                     shouldMarquee
                         ? {
-                              // Animation is defined in Tailwind later (see below)
-                              animation: 'breadcrumb-marquee 3.5s linear infinite'
-                          }
+                              animation: 'breadcrumb-marquee 4s ease-in-out infinite',
+                              '--marquee-offset': `-${marqueeOffset}px`,
+                          } as React.CSSProperties
                         : undefined
                 }
                 aria-label={typeof children === 'string' ? children : undefined}
             >
                 {children}
             </span>
-            {/* Tailwind custom style at page level for marquee if needed */}
             <style jsx global>{`
                 @keyframes breadcrumb-marquee {
-                    0% {
-                        transform: translateX(0%);
+                    0%, 20% {
+                        transform: translateX(0);
                     }
-                    10% {
-                        transform: translateX(0%);
+                    80%, 100% {
+                        transform: translateX(var(--marquee-offset));
                     }
-                    90% {
-                        transform: translateX(calc(-100% + 100%));
-                    }
-                    100% {
-                        transform: translateX(calc(-100% + 100%));
-                    }
-                }
-                .animate-breadcrumb-marquee {
-                    animation: breadcrumb-marquee 3.5s linear infinite;
                 }
             `}</style>
         </span>

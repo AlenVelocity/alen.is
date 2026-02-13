@@ -1,11 +1,13 @@
 import { Metadata } from 'next'
 import { PageTransition } from '@/components/ui/page-transition'
 import { api } from '@/trpc/server'
-import { FiHeadphones, FiExternalLink } from 'react-icons/fi'
+import { FiHeadphones, FiArrowUpRight } from 'react-icons/fi'
 import { FaSpotify } from 'react-icons/fa'
 import Image from 'next/image'
+import Link from 'next/link'
 import { LinkButton } from '@/components/ui/link-button'
 import { SumikaDialog } from './sumika-dialog'
+import { encodeTrackParam } from '@/lib/lastfm'
 import { formatDistanceToNow, parse } from 'date-fns'
 
 export const metadata: Metadata = {
@@ -34,14 +36,12 @@ export default async function Listening() {
                         <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider border-l-2 border-accent pl-3 mb-4">
                             Now Playing
                         </h2>
-                        <a
-                            href={lastFmData.nowPlaying.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <Link
+                            href={`/listening/to/${encodeTrackParam(lastFmData.nowPlaying.artist)}/${encodeTrackParam(lastFmData.nowPlaying.name)}`}
                             className="group flex items-center gap-4 py-4 border-b border-dashed border-border hover:border-accent/50 transition-colors"
                         >
                             {lastFmData.nowPlaying.image ? (
-                                <div className="relative w-14 h-14 rounded-lg overflow-hidden animate-spin-slow shrink-0">
+                                <div className="relative w-14 h-14 rounded-lg overflow-hidden shrink-0">
                                     <Image
                                         src={lastFmData.nowPlaying.image}
                                         alt={`${lastFmData.nowPlaying.name} album art`}
@@ -67,8 +67,8 @@ export default async function Listening() {
                                     {lastFmData.nowPlaying.album && <span className="text-muted-foreground/50"> · {lastFmData.nowPlaying.album}</span>}
                                 </p>
                             </div>
-                            <FiExternalLink className="w-4 h-4 text-muted-foreground/40 group-hover:text-accent transition-colors shrink-0" />
-                        </a>
+                            <FiArrowUpRight className="w-4 h-4 text-muted-foreground/40 group-hover:text-accent transition-colors shrink-0" />
+                        </Link>
                     </section>
                 )}
 
@@ -116,11 +116,9 @@ export default async function Listening() {
                         </h2>
                         <div>
                             {lastFmData.recentlyPlayed.map((track, index) => (
-                                <a
+                                <Link
                                     key={`${track.name}-${index}`}
-                                    href={track.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                                    href={`/listening/to/${encodeTrackParam(track.artist)}/${encodeTrackParam(track.name)}`}
                                     className="group flex items-center gap-3 py-2.5 border-b border-dashed border-border/50 last:border-b-0 hover:border-accent/30 transition-colors"
                                 >
                                     {track.image ? (
@@ -151,7 +149,7 @@ export default async function Listening() {
                                             })()}
                                         </span>
                                     )}
-                                </a>
+                                </Link>
                             ))}
                         </div>
                     </section>

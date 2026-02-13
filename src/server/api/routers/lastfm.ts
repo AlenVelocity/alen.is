@@ -18,6 +18,69 @@ interface Track {
 }
 
 export const lastFmRouter = createTRPCRouter({
+    getTrackInfo: publicProcedure
+        .input(
+            z.object({
+                artist: z.string().min(1),
+                track: z.string().min(1),
+            })
+        )
+        .query(async ({ input }) => {
+            try {
+                const params = new URLSearchParams({
+                    method: 'track.getInfo',
+                    artist: input.artist,
+                    track: input.track,
+                    api_key: API_KEY,
+                    autocorrect: '1',
+                    format: 'json',
+                })
+
+                if (USER_NAME) params.set('username', USER_NAME)
+
+                const response = await fetch(`https://ws.audioscrobbler.com/2.0/?${params}`, {
+                    next: { revalidate: 3600 },
+                })
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch track info from Last.fm')
+                }
+
+                const data = await response.json()
+
+                if (!data.track) {
+                    return null
+                }
+
+                const t = data.track
+                const images: string[] = (t.album?.image ?? [])
+                    .map((i: any) => i['#text'])
+                    .filter(Boolean)
+                const image = images[images.length - 1] ?? null
+
+                return {
+                    name: t.name as string,
+                    artist: (t.artist?.name ?? input.artist) as string,
+                    album: (t.album?.title ?? null) as string | null,
+                    albumUrl: (t.album?.url ?? null) as string | null,
+                    duration: t.duration ? Number(t.duration) : null,
+                    listeners: t.listeners ? Number(t.listeners) : null,
+                    playcount: t.playcount ? Number(t.playcount) : null,
+                    userPlaycount: t.userplaycount != null ? Number(t.userplaycount) : null,
+                    userLoved: t.userloved === '1',
+                    url: t.url as string,
+                    image,
+                    tags: ((t.toptags?.tag ?? []) as any[]).map((tag: any) => tag.name as string).slice(0, 6),
+                    wiki: t.wiki?.summary
+                        ? (t.wiki.summary as string).replace(/<a\b[^>]*>.*?<\/a>/gi, '').trim() || null
+                        : null,
+                }
+            } catch (error) {
+                console.error('Error fetching track info:', error)
+                throw new Error('Failed to fetch track info')
+            }
+        }),
+
     getRecentTracks: publicProcedure
         .input(
             z
