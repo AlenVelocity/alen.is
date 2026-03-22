@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { PageTransition } from '@/components/ui/page-transition'
 import { api } from '@/trpc/server'
 import { fetchAllGames, resolveSlug, slugify } from '@/lib/steam'
-import { FiArrowLeft, FiArrowUpRight, FiCheck, FiLock } from 'react-icons/fi'
+import { FiArrowLeft, FiArrowUpRight, FiCheck } from 'react-icons/fi'
 import { FaSteam, FaXbox } from 'react-icons/fa'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -243,7 +243,7 @@ export default async function GamePage({ params }: Props) {
                                                 >
                                                     {achievement.icon ? (
                                                         <div className="relative w-12 h-12 rounded-lg overflow-hidden shrink-0 ring-2 ring-accent/40 shadow-sm group-hover:ring-accent transition-colors">
-                                                            <Image src={achievement.icon} alt={achievement.name || ""} fill className="object-cover" />
+                                                            <Image src={achievement.icon} alt={achievement.name || ""} fill unoptimized className="object-cover" />
                                                         </div>
                                                     ) : (
                                                         <div className="w-12 h-12 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center shrink-0">
@@ -270,43 +270,9 @@ export default async function GamePage({ params }: Props) {
                                         </div>
                                     )}
 
-                                    {locked.length > 0 && (
-                                        <div>
-                                            <p className="text-xs text-muted-foreground/50 uppercase tracking-wider mb-2">
-                                                Up Next
-                                            </p>
-                                            {locked.map((achievement) => (
-                                                <div
-                                                    key={achievement.apiname}
-                                                    className="group flex items-center gap-4 p-3 mb-2 rounded-xl bg-transparent border border-dashed border-border/30 hover:border-border/60 transition-all opacity-70 hover:opacity-100"
-                                                >
-                                                    {achievement.icon ? (
-                                                        <div className="relative w-10 h-10 rounded-lg overflow-hidden shrink-0 ring-1 ring-border/50 grayscale group-hover:grayscale-0 transition-all">
-                                                            <Image src={achievement.icon} alt={achievement.name || ""} fill className="object-cover opacity-50 group-hover:opacity-80" />
-                                                        </div>
-                                                    ) : (
-                                                        <div className="w-10 h-10 rounded-lg bg-muted/30 border border-border/50 flex items-center justify-center shrink-0">
-                                                            <FiLock className="w-4 h-4 text-muted-foreground/40" />
-                                                        </div>
-                                                    )}
-                                                    <div className="flex-1 min-w-0">
-                                                        <p className="font-medium text-muted-foreground truncate group-hover:text-foreground/80 transition-colors">
-                                                            {achievement.name}
-                                                        </p>
-                                                        {achievement.description && (
-                                                            <p className="text-xs text-muted-foreground/50 truncate mt-0.5">
-                                                                {achievement.description}
-                                                            </p>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-
                                     {achievements.totalAchievements > 15 && (
                                         <p className="text-xs text-muted-foreground/40 mt-3 italic">
-                                            + {achievements.totalAchievements - unlocked.length - locked.length} more
+                                            + {achievements.totalAchievements - unlocked.length} more
                                         </p>
                                     )}
                                 </>
@@ -363,7 +329,7 @@ export default async function GamePage({ params }: Props) {
                                                 >
                                                     {achievement.icon ? (
                                                         <div className="relative w-12 h-12 rounded-lg overflow-hidden shrink-0 ring-2 ring-accent/40 shadow-sm group-hover:ring-accent transition-colors">
-                                                            <Image src={achievement.icon} alt={achievement.name || ""} fill className="object-cover" />
+                                                            <Image src={achievement.icon} alt={achievement.name || ""} fill unoptimized className="object-cover" />
                                                         </div>
                                                     ) : (
                                                         <div className="w-12 h-12 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center shrink-0">
@@ -397,48 +363,9 @@ export default async function GamePage({ params }: Props) {
                                         </div>
                                     )}
 
-                                    {locked.length > 0 && (
-                                        <div>
-                                            <p className="text-xs text-muted-foreground/50 uppercase tracking-wider mb-2">
-                                                Up Next
-                                            </p>
-                                            {locked.map((achievement) => (
-                                                <div
-                                                    key={achievement.id}
-                                                    className="group flex items-center gap-4 p-3 mb-2 rounded-xl bg-transparent border border-dashed border-border/30 hover:border-border/60 transition-all opacity-70 hover:opacity-100"
-                                                >
-                                                    {achievement.icon ? (
-                                                        <div className="relative w-10 h-10 rounded-lg overflow-hidden shrink-0 ring-1 ring-border/50 grayscale group-hover:grayscale-0 transition-all">
-                                                            <Image src={achievement.icon} alt={achievement.name || ""} fill className="object-cover opacity-50 group-hover:opacity-80" />
-                                                        </div>
-                                                    ) : (
-                                                        <div className="w-10 h-10 rounded-lg bg-muted/30 border border-border/50 flex items-center justify-center shrink-0">
-                                                            <FiLock className="w-4 h-4 text-muted-foreground/40" />
-                                                        </div>
-                                                    )}
-                                                    <div className="flex-1 min-w-0">
-                                                        <p className="font-medium text-muted-foreground truncate group-hover:text-foreground/80 transition-colors">
-                                                            {achievement.name}
-                                                        </p>
-                                                        {achievement.description && (
-                                                            <p className="text-xs text-muted-foreground/50 truncate mt-0.5">
-                                                                {achievement.description}
-                                                            </p>
-                                                        )}
-                                                    </div>
-                                                    {achievement.gamerscore > 0 && (
-                                                        <span className="text-xs font-semibold text-muted-foreground/40 shrink-0">
-                                                            {achievement.gamerscore}G
-                                                        </span>
-                                                    )}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-
                                     {xboxDetailedAchievements.length > 15 && (
                                         <p className="text-xs text-muted-foreground/40 mt-3 italic">
-                                            + {xboxDetailedAchievements.length - unlocked.length - locked.length} more
+                                            + {xboxDetailedAchievements.length - unlocked.length} more
                                         </p>
                                     )}
                                 </>
