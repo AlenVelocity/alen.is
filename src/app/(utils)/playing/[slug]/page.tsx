@@ -91,16 +91,23 @@ export default async function GamePage({ params }: Props) {
     const recentGame = recentData.steam?.find((g) => g.appid === appid)
     const recentHours = recentGame?.playtime_2weeks_hours || 0
 
-    // For Xbox games, use the achievement data from the game entry itself for stats
-    const xboxAchievements = !isSteam && game.achievements ? game.achievements : null
     // Detailed Xbox achievement list
     const xboxDetailedAchievements = xboxAchievementsData.xbox || []
+    const hasDetailedXbox = !isSteam && xboxDetailedAchievements.length > 0
 
-    const completionPct = achievements
+    // Fix: Override xboxAchievements using detailed array if available
+    const xboxAchievements = hasDetailedXbox
+        ? {
+            current: xboxDetailedAchievements.filter((a) => a.isUnlocked).length,
+            total: xboxDetailedAchievements.length,
+        }
+        : (!isSteam && game.achievements ? game.achievements : null)
+
+    const completionPct = achievements && achievements.totalAchievements > 0
         ? Math.round((achievements.unlockedAchievements / achievements.totalAchievements) * 100)
         : xboxAchievements && xboxAchievements.total > 0
-          ? Math.round((xboxAchievements.current / xboxAchievements.total) * 100)
-          : null
+            ? Math.round((xboxAchievements.current / xboxAchievements.total) * 100)
+            : null
 
     return (
         <PageTransition>
@@ -114,61 +121,78 @@ export default async function GamePage({ params }: Props) {
                     Back to Playing
                 </Link>
 
-                {/* Header image */}
+                {/* Header image and Title */}
                 {game.image && (
                     <div
-                        className="relative w-full aspect-[460/215] rounded-lg overflow-hidden mb-8"
-                        style={{ rotate: '-0.5deg' }}
+                        className="relative w-full aspect-[460/215] rounded-2xl overflow-hidden mb-10 shadow-xl shadow-black/5 ring-1 ring-border/50 group"
                     >
-                        <Image src={game.image} alt={game.name} fill className="object-cover" priority />
+                        <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent z-10" />
+                        <Image src={game.image} alt={game.name} fill className="object-cover group-hover:scale-105 transition-transform duration-700" priority />
+
+                        {/* Title overlay */}
+                        <div className="absolute bottom-6 left-6 right-6 z-20 flex flex-col md:flex-row md:items-end justify-between gap-4">
+                            <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight drop-shadow-md">{game.name}</h1>
+                            <div className="w-10 h-10 rounded-full bg-background/80 backdrop-blur-md border border-white/10 shadow-lg flex items-center justify-center shrink-0">
+                                {isSteam ? (
+                                    <FaSteam className="w-4 h-4 text-foreground/80" />
+                                ) : (
+                                    <FaXbox className="w-4 h-4 text-foreground/80" />
+                                )}
+                            </div>
+                        </div>
                     </div>
                 )}
 
-                {/* Title + platform */}
-                <div className="flex items-center gap-3 mb-6">
-                    <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{game.name}</h1>
-                    {isSteam ? (
-                        <FaSteam className="w-5 h-5 text-muted-foreground/40 shrink-0" />
-                    ) : (
-                        <FaXbox className="w-5 h-5 text-muted-foreground/40 shrink-0" />
-                    )}
-                </div>
+                {/* Fallback Title if no image */}
+                {!game.image && (
+                    <div className="flex items-center gap-3 mb-10">
+                        <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight">{game.name}</h1>
+                        <div className="w-10 h-10 rounded-full bg-muted/50 border border-border/50 flex items-center justify-center shrink-0">
+                            {isSteam ? (
+                                <FaSteam className="w-4 h-4 text-foreground/70" />
+                            ) : (
+                                <FaXbox className="w-4 h-4 text-foreground/70" />
+                            )}
+                        </div>
+                    </div>
+                )}
 
                 {/* My Stats */}
-                <section className="mb-10">
-                    <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider border-l-2 border-accent pl-3 mb-4">
+                <section className="mb-14">
+                    <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider border-l-2 border-accent pl-3 mb-5">
                         My Stats
                     </h2>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-4 gap-x-6">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         {isSteam && (
-                            <div>
-                                <p className="text-2xl font-bold">
+                            <div className="p-5 rounded-2xl border border-border/50 bg-muted/20 flex flex-col gap-1 shadow-sm hover:border-border transition-colors">
+                                <p className="text-3xl font-bold tracking-tight">
                                     {formatPlaytime(game.playtime_forever_hours)}
                                 </p>
-                                <p className="text-xs text-muted-foreground/60">total playtime</p>
+                                <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest mt-1">total playtime</p>
                             </div>
                         )}
                         {recentHours > 0 && (
-                            <div>
-                                <p className="text-2xl font-bold text-accent">{formatPlaytime(recentHours)}</p>
-                                <p className="text-xs text-muted-foreground/60">this week</p>
+                            <div className="p-5 rounded-2xl border border-accent/20 bg-accent/5 flex flex-col gap-1 relative overflow-hidden shadow-sm shadow-accent/5 block group">
+                                <div className="absolute top-0 right-0 w-24 h-24 bg-accent/10 blur-2xl rounded-full translate-x-1/2 -translate-y-1/2 pointer-events-none group-hover:bg-accent/20 transition-colors duration-500" />
+                                <p className="text-3xl font-bold tracking-tight text-accent relative z-10">{formatPlaytime(recentHours)}</p>
+                                <p className="text-[10px] font-semibold text-accent/70 uppercase tracking-widest relative z-10 mt-1">this week</p>
                             </div>
                         )}
                         {completionPct !== null && (
-                            <div>
-                                <p className="text-2xl font-bold">{completionPct}%</p>
-                                <p className="text-xs text-muted-foreground/60">achievements</p>
+                            <div className="p-5 rounded-2xl border border-border/50 bg-muted/20 flex flex-col gap-1 shadow-sm hover:border-border transition-colors">
+                                <p className="text-3xl font-bold tracking-tight">{completionPct}%</p>
+                                <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest mt-1">completion</p>
                             </div>
                         )}
                         {xboxAchievements && (
-                            <div>
-                                <p className="text-2xl font-bold">
+                            <div className="p-5 rounded-2xl border border-border/50 bg-muted/20 flex flex-col gap-1 shadow-sm hover:border-border transition-colors">
+                                <p className="text-3xl font-bold tracking-tight flex items-baseline gap-1">
                                     {xboxAchievements.current}
-                                    <span className="text-muted-foreground/40 text-lg">
+                                    <span className="text-muted-foreground/40 text-lg font-medium">
                                         /{xboxAchievements.total}
                                     </span>
                                 </p>
-                                <p className="text-xs text-muted-foreground/60">achievements</p>
+                                <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest mt-1">achievements</p>
                             </div>
                         )}
                     </div>
@@ -185,9 +209,12 @@ export default async function GamePage({ params }: Props) {
                         </h2>
 
                         {/* Progress bar */}
-                        <div className="h-1.5 rounded-full bg-muted border border-dashed border-border overflow-hidden mb-5">
+                        <div className="h-2.5 rounded-full bg-muted/40 border border-border/50 overflow-hidden mb-8 relative shadow-inner">
+                            {completionPct === 100 && (
+                                <div className="absolute inset-0 bg-accent/20 blur-sm z-0" />
+                            )}
                             <div
-                                className="h-full bg-accent rounded-full transition-all"
+                                className="h-full bg-gradient-to-r from-accent/80 to-accent rounded-full transition-all duration-1000 relative z-10"
                                 style={{ width: `${completionPct}%` }}
                             />
                         </div>
@@ -212,31 +239,29 @@ export default async function GamePage({ params }: Props) {
                                             {unlocked.map((achievement) => (
                                                 <div
                                                     key={achievement.apiname}
-                                                    className="flex items-center gap-3 py-2 border-b border-dashed border-border/50 last:border-b-0"
+                                                    className="group flex items-center gap-4 p-3 mb-2 rounded-xl bg-muted/10 border border-border/40 hover:bg-muted/30 hover:border-border/80 transition-all shadow-sm"
                                                 >
                                                     {achievement.icon ? (
-                                                        <Image
-                                                            src={achievement.icon}
-                                                            alt=""
-                                                            width={24}
-                                                            height={24}
-                                                            className="rounded shrink-0"
-                                                        />
+                                                        <div className="relative w-12 h-12 rounded-lg overflow-hidden shrink-0 ring-2 ring-accent/40 shadow-sm group-hover:ring-accent transition-colors">
+                                                            <Image src={achievement.icon} alt={achievement.name || ""} fill className="object-cover" />
+                                                        </div>
                                                     ) : (
-                                                        <FiCheck className="w-4 h-4 text-accent shrink-0" />
+                                                        <div className="w-12 h-12 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center shrink-0">
+                                                            <FiCheck className="w-5 h-5 text-accent" />
+                                                        </div>
                                                     )}
                                                     <div className="flex-1 min-w-0">
-                                                        <p className="text-sm font-medium truncate">
+                                                        <p className="font-semibold text-foreground/90 truncate group-hover:text-accent transition-colors">
                                                             {achievement.name}
                                                         </p>
                                                         {achievement.description && (
-                                                            <p className="text-xs text-muted-foreground/50 truncate">
+                                                            <p className="text-xs text-muted-foreground/70 truncate mt-0.5">
                                                                 {achievement.description}
                                                             </p>
                                                         )}
                                                     </div>
                                                     {achievement.unlockDate && (
-                                                        <span className="text-xs text-muted-foreground/40 shrink-0 hidden sm:inline">
+                                                        <span className="text-xs font-medium text-muted-foreground/50 shrink-0 hidden sm:inline bg-background px-2 py-1 rounded-md border border-border/30">
                                                             {formatUnlockDate(achievement.unlockDate)}
                                                         </span>
                                                     )}
@@ -253,25 +278,23 @@ export default async function GamePage({ params }: Props) {
                                             {locked.map((achievement) => (
                                                 <div
                                                     key={achievement.apiname}
-                                                    className="flex items-center gap-3 py-2 border-b border-dashed border-border/30 last:border-b-0 opacity-60"
+                                                    className="group flex items-center gap-4 p-3 mb-2 rounded-xl bg-transparent border border-dashed border-border/30 hover:border-border/60 transition-all opacity-70 hover:opacity-100"
                                                 >
                                                     {achievement.icon ? (
-                                                        <Image
-                                                            src={achievement.icon}
-                                                            alt=""
-                                                            width={24}
-                                                            height={24}
-                                                            className="rounded shrink-0 grayscale"
-                                                        />
+                                                        <div className="relative w-10 h-10 rounded-lg overflow-hidden shrink-0 ring-1 ring-border/50 grayscale group-hover:grayscale-0 transition-all">
+                                                            <Image src={achievement.icon} alt={achievement.name || ""} fill className="object-cover opacity-50 group-hover:opacity-80" />
+                                                        </div>
                                                     ) : (
-                                                        <FiLock className="w-4 h-4 text-muted-foreground/30 shrink-0" />
+                                                        <div className="w-10 h-10 rounded-lg bg-muted/30 border border-border/50 flex items-center justify-center shrink-0">
+                                                            <FiLock className="w-4 h-4 text-muted-foreground/40" />
+                                                        </div>
                                                     )}
                                                     <div className="flex-1 min-w-0">
-                                                        <p className="text-sm font-medium text-muted-foreground/60 truncate">
+                                                        <p className="font-medium text-muted-foreground truncate group-hover:text-foreground/80 transition-colors">
                                                             {achievement.name}
                                                         </p>
                                                         {achievement.description && (
-                                                            <p className="text-xs text-muted-foreground/30 truncate">
+                                                            <p className="text-xs text-muted-foreground/50 truncate mt-0.5">
                                                                 {achievement.description}
                                                             </p>
                                                         )}
@@ -303,9 +326,12 @@ export default async function GamePage({ params }: Props) {
                         </h2>
 
                         {/* Progress bar */}
-                        <div className="h-1.5 rounded-full bg-muted border border-dashed border-border overflow-hidden mb-5">
+                        <div className="h-2.5 rounded-full bg-muted/40 border border-border/50 overflow-hidden mb-8 relative shadow-inner">
+                            {completionPct === 100 && (
+                                <div className="absolute inset-0 bg-accent/20 blur-sm z-0" />
+                            )}
                             <div
-                                className="h-full bg-accent rounded-full transition-all"
+                                className="h-full bg-gradient-to-r from-accent/80 to-accent rounded-full transition-all duration-1000 relative z-10"
                                 style={{ width: `${completionPct}%` }}
                             />
                         </div>
@@ -333,37 +359,35 @@ export default async function GamePage({ params }: Props) {
                                             {unlocked.map((achievement) => (
                                                 <div
                                                     key={achievement.id}
-                                                    className="flex items-center gap-3 py-2 border-b border-dashed border-border/50 last:border-b-0"
+                                                    className="group flex items-center gap-4 p-3 mb-2 rounded-xl bg-muted/10 border border-border/40 hover:bg-muted/30 hover:border-border/80 transition-all shadow-sm"
                                                 >
                                                     {achievement.icon ? (
-                                                        <Image
-                                                            src={achievement.icon}
-                                                            alt=""
-                                                            width={24}
-                                                            height={24}
-                                                            className="rounded shrink-0"
-                                                        />
+                                                        <div className="relative w-12 h-12 rounded-lg overflow-hidden shrink-0 ring-2 ring-accent/40 shadow-sm group-hover:ring-accent transition-colors">
+                                                            <Image src={achievement.icon} alt={achievement.name || ""} fill className="object-cover" />
+                                                        </div>
                                                     ) : (
-                                                        <FiCheck className="w-4 h-4 text-accent shrink-0" />
+                                                        <div className="w-12 h-12 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center shrink-0">
+                                                            <FiCheck className="w-5 h-5 text-accent" />
+                                                        </div>
                                                     )}
                                                     <div className="flex-1 min-w-0">
-                                                        <p className="text-sm font-medium truncate">
+                                                        <p className="font-semibold text-foreground/90 truncate group-hover:text-accent transition-colors">
                                                             {achievement.name}
                                                         </p>
                                                         {achievement.description && (
-                                                            <p className="text-xs text-muted-foreground/50 truncate">
+                                                            <p className="text-xs text-muted-foreground/70 truncate mt-0.5">
                                                                 {achievement.description}
                                                             </p>
                                                         )}
                                                     </div>
-                                                    <div className="flex items-center gap-2 shrink-0">
+                                                    <div className="flex items-center gap-3 shrink-0">
                                                         {achievement.gamerscore > 0 && (
-                                                            <span className="text-xs text-muted-foreground/50">
+                                                            <span className="text-xs font-bold text-accent px-2 py-1 rounded-md bg-accent/10">
                                                                 {achievement.gamerscore}G
                                                             </span>
                                                         )}
                                                         {achievement.unlockedDate && (
-                                                            <span className="text-xs text-muted-foreground/40 hidden sm:inline">
+                                                            <span className="text-xs font-medium text-muted-foreground/50 hidden sm:inline bg-background px-2 py-1 rounded-md border border-border/30">
                                                                 {formatUnlockDate(achievement.unlockedDate)}
                                                             </span>
                                                         )}
@@ -381,31 +405,29 @@ export default async function GamePage({ params }: Props) {
                                             {locked.map((achievement) => (
                                                 <div
                                                     key={achievement.id}
-                                                    className="flex items-center gap-3 py-2 border-b border-dashed border-border/30 last:border-b-0 opacity-60"
+                                                    className="group flex items-center gap-4 p-3 mb-2 rounded-xl bg-transparent border border-dashed border-border/30 hover:border-border/60 transition-all opacity-70 hover:opacity-100"
                                                 >
                                                     {achievement.icon ? (
-                                                        <Image
-                                                            src={achievement.icon}
-                                                            alt=""
-                                                            width={24}
-                                                            height={24}
-                                                            className="rounded shrink-0 grayscale"
-                                                        />
+                                                        <div className="relative w-10 h-10 rounded-lg overflow-hidden shrink-0 ring-1 ring-border/50 grayscale group-hover:grayscale-0 transition-all">
+                                                            <Image src={achievement.icon} alt={achievement.name || ""} fill className="object-cover opacity-50 group-hover:opacity-80" />
+                                                        </div>
                                                     ) : (
-                                                        <FiLock className="w-4 h-4 text-muted-foreground/30 shrink-0" />
+                                                        <div className="w-10 h-10 rounded-lg bg-muted/30 border border-border/50 flex items-center justify-center shrink-0">
+                                                            <FiLock className="w-4 h-4 text-muted-foreground/40" />
+                                                        </div>
                                                     )}
                                                     <div className="flex-1 min-w-0">
-                                                        <p className="text-sm font-medium text-muted-foreground/60 truncate">
+                                                        <p className="font-medium text-muted-foreground truncate group-hover:text-foreground/80 transition-colors">
                                                             {achievement.name}
                                                         </p>
                                                         {achievement.description && (
-                                                            <p className="text-xs text-muted-foreground/30 truncate">
+                                                            <p className="text-xs text-muted-foreground/50 truncate mt-0.5">
                                                                 {achievement.description}
                                                             </p>
                                                         )}
                                                     </div>
                                                     {achievement.gamerscore > 0 && (
-                                                        <span className="text-xs text-muted-foreground/30 shrink-0">
+                                                        <span className="text-xs font-semibold text-muted-foreground/40 shrink-0">
                                                             {achievement.gamerscore}G
                                                         </span>
                                                     )}

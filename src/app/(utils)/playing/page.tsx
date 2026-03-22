@@ -57,27 +57,24 @@ export default async function Playing() {
 
                 {/* Stats line */}
                 {(ownedGames || xboxGames.length > 0) && (
-                    <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-8">
+                    <div className="flex flex-wrap items-center gap-3 mb-10">
                         {ownedGames && (
-                            <span className="flex items-center gap-1.5">
-                                <FaSteam className="w-3.5 h-3.5" />
+                            <span className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-muted/40 border border-border/40 text-sm font-medium hover:bg-muted transition-colors shadow-sm">
+                                <FaSteam className="w-4 h-4 text-muted-foreground" />
                                 {ownedGames.total_games} games
                             </span>
                         )}
                         {xboxGames.length > 0 && (
-                            <span className="flex items-center gap-1.5">
-                                <FaXbox className="w-3.5 h-3.5" />
+                            <span className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-muted/40 border border-border/40 text-sm font-medium hover:bg-muted transition-colors shadow-sm">
+                                <FaXbox className="w-4 h-4 text-muted-foreground" />
                                 {xboxGames.length} games
                             </span>
                         )}
                         {totalHours > 0 && (
-                            <>
-                                <span className="text-muted-foreground/30">·</span>
-                                <span className="flex items-center gap-1.5">
-                                    <FiClock className="w-3.5 h-3.5" />
-                                    {totalHours.toLocaleString()} hrs on Steam
-                                </span>
-                            </>
+                            <span className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-muted/40 border border-border/40 text-sm font-medium hover:bg-muted transition-colors shadow-sm">
+                                <FiClock className="w-4 h-4 text-muted-foreground" />
+                                {totalHours.toLocaleString()} hrs on Steam
+                            </span>
                         )}
                     </div>
                 )}
@@ -86,7 +83,7 @@ export default async function Playing() {
                 <section className="mb-12 space-y-4 text-muted-foreground leading-relaxed">
                     <p>
                         Big fan of story-driven games and JRPGs. Persona changed my brain chemistry. Currently working
-                        through the Final Fantasy backlog.
+                        through Alan Wake 2, Stranger of Paradise, Tunic and Sky: Children of the Light.
                     </p>
                 </section>
 
@@ -101,36 +98,38 @@ export default async function Playing() {
                                 <Link
                                     key={game.appid}
                                     href={`/playing/${slugify(game.name)}`}
-                                    className="group flex items-center gap-4 py-3 border-b border-dashed border-border hover:border-accent/50 transition-colors"
+                                    className="group flex items-center gap-4 p-3 -mx-3 rounded-xl hover:bg-muted/40 transition-all hover:scale-[1.01]"
                                 >
-                                    <div className="relative w-28 h-[52px] rounded-md overflow-hidden flex-shrink-0">
+                                    <div className="relative w-28 h-[52px] rounded-md overflow-hidden flex-shrink-0 shadow-sm group-hover:shadow-md transition-all ring-1 ring-border/50 group-hover:ring-accent/30">
                                         <Image
                                             src={`https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appid}/header.jpg`}
                                             alt={game.name}
                                             fill
-                                            className="object-cover"
+                                            className="object-cover group-hover:scale-105 transition-transform duration-500"
                                         />
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <div className="flex items-center gap-1.5">
+                                        <div className="flex items-center gap-2 mb-0.5">
                                             <p className="font-semibold truncate group-hover:text-accent transition-colors">
                                                 {game.name}
                                             </p>
                                             <PlatformIcon platform="steam" />
                                         </div>
-                                        <p className="text-xs text-muted-foreground">
+                                        <p className="text-xs text-muted-foreground/80">
                                             {game.playtime_2weeks_hours > 0 && (
-                                                <span className="text-accent">{game.playtime_2weeks_hours} hrs this week</span>
+                                                <span className="text-accent font-medium">{game.playtime_2weeks_hours} hrs this week</span>
                                             )}
                                             {game.playtime_2weeks_hours > 0 && game.playtime_forever_hours > 0 && (
-                                                <span className="text-muted-foreground/50"> · </span>
+                                                <span className="text-muted-foreground/30 mx-1.5">•</span>
                                             )}
                                             {game.playtime_forever_hours > 0 && (
                                                 <span>{game.playtime_forever_hours} hrs total</span>
                                             )}
                                         </p>
                                     </div>
-                                    <FiArrowUpRight className="w-4 h-4 text-muted-foreground/40 group-hover:text-accent transition-colors shrink-0" />
+                                    <div className="w-8 h-8 rounded-full bg-background border border-border flex items-center justify-center opacity-0 group-hover:opacity-100 -translate-x-3 group-hover:translate-x-0 transition-all shrink-0">
+                                        <FiArrowUpRight className="w-4 h-4 text-accent" />
+                                    </div>
                                 </Link>
                             ))}
                         </div>
@@ -151,22 +150,25 @@ export default async function Playing() {
                                     <Link
                                         key={game.appid}
                                         href={`/playing/${slugify(game.name)}`}
-                                        className="group flex items-center gap-3 py-2 border-b border-dashed border-border/50 last:border-b-0 hover:border-accent/30 transition-colors"
+                                        className="group flex items-center gap-3 p-2.5 -mx-2.5 rounded-lg hover:bg-muted/40 transition-all"
                                     >
-                                        <div className="relative w-16 h-7 rounded overflow-hidden flex-shrink-0">
+                                        <div className="relative w-16 h-7 rounded overflow-hidden flex-shrink-0 ring-1 ring-border/50 group-hover:ring-accent/30 transition-all">
                                             <Image
                                                 src={`https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appid}/header.jpg`}
                                                 alt={game.name}
                                                 fill
-                                                className="object-cover"
+                                                className="object-cover group-hover:scale-110 transition-transform duration-500"
                                             />
                                         </div>
-                                        <p className="flex-1 min-w-0 text-sm font-medium truncate group-hover:text-accent transition-colors">
+                                        <p className="flex-1 min-w-0 text-sm font-medium truncate group-hover:text-accent group-hover:translate-x-0.5 transition-all duration-300">
                                             {game.name}
                                         </p>
-                                        <span className="text-xs text-muted-foreground/50 shrink-0 hidden sm:inline">
-                                            {game.playtime_forever_hours} hrs
-                                        </span>
+                                        <div className="flex items-center gap-3 shrink-0">
+                                            <span className="text-xs text-muted-foreground/60 hidden sm:inline">
+                                                {game.playtime_forever_hours} hrs
+                                            </span>
+                                            <FiArrowUpRight className="w-4 h-4 text-muted-foreground/30 group-hover:text-accent opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all" />
+                                        </div>
                                     </Link>
                                 ))}
                         </div>
@@ -196,25 +198,21 @@ export default async function Playing() {
                                 <Link
                                     key={game.titleId}
                                     href={`/playing/${slugify(game.name)}`}
-                                    className="group flex items-center gap-3 py-2 border-b border-dashed border-border/50 last:border-b-0 hover:border-accent/30 transition-colors"
+                                    className="group flex items-center gap-3 p-2.5 -mx-2.5 rounded-lg hover:bg-muted/40 transition-all"
                                 >
                                     {game.image ? (
-                                        <div className="relative w-7 h-7 rounded overflow-hidden flex-shrink-0">
-                                            <Image src={game.image} alt={game.name} fill className="object-cover" />
+                                        <div className="relative w-8 h-8 rounded overflow-hidden flex-shrink-0 ring-1 ring-border/50 group-hover:ring-accent/30 transition-all">
+                                            <Image src={game.image} alt={game.name} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
                                         </div>
                                     ) : (
-                                        <div className="w-7 h-7 rounded bg-muted flex items-center justify-center flex-shrink-0">
-                                            <FaXbox className="w-3 h-3 text-muted-foreground" />
+                                        <div className="w-8 h-8 rounded border border-border/50 bg-muted/30 flex items-center justify-center flex-shrink-0 group-hover:border-accent/30 transition-colors">
+                                            <FaXbox className="w-3.5 h-3.5 text-muted-foreground/50 group-hover:text-accent/70 transition-colors" />
                                         </div>
                                     )}
-                                    <p className="flex-1 min-w-0 text-sm font-medium truncate group-hover:text-accent transition-colors">
+                                    <p className="flex-1 min-w-0 text-sm font-medium truncate group-hover:text-accent group-hover:translate-x-0.5 transition-all duration-300">
                                         {game.name}
                                     </p>
-                                    {game.totalAchievements > 0 && (
-                                        <span className="text-xs text-muted-foreground/50 shrink-0 hidden sm:inline">
-                                            {game.currentAchievements}/{game.totalAchievements} achievements
-                                        </span>
-                                    )}
+                                    <FiArrowUpRight className="w-4 h-4 text-muted-foreground/30 group-hover:text-accent opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all shrink-0" />
                                 </Link>
                             ))}
                         </div>
