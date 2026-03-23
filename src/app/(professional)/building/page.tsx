@@ -5,7 +5,7 @@ import { runGetProjects } from '@/lib/cms-db'
 import { ProjectDetail, ProjectRow } from './_components/ProjectCard'
 
 export const metadata: Metadata = {
-    title: 'Building',
+    title: 'Projects',
     description: "Things I've built and shipped",
     openGraph: {
         title: 'Building',
@@ -43,7 +43,7 @@ export default async function Building() {
                 {/* Header */}
                 <div className="mb-12">
                     <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
-                        Building
+                        Projects
                     </h1>
                     <p className="text-lg text-muted-foreground">
                         Things I've built, shipped, and sometimes abandoned.
