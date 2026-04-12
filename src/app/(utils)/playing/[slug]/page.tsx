@@ -8,16 +8,6 @@ import { FaSteam, FaXbox } from 'react-icons/fa'
 import Image from 'next/image'
 import Link from 'next/link'
 
-// ─── Static generation ──────────────────────────────────────────────────────
-
-export const dynamicParams = true
-
-export async function generateStaticParams() {
-    const games = await fetchAllGames()
-    return games
-        .filter((g) => g.playtime_forever_hours > 0 || g.achievements?.current)
-        .map((g) => ({ slug: g.slug }))
-}
 
 // ─── Metadata ────────────────────────────────────────────────────────────────
 

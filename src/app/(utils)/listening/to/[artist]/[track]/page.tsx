@@ -9,34 +9,6 @@ import { FaSpotify, FaYoutube, FaApple } from 'react-icons/fa'
 import Image from 'next/image'
 import Link from 'next/link'
 
-// ─── Static generation ──────────────────────────────────────────────────────
-
-export const dynamicParams = true
-
-export async function generateStaticParams() {
-    try {
-        const data = await api.lastfm.getRecentTracks()
-        const seen = new Set<string>()
-        const params: { artist: string; track: string }[] = []
-
-        const allTracks = [...data.recentlyPlayed, ...(data.nowPlaying ? [data.nowPlaying] : [])]
-
-        for (const t of allTracks) {
-            const key = `${t.artist}|||${t.name}`
-            if (!seen.has(key)) {
-                seen.add(key)
-                params.push({
-                    artist: encodeTrackParam(t.artist),
-                    track: encodeTrackParam(t.name),
-                })
-            }
-        }
-
-        return params
-    } catch {
-        return []
-    }
-}
 
 // ─── Metadata ───────────────────────────────────────────────────────────────
 
@@ -212,21 +184,6 @@ export default async function TrackPage({ params }: Props) {
                             <div>
                                 <p className="text-2xl font-bold text-accent">{formatNumber(track.userPlaycount)}</p>
                                 <p className="text-xs text-muted-foreground/60">my scrobbles</p>
-                            </div>
-                        )}
-                        {track.playcount != null && track.playcount > 0 && (
-                            <div>
-                                <p className="text-2xl font-bold">{formatNumber(track.playcount)}</p>
-                                <p className="text-xs text-muted-foreground/60">total scrobbles</p>
-                            </div>
-                        )}
-                        {track.listeners != null && track.listeners > 0 && (
-                            <div>
-                                <div className="flex items-center gap-1.5 mb-0.5">
-                                    <FiUsers className="w-3.5 h-3.5 text-muted-foreground/50" />
-                                    <p className="text-2xl font-bold">{formatNumber(track.listeners)}</p>
-                                </div>
-                                <p className="text-xs text-muted-foreground/60">listeners</p>
                             </div>
                         )}
                     </div>
