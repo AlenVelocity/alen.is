@@ -6,10 +6,10 @@ import { ProjectDetail, ProjectRow } from './_components/ProjectCard'
 
 export const metadata: Metadata = {
     title: 'Projects',
-    description: "Things I've built and shipped",
+    description: "Things I've built, shipped and sometimes abandoned",
     openGraph: {
-        title: 'Building',
-        description: "Things I've built and shipped",
+        title: 'Projects',
+        description: "Things I've built, shipped and sometimes abandoned",
         url: 'https://alen.is/building'
     },
     alternates: {

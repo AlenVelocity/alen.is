@@ -85,8 +85,7 @@ export default async function Playing() {
                 {/* About */}
                 <section className="mb-12 space-y-4 text-muted-foreground leading-relaxed">
                     <p>
-                        Big fan of story-driven games and JRPGs. Persona changed my brain chemistry. Currently working
-                        through Alan Wake 2, Stranger of Paradise, Tunic and Sky: Children of the Light.
+                        Big fan of story-driven games and JRPGs. Persona changed my brain chemistry.
                     </p>
                 </section>
 
