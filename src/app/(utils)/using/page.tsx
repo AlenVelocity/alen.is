@@ -1,11 +1,11 @@
 import { Metadata } from 'next'
 import { PageTransition } from '@/components/ui/page-transition'
-import { FiArrowUpRight, FiCpu } from 'react-icons/fi'
+import { FiArrowUpRight } from 'react-icons/fi'
 import Image from 'next/image'
 
 export const metadata: Metadata = {
-    title: 'Using',
-    description: 'My gear and setup',
+    title: 'My Gear',
+    description: 'My hardware setup',
     openGraph: {
         title: 'Alen is Using',
         description: 'My gear and setup',
@@ -34,7 +34,7 @@ const gearSections: GearSection[] = [
         items: [
             {
                 name: 'ASUS ROG Strix G16 (2025)',
-                specs: ['Ryzen 9 8945HX', 'RTX 5070 Ti', '16" QHD+ 240Hz'],
+                specs: ['Ryzen 9 8940HX', 'RTX 5070 Ti'],
                 type: 'Laptop',
                 href: 'https://in.store.asus.com/rog/gaming-laptop-rog-strix-g16-g614pr-rv032ws.html',
                 image: '/gear/rog-strix-g16.png',
@@ -228,9 +228,8 @@ export default function Using() {
             <div className="container max-w-3xl py-12 md:py-20">
                 {/* Header */}
                 <div className="flex items-center gap-3 mb-3">
-                    <FiCpu className="w-6 h-6 text-muted-foreground" />
                     <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-                        Using
+                        Gear
                     </h1>
                 </div>
 
