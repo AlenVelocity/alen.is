@@ -7,13 +7,14 @@ import { FaSteam, FaXbox } from 'react-icons/fa'
 import Image from 'next/image'
 import Link from 'next/link'
 import { slugify, fetchXboxGames } from '@/lib/steam'
+import { CollapsibleSection } from '@/components/ui/collapsible-section'
 
 export const metadata: Metadata = {
-    title: 'playing',
-    description: 'Alen is playing. Big fan of story-driven games and JRPGs. Check out my Steam and Xbox gaming stats.',
+    title: 'Playing',
+    description: 'What I play',
     openGraph: {
-        title: 'Alen is playing',
-        description: 'Alen is playing. Big fan of story-driven games.',
+        title: 'Alen is Playing',
+        description: 'What I play',
     },
     alternates: { canonical: '/playing' },
 }
@@ -27,10 +28,12 @@ function PlatformIcon({ platform }: { platform: 'steam' | 'xbox' }) {
 }
 
 export default async function Playing() {
-    const [recentData, ownedData, xboxGames] = await Promise.all([
+    const showReviews = process.env.SHOW_REVIEWS === 'true'
+    const [recentData, ownedData, xboxGames, reviewsData] = await Promise.all([
         api.gaming.getRecentlyPlayed(),
         api.gaming.getOwnedGames(),
         fetchXboxGames(),
+        showReviews ? api.reviews.getReviewsByType({ type: 'GAME' }) : Promise.resolve([]),
     ])
 
     const recentGames = recentData.steam
@@ -86,6 +89,52 @@ export default async function Playing() {
                         through Alan Wake 2, Stranger of Paradise, Tunic and Sky: Children of the Light.
                     </p>
                 </section>
+
+                {/* My Reviews */}
+                {showReviews && (() => {
+                    const gameReviews = reviewsData
+                    if (!gameReviews || gameReviews.length === 0) return null
+                    return (
+                        <CollapsibleSection title="My Reviews">
+                            <div>
+                                {gameReviews.map((review) => (
+                                    <div
+                                        key={review.id}
+                                        className="group flex items-start gap-4 p-3 -mx-3 rounded-xl hover:bg-muted/40 transition-all"
+                                    >
+                                        {review.image ? (
+                                            <div className="relative w-28 h-[52px] rounded-md overflow-hidden flex-shrink-0 shadow-sm ring-1 ring-border/50">
+                                                <Image
+                                                    src={review.image}
+                                                    alt={review.name}
+                                                    fill
+                                                    className="object-cover"
+                                                />
+                                            </div>
+                                        ) : (
+                                            <div className="w-28 h-[52px] rounded-md bg-muted flex items-center justify-center flex-shrink-0 border border-border/50">
+                                                <GiGamepad className="w-5 h-5 text-muted-foreground/40" />
+                                            </div>
+                                        )}
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-center gap-2 mb-0.5">
+                                                <p className="font-semibold truncate">{review.name}</p>
+                                                {review.rating && (
+                                                    <span className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent/10 border border-accent/20 text-xs font-semibold text-accent">
+                                                        {review.rating}/10
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+                                                {review.content}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </CollapsibleSection>
+                    )
+                })()}
 
                 {/* Recently Played (Steam) */}
                 {recentGames && recentGames.length > 0 && (

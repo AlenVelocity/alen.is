@@ -19,10 +19,10 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
     title: {
-        default: "Alen's Portfolio",
-        template: "Alen is %s"
+        default: "Alen's Personal Website",
+        template: 'Alen is %s'
     },
-    description: "I'm Alen, a Software Engineer focusing on TypeScript, web development, and AI. Welcome to my portfolio where I build cool stuff.",
+    description: 'Engineer, developer and creator of cool stuff',
     metadataBase: new URL('https://alen.is'),
     manifest: '/manifest.json',
     applicationName: 'Alen.is',
@@ -57,22 +57,22 @@ export const metadata = {
         'AI',
         'LLM'
     ],
-    authors: [{ name: 'Alen' }],
-    creator: 'Alen',
-    publisher: 'Alen',
+    authors: [{ name: 'Alen Yohannan' }],
+    creator: 'Alen Yohannan',
+    publisher: 'Alen Yohannan',
     openGraph: {
         type: 'website',
         locale: 'en_US',
         url: 'https://alen.is',
-        title: "Alen's Portfolio",
-        description: "I'm Alen, a Software Engineer focusing on TypeScript, web development, and AI. Welcome to my portfolio where I build cool stuff.",
-        siteName: 'Alen',
-        images: [{ url: '/og.jpg', width: 1200, height: 630, alt: "Alen's Portfolio" }]
+        title: 'Alen.is',
+        description: 'Engineer, developer and creator of cool stuff',
+        siteName: 'Alen Yohannan',
+        images: [{ url: '/og.jpg', width: 1200, height: 630, alt: 'Alen.is' }]
     },
     twitter: {
         card: 'summary_large_image',
-        title: "Alen's Portfolio",
-        description: "I'm Alen, a Software Engineer focusing on TypeScript, web development, and AI. Welcome to my portfolio where I build cool stuff.",
+        title: 'Alen.is',
+        description: 'Engineer and creator of cool stuff',
         images: ['/og.jpg']
     }
 }
@@ -82,16 +82,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <html lang="en" suppressHydrationWarning>
             <body className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
                 <PostHogProvider>
-                <TRPCReactProvider>
-                    <ThemeProvider
-                        attribute="class"
+                    <TRPCReactProvider>
+                        <ThemeProvider
+                            attribute="class"
                             defaultTheme="dark"
-                        enableSystem
-                        disableTransitionOnChange
-                    >
-                        <ClientLayout>{children}</ClientLayout>
-                    </ThemeProvider>
-                </TRPCReactProvider>
+                            enableSystem
+                            disableTransitionOnChange
+                        >
+                            <ClientLayout>{children}</ClientLayout>
+                        </ThemeProvider>
+                    </TRPCReactProvider>
                 </PostHogProvider>
                 <Databuddy
                     clientId="zqwjrmeJFRJrzTzszsnvV"
