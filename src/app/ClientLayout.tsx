@@ -13,7 +13,7 @@ import { posthog } from '@/components/posthog-provider'
 // NAV ITEMS
 const NAV_ITEMS = [
     { href: '/', label: 'Alen.is', icon: null },
-    { href: '/experience', label: 'Experience', icon: FiBriefcase },
+    { href: '/working', label: 'Experience', icon: FiBriefcase },
     { href: '/building', label: 'Projects', icon: FiCode },
 ]
 
@@ -344,7 +344,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     const pathname = usePathname()
     // Hide main navbar on /lost page - it has its own custom navbar
     const showNavbar = !pathname.startsWith('/lost')
-    const showFooter = pathname === '/' || pathname.startsWith('/experience') || pathname.startsWith('/building')
+    const showFooter = pathname === '/' || pathname.startsWith('/working') || pathname.startsWith('/building')
 
     return (
         <div className="min-h-screen flex flex-col">
