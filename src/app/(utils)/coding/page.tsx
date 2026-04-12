@@ -5,11 +5,11 @@ import { FiGithub, FiCode, FiGitCommit, FiGitPullRequest } from 'react-icons/fi'
 import { VscIssues } from 'react-icons/vsc'
 
 export const metadata: Metadata = {
-    title: 'coding',
-    description: 'Alen is coding. My GitHub stats, top languages, and open source contributions.',
+    title: 'Coding',
+    description: 'My GitHub stats and contributions',
     openGraph: {
-        title: 'Alen is coding',
-        description: 'Alen is coding. My GitHub stats and contributions.'
+        title: 'Alen is Coding',
+        description: 'My GitHub stats and contributions'
     },
     alternates: { canonical: '/coding' }
 }
@@ -19,9 +19,9 @@ function ContributionGraph({ days }: { days: { date: string; contributionCount: 
     for (let i = 0; i < days.length; i += 7) {
         weeks.push(days.slice(i, i + 7))
     }
-    
+
     const mobileWeeks = weeks.slice(-20)
-    
+
     return (
         <div className="overflow-x-auto">
             <div className="hidden sm:flex gap-[2px]">
@@ -63,7 +63,7 @@ function LanguageBar({ languages }: { languages: { name: string; color: string; 
                     <div
                         key={lang.name}
                         className="h-full first:rounded-l-full last:rounded-r-full"
-                        style={{ 
+                        style={{
                             backgroundColor: lang.color || '#8b949e',
                             width: `${lang.percentage}%`
                         }}
@@ -73,8 +73,8 @@ function LanguageBar({ languages }: { languages: { name: string; color: string; 
             <div className="flex flex-wrap gap-3">
                 {languages.slice(0, 6).map((lang) => (
                     <div key={lang.name} className="flex items-center gap-1.5 text-sm">
-                        <span 
-                            className="w-2.5 h-2.5 rounded-full" 
+                        <span
+                            className="w-2.5 h-2.5 rounded-full"
                             style={{ backgroundColor: lang.color || '#8b949e' }}
                         />
                         <span className="text-muted-foreground">{lang.name}</span>

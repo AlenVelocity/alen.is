@@ -4,11 +4,11 @@ import { FiArrowUpRight } from 'react-icons/fi'
 import Image from 'next/image'
 
 export const metadata: Metadata = {
-    title: 'using',
-    description: 'Alen is using these tools. My gear and setup for computing, display, mobile, audio, and gaming.',
+    title: 'My Gear',
+    description: 'My hardware setup',
     openGraph: {
-        title: 'Alen is using',
-        description: 'Alen is using these tools. My gear and setup.',
+        title: 'Alen is Using',
+        description: 'My gear and setup',
     },
     alternates: { canonical: '/using' },
 }
@@ -235,7 +235,7 @@ export default function Using() {
 
                 {/* About */}
                 <section className="mb-12 text-muted-foreground leading-relaxed">
-                    <p>My current hardware setup.</p>
+                    <p>My current hardware setup. Click any card to visit the product page.</p>
                 </section>
 
                 {/* Gear Sections */}

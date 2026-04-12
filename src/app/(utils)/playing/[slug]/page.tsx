@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { PageTransition } from '@/components/ui/page-transition'
 import { api } from '@/trpc/server'
 import { fetchAllGames, resolveSlug, slugify } from '@/lib/steam'
-import { FiArrowLeft, FiArrowUpRight, FiCheck } from 'react-icons/fi'
+import { FiArrowLeft, FiArrowUpRight, FiCheck, FiStar } from 'react-icons/fi'
 import { FaSteam, FaXbox } from 'react-icons/fa'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -80,11 +80,13 @@ export default async function GamePage({ params }: Props) {
     const isSteam = game.platform === 'steam'
     const appid = isSteam ? Number(game.id) : null
 
+    const showReviews = process.env.SHOW_REVIEWS === 'true'
     // Fetch platform-specific data in parallel
-    const [achievementsData, recentData, xboxAchievementsData] = await Promise.all([
+    const [achievementsData, recentData, xboxAchievementsData, reviewData] = await Promise.all([
         appid ? api.gaming.getGameAchievements({ appid }).catch(() => ({ steam: null })) : { steam: null },
         isSteam ? api.gaming.getRecentlyPlayed() : { steam: null },
         !isSteam ? api.gaming.getXboxGameAchievements({ titleId: game.id }).catch(() => ({ xbox: [] })) : { xbox: [] },
+        showReviews ? api.reviews.getReview({ entityId: game.id.toString(), type: 'GAME' }).catch(() => null) : Promise.resolve(null)
     ])
 
     const achievements = achievementsData.steam
@@ -155,6 +157,26 @@ export default async function GamePage({ params }: Props) {
                             )}
                         </div>
                     </div>
+                )}
+
+                {/* Review Section */}
+                {showReviews && reviewData && (
+                    <section className="mb-14">
+                        <div className="p-6 rounded-2xl bg-card border border-border mt-8 flex flex-col gap-3 shadow-sm hover:shadow-md transition-shadow">
+                            <div className="flex items-center justify-between border-b pb-2">
+                                <h3 className="font-bold text-lg tracking-tight">Alen's Review</h3>
+                                {reviewData.rating && (
+                                    <div className="flex items-center gap-1.5 text-accent font-bold">
+                                        <FiStar className="fill-current w-4 h-4" />
+                                        <span>{reviewData.rating} <span className="text-muted-foreground/50 text-sm">/ 10</span></span>
+                                    </div>
+                                )}
+                            </div>
+                            <p className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
+                                {reviewData.content}
+                            </p>
+                        </div>
+                    </section>
                 )}
 
                 {/* My Stats */}

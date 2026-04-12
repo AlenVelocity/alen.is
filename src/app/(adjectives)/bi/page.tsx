@@ -1,16 +1,3 @@
-import { Metadata } from 'next'
-
-export const metadata: Metadata = {
-    title: 'bi',
-    description: 'Alen is bi. Everyone\'s cute. That\'s about it.',
-    openGraph: {
-        title: 'Alen is bi',
-        description: 'Alen is bi. Everyone\'s cute.',
-        url: 'https://alen.is/bi'
-    },
-    alternates: { canonical: '/bi' }
-}
-
 const PrideStripe = ({ color, delay }: { color: string; delay: string }) => (
     <div
         className="h-3 w-full rounded-sm animate-fade-in-up opacity-0"
@@ -30,15 +17,26 @@ export default function Bi() {
 
             {/* Message */}
             <div className="text-center space-y-3 animate-fade-in-up" style={{ animationDelay: '0.5s', animationFillMode: 'forwards', opacity: 0 }}>
-                <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+                <h1 className="text-3xl md:text-4xl font-bold">
                     <span className="bg-gradient-to-r from-[#D60270] via-[#9B4F96] to-[#0038A8] bg-clip-text text-transparent">
-                        everyone's cute
+                        everyone's cute{' '}
+                    </span>
+                    <span className="text-muted-foreground font-normal text-2xl">
+                        not my fault
                     </span>
                 </h1>
 
-                <p className="text-muted-foreground text-sm">
-                    that's roughly the extent of it.
+                <p className="text-muted-foreground text-sm italic">
+                    (no I will not pick a side)
                 </p>
+
+                <div className="flex items-center justify-center gap-2 text-muted-foreground/70 text-xs flex-wrap">
+                    <span>can't sit straight</span>
+                    <span className="text-accent">~</span>
+                    <span>foldable phone for split screen (ykwim)</span>
+                    <span className="text-accent">~</span>
+                    <span>too many hoodies</span>
+                </div>
             </div>
         </div>
     )

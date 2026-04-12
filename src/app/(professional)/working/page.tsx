@@ -19,15 +19,15 @@ const getWorkTypeBadge = (workType: string) => {
 }
 
 export const metadata: Metadata = {
-    title: 'working',
-    description: 'Alen is working. My professional journey as a Software Engineer.',
+    title: 'experience',
+    description: 'Alen is gaining experience. My professional journey as a Software Engineer.',
     openGraph: {
-        title: 'Alen is working',
-        description: 'Alen is working. My professional journey as a Software Engineer.',
-        url: 'https://alen.is/working'
+        title: 'Alen is experience',
+        description: 'Alen is gaining experience. My professional journey as a Software Engineer.',
+        url: 'https://alen.is/experience'
     },
     alternates: {
-        canonical: '/working'
+        canonical: '/experience'
     }
 }
 
@@ -61,16 +61,16 @@ export default async function Experience() {
             <div className="container max-w-2xl py-12 md:py-20">
                 {/* Header */}
                 <div className="flex items-start justify-between gap-4 mb-12">
-                        <div>
+                    <div>
                         <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
-                                Experience
-                            </h1>
+                            Experience
+                        </h1>
                         <p className="text-lg text-muted-foreground">
                             My professional journey so far.
                         </p>
-                        </div>
+                    </div>
                     <a
-                        href="/Alen_Resume.pdf" 
+                        href="/Alen_Resume.pdf"
                         download
                         className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border border-border hover:bg-muted hover:border-foreground/20 transition-all duration-200"
                     >
@@ -83,17 +83,16 @@ export default async function Experience() {
                 <div className="relative">
                     {/* Timeline line */}
                     <div className="absolute left-0 top-2 bottom-2 w-px border-l border-dashed border-border" />
-                    
+
                     <div className="space-y-12">
-                    {experiences.map((experience, index) => (
+                        {experiences.map((experience, index) => (
                             <div key={experience.id} className="relative pl-8">
                                 {/* Timeline dot */}
-                                <div className={`absolute left-0 top-2 w-2 h-2 rounded-full -translate-x-[3px] ${
-                                    experience.current
+                                <div className={`absolute left-0 top-2 w-2 h-2 rounded-full -translate-x-[3px] ${experience.current
                                         ? 'bg-accent ring-4 ring-accent/20'
                                         : 'border-2 border-muted-foreground/50 bg-card'
-                                }`} />
-                                
+                                    }`} />
+
                                 {/* Card */}
                                 <div className="group">
                                     <div className="flex items-start justify-between gap-4 mb-2">
@@ -115,7 +114,7 @@ export default async function Experience() {
                                                 )}
                                             </div>
                                             <p className="text-muted-foreground font-medium">
-                                                    {experience.position}
+                                                {experience.position}
                                             </p>
                                         </div>
                                     </div>
@@ -137,19 +136,19 @@ export default async function Experience() {
                                             )
                                         })()}
                                     </div>
-                                    
+
                                     <ul className="space-y-2">
-                                            {experience.description.map((item, i) => (
+                                        {experience.description.map((item, i) => (
                                             <li key={i} className="flex items-start gap-3 text-muted-foreground text-sm">
                                                 <span className="w-1 h-1 rounded-full bg-muted-foreground/50 mt-2 flex-shrink-0" />
-                                                    <span>{item}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
+                                                <span>{item}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
                                 </div>
+                            </div>
                         ))}
-                        </div>
+                    </div>
                 </div>
             </div>
         </PageTransition>

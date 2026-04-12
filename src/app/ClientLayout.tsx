@@ -13,7 +13,7 @@ import { posthog } from '@/components/posthog-provider'
 // NAV ITEMS
 const NAV_ITEMS = [
     { href: '/', label: 'Alen.is', icon: null },
-    { href: '/working', label: 'Experience', icon: FiBriefcase },
+    { href: '/experience', label: 'Experience', icon: FiBriefcase },
     { href: '/building', label: 'Projects', icon: FiCode },
 ]
 
@@ -96,9 +96,9 @@ function MarqueeBreadcrumb({ children }: { children: React.ReactNode }) {
                 style={
                     shouldMarquee
                         ? {
-                              animation: 'breadcrumb-marquee 4s ease-in-out infinite',
-                              '--marquee-offset': `-${marqueeOffset}px`,
-                          } as React.CSSProperties
+                            animation: 'breadcrumb-marquee 4s ease-in-out infinite',
+                            '--marquee-offset': `-${marqueeOffset}px`,
+                        } as React.CSSProperties
                         : undefined
                 }
                 aria-label={typeof children === 'string' ? children : undefined}
@@ -344,7 +344,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     const pathname = usePathname()
     // Hide main navbar on /lost page - it has its own custom navbar
     const showNavbar = !pathname.startsWith('/lost')
-    const showFooter = pathname === '/' || pathname.startsWith('/working') || pathname.startsWith('/experience') || pathname.startsWith('/building')
+    const showFooter = pathname === '/' || pathname.startsWith('/experience') || pathname.startsWith('/building')
 
     return (
         <div className="min-h-screen flex flex-col">
@@ -354,7 +354,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
                 <footer className="border-t border-dashed border-border py-8">
                     <div className="container max-w-4xl">
                         <p className="text-sm text-muted-foreground text-center">
-                            © {new Date().getFullYear()} Alen
+                            © {new Date().getFullYear()} Alen Yohannan
                         </p>
                     </div>
                 </footer>

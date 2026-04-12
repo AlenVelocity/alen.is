@@ -338,4 +338,53 @@ export const gamingRouter = createTRPCRouter({
             } : null
         }
     }),
+
+    // Search Steam games by name
+    searchGames: publicProcedure
+        .input(z.object({
+            query: z.string().min(1)
+        }))
+        .query(async ({ input }) => {
+            try {
+                const response = await fetch(
+                    `https://store.steampowered.com/api/storesearch/?term=${encodeURIComponent(input.query)}&l=english&cc=US`
+                )
+                if (!response.ok) {
+                    throw new Error('Steam store search failed')
+                }
+                const data = await response.json()
+                const items = data?.items || []
+                return items.map((item: any) => ({
+                    appid: item.id as number,
+                    name: item.name as string,
+                    img: `https://cdn.cloudflare.steamstatic.com/steam/apps/${item.id}/header.jpg`,
+                }))
+            } catch (error) {
+                console.error('Error searching Steam games:', error)
+                return []
+            }
+        }),
+
+    // Search Xbox games by filtering player's library
+    searchXboxGames: publicProcedure
+        .input(z.object({
+            query: z.string().min(1)
+        }))
+        .query(async ({ input }) => {
+            try {
+                const { fetchXboxGames } = await import('@/lib/steam')
+                const xboxGames = await fetchXboxGames()
+                const query = input.query.toLowerCase()
+                return xboxGames
+                    .filter(g => g.name.toLowerCase().includes(query))
+                    .map(g => ({
+                        appid: g.titleId,
+                        name: g.name,
+                        img: g.image || '',
+                    }))
+            } catch (error) {
+                console.error('Error searching Xbox games:', error)
+                return []
+            }
+        }),
 }) 

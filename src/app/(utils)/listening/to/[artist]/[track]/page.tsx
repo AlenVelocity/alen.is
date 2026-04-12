@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { PageTransition } from '@/components/ui/page-transition'
 import { api } from '@/trpc/server'
 import { decodeTrackParam, encodeTrackParam } from '@/lib/lastfm'
-import { FiArrowLeft, FiArrowUpRight, FiHeadphones, FiHeart, FiClock, FiUsers, FiDisc } from 'react-icons/fi'
+import { FiArrowLeft, FiArrowUpRight, FiHeadphones, FiHeart, FiClock, FiUsers, FiDisc, FiStar } from 'react-icons/fi'
 import { SiLastdotfm } from 'react-icons/si'
 import { FaSpotify, FaYoutube, FaApple } from 'react-icons/fa'
 import Image from 'next/image'
@@ -96,9 +96,10 @@ export default async function TrackPage({ params }: Props) {
     const trackName = decodeTrackParam(trackParam)
 
     // Fetch track info and recent tracks in parallel
-    const [track, lastFmData] = await Promise.all([
+    const [track, lastFmData, reviewData] = await Promise.all([
         api.lastfm.getTrackInfo({ artist: artistName, track: trackName }).catch(() => null),
         api.lastfm.getRecentTracks().catch(() => null),
+        api.reviews.getReview({ entityId: `${artistName.replace(/\\s+/g, '-').toLowerCase()}-${trackName.replace(/\\s+/g, '-').toLowerCase()}`, type: 'SONG' }).catch(() => null)
     ])
 
     if (!track) notFound()
@@ -171,6 +172,26 @@ export default async function TrackPage({ params }: Props) {
 
                 {/* Spacer when neither now-playing nor loved */}
                 {!isNowPlaying && !track.userLoved && <div className="mb-4" />}
+
+                {/* Review */}
+                {reviewData && (
+                    <section className="mb-10 animate-fade-in-up">
+                        <div className="p-6 rounded-2xl bg-card border border-border flex flex-col gap-3 shadow-sm hover:shadow-md transition-shadow">
+                            <div className="flex items-center justify-between border-b pb-2 border-border/50">
+                                <h3 className="font-bold text-lg tracking-tight">Alen's Review</h3>
+                                {reviewData.rating && (
+                                    <div className="flex items-center gap-1.5 text-accent font-bold">
+                                        <FiStar className="fill-current w-4 h-4" />
+                                        <span>{reviewData.rating} <span className="text-muted-foreground/50 text-sm">/ 10</span></span>
+                                    </div>
+                                )}
+                            </div>
+                            <p className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
+                                {reviewData.content}
+                            </p>
+                        </div>
+                    </section>
+                )}
 
                 {/* Stats */}
                 <section className="mb-10">

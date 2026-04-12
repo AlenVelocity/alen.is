@@ -70,3 +70,17 @@ model SocialLink {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Review {
+  id        String   @id @default(cuid())
+  entityId  String   // A slugified string to identify the unique game or song
+  type      String   // "GAME" or "SONG"
+  name      String   @default("") // Display name (game title or "Artist - Song")
+  image     String?  // Cover art / header image URL
+  rating    Int?
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@unique([entityId, type])
+}
