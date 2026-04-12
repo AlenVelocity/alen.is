@@ -1,11 +1,11 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-    title: 'Schedule a Meeting',
-    description: 'Book a one-hour meeting with Alen',
+    title: 'meeting',
+    description: 'Alen is meeting. Book a one-hour meeting with Alen.',
     openGraph: {
-        title: 'Schedule a Meeting',
-        description: 'Book a one-hour meeting with Alen',
+        title: 'Alen is meeting',
+        description: 'Alen is meeting. Book a one-hour meeting.',
         url: 'https://alen.is/meeting'
     },
     alternates: {

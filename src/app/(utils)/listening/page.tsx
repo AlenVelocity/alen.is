@@ -11,11 +11,11 @@ import { encodeTrackParam } from '@/lib/lastfm'
 import { formatDistanceToNow, parse } from 'date-fns'
 
 export const metadata: Metadata = {
-    title: 'Listening',
-    description: 'What I listen to',
+    title: 'listening',
+    description: 'Alen is listening to music right now. Mostly video game OSTs and Japanese rock. Check out my Spotify recommendations and recent tracks.',
     openGraph: {
-        title: 'Alen is Listening',
-        description: 'What I listen to',
+        title: 'Alen is listening',
+        description: 'Alen is listening to music right now. Mostly video game OSTs and Japanese rock.',
         images: [{ url: '/sumika-wrapped.png', width: 250, height: 250, alt: "Alen's Year of Sumika" }]
     },
     alternates: { canonical: '/listening' }
