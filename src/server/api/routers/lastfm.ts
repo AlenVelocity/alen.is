@@ -4,7 +4,7 @@ import { createTRPCRouter, publicProcedure } from '../trpc'
 // Last.fm API constants
 const API_KEY = process.env.LASTFM_API_KEY ?? ''
 const USER_NAME = process.env.LASTFM_USERNAME ?? ''
-const TRACK_LIMIT = 8
+const TRACK_LIMIT = 50
 
 // Track interface for TypeScript
 interface Track {
@@ -85,7 +85,7 @@ export const lastFmRouter = createTRPCRouter({
         .input(
             z
                 .object({
-                    limit: z.number().min(1).max(50).optional().default(TRACK_LIMIT),
+                    limit: z.number().min(1).max(300).optional().default(TRACK_LIMIT),
                     username: z.string().optional().default(USER_NAME)
                 })
                 .optional()
