@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { PageTransition } from '@/components/ui/page-transition'
 import { api } from '@/trpc/server'
 import { decodeTrackParam, encodeTrackParam } from '@/lib/lastfm'
+import { calculateFrequency, getStreakInfo } from '@/lib/streak'
 import { FiArrowLeft, FiArrowUpRight, FiHeadphones, FiHeart, FiClock, FiUsers, FiDisc, FiStar } from 'react-icons/fi'
 import { SiLastdotfm } from 'react-icons/si'
 import { FaSpotify, FaYoutube, FaApple } from 'react-icons/fa'
@@ -77,10 +78,15 @@ export default async function TrackPage({ params }: Props) {
     if (!track) notFound()
 
     // Check if this track is currently playing
-    const isNowPlaying =
+    const isNowPlaying = !!(
         lastFmData?.nowPlaying &&
         lastFmData.nowPlaying.artist.toLowerCase() === track.artist.toLowerCase() &&
         lastFmData.nowPlaying.name.toLowerCase() === track.name.toLowerCase()
+    )
+
+    // Calculate streak
+    const nowPlayingFrequency = lastFmData ? calculateFrequency(track, lastFmData.recentlyPlayed) : 1
+    const { subtitle, rawColor, borderGradient, shadowStyle } = getStreakInfo(nowPlayingFrequency, isNowPlaying, 'large')
 
     // Build search query for streaming links
     const searchQuery = encodeURIComponent(`${track.artist} ${track.name}`)
@@ -97,10 +103,20 @@ export default async function TrackPage({ params }: Props) {
                     Back to Listening
                 </Link>
 
+                {/* Full page ambient streak glow */}
+                {nowPlayingFrequency >= 3 && (
+                    <div className="fixed inset-0 pointer-events-none z-[-5] overflow-hidden">
+                        <div
+                            className="absolute top-[-20vw] left-[50%] w-[120vw] h-[100vw] ml-[-60vw] rounded-full blur-[120px] opacity-25 mix-blend-screen"
+                            style={{ backgroundColor: rawColor }}
+                        />
+                    </div>
+                )}
+
                 {/* Album art */}
                 {track.image ? (
                     <div
-                        className="relative w-full max-w-[300px] aspect-square rounded-lg overflow-hidden mb-8"
+                        className="relative w-full max-w-[300px] aspect-square rounded-lg overflow-hidden mb-8 shadow-xl"
                         style={{ rotate: '-0.5deg' }}
                     >
                         <Image
@@ -113,10 +129,23 @@ export default async function TrackPage({ params }: Props) {
                     </div>
                 ) : (
                     <div
-                        className="w-full max-w-[300px] aspect-square rounded-lg bg-muted flex items-center justify-center mb-8"
+                        className="w-full max-w-[300px] aspect-square rounded-lg bg-muted flex items-center justify-center mb-8 shadow-xl"
                         style={{ rotate: '-0.5deg' }}
                     >
                         <FiHeadphones className="w-12 h-12 text-muted-foreground/30" />
+                    </div>
+                )}
+
+                {/* Now playing indicator */}
+                {isNowPlaying && (
+                    <div className="flex items-center gap-2 mb-4">
+                        <span className="inline-block w-1.5 h-1.5 rounded-full bg-accent animate-pulse-subtle" />
+                        <span className="text-xs font-medium text-accent">
+                            {subtitle}
+                            {nowPlayingFrequency >= 3 && (
+                                <span className="ml-1.5 opacity-80 lowercase">x{nowPlayingFrequency}</span>
+                            )}
+                        </span>
                     </div>
                 )}
 
@@ -124,16 +153,8 @@ export default async function TrackPage({ params }: Props) {
                 <div className="mb-1">
                     <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{track.name}</h1>
                 </div>
+
                 <p className="text-lg text-muted-foreground mb-2">{track.artist}</p>
-
-                {/* Now playing indicator */}
-                {isNowPlaying && (
-                    <div className="flex items-center gap-2 mb-4">
-                        <span className="inline-block w-1.5 h-1.5 rounded-full bg-accent animate-pulse-subtle" />
-                        <span className="text-xs font-medium text-accent">Listening now</span>
-                    </div>
-                )}
-
                 {/* Loved badge */}
                 {track.userLoved && (
                     <div className="flex items-center gap-1.5 text-sm text-accent mb-6">

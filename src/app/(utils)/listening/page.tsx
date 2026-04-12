@@ -9,6 +9,7 @@ import { LinkButton } from '@/components/ui/link-button'
 import { CollapsibleSection } from '@/components/ui/collapsible-section'
 import { SumikaDialog } from './sumika-dialog'
 import { encodeTrackParam } from '@/lib/lastfm'
+import { calculateFrequency, getStreakInfo } from '@/lib/streak'
 import { formatDistanceToNow, parse } from 'date-fns'
 
 export const metadata: Metadata = {
@@ -41,42 +42,8 @@ export default async function Listening() {
 
     const displayTracks = groupedTracks.slice(0, 20)
 
-    let nowPlayingFrequency = 1
-    if (lastFmData.nowPlaying) {
-        for (const track of lastFmData.recentlyPlayed) {
-            if (track.name === lastFmData.nowPlaying.name && track.artist === lastFmData.nowPlaying.artist) {
-                nowPlayingFrequency++
-            } else {
-                break
-            }
-        }
-    }
-
-    let nowPlayingSubtitle = "Live"
-    if (nowPlayingFrequency >= 50) nowPlayingSubtitle = "I'm in love"
-    else if (nowPlayingFrequency >= 25) nowPlayingSubtitle = "Addicted"
-    else if (nowPlayingFrequency >= 20) nowPlayingSubtitle = "Unhealthy"
-    else if (nowPlayingFrequency >= 15) nowPlayingSubtitle = "Obsessed"
-    else if (nowPlayingFrequency >= 10) nowPlayingSubtitle = "Can't Get Enough"
-    else if (nowPlayingFrequency >= 7) nowPlayingSubtitle = "Heavy Rotation"
-    else if (nowPlayingFrequency >= 5) nowPlayingSubtitle = "Running It Back"
-    else if (nowPlayingFrequency >= 3) nowPlayingSubtitle = "On Repeat"
-
-    let borderGradient = 'conic-gradient(from 0deg, #ff0000, #ff8000, #ffff00, #00ff00, #0000ff, #8000ff, #ff0000)'
-    let shadowStyle = undefined
-    if (nowPlayingFrequency >= 50) {
-        borderGradient = 'conic-gradient(from 0deg, #090014, #ff007f, #330066, #00f0ff, #090014)'
-        shadowStyle = '0 0 40px rgba(255, 0, 127, 0.4)'
-    } else if (nowPlayingFrequency >= 25) {
-        borderGradient = 'conic-gradient(from 0deg, #ff0055, #ff00ff, #00ffff, #ff00ff, #ff0055)'
-        shadowStyle = '0 0 30px rgba(255, 0, 255, 0.3)'
-    } else if (nowPlayingFrequency >= 20) {
-        borderGradient = 'conic-gradient(from 0deg, #ff6a00, #ffb300, #ffeb3b, #ffb300, #ff6a00)'
-        shadowStyle = '0 0 20px rgba(255, 179, 0, 0.3)'
-    } else if (nowPlayingFrequency >= 3) {
-        shadowStyle = '0 0 15px rgba(0, 255, 0, 0.15)'
-    }
-
+    const nowPlayingFrequency = lastFmData.nowPlaying ? calculateFrequency(lastFmData.nowPlaying, lastFmData.recentlyPlayed) : 1
+    const { subtitle: nowPlayingSubtitle, borderGradient, shadowStyle } = getStreakInfo(nowPlayingFrequency, !!lastFmData.nowPlaying, 'large')
 
     return (
         <PageTransition>
