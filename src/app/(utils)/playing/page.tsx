@@ -9,11 +9,11 @@ import Link from 'next/link'
 import { slugify, fetchXboxGames } from '@/lib/steam'
 
 export const metadata: Metadata = {
-    title: 'Playing',
-    description: 'What I play',
+    title: 'playing',
+    description: 'Alen is playing. Big fan of story-driven games and JRPGs. Check out my Steam and Xbox gaming stats.',
     openGraph: {
-        title: 'Alen is Playing',
-        description: 'What I play',
+        title: 'Alen is playing',
+        description: 'Alen is playing. Big fan of story-driven games.',
     },
     alternates: { canonical: '/playing' },
 }

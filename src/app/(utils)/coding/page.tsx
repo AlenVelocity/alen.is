@@ -5,11 +5,11 @@ import { FiGithub, FiCode, FiGitCommit, FiGitPullRequest } from 'react-icons/fi'
 import { VscIssues } from 'react-icons/vsc'
 
 export const metadata: Metadata = {
-    title: 'Coding',
-    description: 'My GitHub stats and contributions',
+    title: 'coding',
+    description: 'Alen is coding. My GitHub stats, top languages, and open source contributions.',
     openGraph: {
-        title: 'Alen is Coding',
-        description: 'My GitHub stats and contributions'
+        title: 'Alen is coding',
+        description: 'Alen is coding. My GitHub stats and contributions.'
     },
     alternates: { canonical: '/coding' }
 }

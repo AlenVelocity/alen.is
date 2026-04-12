@@ -3,11 +3,11 @@ import { CenteredPage } from '@/components/ui/centered-page'
 import { GiWeightLiftingUp } from 'react-icons/gi'
 
 export const metadata: Metadata = {
-    title: 'Lifting',
-    description: 'My workout and fitness stats',
+    title: 'lifting',
+    description: 'Alen is lifting weights. My workout and fitness stats coming soon to the app.',
     openGraph: {
-        title: 'Alen is Lifting',
-        description: 'My workout and fitness stats'
+        title: 'Alen is lifting',
+        description: 'Alen is lifting weights. My workout and fitness stats coming soon.'
     },
     alternates: { canonical: '/lifting' }
 }

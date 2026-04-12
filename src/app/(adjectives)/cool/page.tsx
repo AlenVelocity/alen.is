@@ -5,10 +5,10 @@ import { Metadata } from 'next'
 
 export const metadata: Metadata = {
     title: 'cool',
-    description: 'Am I cool?',
+    description: 'Alen is cool. Exhibit A. Am I cool? Yes or No. Vote on the poll and decide.',
     openGraph: {
-        title: 'cool',
-        description: 'Am I cool?',
+        title: 'Alen is cool',
+        description: 'Alen is cool. Exhibit A. Am I cool?',
         url: 'https://alen.is/cool',
         images: [{ url: '/rinu-cool.webp', width: 250, height: 250, alt: 'Rinu Cool' }]
     },

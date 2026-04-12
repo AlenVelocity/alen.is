@@ -5,11 +5,11 @@ import { runGetProjects } from '@/lib/cms-db'
 import { ProjectDetail, ProjectRow } from './_components/ProjectCard'
 
 export const metadata: Metadata = {
-    title: 'Projects',
-    description: "Things I've built and shipped",
+    title: 'building',
+    description: "Alen is building. Things I've built, shipped, and sometimes abandoned. View my projects.",
     openGraph: {
-        title: 'Building',
-        description: "Things I've built and shipped",
+        title: 'Alen is building',
+        description: "Alen is building. Things I've built and shipped.",
         url: 'https://alen.is/building'
     },
     alternates: {
