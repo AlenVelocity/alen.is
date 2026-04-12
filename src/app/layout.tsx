@@ -5,6 +5,7 @@ import { TRPCReactProvider } from '@/trpc/react'
 import { ThemeProvider } from '@/components/theme-provider'
 import { PostHogProvider } from '@/components/posthog-provider'
 import { Databuddy } from '@databuddy/sdk'
+import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 const geistSans = Geist({
@@ -100,6 +101,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     trackEngagement={true}
                     enableBatching={true}
                 />
+                <Analytics />
             </body>
         </html>
     )
