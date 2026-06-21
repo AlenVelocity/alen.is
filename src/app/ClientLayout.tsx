@@ -203,7 +203,7 @@ function Navigation() {
                 transition={{ layout: { type: 'spring', stiffness: 500, damping: 35 } }}
                 className={cn(
                     'flex items-center gap-0 px-1 py-1 border border-border/60',
-                    'bg-background/90 backdrop-blur-md sharp-shadow',
+                    'bg-background/90 backdrop-blur-md shadow-lg shadow-background/20',
                     'rounded-sm'
                 )}
             >
