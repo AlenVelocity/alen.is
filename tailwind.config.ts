@@ -18,8 +18,11 @@ const config = {
     },
     extend: {
       fontFamily: {
-        sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
-        mono: ['var(--font-geist-mono)', 'monospace'],
+        sans: ['var(--font-syne)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-jetbrains-mono)', 'monospace'],
+        serif: ['var(--font-syne)', 'sans-serif'],
+        'mono-ui': ['var(--font-jetbrains-mono)', 'monospace'],
+        'display': ['var(--font-syne)', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -58,8 +61,10 @@ const config = {
       },
       borderRadius: {
         lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        md: "calc(var(--radius))",
+        sm: "calc(var(--radius))",
+        xl: "calc(var(--radius) + 4px)",
+        '2xl': "calc(var(--radius) + 8px)",
       },
       keyframes: {
         "accordion-down": {

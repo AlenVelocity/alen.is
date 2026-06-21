@@ -14,7 +14,7 @@ export function LinkButton({ href, children, className, target }: LinkButtonProp
             href={href}
             target={target}
             className={cn(
-                'font-medium text-foreground underline decoration-accent/50 decoration-2 underline-offset-4 hover:decoration-accent transition-colors',
+                'font-medium text-foreground underline decoration-accent/40 decoration-1 underline-offset-4 hover:decoration-accent hover:text-accent transition-all duration-200',
                 className
             )}
         >

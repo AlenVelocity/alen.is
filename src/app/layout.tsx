@@ -1,5 +1,5 @@
 import type React from 'react'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Syne, JetBrains_Mono } from 'next/font/google'
 import ClientLayout from './ClientLayout'
 import { TRPCReactProvider } from '@/trpc/react'
 import { ThemeProvider } from '@/components/theme-provider'
@@ -8,14 +8,16 @@ import { Databuddy } from '@databuddy/sdk'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
-const geistSans = Geist({
-    variable: '--font-geist-sans',
+const syne = Syne({
+    variable: '--font-syne',
     subsets: ['latin'],
+    weight: ['400', '500', '600', '700', '800'],
 })
 
-const geistMono = Geist_Mono({
-    variable: '--font-geist-mono',
+const jetbrainsMono = JetBrains_Mono({
+    variable: '--font-jetbrains-mono',
     subsets: ['latin'],
+    weight: ['400', '500', '600', '700'],
 })
 
 export const metadata = {
@@ -81,7 +83,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en" suppressHydrationWarning>
-            <body className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
+            <body className={`${syne.variable} ${jetbrainsMono.variable} font-mono-ui`}>
                 <PostHogProvider>
                     <TRPCReactProvider>
                         <ThemeProvider

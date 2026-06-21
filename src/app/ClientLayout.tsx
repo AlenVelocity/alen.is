@@ -6,49 +6,37 @@ import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { Toaster } from 'sonner'
 import { useTheme } from 'next-themes'
-import { FiSun, FiMoon, FiArrowUp, FiBriefcase, FiCode } from 'react-icons/fi'
+import { FiBriefcase, FiCode } from 'react-icons/fi'
 import { motion, AnimatePresence } from 'framer-motion'
 import { posthog } from '@/components/posthog-provider'
+import { AlienDataStream } from '@/components/ui/alien-ambience'
 
 // NAV ITEMS
 const NAV_ITEMS = [
-    { href: '/', label: 'Alen.is', icon: null },
-    { href: '/working', label: 'Experience', icon: FiBriefcase },
-    { href: '/building', label: 'Projects', icon: FiCode },
+    { href: '/', label: 'alen.is', icon: null },
+    { href: '/working', label: 'exp', icon: FiBriefcase },
+    { href: '/building', label: 'projects', icon: FiCode },
 ]
 
-// Helper: Title-cases and splits slugs ("persona-5" -> "Persona 5")
 function humanize(slug: string) {
-    return slug
-        .replace(/-/g, ' ')
-        .replace(/\b\w/g, c => c.toUpperCase())
+    return slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
 }
 
-// Segments to skip in breadcrumbs (still accumulate their href)
 const SKIP_SEGMENTS = new Set(['to'])
 
 function getBreadcrumbs(currentPath: string) {
     if (currentPath === '/') return []
-
     const parts = currentPath.split('/').filter(Boolean)
-    // Start with: { href: '/', label: 'Alen.is' }
-    const breadcrumbs = [{ href: '/', label: 'Alen.is' }]
+    const breadcrumbs = [{ href: '/', label: 'alen.is' }]
     let href = ''
-
     for (let i = 0; i < parts.length; i++) {
         href += '/' + parts[i]
-
-        // Skip noise segments like "to" but keep accumulating the href
         if (SKIP_SEGMENTS.has(parts[i].toLowerCase())) continue
-
-        // Try to use label from NAV_ITEMS for top-level pages
         const navMatch = NAV_ITEMS.find(
-            nav =>
-                nav.href.replace(/^\/|\/$/g, '') ===
-                parts[i].replace(/^\/|\/$/g, '')
+            nav => nav.href.replace(/^\/|\/$/, '') === parts[i].replace(/^\/|\/$/, '')
         )
         let label
-        if (navMatch && navMatch.label !== 'Alen.is') {
+        if (navMatch && navMatch.label !== 'alen.is') {
             label = navMatch.label
         } else {
             label = humanize(decodeURIComponent(parts[i]))
@@ -58,7 +46,6 @@ function getBreadcrumbs(currentPath: string) {
     return breadcrumbs
 }
 
-// Marquee wrapper for breadcrumb label if too wide
 function MarqueeBreadcrumb({ children }: { children: React.ReactNode }) {
     const outerRef = useRef<HTMLSpanElement>(null)
     const innerRef = useRef<HTMLSpanElement>(null)
@@ -66,10 +53,7 @@ function MarqueeBreadcrumb({ children }: { children: React.ReactNode }) {
     const [marqueeOffset, setMarqueeOffset] = useState(0)
 
     useEffect(() => {
-        if (!outerRef.current || !innerRef.current) {
-            setShouldMarquee(false)
-            return
-        }
+        if (!outerRef.current || !innerRef.current) { setShouldMarquee(false); return }
         const outer = outerRef.current
         const inner = innerRef.current
         const overflow = inner.scrollWidth - outer.offsetWidth
@@ -105,17 +89,65 @@ function MarqueeBreadcrumb({ children }: { children: React.ReactNode }) {
             >
                 {children}
             </span>
-            <style jsx global>{`
-                @keyframes breadcrumb-marquee {
-                    0%, 20% {
-                        transform: translateX(0);
-                    }
-                    80%, 100% {
-                        transform: translateX(var(--marquee-offset));
-                    }
-                }
-            `}</style>
         </span>
+    )
+}
+
+// Custom cursor blob
+function CursorBlob() {
+    const blobRef = useRef<HTMLDivElement>(null)
+    const pos = useRef({ x: -100, y: -100 })
+    const curr = useRef({ x: -100, y: -100 })
+    const rafRef = useRef<number | null>(null)
+    const [hovering, setHovering] = useState(false)
+
+    useEffect(() => {
+        document.body.classList.add('custom-cursor')
+
+        const onMove = (e: MouseEvent) => {
+            pos.current = { x: e.clientX, y: e.clientY }
+        }
+
+        const onEnter = () => setHovering(true)
+        const onLeave = () => setHovering(false)
+
+        const addListeners = () => {
+            document.querySelectorAll('a, button, [role="button"]').forEach(el => {
+                el.addEventListener('mouseenter', onEnter)
+                el.addEventListener('mouseleave', onLeave)
+            })
+        }
+
+        const observer = new MutationObserver(addListeners)
+        observer.observe(document.body, { childList: true, subtree: true })
+        addListeners()
+
+        const animate = () => {
+            curr.current.x += (pos.current.x - curr.current.x) * 0.12
+            curr.current.y += (pos.current.y - curr.current.y) * 0.12
+            if (blobRef.current) {
+                blobRef.current.style.transform = `translate(${curr.current.x}px, ${curr.current.y}px) translate(-50%, -50%)`
+            }
+            rafRef.current = requestAnimationFrame(animate)
+        }
+
+        document.addEventListener('mousemove', onMove)
+        rafRef.current = requestAnimationFrame(animate)
+
+        return () => {
+            document.body.classList.remove('custom-cursor')
+            document.removeEventListener('mousemove', onMove)
+            observer.disconnect()
+            if (rafRef.current) cancelAnimationFrame(rafRef.current)
+        }
+    }, [])
+
+    return (
+        <div
+            ref={blobRef}
+            className={cn('cursor-blob hidden lg:block', hovering && 'is-hovering')}
+            aria-hidden="true"
+        />
     )
 }
 
@@ -127,30 +159,19 @@ function Navigation() {
     const [showScrollBtn, setShowScrollBtn] = useState(false)
     const showScrollBtnRef = useRef(false)
 
-    // Normalize path - remove trailing slash except for root
     const currentPath = pathname === '/' ? '/' : pathname.replace(/\/$/, '')
-
-    // Check if we're on a main nav page (home, experience, projects)
     const isMainNav = NAV_ITEMS.some(item => item.href === currentPath)
-
-    // Filter nav items based on scroll state and current page
-    // When scrolled: hide non-current pages (but keep home always visible)
     const visibleNavItems = scrolled && isMainNav
         ? NAV_ITEMS.filter(item => item.href === '/' || item.href === currentPath)
         : NAV_ITEMS
-
-    // Breadcrumbs for non-main-nav pages
     const breadcrumbs = getBreadcrumbs(currentPath)
 
-    useEffect(() => {
-        setMounted(true)
-    }, [])
+    useEffect(() => { setMounted(true) }, [])
 
     useEffect(() => {
         const handleScroll = () => {
             const isScrolled = window.scrollY > 50
             setScrolled(isScrolled)
-
             if (isScrolled && !showScrollBtnRef.current) {
                 showScrollBtnRef.current = true
                 setShowScrollBtn(true)
@@ -168,9 +189,7 @@ function Navigation() {
         if (!document.startViewTransition) {
             setTheme(newTheme)
         } else {
-            document.startViewTransition(() => {
-                setTheme(newTheme)
-            })
+            document.startViewTransition(() => { setTheme(newTheme) })
         }
         posthog.capture('theme_toggle', { theme: newTheme })
     }
@@ -181,73 +200,51 @@ function Navigation() {
         <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50">
             <motion.nav
                 layout
-                transition={{
-                    layout: { type: 'spring', stiffness: 500, damping: 35 }
-                }}
+                transition={{ layout: { type: 'spring', stiffness: 500, damping: 35 } }}
                 className={cn(
-                    'flex items-center gap-1 px-2 py-1.5 rounded-xl border',
-                    'bg-card/90 backdrop-blur-sm border-border paper-shadow'
+                    'flex items-center gap-0 px-1 py-1 border border-border/60',
+                    'bg-background/90 backdrop-blur-md sharp-shadow',
+                    'rounded-sm'
                 )}
             >
                 <AnimatePresence mode="popLayout" initial={false}>
                     {isMainNav ? (
                         <motion.div
                             key="main-nav"
-                            initial={{ opacity: 0, scale: 0.9 }}
+                            initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.9 }}
-                            transition={{ duration: 0.2 }}
-                            className="flex items-center gap-1"
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.15 }}
+                            className="flex items-center gap-0"
                         >
                             <AnimatePresence mode="popLayout" initial={false}>
                                 {visibleNavItems.map((item) => {
                                     const isActive = currentPath === item.href
                                     const isHome = item.href === '/'
-                                    const Icon = item.icon
 
                                     return (
                                         <motion.div
                                             key={item.href}
                                             layout
-                                            initial={{ opacity: 0, scale: 0.8 }}
-                                            animate={{ opacity: 1, scale: 1 }}
-                                            exit={{ opacity: 0, scale: 0.8 }}
-                                            transition={{ duration: 0.2 }}
+                                            initial={{ opacity: 0, x: -4 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, x: -4 }}
+                                            transition={{ duration: 0.15 }}
                                         >
                                             <Link
                                                 href={item.href}
                                                 className={cn(
-                                                    'relative px-3 py-1.5 text-sm rounded-lg transition-colors duration-200 block whitespace-nowrap',
-                                                    isHome ? 'font-bold' : 'font-medium',
+                                                    'relative px-3 py-1.5 text-xs font-mono-ui tracking-wide block whitespace-nowrap transition-all duration-150',
+                                                    isHome ? 'font-semibold' : 'font-medium',
                                                     isActive
-                                                        ? 'text-foreground'
-                                                        : 'text-muted-foreground hover:text-foreground'
+                                                        ? 'text-accent bg-accent/8'
+                                                        : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
                                                 )}
                                             >
-                                                {/* Animated underline indicator */}
                                                 {isActive && (
-                                                    <motion.span
-                                                        layoutId="nav-pill"
-                                                        className="absolute bottom-0 left-2 right-2 h-0.5 bg-accent rounded-full"
-                                                        transition={{
-                                                            type: 'spring',
-                                                            stiffness: 400,
-                                                            damping: 30
-                                                        }}
-                                                    />
+                                                    <span className="mr-1 text-accent font-bold">//</span>
                                                 )}
-
-                                                {/* Content */}
-                                                <span className="relative z-10">
-                                                    {isHome ? (
-                                                        item.label
-                                                    ) : (
-                                                        <>
-                                                            {Icon && <Icon className="w-4 h-4 sm:hidden" />}
-                                                            <span className="hidden sm:inline">{item.label}</span>
-                                                        </>
-                                                    )}
-                                                </span>
+                                                {item.label}
                                             </Link>
                                         </motion.div>
                                     )
@@ -257,41 +254,37 @@ function Navigation() {
                     ) : (
                         <motion.div
                             key="breadcrumb"
-                            initial={{ opacity: 0, scale: 0.9 }}
+                            initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.9 }}
-                            transition={{ duration: 0.2 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.15 }}
                         >
                             <nav
                                 aria-label="Breadcrumb"
-                                className="flex items-center px-3 py-1.5 text-sm font-medium transition-colors gap-2"
+                                className="flex items-center px-3 py-1.5 text-xs font-mono-ui tracking-wide gap-2"
                             >
                                 {breadcrumbs.map((crumb, i) => {
                                     const isLast = i === breadcrumbs.length - 1
                                     return (
                                         <React.Fragment key={crumb.href}>
                                             {i !== 0 && (
-                                                <span className="text-accent/60">/</span>
+                                                <span className="text-accent font-bold">/</span>
                                             )}
                                             {!isLast ? (
                                                 <Link
                                                     href={crumb.href}
                                                     className={cn(
                                                         i === 0
-                                                            ? 'text-muted-foreground font-bold'
+                                                            ? 'text-muted-foreground font-semibold hover:text-foreground'
                                                             : 'text-muted-foreground hover:text-foreground'
                                                     )}
                                                     tabIndex={0}
                                                 >
-                                                    <MarqueeBreadcrumb>
-                                                        {crumb.label}
-                                                    </MarqueeBreadcrumb>
+                                                    <MarqueeBreadcrumb>{crumb.label}</MarqueeBreadcrumb>
                                                 </Link>
                                             ) : (
-                                                <span className="text-foreground capitalize">
-                                                    <MarqueeBreadcrumb>
-                                                        {crumb.label}
-                                                    </MarqueeBreadcrumb>
+                                                <span className="text-foreground">
+                                                    <MarqueeBreadcrumb>{crumb.label}</MarqueeBreadcrumb>
                                                 </span>
                                             )}
                                         </React.Fragment>
@@ -302,35 +295,36 @@ function Navigation() {
                     )}
                 </AnimatePresence>
 
-                <div className="w-px h-4 bg-accent/20 mx-1" />
+                <div className="w-px h-3 bg-border mx-1" />
 
+                {/* Theme toggle — text style */}
                 {mounted ? (
                     <button
                         onClick={toggleTheme}
-                        className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200"
+                        className="px-2 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-150 whitespace-nowrap"
                         aria-label="Toggle theme"
                     >
-                        {theme === 'dark' ? <FiSun className="w-4 h-4" /> : <FiMoon className="w-4 h-4" />}
+                        [{theme === 'dark' ? 'light' : 'dark'}]
                     </button>
                 ) : (
-                    <div className="p-2 w-8 h-8" />
+                    <div className="px-2 py-1.5 text-xs opacity-0 select-none">[dark]</div>
                 )}
 
                 <AnimatePresence initial={false}>
                     {showScrollBtn && (
                         <motion.div
                             initial={{ width: 0, opacity: 0 }}
-                            animate={{ width: 40, opacity: 1 }}
+                            animate={{ width: 'auto', opacity: 1 }}
                             exit={{ width: 0, opacity: 0 }}
-                            transition={{ duration: 0.2 }}
+                            transition={{ duration: 0.15 }}
                             className="overflow-hidden"
                         >
                             <button
                                 onClick={scrollToTop}
-                                className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors duration-200"
+                                className="px-2 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-150"
                                 aria-label="Scroll to top"
                             >
-                                <FiArrowUp className="w-4 h-4" />
+                                ↑
                             </button>
                         </motion.div>
                     )}
@@ -342,19 +336,21 @@ function Navigation() {
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname()
-    // Hide main navbar on /lost page - it has its own custom navbar
     const showNavbar = !pathname.startsWith('/lost')
     const showFooter = pathname === '/' || pathname.startsWith('/working') || pathname.startsWith('/building')
 
     return (
         <div className="min-h-screen flex flex-col">
+            <AlienDataStream />
+            <CursorBlob />
             {showNavbar && <Navigation />}
-            <main className={cn('flex-1', showNavbar && 'pt-[var(--navbar-height)]')}>{children}</main>
+            <main className={cn('flex-1 relative z-10', showNavbar && 'pt-[var(--navbar-height)]')}>{children}</main>
             {showFooter && (
-                <footer className="border-t border-dashed border-border py-8">
+                <footer className="relative z-10 border-t border-dashed border-border/40 py-8">
                     <div className="container max-w-4xl">
-                        <p className="text-sm text-muted-foreground text-center">
-                            © {new Date().getFullYear()} Alen Yohannan
+                        <p className="text-xs font-mono-ui text-muted-foreground/50 text-center tracking-wide">
+                            © {new Date().getFullYear()} alen yohannan
+                            <span className="animate-blink ml-0.5">_</span>
                         </p>
                     </div>
                 </footer>

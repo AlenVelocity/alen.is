@@ -67,45 +67,47 @@ export default function CoolPoll({ initialData }: CoolPollProps) {
         const diff = Math.abs(positivePercentage - negativePercentage)
         const isClose = diff < 5
         const isPositiveMajority = positivePercentage > negativePercentage
-        
+
         if (!voteData.vote) {
-            return isPositiveMajority ? "Hee-ho!" : 'Looks like we hit a weakness...'
+            return isPositiveMajority ? 'the people have spoken.' : 'controversial.'
         }
         if (isClose) {
-            return voteData.vote === 'positive' ? 'Jack Frost approves' : 'Mara would be proud of that criticism.'
+            return 'it\'s close.'
         }
         if (voteData.vote === 'positive') {
-            return isPositiveMajority ? 'ONE MORE GOD REJECTED!' : 'A lone Samurai stands against the horde...'
+            return isPositiveMajority ? 'glad you think so.' : 'a lone voice in the crowd.'
         }
-        return isPositiveMajority ? "I mean, I guess it's not that bad..." : 'The negotiations were short...'
+        return isPositiveMajority ? 'noted, respectfully.' : 'fair enough.'
     }
 
     return (
-        <div className="w-full max-w-sm space-y-5">
+        <div className="w-full space-y-5">
             {canVote ? (
-                <div className="flex justify-center gap-6">
+                <div className="flex justify-center gap-8">
                     <button
                         onClick={() => handleVote('positive')}
-                        className="text-xl font-semibold text-accent hover:underline decoration-2 underline-offset-4 transition-all active:scale-95"
+                        className="text-display text-2xl text-accent hover:text-accent border-b border-transparent hover:border-accent transition-all duration-200 active:scale-95 pb-0.5"
                     >
                         yes
                     </button>
-                    <span className="text-muted-foreground/30 text-xl">/</span>
+                    <span className="mono-label text-muted-foreground/25 text-2xl">/</span>
                     <button
                         onClick={() => handleVote('negative')}
-                        className="text-xl font-semibold text-destructive hover:underline decoration-2 underline-offset-4 transition-all active:scale-95"
+                        className="text-display text-2xl text-muted-foreground hover:text-destructive border-b border-transparent hover:border-destructive/50 transition-all duration-200 active:scale-95 pb-0.5"
                     >
                         no
                     </button>
                 </div>
             ) : (
                 <div className="space-y-4">
-                    <div className="flex justify-between text-sm mb-1">
-                        <span className="text-accent font-medium">Yes</span>
-                        <span className="text-destructive font-medium">No</span>
+                    <div className="flex justify-between mono-label text-muted-foreground/50 mb-2">
+                        <span className="text-accent">yes</span>
+                        <span>{totalVotes} votes</span>
+                        <span className="text-destructive">no</span>
                     </div>
 
-                    <div className="relative h-8 bg-muted rounded-lg overflow-hidden">
+                    {/* Progress bar — sharp corners */}
+                    <div className="relative h-6 bg-muted overflow-hidden rounded-sm">
                         <motion.div
                             className="absolute h-full bg-accent left-0"
                             initial={{ width: '0%' }}
@@ -113,21 +115,18 @@ export default function CoolPoll({ initialData }: CoolPollProps) {
                             transition={{ duration: 0.8, ease: 'easeOut' }}
                         />
                         <motion.div
-                            className="absolute h-full bg-destructive right-0"
+                            className="absolute h-full bg-destructive/70 right-0"
                             initial={{ width: '0%' }}
                             animate={{ width: `${negativePercentage}%` }}
                             transition={{ duration: 0.8, ease: 'easeOut' }}
                         />
-                        <div className="absolute inset-0 flex justify-between px-3 items-center text-xs font-medium">
-                            <span className="text-accent-foreground">{pollData.positive} ({positivePercentage.toFixed(1)}%)</span>
-                            <span className="text-destructive-foreground">{pollData.negative} ({negativePercentage.toFixed(1)}%)</span>
+                        <div className="absolute inset-0 flex justify-between px-2.5 items-center mono-label text-background mix-blend-difference">
+                            <span>{positivePercentage.toFixed(0)}%</span>
+                            <span>{negativePercentage.toFixed(0)}%</span>
                         </div>
                     </div>
 
-                    <div className="space-y-1 text-center">
-                        <p className="text-xs text-muted-foreground/60 italic">{totalVotes} votes</p>
-                        <p className="text-base font-semibold">{getResultMessage()}</p>
-                    </div>
+                    <p className="text-display text-base text-center">{getResultMessage()}</p>
                 </div>
             )}
         </div>

@@ -12,9 +12,7 @@ export const metadata: Metadata = {
         description: "Things I've built, shipped and sometimes abandoned",
         url: 'https://alen.is/building'
     },
-    alternates: {
-        canonical: '/building'
-    }
+    alternates: { canonical: '/building' }
 }
 
 export default async function Building() {
@@ -39,23 +37,23 @@ export default async function Building() {
     return (
         <PageTransition>
             <JsonLd data={projectsSchema} />
-            <div className="container max-w-2xl py-12 md:py-20">
-                {/* Header */}
-                <div className="mb-12">
-                    <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+            <div className="container max-w-2xl py-12 md:py-20 px-4">
+
+                {/* ── Header ───────────────────────────────────── */}
+                <div className="mb-16">
+                    <p className="mono-label text-muted-foreground/50 mb-4">// work</p>
+                    <h1 className="text-display text-5xl md:text-6xl mb-3">
                         Projects
                     </h1>
-                    <p className="text-lg text-muted-foreground">
-                        Things I've built, shipped, and sometimes abandoned.
+                    <p className="text-[0.9rem] text-muted-foreground">
+                        Things I&apos;ve built, shipped, and sometimes abandoned.
                     </p>
                 </div>
 
-                {/* Featured — expanded with descriptions */}
+                {/* ── Featured ─────────────────────────────────── */}
                 {featuredProjects.length > 0 && (
-                    <section className="mb-10">
-                        <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider border-l-2 border-accent pl-3 mb-4">
-                            Featured
-                        </h2>
+                    <section className="mb-12">
+                        <div className="section-label mb-6">featured</div>
                         <div>
                             {featuredProjects.map((project) => (
                                 <ProjectDetail key={project.id} project={project} />
@@ -64,12 +62,10 @@ export default async function Building() {
                     </section>
                 )}
 
-                {/* Everything else — compact directory listing */}
+                {/* ── Other ─────────────────────────────────────── */}
                 {otherProjects.length > 0 && (
                     <section>
-                        <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider border-l-2 border-accent pl-3 mb-4">
-                            Other
-                        </h2>
+                        <div className="section-label mb-4">everything else</div>
                         <div>
                             {otherProjects.map((project) => (
                                 <ProjectRow key={project.id} project={project} />
@@ -77,8 +73,8 @@ export default async function Building() {
                         </div>
                     </section>
                 )}
+
             </div>
         </PageTransition>
     )
 }
-

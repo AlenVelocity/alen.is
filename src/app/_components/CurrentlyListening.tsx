@@ -1,7 +1,7 @@
 'use client'
 
 import { api } from '@/trpc/react'
-import { FiMusic, FiHeadphones, FiExternalLink } from 'react-icons/fi'
+import { FiHeadphones, FiExternalLink } from 'react-icons/fi'
 import Link from 'next/link'
 import Image from 'next/image'
 import { calculateFrequency, getStreakInfo } from '@/lib/streak'
@@ -11,12 +11,12 @@ export const CurrentlyListening = () => {
 
     if (isLoading) {
         return (
-            <div className="p-4 rounded-xl border border-border bg-card animate-pulse">
+            <div className="border-l-2 border-accent/30 pl-4 py-2 animate-pulse">
                 <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-lg bg-muted" />
-                    <div className="flex-1 space-y-2">
-                        <div className="h-4 bg-muted rounded w-32" />
-                        <div className="h-3 bg-muted rounded w-24" />
+                    <div className="w-10 h-10 bg-muted rounded-sm shrink-0" />
+                    <div className="space-y-2 flex-1">
+                        <div className="h-3 bg-muted rounded w-32" />
+                        <div className="h-3 bg-muted rounded w-20" />
                     </div>
                 </div>
             </div>
@@ -29,39 +29,35 @@ export const CurrentlyListening = () => {
 
     const currentTrack = lastFmData.nowPlaying || lastFmData.recentlyPlayed[0]
     const isNowPlaying = !!lastFmData.nowPlaying
-
     const nowPlayingFrequency = calculateFrequency(currentTrack, lastFmData.recentlyPlayed)
     const { subtitle } = getStreakInfo(nowPlayingFrequency, isNowPlaying, 'small', true)
 
-    // Using constant page theme colors for the spinning effect
     const themeGradient = 'conic-gradient(from 0deg, transparent 0%, transparent 40%, hsl(var(--accent)) 60%, hsl(var(--foreground)) 80%, transparent 100%)'
-    const themeShadow = '0 0 12px hsl(var(--accent) / 0.15)'
 
     return (
-        <div className={`relative ${nowPlayingFrequency >= 3 ? 'p-[1px] rounded-xl overflow-visible shadow-sm' : ''}`}>
+        <div className={`relative ${nowPlayingFrequency >= 3 ? 'p-[1px] overflow-hidden' : ''}`}>
             {nowPlayingFrequency >= 3 && (
-                <>
+                <div className="absolute inset-0 overflow-hidden z-[-1]">
                     <div
-                        className="absolute inset-[1px] rounded-[11px] z-[-1]"
-                        style={{ boxShadow: themeShadow }}
+                        className="absolute left-[50%] top-[50%] w-[800px] h-[800px] ml-[-400px] mt-[-400px] origin-center opacity-30"
+                        style={{
+                            backgroundImage: themeGradient,
+                            animation: 'spin-slow 5s linear infinite'
+                        }}
                     />
-                    <div className="absolute inset-0 rounded-xl overflow-hidden z-[-2]">
-                        <div
-                            className="absolute left-[50%] top-[50%] w-[1000px] h-[1000px] ml-[-500px] mt-[-500px] origin-center opacity-40 mix-blend-normal"
-                            style={{
-                                backgroundImage: themeGradient,
-                                animation: `spin-slow 4s linear infinite`
-                            }}
-                        />
-                    </div>
-                </>
+                </div>
             )}
-            <Link 
-                href="/listening" 
-                className={`group relative z-10 flex items-center gap-4 p-4 transition-all duration-300 ${nowPlayingFrequency >= 3 ? 'bg-card rounded-[11px] hover:bg-muted/80' : 'rounded-xl border border-border bg-card paper-shadow hover:bg-muted/50 hover:border-foreground/20'}`}
+            <Link
+                href="/listening"
+                className={`group relative z-10 flex items-center gap-4 p-4 transition-all duration-300 scanline-hover
+                    ${nowPlayingFrequency >= 3
+                        ? 'bg-card border-l-2 border-accent hover:bg-muted/60'
+                        : 'border-l-2 border-border bg-card hover:border-accent/60 hover:bg-muted/40'
+                    }`}
             >
+                {/* Album art or fallback */}
                 {currentTrack.image ? (
-                    <div className="relative w-12 h-12 rounded-lg overflow-hidden shrink-0">
+                    <div className="relative w-10 h-10 rounded-sm overflow-hidden shrink-0">
                         <Image
                             src={currentTrack.image}
                             alt={`${currentTrack.name} album art`}
@@ -70,31 +66,38 @@ export const CurrentlyListening = () => {
                         />
                     </div>
                 ) : (
-                    <div className="w-12 h-12 rounded-lg bg-muted flex items-center justify-center shrink-0">
-                        <FiHeadphones className="w-5 h-5 text-muted-foreground" />
+                    <div className="w-10 h-10 bg-muted flex items-center justify-center shrink-0 rounded-sm">
+                        <FiHeadphones className="w-4 h-4 text-muted-foreground" />
                     </div>
                 )}
-                
+
                 <div className="flex-1 min-w-0">
+                    {/* Status label */}
                     <div className="flex items-center gap-2 mb-0.5">
-                        <FiMusic className="w-3 h-3 text-accent" />
-                        <span className="text-xs font-medium text-accent">
+                        {isNowPlaying && (
+                            <span className="inline-block w-1.5 h-1.5 rounded-full bg-accent animate-pulse-dot shrink-0" />
+                        )}
+                        <span className="mono-label text-accent">
                             {subtitle}
                             {nowPlayingFrequency >= 3 && (
-                                <span className="ml-1.5 opacity-80 lowercase">x{nowPlayingFrequency}</span>
+                                <span className="ml-1.5 opacity-70">×{nowPlayingFrequency}</span>
                             )}
                         </span>
                     </div>
-                    <p className="font-medium truncate group-hover:text-foreground transition-colors">
+
+                    {/* Track name */}
+                    <p className="text-display text-sm font-display truncate group-hover:text-accent group-hover:animate-glitch-shift transition-colors duration-200" style={{ fontFamily: 'var(--font-syne), sans-serif' }}>
                         {currentTrack.name}
                     </p>
-                    <p className="text-sm text-muted-foreground truncate">
+
+                    {/* Artist */}
+                    <p className="mono-label text-muted-foreground truncate mt-0.5">
                         {currentTrack.artist}
                     </p>
                 </div>
-                
-                <FiExternalLink className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+
+                <FiExternalLink className="w-3.5 h-3.5 text-muted-foreground/30 group-hover:text-accent shrink-0 transition-colors duration-200" />
             </Link>
         </div>
     )
-}   
+}
