@@ -81,6 +81,30 @@ export const lastFmRouter = createTRPCRouter({
             }
         }),
 
+    getArtistImages: publicProcedure
+        .input(z.object({ artists: z.array(z.string().min(1)).max(10) }))
+        .query(async ({ input }) => {
+            const results = await Promise.allSettled(
+                input.artists.map(async (artist) => {
+                    // Use Deezer's free API — no auth required, returns artist photos
+                    const res = await fetch(
+                        `https://api.deezer.com/search/artist?q=${encodeURIComponent(artist)}&limit=1`,
+                        { next: { revalidate: 86400 } } // Cache for 24h
+                    )
+                    if (!res.ok) return { artist, image: null }
+                    const data = await res.json()
+                    const firstResult = data.data?.[0]
+                    return {
+                        artist,
+                        image: firstResult?.picture_medium || firstResult?.picture || null
+                    }
+                })
+            )
+            return results.map((r) =>
+                r.status === 'fulfilled' ? r.value : { artist: '', image: null }
+            )
+        }),
+
     getRecentTracks: publicProcedure
         .input(
             z

@@ -59,6 +59,12 @@ const gearSections: GearSection[] = [
     {
         title: 'Audio',
         items: [
+            {
+                name: '7Hz x Crinacle Divine',
+                specs: 'Crinacle Collab Tuning · 3.5mm Wired',
+                type: 'IEM · Wired',
+                badge: 'Daily Driver'
+            },
             { name: 'Simgot EW300 DSP', specs: 'Tribrid DD+Planar+PZT · USB-C DSP', type: 'IEM · Wired', badge: 'Broken' },
             { name: 'Realme TechLife Studio H1', specs: '40mm Drivers · 43dB ANC', type: 'Over-ear · Wireless' },
             { name: 'boAt Airdopes 161', specs: 'BT 5.3 · ENx™ ENC', type: 'Earbuds · Wireless' },

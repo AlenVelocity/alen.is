@@ -10,16 +10,18 @@ import { FiBriefcase, FiCode } from 'react-icons/fi'
 import { motion, AnimatePresence } from 'framer-motion'
 import { posthog } from '@/components/posthog-provider'
 import { AlienDataStream } from '@/components/ui/alien-ambience'
+import { CommandBar, openCommandBar } from '@/components/ui/command-bar'
+import { UfoAbduction } from '@/components/ui/ufo-abduction'
 
 // NAV ITEMS
 const NAV_ITEMS = [
     { href: '/', label: 'alen.is', icon: null },
     { href: '/working', label: 'exp', icon: FiBriefcase },
-    { href: '/building', label: 'projects', icon: FiCode },
+    { href: '/building', label: 'projects', icon: FiCode }
 ]
 
 function humanize(slug: string) {
-    return slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+    return slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
 const SKIP_SEGMENTS = new Set(['to'])
@@ -32,9 +34,7 @@ function getBreadcrumbs(currentPath: string) {
     for (let i = 0; i < parts.length; i++) {
         href += '/' + parts[i]
         if (SKIP_SEGMENTS.has(parts[i].toLowerCase())) continue
-        const navMatch = NAV_ITEMS.find(
-            nav => nav.href.replace(/^\/|\/$/, '') === parts[i].replace(/^\/|\/$/, '')
-        )
+        const navMatch = NAV_ITEMS.find((nav) => nav.href.replace(/^\/|\/$/, '') === parts[i].replace(/^\/|\/$/, ''))
         let label
         if (navMatch && navMatch.label !== 'alen.is') {
             label = navMatch.label
@@ -53,7 +53,10 @@ function MarqueeBreadcrumb({ children }: { children: React.ReactNode }) {
     const [marqueeOffset, setMarqueeOffset] = useState(0)
 
     useEffect(() => {
-        if (!outerRef.current || !innerRef.current) { setShouldMarquee(false); return }
+        if (!outerRef.current || !innerRef.current) {
+            setShouldMarquee(false)
+            return
+        }
         const outer = outerRef.current
         const inner = innerRef.current
         const overflow = inner.scrollWidth - outer.offsetWidth
@@ -79,10 +82,10 @@ function MarqueeBreadcrumb({ children }: { children: React.ReactNode }) {
                 className="block whitespace-nowrap"
                 style={
                     shouldMarquee
-                        ? {
-                            animation: 'breadcrumb-marquee 4s ease-in-out infinite',
-                            '--marquee-offset': `-${marqueeOffset}px`,
-                        } as React.CSSProperties
+                        ? ({
+                              animation: 'breadcrumb-marquee 4s ease-in-out infinite',
+                              '--marquee-offset': `-${marqueeOffset}px`
+                          } as React.CSSProperties)
                         : undefined
                 }
                 aria-label={typeof children === 'string' ? children : undefined}
@@ -112,7 +115,7 @@ function CursorBlob() {
         const onLeave = () => setHovering(false)
 
         const addListeners = () => {
-            document.querySelectorAll('a, button, [role="button"]').forEach(el => {
+            document.querySelectorAll('a, button, [role="button"]').forEach((el) => {
                 el.addEventListener('mouseenter', onEnter)
                 el.addEventListener('mouseleave', onLeave)
             })
@@ -160,13 +163,14 @@ function Navigation() {
     const showScrollBtnRef = useRef(false)
 
     const currentPath = pathname === '/' ? '/' : pathname.replace(/\/$/, '')
-    const isMainNav = NAV_ITEMS.some(item => item.href === currentPath)
-    const visibleNavItems = scrolled && isMainNav
-        ? NAV_ITEMS.filter(item => item.href === '/' || item.href === currentPath)
-        : NAV_ITEMS
+    const isMainNav = NAV_ITEMS.some((item) => item.href === currentPath)
+    const visibleNavItems =
+        scrolled && isMainNav ? NAV_ITEMS.filter((item) => item.href === '/' || item.href === currentPath) : NAV_ITEMS
     const breadcrumbs = getBreadcrumbs(currentPath)
 
-    useEffect(() => { setMounted(true) }, [])
+    useEffect(() => {
+        setMounted(true)
+    }, [])
 
     useEffect(() => {
         const handleScroll = () => {
@@ -189,7 +193,9 @@ function Navigation() {
         if (!document.startViewTransition) {
             setTheme(newTheme)
         } else {
-            document.startViewTransition(() => { setTheme(newTheme) })
+            document.startViewTransition(() => {
+                setTheme(newTheme)
+            })
         }
         posthog.capture('theme_toggle', { theme: newTheme })
     }
@@ -241,9 +247,7 @@ function Navigation() {
                                                         : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
                                                 )}
                                             >
-                                                {isActive && (
-                                                    <span className="mr-1 text-accent font-bold">//</span>
-                                                )}
+                                                {isActive && <span className="mr-1 text-accent font-bold">//</span>}
                                                 {item.label}
                                             </Link>
                                         </motion.div>
@@ -267,9 +271,7 @@ function Navigation() {
                                     const isLast = i === breadcrumbs.length - 1
                                     return (
                                         <React.Fragment key={crumb.href}>
-                                            {i !== 0 && (
-                                                <span className="text-accent font-bold">/</span>
-                                            )}
+                                            {i !== 0 && <span className="text-accent font-bold">/</span>}
                                             {!isLast ? (
                                                 <Link
                                                     href={crumb.href}
@@ -310,6 +312,16 @@ function Navigation() {
                     <div className="px-2 py-1.5 text-xs opacity-0 select-none">[dark]</div>
                 )}
 
+                {/* Command bar trigger — the "alen.is/…" warp drive (also opens with / or Ctrl+K) */}
+                <button
+                    onClick={openCommandBar}
+                    className="px-2 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-150 whitespace-nowrap"
+                    aria-label="Open site navigator (press / or Ctrl+K)"
+                    title="alen.is/… — press / to warp"
+                >
+                    [/]
+                </button>
+
                 <AnimatePresence initial={false}>
                     {showScrollBtn && (
                         <motion.div
@@ -343,6 +355,8 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         <div className="min-h-screen flex flex-col">
             <AlienDataStream />
             <CursorBlob />
+            <CommandBar />
+            <UfoAbduction />
             {showNavbar && <Navigation />}
             <main className={cn('flex-1 relative z-10', showNavbar && 'pt-[var(--navbar-height)]')}>{children}</main>
             {showFooter && (

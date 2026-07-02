@@ -66,7 +66,8 @@
         --ring: 152 100% 48%;
         --radius: 0.125rem;
         --glow-accent: 0 0 16px hsl(152 100% 48% / 0.35);
-        --glow-accent-strong: 0 0 20px hsl(152 100% 48% / 0.5), 0 0 60px hsl(152 100% 48% / 0.15), 0 0 120px hsl(152 100% 48% / 0.04);
+        --glow-accent-strong:
+            0 0 20px hsl(152 100% 48% / 0.5), 0 0 60px hsl(152 100% 48% / 0.15), 0 0 120px hsl(152 100% 48% / 0.04);
     }
 }
 
@@ -134,7 +135,6 @@ html {
 
 /* Music bars */
 @keyframes musicBar1 {
-
     0%,
     100% {
         height: 0.75rem;
@@ -146,7 +146,6 @@ html {
 }
 
 @keyframes musicBar2 {
-
     0%,
     100% {
         height: 1rem;
@@ -158,7 +157,6 @@ html {
 }
 
 @keyframes musicBar3 {
-
     0%,
     100% {
         height: 0.5rem;
@@ -170,7 +168,6 @@ html {
 }
 
 @keyframes musicBar4 {
-
     0%,
     100% {
         height: 1.25rem;
@@ -212,7 +209,6 @@ html {
 
 /* Blink cursor */
 @keyframes blink {
-
     0%,
     100% {
         opacity: 1;
@@ -236,7 +232,6 @@ html {
 
 /* Float */
 @keyframes float {
-
     0%,
     100% {
         transform: translateY(0px);
@@ -249,7 +244,6 @@ html {
 
 /* Pulse dot */
 @keyframes pulseDot {
-
     0%,
     100% {
         transform: scale(1);
@@ -300,7 +294,6 @@ html {
 
 /* Chromatic aberration — periodic, autonomous */
 @keyframes chromatic-hero {
-
     0%,
     88%,
     100% {
@@ -309,12 +302,16 @@ html {
     }
 
     89% {
-        text-shadow: 4px 0 hsl(0 100% 65% / 0.7), -4px 0 hsl(195 100% 65% / 0.7);
+        text-shadow:
+            4px 0 hsl(0 100% 65% / 0.7),
+            -4px 0 hsl(195 100% 65% / 0.7);
         transform: skewX(-1deg);
     }
 
     90% {
-        text-shadow: -3px 0 hsl(0 100% 65% / 0.6), 3px 0 hsl(195 100% 65% / 0.6);
+        text-shadow:
+            -3px 0 hsl(0 100% 65% / 0.6),
+            3px 0 hsl(195 100% 65% / 0.6);
         transform: skewX(1deg);
     }
 
@@ -324,7 +321,10 @@ html {
     }
 
     92% {
-        text-shadow: 5px 0 hsl(0 100% 65% / 0.5), -5px 0 hsl(195 100% 65% / 0.5), 0 0 20px hsl(152 100% 50% / 0.3);
+        text-shadow:
+            5px 0 hsl(0 100% 65% / 0.5),
+            -5px 0 hsl(195 100% 65% / 0.5),
+            0 0 20px hsl(152 100% 50% / 0.3);
         transform: skewX(-0.5deg) translateX(2px);
     }
 
@@ -336,7 +336,6 @@ html {
 
 /* Slice glitch — cuts element into pieces */
 @keyframes slice-glitch {
-
     0%,
     82%,
     100% {
@@ -375,7 +374,6 @@ html {
 
 /* Flicker — rapid blink */
 @keyframes flicker {
-
     0%,
     19%,
     21%,
@@ -421,7 +419,6 @@ html {
 
 /* Glitch shift — general subtle shift */
 @keyframes glitch-shift {
-
     0%,
     75%,
     100% {
@@ -443,7 +440,6 @@ html {
 
 /* Noise pulse — subtle opacity pulse */
 @keyframes noisePulse {
-
     0%,
     100% {
         opacity: 0.04;
@@ -456,14 +452,15 @@ html {
 
 /* Glow pulse */
 @keyframes pulseGlow {
-
     0%,
     100% {
         box-shadow: 0 0 6px hsl(var(--accent) / 0.4);
     }
 
     50% {
-        box-shadow: 0 0 20px hsl(var(--accent) / 0.7), 0 0 40px hsl(var(--accent) / 0.2);
+        box-shadow:
+            0 0 20px hsl(var(--accent) / 0.7),
+            0 0 40px hsl(var(--accent) / 0.2);
     }
 }
 
@@ -482,7 +479,6 @@ html {
 
 /* Breadcrumb marquee */
 @keyframes breadcrumb-marquee {
-
     0%,
     20% {
         transform: translateX(0);
@@ -567,7 +563,7 @@ html {
 }
 
 ::view-transition-new(root) {
-    mask: url('/pusheen.png') center / 0 no-repeat;
+    mask: url('/ufosheens.png') center / 0 no-repeat;
     animation: scale 0.6s;
 }
 
@@ -605,7 +601,11 @@ body::after {
         linear-gradient(90deg, hsl(var(--accent)) 1px, transparent 1px),
         linear-gradient(hsl(var(--accent) / 0.35) 1px, transparent 1px),
         linear-gradient(90deg, hsl(var(--accent) / 0.35) 1px, transparent 1px);
-    background-size: 96px 96px, 96px 96px, 24px 24px, 24px 24px;
+    background-size:
+        96px 96px,
+        96px 96px,
+        24px 24px,
+        24px 24px;
 }
 
 /* ─── Custom Cursor (diamond shape) ─────────────────────────────────── */
@@ -617,7 +617,10 @@ body::after {
     z-index: 9999;
     transform: translate(-50%, -50%);
     will-change: transform;
-    transition: width 0.15s, height 0.15s, opacity 0.15s;
+    transition:
+        width 0.15s,
+        height 0.15s,
+        opacity 0.15s;
     background: hsl(var(--accent));
     clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
     box-shadow: var(--glow-accent);
@@ -660,11 +663,13 @@ body.custom-cursor * {
     content: '';
     position: absolute;
     inset: 0;
-    background: repeating-linear-gradient(0deg,
-            transparent,
-            transparent 2px,
-            hsl(var(--accent) / 0.025) 2px,
-            hsl(var(--accent) / 0.025) 3px);
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        hsl(var(--accent) / 0.025) 2px,
+        hsl(var(--accent) / 0.025) 3px
+    );
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s;
@@ -750,25 +755,38 @@ body.custom-cursor * {
 
 /* Paper shadow */
 .paper-shadow {
-    box-shadow: 0 1px 2px hsl(var(--foreground) / 0.04), 0 4px 16px hsl(var(--foreground) / 0.03);
+    box-shadow:
+        0 1px 2px hsl(var(--foreground) / 0.04),
+        0 4px 16px hsl(var(--foreground) / 0.03);
 }
 
 .dark .paper-shadow {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.3);
+    box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.4),
+        0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 /* Nav shadow */
 .sharp-shadow {
-    box-shadow: 0 0 0 1px hsl(var(--accent) / 0.15), var(--glow-accent);
+    box-shadow:
+        0 0 0 1px hsl(var(--accent) / 0.15),
+        var(--glow-accent);
 }
 
 .dark .sharp-shadow {
-    box-shadow: 0 0 0 1px hsl(var(--accent) / 0.3), var(--glow-accent-strong);
+    box-shadow:
+        0 0 0 1px hsl(var(--accent) / 0.3),
+        var(--glow-accent-strong);
 }
 
 /* Hover lift */
 .hover-lift {
     @apply transition-all duration-300 hover:-translate-y-px;
+}
+
+/* Cyber-organic panel: notched corners, like a cut piece of alien hull plating */
+.clip-notch {
+    clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
 }
 
 /* Typography */
@@ -791,4 +809,317 @@ body.custom-cursor * {
 
 .font-mono-ui {
     font-family: var(--font-jetbrains-mono), monospace;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   UFO ABDUCTION (Konami code easter egg — see components/ui/konami-ufo.tsx)
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* Saucer flight path */
+@keyframes ufoArrive {
+    from {
+        transform: translate(-60vw, -18vh) rotate(-10deg);
+        opacity: 0;
+    }
+
+    to {
+        transform: translate(-50%, 0) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes ufoDepart {
+    from {
+        transform: translate(-50%, 0) rotate(0deg);
+        opacity: 1;
+    }
+
+    to {
+        transform: translate(60vw, -30vh) rotate(12deg);
+        opacity: 0;
+    }
+}
+
+@keyframes ufoBob {
+    0%,
+    100% {
+        transform: translate(-50%, 0);
+    }
+
+    50% {
+        transform: translate(-50%, -8px);
+    }
+}
+
+/* Tractor beam unfurls downward from the hull, then shimmers */
+@keyframes beamDrop {
+    from {
+        transform: translateX(-50%) scaleY(0);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(-50%) scaleY(1);
+        opacity: 1;
+    }
+}
+
+@keyframes beamFlicker {
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.75;
+    }
+}
+
+/* Beam switching off after delivering the new page (warp-in phase) */
+@keyframes beamRetract {
+    from {
+        transform: translateX(-50%) scaleY(1);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateX(-50%) scaleY(0);
+        opacity: 0;
+    }
+}
+
+/* One page piece getting sucked up the tractor beam. Each piece gets its own
+   --abduct-dx/--abduct-dy (vector to the beam axis / saucer mouth) and
+   --abduct-spin/--abduct-wobble, set inline by the KonamiUfo component.
+   Choreography: cartoon anticipation (recoil away from the beam), yank onto
+   the beam axis while shrinking enough to fit inside the light cone, then
+   ride the beam straight up into the hull. */
+@keyframes abductPiece {
+    0% {
+        transform: translate(0, 0) rotate(0deg) scale(1);
+        opacity: 1;
+        filter: blur(0);
+    }
+
+    /* Anticipation: a slight lean against the pull before letting go */
+    14% {
+        transform: translate(calc(var(--abduct-dx) * -0.02), 5px) rotate(var(--abduct-wobble)) scale(1.01);
+        opacity: 1;
+    }
+
+    /* Drawn sideways onto the beam axis, shrunk to fit inside the cone */
+    52% {
+        transform: translate(var(--abduct-dx), calc(var(--abduct-dy) * 0.45)) rotate(calc(var(--abduct-spin) * 0.45))
+            scale(0.42);
+        opacity: 1;
+        filter: blur(0.5px);
+    }
+
+    /* Riding the beam up — stays on the axis, spiraling and vanishing into the mouth */
+    100% {
+        transform: translate(var(--abduct-dx), var(--abduct-dy)) rotate(var(--abduct-spin)) scale(0.02);
+        opacity: 0;
+        filter: blur(2px);
+    }
+}
+
+/* …and is beamed back down afterwards */
+@keyframes abductReturn {
+    from {
+        transform: translateY(-28px) scale(0.98);
+        opacity: 0;
+        filter: blur(4px);
+    }
+
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+        filter: blur(0);
+    }
+}
+
+/* Saucer gulp once the content is fully consumed — a restrained squash & settle */
+@keyframes ufoSwallow {
+    0% {
+        transform: translate(-50%, 0) scale(1, 1);
+    }
+
+    35% {
+        transform: translate(-50%, 2px) scale(1.06, 0.93);
+    }
+
+    65% {
+        transform: translate(-50%, -2px) scale(0.97, 1.04);
+    }
+
+    100% {
+        transform: translate(-50%, 0) scale(1, 1);
+    }
+}
+
+/* Phase classes toggled on <body> by the KonamiUfo component. The piece
+   animations themselves are applied inline per element (see abductPiece). */
+body.ufo-abduct main {
+    pointer-events: none;
+}
+
+body.ufo-return main {
+    animation: abductReturn 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* ─── Stat bars (listening/playing pages) grow in from the left ─────────── */
+@keyframes barGrow {
+    from {
+        transform: scaleX(0);
+    }
+
+    to {
+        transform: scaleX(1);
+    }
+}
+
+.animate-bar-grow {
+    transform-origin: left center;
+    animation: barGrow 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ─── Modern shimmer skeletons ───────────────────────────────────────────
+   Loading placeholders use a smooth gradient sweep instead of glyph static.
+   The shimmer runs diagonally across a translucent bar for a premium feel. */
+
+@keyframes skeletonShimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.skeleton-shimmer {
+    background: linear-gradient(
+        100deg,
+        hsl(var(--muted) / 0.35) 0%,
+        hsl(var(--muted) / 0.55) 40%,
+        hsl(var(--accent) / 0.08) 50%,
+        hsl(var(--muted) / 0.55) 60%,
+        hsl(var(--muted) / 0.35) 100%
+    );
+    background-size: 200% 100%;
+    animation: skeletonShimmer 2s ease-in-out infinite;
+}
+
+/* Legacy glyph shimmer (kept for backward compat) */
+@keyframes glyphShimmer {
+    0%,
+    100% {
+        opacity: 0.35;
+    }
+
+    50% {
+        opacity: 0.9;
+    }
+}
+
+.glyph-shimmer {
+    animation: glyphShimmer 1.8s ease-in-out infinite;
+}
+
+@keyframes skeletonSweep {
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(250%);
+    }
+}
+
+/* Streamed-in content tuning into focus — replaces the hard skeleton→content pop.
+   Applied automatically by the StreamFade wrapper component. */
+@keyframes signalResolve {
+    from {
+        opacity: 0;
+        filter: blur(8px) saturate(0.5);
+        transform: translateY(4px) scale(0.99);
+    }
+
+    60% {
+        opacity: 1;
+        filter: blur(2px) saturate(0.85);
+        transform: translateY(1px) scale(0.998);
+    }
+
+    to {
+        opacity: 1;
+        filter: blur(0) saturate(1);
+        transform: translateY(0) scale(1);
+    }
+}
+
+.animate-signal-resolve {
+    animation: signalResolve 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Legacy signal-scan sweep (kept for backward compat) */
+.signal-scan {
+    position: relative;
+    overflow: hidden;
+}
+
+.signal-scan::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 40%;
+    background: linear-gradient(90deg, transparent, hsl(var(--accent) / 0.08), transparent);
+    animation: skeletonSweep 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   ACCESSIBILITY & POLISH
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* Text selection in accent green — even highlighting feels alien */
+::selection {
+    background: hsl(var(--accent) / 0.25);
+    color: hsl(var(--foreground));
+}
+
+/* Visible, glowing focus ring for keyboard navigation */
+:focus-visible {
+    outline: 1px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+/* Honor prefers-reduced-motion: collapse all animation/transition to a single
+   frame. fill-mode:forwards animations still land on their final state, so
+   fade-in content stays visible. Decorative overlays are removed outright. */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    html {
+        scroll-behavior: auto;
+    }
+
+    .scan-line-el,
+    .cursor-blob {
+        display: none !important;
+    }
+
+    /* Restore the native cursor when the custom blob is disabled */
+    body.custom-cursor * {
+        cursor: auto !important;
+    }
 }

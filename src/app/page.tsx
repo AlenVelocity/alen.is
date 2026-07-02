@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { LinkButton } from '@/components/ui/link-button'
 import { PageTransition } from '@/components/ui/page-transition'
 import { DiscordCopy } from '@/components/ui/discord-copy'
@@ -8,7 +9,7 @@ import JsonLd from '@/components/JsonLd'
 import { FiMail, FiCalendar } from 'react-icons/fi'
 import { FaLinkedin, FaGithub, FaWhatsapp } from 'react-icons/fa'
 import { runGetPersonalInfo, runGetSocialLinks } from '@/lib/cms-db'
-import { CurrentlyListening } from './_components/CurrentlyListening'
+import { CurrentlyListening, CurrentlyListeningSkeleton } from './_components/CurrentlyListening'
 
 export async function generateMetadata(): Promise<Metadata> {
     const personalInfo = await runGetPersonalInfo()
@@ -50,11 +51,7 @@ function parseTextWithLinks(text: string): React.ReactNode[] {
             )
         } else if (url) {
             parts.push(
-                <LinkButton
-                    key={startIndex}
-                    href={url}
-                    target={url.startsWith('http') ? '_blank' : undefined}
-                >
+                <LinkButton key={startIndex} href={url} target={url.startsWith('http') ? '_blank' : undefined}>
                     {linkText}
                 </LinkButton>
             )
@@ -65,11 +62,14 @@ function parseTextWithLinks(text: string): React.ReactNode[] {
     return parts.map((part, index) => <span key={index}>{part}</span>)
 }
 
+/**
+ * The hero/about/contact content awaits the CMS directly (fast, and deduped
+ * with generateMetadata via React cache) — only the Last.fm-powered "now
+ * playing" section streams in behind Suspense, so the one genuinely slow
+ * API call never delays the rest of the page.
+ */
 export default async function Home() {
-    const [personalInfo, socialLinks] = await Promise.all([
-        runGetPersonalInfo(),
-        runGetSocialLinks()
-    ])
+    const [personalInfo, socialLinks] = await Promise.all([runGetPersonalInfo(), runGetSocialLinks()])
 
     const personSchema = {
         '@context': 'https://schema.org',
@@ -86,7 +86,7 @@ export default async function Home() {
         knowsAbout: personalInfo.skills
     }
 
-    const heroSocialLinks = socialLinks.filter(link =>
+    const heroSocialLinks = socialLinks.filter((link) =>
         ['email', 'linkedin', 'github', 'meeting', 'whatsapp'].includes(link.id)
     )
 
@@ -94,7 +94,6 @@ export default async function Home() {
         <PageTransition>
             <JsonLd data={personSchema} />
             <div className="container max-w-2xl py-12 md:py-20 px-4">
-
                 {/* ── Hero ─────────────────────────────────────────── */}
                 <section className="mb-20">
                     {/* Eyebrow */}
@@ -137,7 +136,9 @@ export default async function Home() {
                                 >
                                     {IconComponent && <IconComponent className="w-3 h-3 shrink-0" />}
                                     <span className="hidden sm:inline">{link.name}</span>
-                                    <span className="text-accent/40 group-hover:text-accent group-hover:glow-text transition-colors duration-200 ml-0.5">→</span>
+                                    <span className="text-accent/40 group-hover:text-accent group-hover:glow-text transition-colors duration-200 ml-0.5">
+                                        →
+                                    </span>
                                 </a>
                             )
                         })}
@@ -167,10 +168,12 @@ export default async function Home() {
                     </div>
                 </section>
 
-                {/* ── Currently Listening ──────────────────────────── */}
+                {/* ── Currently Listening — the only streamed section ── */}
                 <section className="mb-20">
                     <div className="section-label mb-5">now playing</div>
-                    <CurrentlyListening />
+                    <Suspense fallback={<CurrentlyListeningSkeleton />}>
+                        <CurrentlyListening />
+                    </Suspense>
                 </section>
 
                 {/* ── Contact ──────────────────────────────────────── */}
@@ -180,7 +183,6 @@ export default async function Home() {
                         {parseTextWithLinks(personalInfo.contact_description)}
                     </p>
                 </section>
-
             </div>
         </PageTransition>
     )
