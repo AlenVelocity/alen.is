@@ -1,8 +1,14 @@
-export function calculateFrequency(currentTrack: { name: string, artist: string } | null, recentlyPlayed: { name: string, artist: string }[]) {
+export function calculateFrequency(
+    currentTrack: { name: string; artist: string } | null,
+    recentlyPlayed: { name: string; artist: string }[]
+) {
     if (!currentTrack) return 1
     let frequency = 1
     for (const track of recentlyPlayed) {
-        if (track.name.toLowerCase() === currentTrack.name.toLowerCase() && track.artist.toLowerCase() === currentTrack.artist.toLowerCase()) {
+        if (
+            track.name.toLowerCase() === currentTrack.name.toLowerCase() &&
+            track.artist.toLowerCase() === currentTrack.artist.toLowerCase()
+        ) {
             frequency++
         } else {
             break
@@ -11,21 +17,26 @@ export function calculateFrequency(currentTrack: { name: string, artist: string 
     return frequency
 }
 
-export function getStreakInfo(nowPlayingFrequency: number, isNowPlaying: boolean, size: 'small' | 'large' = 'small', minimal: boolean = false) {
+export function getStreakInfo(
+    nowPlayingFrequency: number,
+    isNowPlaying: boolean,
+    size: 'small' | 'large' = 'small',
+    minimal: boolean = false
+) {
     let subtitle = isNowPlaying ? 'Now playing' : 'Recently played'
-    
+
     if (isNowPlaying) {
         if (minimal) {
             subtitle = 'Now Listening'
         } else {
             if (nowPlayingFrequency >= 50) subtitle = "I'm in love"
-            else if (nowPlayingFrequency >= 25) subtitle = "Addicted"
-            else if (nowPlayingFrequency >= 20) subtitle = "Unhealthy"
-            else if (nowPlayingFrequency >= 15) subtitle = "Obsessed"
+            else if (nowPlayingFrequency >= 25) subtitle = 'Addicted'
+            else if (nowPlayingFrequency >= 20) subtitle = 'Unhealthy'
+            else if (nowPlayingFrequency >= 15) subtitle = 'Obsessed'
             else if (nowPlayingFrequency >= 10) subtitle = "Can't Get Enough"
-            else if (nowPlayingFrequency >= 7) subtitle = "Heavy Rotation"
-            else if (nowPlayingFrequency >= 5) subtitle = "Running It Back"
-            else if (nowPlayingFrequency >= 3) subtitle = "On Repeat"
+            else if (nowPlayingFrequency >= 7) subtitle = 'Heavy Rotation'
+            else if (nowPlayingFrequency >= 5) subtitle = 'Running It Back'
+            else if (nowPlayingFrequency >= 3) subtitle = 'On Repeat'
         }
     }
 

@@ -1,25 +1,25 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
 export function middleware(req: NextRequest) {
-  const url = req.nextUrl;
+    const url = req.nextUrl
 
-  // Don't protect the login route
-  if (url.pathname.startsWith("/management/login")) {
-    return NextResponse.next();
-  }
+    // Don't protect the login route
+    if (url.pathname.startsWith('/management/login')) {
+        return NextResponse.next()
+    }
 
-  // Check for the admin session cookie
-  const sessionCookie = req.cookies.get("admin_session");
+    // Check for the admin session cookie
+    const sessionCookie = req.cookies.get('admin_session')
 
-  if (!sessionCookie || sessionCookie.value !== "authenticated") {
-    return NextResponse.redirect(new URL("/management/login", req.url));
-  }
+    if (!sessionCookie || sessionCookie.value !== 'authenticated') {
+        return NextResponse.redirect(new URL('/management/login', req.url))
+    }
 
-  return NextResponse.next();
+    return NextResponse.next()
 }
 
 // Specify the paths where the middleware should run
 export const config = {
-  matcher: ["/management/:path*"],
-};
+    matcher: ['/management/:path*']
+}

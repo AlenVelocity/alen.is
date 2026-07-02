@@ -51,17 +51,12 @@ export default async function Experience() {
         <PageTransition>
             <JsonLd data={experienceSchema} />
             <div className="container max-w-2xl py-12 md:py-20 px-4">
-
                 {/* ── Header ─────────────────────────────────────── */}
                 <div className="flex items-start justify-between gap-4 mb-16">
                     <div>
                         <p className="mono-label text-muted-foreground/50 mb-4">// career</p>
-                        <h1 className="text-display text-5xl md:text-6xl mb-3">
-                            Experience
-                        </h1>
-                        <p className="text-[0.9rem] text-muted-foreground">
-                            My professional journey so far.
-                        </p>
+                        <h1 className="text-display text-5xl md:text-6xl mb-3">Experience</h1>
+                        <p className="text-[0.9rem] text-muted-foreground">My professional journey so far.</p>
                     </div>
                     <a
                         href="/Alen_Resume.pdf"
@@ -86,10 +81,9 @@ export default async function Experience() {
                                 <div key={experience.id} className="relative pl-8 group/exp">
                                     {/* Timeline dot */}
                                     <div
-                                        className={`absolute left-0 top-1.5 w-2 h-2 -translate-x-[3.5px] border border-border bg-background transition-colors duration-300 group-hover/exp:border-accent/60 ${experience.current
-                                            ? 'bg-accent border-accent ring-4 ring-accent/15'
-                                            : ''
-                                            }`}
+                                        className={`absolute left-0 top-1.5 w-2 h-2 -translate-x-[3.5px] border border-border bg-background transition-colors duration-300 group-hover/exp:border-accent/60 ${
+                                            experience.current ? 'bg-accent border-accent ring-4 ring-accent/15' : ''
+                                        }`}
                                     />
 
                                     {/* Entry */}
@@ -98,7 +92,11 @@ export default async function Experience() {
                                         <div className="flex items-baseline gap-3 mb-0.5 flex-wrap">
                                             <h2 className="text-display text-xl">
                                                 {experience.link ? (
-                                                    <LinkButton href={experience.link} target="_blank" className="text-xl">
+                                                    <LinkButton
+                                                        href={experience.link}
+                                                        target="_blank"
+                                                        className="text-xl"
+                                                    >
                                                         {experience.company}
                                                     </LinkButton>
                                                 ) : (
@@ -133,8 +131,13 @@ export default async function Experience() {
                                         {/* Description bullets */}
                                         <ul className="space-y-2">
                                             {experience.description.map((item, i) => (
-                                                <li key={i} className="flex items-start gap-3 text-[0.875rem] text-muted-foreground leading-relaxed">
-                                                    <span className="text-accent/50 mt-[0.2em] shrink-0 font-mono-ui">—</span>
+                                                <li
+                                                    key={i}
+                                                    className="flex items-start gap-3 text-[0.875rem] text-muted-foreground leading-relaxed"
+                                                >
+                                                    <span className="text-accent/50 mt-[0.2em] shrink-0 font-mono-ui">
+                                                        —
+                                                    </span>
                                                     <span>{item}</span>
                                                 </li>
                                             ))}
@@ -145,7 +148,6 @@ export default async function Experience() {
                         })}
                     </div>
                 </div>
-
             </div>
         </PageTransition>
     )

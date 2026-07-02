@@ -1,146 +1,146 @@
 [
-  {
-    "id": "mercor-2025",
-    "company": "Mercor",
-    "position": "Software Engineer II",
-    "period": "July 2025 - January 2026",
-    "location": "San Francisco, USA",
-    "workType": "remote",
-    "description": [
-      "Built the Mercor Work Platform, an AI-powered talent marketplace",
-      "Built a survey system that helped thousands of users give feedback, driving product insights",
-      "Created an availability collection system for contractors that helped the company make better decisions on talent allocation",
-      "Improved code quality through better testing and code review standards",
-      "Built location and work authorization collection flows for better user verification",
-      "Added phone verification as a fraud signal to improve platform security"
-    ],
-    "current": false,
-    "order": 0,
-    "published": true,
-    "link": "https://mercor.com"
-  },
-  {
-    "id": "kmrb-2025",
-    "company": "Komorebi",
-    "position": "Co-Founder",
-    "period": "October 2024 - December 2025",
-    "location": "India",
-    "workType": "remote",
-    "description": [
-      "Commissioned by Official Valorant Discord to build Valdle, an arcade game for their community",
-      "Co-founded freelance development company specializing in client projects and developer tools",
-      "Built identity management solutions for enterprise clients",
-      "Led technical architecture and product decisions for client deliverables"
-    ],
-    "current": false,
-    "order": 0,
-    "published": true,
-    "link": "https://kmrb.tech"
-  },
-  {
-    "id": "frappe-2024",
-    "company": "Frappe",
-    "position": "Software Engineer",
-    "period": "November 2024 - June 2025",
-    "location": "Mumbai, India",
-    "workType": "remote",
-    "description": [
-      "Worked on Frappe Cloud, mainly on infrastructure automation and AWS management",
-      "Added support for custom domains, email, and DNS configurations",
-      "Made developer experience improvements for Frappe Cloud and Framework users"
-    ],
-    "current": false,
-    "order": 0,
-    "published": true,
-    "link": "https://frappe.io"
-  },
-  {
-    "id": "xagi-2024",
-    "company": "xAGI",
-    "position": "Software Development Engineer",
-    "location": "Bangalore, India",
-    "workType": "remote",
-    "period": "April 2024 - Nov 2024",
-    "description": [
-      "Built a dynamic AI Agent Platform and an AI Course Generation Platform",
-      "Set up infrastructure for deploying edge apps on multiple providers",
-      "Built AI web apps including a voice survey platform",
-      "Developed AI agents for various clients from scratch"
-    ],
-    "current": false,
-    "order": 1,
-    "published": true,
-    "link": "https://xagi.in"
-  },
-  {
-    "id": "plazza-2024",
-    "company": "Plazza",
-    "position": "Software Engineer",
-    "location": "Bangalore, India",
-    "workType": "remote",
-    "period": "May 2024 - Nov 2024",
-    "description": [
-      "Built the first version of Plazza's Quick Commerce system",
-      "Made a WhatsApp Bot medicine delivery system for the APR region",
-      "Implemented infrastructure and backend solutions",
-      "Built microservices using NestJS, RabbitMQ, and PostgreSQL",
-      "Used AWS services like EC2, EKS, Amazon MQ, and RDS"
-    ],
-    "current": false,
-    "order": 2,
-    "published": true,
-    "link": "https://plazza.in"
-  },
-  {
-    "id": "equivoxai-2023",
-    "company": "EquivoxAI (now Shuriken)",
-    "position": "Founding Software Engineer - AI",
-    "location": "Melbourne, Australia",
-    "workType": "remote",
-    "period": "May 2023 - Jan 2024",
-    "description": [
-      "Built dataset parsing algorithms for LoRA training data for LLMs like Vicuna-13b and LLaMa-2-7b",
-      "Made methods to streamline fine-tuning of diffusion models on faces",
-      "Built interactive AI-first chat playground UIs"
-    ],
-    "current": false,
-    "order": 3,
-    "published": true,
-    "link": "https://shuriken.trade/"
-  },
-  {
-    "id": "dataequinox-2021",
-    "company": "DataEquinox",
-    "position": "Software Development Engineer - Intern",
-    "location": "Kochi, India",
-    "workType": "remote",
-    "period": "Dec 2021 - Sep 2022",
-    "description": [
-      "Built CRM web apps by connecting multiple feedback and customer sources",
-      "Made proofs of concept for multi-threaded Node backends",
-      "Worked with teams of 7+ people"
-    ],
-    "current": false,
-    "order": 4,
-    "published": true,
-    "link": "https://dataequinox.com/"
-  },
-  {
-    "id": "synthesized-infinity-2020",
-    "company": "Synthesized Infinity",
-    "position": "Founder",
-    "location": "Worldwide",
-    "workType": "remote",
-    "period": "July 2020 - December 2025",
-    "description": [
-      "Managed dev teams with 10+ people",
-      "Created the org's mission and vision statements",
-      "Built and contributed to 12+ OSS projects",
-      "Taught NodeJS and TypeScript to community members"
-    ],
-    "current": false,
-    "order": 5,
-    "published": true,
-    "link": "https://github.com/Synthesized-Infinity"
-  }
+    {
+        "id": "mercor-2025",
+        "company": "Mercor",
+        "position": "Software Engineer II",
+        "period": "July 2025 - January 2026",
+        "location": "San Francisco, USA",
+        "workType": "remote",
+        "description": [
+            "Built the Mercor Work Platform, an AI-powered talent marketplace",
+            "Built a survey system that helped thousands of users give feedback, driving product insights",
+            "Created an availability collection system for contractors that helped the company make better decisions on talent allocation",
+            "Improved code quality through better testing and code review standards",
+            "Built location and work authorization collection flows for better user verification",
+            "Added phone verification as a fraud signal to improve platform security"
+        ],
+        "current": false,
+        "order": 0,
+        "published": true,
+        "link": "https://mercor.com"
+    },
+    {
+        "id": "kmrb-2025",
+        "company": "Komorebi",
+        "position": "Co-Founder",
+        "period": "October 2024 - December 2025",
+        "location": "India",
+        "workType": "remote",
+        "description": [
+            "Commissioned by Official Valorant Discord to build Valdle, an arcade game for their community",
+            "Co-founded freelance development company specializing in client projects and developer tools",
+            "Built identity management solutions for enterprise clients",
+            "Led technical architecture and product decisions for client deliverables"
+        ],
+        "current": false,
+        "order": 0,
+        "published": true,
+        "link": "https://kmrb.tech"
+    },
+    {
+        "id": "frappe-2024",
+        "company": "Frappe",
+        "position": "Software Engineer",
+        "period": "November 2024 - June 2025",
+        "location": "Mumbai, India",
+        "workType": "remote",
+        "description": [
+            "Worked on Frappe Cloud, mainly on infrastructure automation and AWS management",
+            "Added support for custom domains, email, and DNS configurations",
+            "Made developer experience improvements for Frappe Cloud and Framework users"
+        ],
+        "current": false,
+        "order": 0,
+        "published": true,
+        "link": "https://frappe.io"
+    },
+    {
+        "id": "xagi-2024",
+        "company": "xAGI",
+        "position": "Software Development Engineer",
+        "location": "Bangalore, India",
+        "workType": "remote",
+        "period": "April 2024 - Nov 2024",
+        "description": [
+            "Built a dynamic AI Agent Platform and an AI Course Generation Platform",
+            "Set up infrastructure for deploying edge apps on multiple providers",
+            "Built AI web apps including a voice survey platform",
+            "Developed AI agents for various clients from scratch"
+        ],
+        "current": false,
+        "order": 1,
+        "published": true,
+        "link": "https://xagi.in"
+    },
+    {
+        "id": "plazza-2024",
+        "company": "Plazza",
+        "position": "Software Engineer",
+        "location": "Bangalore, India",
+        "workType": "remote",
+        "period": "May 2024 - Nov 2024",
+        "description": [
+            "Built the first version of Plazza's Quick Commerce system",
+            "Made a WhatsApp Bot medicine delivery system for the APR region",
+            "Implemented infrastructure and backend solutions",
+            "Built microservices using NestJS, RabbitMQ, and PostgreSQL",
+            "Used AWS services like EC2, EKS, Amazon MQ, and RDS"
+        ],
+        "current": false,
+        "order": 2,
+        "published": true,
+        "link": "https://plazza.in"
+    },
+    {
+        "id": "equivoxai-2023",
+        "company": "EquivoxAI (now Shuriken)",
+        "position": "Founding Software Engineer - AI",
+        "location": "Melbourne, Australia",
+        "workType": "remote",
+        "period": "May 2023 - Jan 2024",
+        "description": [
+            "Built dataset parsing algorithms for LoRA training data for LLMs like Vicuna-13b and LLaMa-2-7b",
+            "Made methods to streamline fine-tuning of diffusion models on faces",
+            "Built interactive AI-first chat playground UIs"
+        ],
+        "current": false,
+        "order": 3,
+        "published": true,
+        "link": "https://shuriken.trade/"
+    },
+    {
+        "id": "dataequinox-2021",
+        "company": "DataEquinox",
+        "position": "Software Development Engineer - Intern",
+        "location": "Kochi, India",
+        "workType": "remote",
+        "period": "Dec 2021 - Sep 2022",
+        "description": [
+            "Built CRM web apps by connecting multiple feedback and customer sources",
+            "Made proofs of concept for multi-threaded Node backends",
+            "Worked with teams of 7+ people"
+        ],
+        "current": false,
+        "order": 4,
+        "published": true,
+        "link": "https://dataequinox.com/"
+    },
+    {
+        "id": "synthesized-infinity-2020",
+        "company": "Synthesized Infinity",
+        "position": "Founder",
+        "location": "Worldwide",
+        "workType": "remote",
+        "period": "July 2020 - December 2025",
+        "description": [
+            "Managed dev teams with 10+ people",
+            "Created the org's mission and vision statements",
+            "Built and contributed to 12+ OSS projects",
+            "Taught NodeJS and TypeScript to community members"
+        ],
+        "current": false,
+        "order": 5,
+        "published": true,
+        "link": "https://github.com/Synthesized-Infinity"
+    }
 ]

@@ -20,7 +20,6 @@ export default async function Cool() {
 
     return (
         <div className="flex flex-col items-center justify-center gap-8 px-4 h-full">
-
             {/* Eyebrow */}
             <p
                 className="mono-label text-muted-foreground/35 animate-fade-in-up opacity-0 stagger-1 tracking-[0.25em]"
@@ -35,11 +34,15 @@ export default async function Cool() {
                 style={{ animationFillMode: 'forwards', rotate: '-2.5deg' }}
             >
                 {/* Outer glow ring on hover */}
-                <div className="absolute -inset-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                    style={{ background: 'radial-gradient(ellipse at center, hsl(var(--accent)/0.15), transparent 70%)' }}
+                <div
+                    className="absolute -inset-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                    style={{
+                        background: 'radial-gradient(ellipse at center, hsl(var(--accent)/0.15), transparent 70%)'
+                    }}
                 />
 
-                <div className="bg-card border border-border/60 p-3 pb-8 relative overflow-hidden scanline-hover"
+                <div
+                    className="bg-card border border-border/60 p-3 pb-8 relative overflow-hidden scanline-hover"
                     style={{ boxShadow: '4px 4px 0 hsl(var(--border))' }}
                 >
                     {/* Corner brackets */}

@@ -10,7 +10,6 @@ import { FaSpotify, FaYoutube, FaApple } from 'react-icons/fa'
 import Image from 'next/image'
 import Link from 'next/link'
 
-
 // ─── Metadata ───────────────────────────────────────────────────────────────
 
 type Props = { params: Promise<{ artist: string; track: string }> }
@@ -33,15 +32,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             description: desc,
             images: track.image
                 ? [{ url: track.image, width: 300, height: 300, alt: `${track.name} album art` }]
-                : undefined,
+                : undefined
         },
         twitter: {
             card: 'summary',
             title: `Alen is Listening to ${track.name}`,
             description: desc,
-            images: track.image ? [track.image] : undefined,
+            images: track.image ? [track.image] : undefined
         },
-        alternates: { canonical: `/listening/to/${artistParam}/${trackParam}` },
+        alternates: { canonical: `/listening/to/${artistParam}/${trackParam}` }
     }
 }
 
@@ -72,7 +71,12 @@ export default async function TrackPage({ params }: Props) {
     const [track, lastFmData, reviewData] = await Promise.all([
         api.lastfm.getTrackInfo({ artist: artistName, track: trackName }).catch(() => null),
         api.lastfm.getRecentTracks().catch(() => null),
-        api.reviews.getReview({ entityId: `${artistName.replace(/\\s+/g, '-').toLowerCase()}-${trackName.replace(/\\s+/g, '-').toLowerCase()}`, type: 'SONG' }).catch(() => null)
+        api.reviews
+            .getReview({
+                entityId: `${artistName.replace(/\\s+/g, '-').toLowerCase()}-${trackName.replace(/\\s+/g, '-').toLowerCase()}`,
+                type: 'SONG'
+            })
+            .catch(() => null)
     ])
 
     if (!track) notFound()
@@ -86,7 +90,11 @@ export default async function TrackPage({ params }: Props) {
 
     // Calculate streak
     const nowPlayingFrequency = lastFmData ? calculateFrequency(track, lastFmData.recentlyPlayed) : 1
-    const { subtitle, rawColor, borderGradient, shadowStyle } = getStreakInfo(nowPlayingFrequency, isNowPlaying, 'large')
+    const { subtitle, rawColor, borderGradient, shadowStyle } = getStreakInfo(
+        nowPlayingFrequency,
+        isNowPlaying,
+        'large'
+    )
 
     // Build search query for streaming links
     const searchQuery = encodeURIComponent(`${track.artist} ${track.name}`)
@@ -175,7 +183,10 @@ export default async function TrackPage({ params }: Props) {
                                 {reviewData.rating && (
                                     <div className="flex items-center gap-1.5 text-accent font-bold">
                                         <FiStar className="fill-current w-4 h-4" />
-                                        <span>{reviewData.rating} <span className="text-muted-foreground/50 text-sm">/ 10</span></span>
+                                        <span>
+                                            {reviewData.rating}{' '}
+                                            <span className="text-muted-foreground/50 text-sm">/ 10</span>
+                                        </span>
                                     </div>
                                 )}
                             </div>

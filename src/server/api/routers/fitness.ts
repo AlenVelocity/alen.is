@@ -40,7 +40,7 @@ const ACTIVITY_NAMES: Record<number, string> = {
     37: 'HIIT',
     120: 'Rowing Machine',
     1: 'Biking',
-    4: 'Unknown',
+    4: 'Unknown'
 }
 
 async function getAccessToken(): Promise<string> {
@@ -51,8 +51,8 @@ async function getAccessToken(): Promise<string> {
             client_id: GOOGLE_CLIENT_ID,
             client_secret: GOOGLE_CLIENT_SECRET,
             refresh_token: GOOGLE_REFRESH_TOKEN,
-            grant_type: 'refresh_token',
-        }),
+            grant_type: 'refresh_token'
+        })
     })
 
     if (!response.ok) {
@@ -112,35 +112,32 @@ export const fitnessRouter = createTRPCRouter({
                         activityType: session.activityType,
                         startTime,
                         endTime,
-                        durationMinutes,
+                        durationMinutes
                     }
                 })
                 .sort((a: ActivitySession, b: ActivitySession) => b.startTime.getTime() - a.startTime.getTime())
                 .slice(0, 10) // Last 10 workouts
 
             // Fetch aggregate data for steps, calories, distance
-            const aggregateResponse = await fetch(
-                'https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate',
-                {
-                    method: 'POST',
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        aggregateBy: [
-                            { dataTypeName: 'com.google.step_count.delta' },
-                            { dataTypeName: 'com.google.calories.expended' },
-                            { dataTypeName: 'com.google.heart_minutes' },
-                            { dataTypeName: 'com.google.distance.delta' },
-                        ],
-                        bucketByTime: { durationMillis: 86400000 }, // 1 day
-                        startTimeMillis: sevenDaysAgo,
-                        endTimeMillis: now,
-                    }),
-                    next: { revalidate: 1800 }
-                }
-            )
+            const aggregateResponse = await fetch('https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate', {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    aggregateBy: [
+                        { dataTypeName: 'com.google.step_count.delta' },
+                        { dataTypeName: 'com.google.calories.expended' },
+                        { dataTypeName: 'com.google.heart_minutes' },
+                        { dataTypeName: 'com.google.distance.delta' }
+                    ],
+                    bucketByTime: { durationMillis: 86400000 }, // 1 day
+                    startTimeMillis: sevenDaysAgo,
+                    endTimeMillis: now
+                }),
+                next: { revalidate: 1800 }
+            })
 
             if (!aggregateResponse.ok) {
                 console.error('Aggregate API error:', await aggregateResponse.text())
@@ -148,7 +145,7 @@ export const fitnessRouter = createTRPCRouter({
             }
 
             const aggregateData = await aggregateResponse.json()
-            
+
             // Debug: log ALL buckets
             console.log('Google Fit buckets:', aggregateData.bucket?.length || 0)
             for (let i = 0; i < (aggregateData.bucket?.length || 0); i++) {
@@ -165,20 +162,27 @@ export const fitnessRouter = createTRPCRouter({
             // Process daily summaries
             const dailySummaries: DailySummary[] = (aggregateData.bucket || []).map((bucket: any) => {
                 const date = new Date(parseInt(bucket.startTimeMillis)).toISOString().split('T')[0]
-                let steps = 0, calories = 0, activeMinutes = 0, distance = 0
+                let steps = 0,
+                    calories = 0,
+                    activeMinutes = 0,
+                    distance = 0
 
                 for (const dataset of bucket.dataset || []) {
                     const sourceId = dataset.dataSourceId?.toLowerCase() || ''
-                    
+
                     for (const point of dataset.point || []) {
                         for (const value of point.value || []) {
                             const numValue = value.intVal ?? value.fpVal ?? 0
-                            
+
                             if (sourceId.includes('step_count') || sourceId.includes('step')) {
                                 steps += Math.round(numValue)
                             } else if (sourceId.includes('calories') || sourceId.includes('calorie')) {
                                 calories += Math.round(numValue)
-                            } else if (sourceId.includes('active_minutes') || sourceId.includes('heart_minutes') || sourceId.includes('activity.segment')) {
+                            } else if (
+                                sourceId.includes('active_minutes') ||
+                                sourceId.includes('heart_minutes') ||
+                                sourceId.includes('activity.segment')
+                            ) {
                                 activeMinutes += Math.round(numValue)
                             } else if (sourceId.includes('distance')) {
                                 distance += numValue
@@ -196,15 +200,13 @@ export const fitnessRouter = createTRPCRouter({
                     totalSteps: acc.totalSteps + day.steps,
                     totalCalories: acc.totalCalories + day.calories,
                     totalActiveMinutes: acc.totalActiveMinutes + day.activeMinutes,
-                    totalDistance: acc.totalDistance + day.distance,
+                    totalDistance: acc.totalDistance + day.distance
                 }),
                 { totalSteps: 0, totalCalories: 0, totalActiveMinutes: 0, totalDistance: 0 }
             )
 
             // Calculate workout streak
-            const workoutDates = new Set(
-                workouts.map((w) => w.startTime.toISOString().split('T')[0])
-            )
+            const workoutDates = new Set(workouts.map((w) => w.startTime.toISOString().split('T')[0]))
             let workoutStreak = 0
             const today = new Date()
             for (let i = 0; i < 30; i++) {
@@ -223,21 +225,20 @@ export const fitnessRouter = createTRPCRouter({
                     ...w,
                     startTime: w.startTime.toISOString(),
                     endTime: w.endTime.toISOString(),
-                    activityName: ACTIVITY_NAMES[w.activityType] || 'Workout',
+                    activityName: ACTIVITY_NAMES[w.activityType] || 'Workout'
                 })),
                 dailySummaries,
                 weeklyStats: {
                     ...weeklyStats,
                     avgSteps: Math.round(weeklyStats.totalSteps / Math.max(dailySummaries.length, 1)),
-                    avgCalories: Math.round(weeklyStats.totalCalories / Math.max(dailySummaries.length, 1)),
+                    avgCalories: Math.round(weeklyStats.totalCalories / Math.max(dailySummaries.length, 1))
                 },
                 workoutStreak,
-                totalWorkouts: workouts.length,
+                totalWorkouts: workouts.length
             }
         } catch (error) {
             console.error('Error fetching Google Fit data:', error)
             throw new Error('Failed to fetch fitness data')
         }
-    }),
+    })
 })
-

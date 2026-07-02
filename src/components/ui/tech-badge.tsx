@@ -29,11 +29,42 @@ import { BsDatabaseFill } from 'react-icons/bs'
 import { HiSparkles } from 'react-icons/hi2'
 
 export type TechType =
-    | 'typescript' | 'javascript' | 'react' | 'next' | 'node' | 'vue' | 'rust'
-    | 'python' | 'aws' | 'gcp' | 'langchain' | 'tensorflow' | 'mediapipe' | 'llm'
-    | 'valorant' | 'web' | 'discord' | 'npm' | 'github' | 'overwatch' | 'ai'
-    | 'postgres' | 'prisma' | 'mongodb' | 'mariadb' | 'frappe' | 'convex'
-    | 'tailwind' | 'shadcn' | 'scaleway' | 'wasm' | 'django' | 'fastapi' | 'go' | 'mysql' | 'redis'
+    | 'typescript'
+    | 'javascript'
+    | 'react'
+    | 'next'
+    | 'node'
+    | 'vue'
+    | 'rust'
+    | 'python'
+    | 'aws'
+    | 'gcp'
+    | 'langchain'
+    | 'tensorflow'
+    | 'mediapipe'
+    | 'llm'
+    | 'valorant'
+    | 'web'
+    | 'discord'
+    | 'npm'
+    | 'github'
+    | 'overwatch'
+    | 'ai'
+    | 'postgres'
+    | 'prisma'
+    | 'mongodb'
+    | 'mariadb'
+    | 'frappe'
+    | 'convex'
+    | 'tailwind'
+    | 'shadcn'
+    | 'scaleway'
+    | 'wasm'
+    | 'django'
+    | 'fastapi'
+    | 'go'
+    | 'mysql'
+    | 'redis'
 
 const techIcons: Record<TechType, React.ReactNode> = {
     typescript: <SiTypescript />,
@@ -75,14 +106,42 @@ const techIcons: Record<TechType, React.ReactNode> = {
 }
 
 const techNames: Record<TechType, string> = {
-    typescript: 'TypeScript', javascript: 'JavaScript', react: 'React', next: 'Next.js',
-    node: 'Node.js', vue: 'Vue', rust: 'Rust', python: 'Python', aws: 'AWS', gcp: 'GCP',
-    langchain: 'LangChain', tensorflow: 'TensorFlow', mediapipe: 'MediaPipe', llm: 'LLM',
-    valorant: 'Valorant', web: 'Web', discord: 'Discord', npm: 'NPM', github: 'GitHub',
-    overwatch: 'Overwatch', ai: 'AI', postgres: 'PostgreSQL', prisma: 'Prisma',
-    mongodb: 'MongoDB', mariadb: 'MariaDB', frappe: 'Frappe', convex: 'Convex',
-    tailwind: 'Tailwind', shadcn: 'shadcn/ui', scaleway: 'Scaleway', wasm: 'WASM',
-    django: 'Django', fastapi: 'FastAPI', go: 'Go', mysql: 'MySQL', redis: 'Redis'
+    typescript: 'TypeScript',
+    javascript: 'JavaScript',
+    react: 'React',
+    next: 'Next.js',
+    node: 'Node.js',
+    vue: 'Vue',
+    rust: 'Rust',
+    python: 'Python',
+    aws: 'AWS',
+    gcp: 'GCP',
+    langchain: 'LangChain',
+    tensorflow: 'TensorFlow',
+    mediapipe: 'MediaPipe',
+    llm: 'LLM',
+    valorant: 'Valorant',
+    web: 'Web',
+    discord: 'Discord',
+    npm: 'NPM',
+    github: 'GitHub',
+    overwatch: 'Overwatch',
+    ai: 'AI',
+    postgres: 'PostgreSQL',
+    prisma: 'Prisma',
+    mongodb: 'MongoDB',
+    mariadb: 'MariaDB',
+    frappe: 'Frappe',
+    convex: 'Convex',
+    tailwind: 'Tailwind',
+    shadcn: 'shadcn/ui',
+    scaleway: 'Scaleway',
+    wasm: 'WASM',
+    django: 'Django',
+    fastapi: 'FastAPI',
+    go: 'Go',
+    mysql: 'MySQL',
+    redis: 'Redis'
 }
 
 // Active colors for each tech (shown on group hover)
@@ -173,7 +232,13 @@ interface TechBadgeProps {
     alwaysColor?: boolean
 }
 
-export function TechBadge({ tech, showName = false, className, colorOnGroupHover = false, alwaysColor = false }: TechBadgeProps) {
+export function TechBadge({
+    tech,
+    showName = false,
+    className,
+    colorOnGroupHover = false,
+    alwaysColor = false
+}: TechBadgeProps) {
     return (
         <span
             className={cn(
@@ -199,11 +264,23 @@ interface TechStackProps {
     alwaysColor?: boolean
 }
 
-export function TechStack({ technologies, showNames = false, className, colorOnGroupHover = false, alwaysColor = false }: TechStackProps) {
+export function TechStack({
+    technologies,
+    showNames = false,
+    className,
+    colorOnGroupHover = false,
+    alwaysColor = false
+}: TechStackProps) {
     return (
         <div className={cn('flex flex-wrap gap-2', className)}>
             {technologies.map((tech) => (
-                <TechBadge key={tech} tech={tech as TechType} showName={showNames} colorOnGroupHover={colorOnGroupHover} alwaysColor={alwaysColor} />
+                <TechBadge
+                    key={tech}
+                    tech={tech as TechType}
+                    showName={showNames}
+                    colorOnGroupHover={colorOnGroupHover}
+                    alwaysColor={alwaysColor}
+                />
             ))}
         </div>
     )

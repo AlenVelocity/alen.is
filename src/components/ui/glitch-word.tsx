@@ -64,7 +64,9 @@ export function GlitchPersonWord({ className }: GlitchWordProps) {
     }, [isAlien, scramble])
 
     useEffect(() => {
-        return () => { if (rafRef.current) clearTimeout(rafRef.current) }
+        return () => {
+            if (rafRef.current) clearTimeout(rafRef.current)
+        }
     }, [])
 
     return (
@@ -74,10 +76,7 @@ export function GlitchPersonWord({ className }: GlitchWordProps) {
             className={`
                 inline-block font-mono-ui cursor-crosshair select-none
                 transition-colors duration-100
-                ${isAlien
-                    ? 'text-accent [text-shadow:var(--glow-accent)]'
-                    : 'hover:text-accent/70'
-                }
+                ${isAlien ? 'text-accent [text-shadow:var(--glow-accent)]' : 'hover:text-accent/70'}
                 ${className ?? ''}
             `}
             title="hover me"

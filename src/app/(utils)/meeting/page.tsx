@@ -7,7 +7,7 @@ import { useTheme } from 'next-themes'
 
 export default function MeetingPage() {
     const { theme } = useTheme()
-    
+
     useEffect(() => {
         ;(async function () {
             const cal = await getCalApi()

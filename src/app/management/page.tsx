@@ -18,7 +18,13 @@ function useDebounce(value: string, delay: number) {
 }
 
 // ── Review Form (only rendered for a single selected item) ─────────────────────
-const ReviewForm = memo(function ReviewForm({ type, entityId, name, image, onClose }: {
+const ReviewForm = memo(function ReviewForm({
+    type,
+    entityId,
+    name,
+    image,
+    onClose
+}: {
     type: 'GAME' | 'SONG'
     entityId: string
     name: string
@@ -64,7 +70,7 @@ const ReviewForm = memo(function ReviewForm({ type, entityId, name, image, onClo
             name,
             image: image || null,
             rating: rating === '' ? undefined : Number(rating),
-            content,
+            content
         })
     }, [entityId, type, name, image, rating, content, upsertMutation])
 
@@ -80,17 +86,28 @@ const ReviewForm = memo(function ReviewForm({ type, entityId, name, image, onClo
             <div className="rounded-xl bg-card border border-accent/20 paper-shadow p-4 md:p-5">
                 <div className="flex flex-col md:flex-row gap-4">
                     {image ? (
-                        <img src={image} alt={name} className="w-20 h-20 md:w-24 md:h-24 rounded-lg object-cover ring-1 ring-border shrink-0" />
+                        <img
+                            src={image}
+                            alt={name}
+                            className="w-20 h-20 md:w-24 md:h-24 rounded-lg object-cover ring-1 ring-border shrink-0"
+                        />
                     ) : (
                         <div className="w-20 h-20 md:w-24 md:h-24 rounded-lg bg-muted flex items-center justify-center shrink-0 border border-border">
-                            {type === 'GAME' ? <FiCommand className="w-7 h-7 text-muted-foreground/40" /> : <FiMusic className="w-7 h-7 text-muted-foreground/40" />}
+                            {type === 'GAME' ? (
+                                <FiCommand className="w-7 h-7 text-muted-foreground/40" />
+                            ) : (
+                                <FiMusic className="w-7 h-7 text-muted-foreground/40" />
+                            )}
                         </div>
                     )}
 
                     <div className="flex-1 space-y-3">
                         <div className="flex items-center justify-between">
                             <h3 className="text-base font-semibold tracking-tight">{name}</h3>
-                            <button onClick={onClose} className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
+                            <button
+                                onClick={onClose}
+                                className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                            >
                                 <FiX className="w-4 h-4" />
                             </button>
                         </div>
@@ -101,7 +118,8 @@ const ReviewForm = memo(function ReviewForm({ type, entityId, name, image, onClo
                             </div>
                             <input
                                 type="number"
-                                min="1" max="10"
+                                min="1"
+                                max="10"
                                 placeholder="/ 10"
                                 value={rating}
                                 onChange={(e) => setRating(e.target.value === '' ? '' : parseInt(e.target.value))}
@@ -122,8 +140,8 @@ const ReviewForm = memo(function ReviewForm({ type, entityId, name, image, onClo
                                 disabled={upsertMutation.isPending}
                                 className="flex items-center gap-2 bg-accent text-accent-foreground px-4 py-2 rounded-lg text-sm font-semibold hover-lift transition-all"
                             >
-                                <FiSave className={upsertMutation.isPending ? "animate-spin" : ""} />
-                                {upsertMutation.isPending ? 'Saving...' : (review ? 'Update' : 'Publish')}
+                                <FiSave className={upsertMutation.isPending ? 'animate-spin' : ''} />
+                                {upsertMutation.isPending ? 'Saving...' : review ? 'Update' : 'Publish'}
                             </button>
 
                             {review && (
@@ -150,7 +168,12 @@ interface ListItem {
     subtitle?: string
 }
 
-const ItemRow = memo(function ItemRow({ item, isSelected, onSelect, type }: {
+const ItemRow = memo(function ItemRow({
+    item,
+    isSelected,
+    onSelect,
+    type
+}: {
     item: ListItem
     isSelected: boolean
     onSelect: (item: ListItem) => void
@@ -172,15 +195,27 @@ const ItemRow = memo(function ItemRow({ item, isSelected, onSelect, type }: {
                     </div>
                 )
             ) : (
-                <div className={`${type === 'GAME' ? 'w-20 h-9' : 'w-9 h-9'} rounded bg-muted flex items-center justify-center flex-shrink-0 border border-border/50`}>
-                    {type === 'GAME' ? <FiCommand className="w-3.5 h-3.5 text-muted-foreground/40" /> : <FiMusic className="w-3.5 h-3.5 text-muted-foreground/40" />}
+                <div
+                    className={`${type === 'GAME' ? 'w-20 h-9' : 'w-9 h-9'} rounded bg-muted flex items-center justify-center flex-shrink-0 border border-border/50`}
+                >
+                    {type === 'GAME' ? (
+                        <FiCommand className="w-3.5 h-3.5 text-muted-foreground/40" />
+                    ) : (
+                        <FiMusic className="w-3.5 h-3.5 text-muted-foreground/40" />
+                    )}
                 </div>
             )}
             <div className="flex-1 min-w-0">
-                <p className={`text-sm font-medium truncate transition-colors ${isSelected ? 'text-accent' : 'group-hover:text-accent'}`}>{item.name}</p>
+                <p
+                    className={`text-sm font-medium truncate transition-colors ${isSelected ? 'text-accent' : 'group-hover:text-accent'}`}
+                >
+                    {item.name}
+                </p>
                 {item.subtitle && <p className="text-xs text-muted-foreground/60 truncate">{item.subtitle}</p>}
             </div>
-            <FiChevronRight className={`w-4 h-4 shrink-0 transition-all ${isSelected ? 'text-accent' : 'text-muted-foreground/30 group-hover:text-accent/60 -translate-x-1 group-hover:translate-x-0 opacity-0 group-hover:opacity-100'}`} />
+            <FiChevronRight
+                className={`w-4 h-4 shrink-0 transition-all ${isSelected ? 'text-accent' : 'text-muted-foreground/30 group-hover:text-accent/60 -translate-x-1 group-hover:translate-x-0 opacity-0 group-hover:opacity-100'}`}
+            />
         </button>
     )
 })
@@ -194,11 +229,12 @@ function AdminDashboard() {
     const debouncedQuery = useDebounce(searchQuery, 300)
 
     // Only fetch data for the active tab (avoids unnecessary network + renders)
-    const { data: gamesData, isLoading: gamesLoading } = api.gaming.getRecentlyPlayed.useQuery(
-        undefined, { enabled: tab === 'GAMES' }
-    )
+    const { data: gamesData, isLoading: gamesLoading } = api.gaming.getRecentlyPlayed.useQuery(undefined, {
+        enabled: tab === 'GAMES'
+    })
     const { data: songsData, isLoading: songsLoading } = api.lastfm.getRecentTracks.useQuery(
-        { limit: 20 }, { enabled: tab === 'SONGS' }
+        { limit: 20 },
+        { enabled: tab === 'SONGS' }
     )
 
     const isSearching = debouncedQuery.length > 1
@@ -221,7 +257,7 @@ function AdminDashboard() {
     const uniqueSongs = useMemo(() => {
         if (!songsData?.recentlyPlayed) return []
         const seen = new Set<string>()
-        return songsData.recentlyPlayed.filter(song => {
+        return songsData.recentlyPlayed.filter((song) => {
             const entityId = `${song.artist.replace(/\s+/g, '-').toLowerCase()}-${song.name.replace(/\s+/g, '-').toLowerCase()}`
             if (seen.has(entityId)) return false
             seen.add(entityId)
@@ -237,25 +273,25 @@ function AdminDashboard() {
     }, [])
 
     const handleSelect = useCallback((item: ListItem) => {
-        setSelectedItem(prev => prev?.entityId === item.entityId ? null : item)
+        setSelectedItem((prev) => (prev?.entityId === item.entityId ? null : item))
     }, [])
 
     // Build the items list for current tab
     const gameItems = useMemo((): ListItem[] => {
         if (!gamesData?.steam) return []
-        return gamesData.steam.map(g => ({
+        return gamesData.steam.map((g) => ({
             entityId: g.appid.toString(),
             name: g.name,
             image: g.img_logo_url || g.img_icon_url,
-            subtitle: g.playtime_2weeks ? `${Math.round(g.playtime_2weeks / 60 * 10) / 10}h this week` : undefined,
+            subtitle: g.playtime_2weeks ? `${Math.round((g.playtime_2weeks / 60) * 10) / 10}h this week` : undefined
         }))
     }, [gamesData])
 
     const songItems = useMemo((): ListItem[] => {
-        return uniqueSongs.map(s => ({
+        return uniqueSongs.map((s) => ({
             entityId: `${s.artist.replace(/\s+/g, '-').toLowerCase()}-${s.name.replace(/\s+/g, '-').toLowerCase()}`,
             name: `${s.artist} - ${s.name}`,
-            image: s.image,
+            image: s.image
         }))
     }, [uniqueSongs])
 
@@ -267,22 +303,27 @@ function AdminDashboard() {
             return (results || []).map((g: any) => ({
                 entityId: String(g.appid),
                 name: g.name,
-                image: g.img,
+                image: g.img
             }))
         }
         if (tab === 'SONGS') {
             return (songSearchResults || []).map((t: any) => ({
                 entityId: `${t.artist.replace(/\s+/g, '-').toLowerCase()}-${t.name.replace(/\s+/g, '-').toLowerCase()}`,
                 name: `${t.artist} - ${t.name}`,
-                image: t.image,
+                image: t.image
             }))
         }
         return []
     }, [isSearching, tab, gameSearchPlatform, gameSearchResults, xboxSearchResults, songSearchResults])
 
-    const currentType = tab === 'GAMES' ? 'GAME' as const : 'SONG' as const
+    const currentType = tab === 'GAMES' ? ('GAME' as const) : ('SONG' as const)
     const isLoading = tab === 'GAMES' ? gamesLoading : songsLoading
-    const isFetchingSearch = tab === 'GAMES' ? (gameSearchPlatform === 'steam' ? gameSearchFetching : xboxSearchFetching) : songSearchFetching
+    const isFetchingSearch =
+        tab === 'GAMES'
+            ? gameSearchPlatform === 'steam'
+                ? gameSearchFetching
+                : xboxSearchFetching
+            : songSearchFetching
     const browseItems = tab === 'GAMES' ? gameItems : songItems
 
     return (
@@ -296,10 +337,18 @@ function AdminDashboard() {
                         className={`relative flex-1 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${tab === t ? 'text-foreground' : 'text-muted-foreground hover:text-foreground/80'}`}
                     >
                         {tab === t && (
-                            <motion.div layoutId="adminTab" className="absolute inset-0 bg-card border border-border rounded-lg paper-shadow -z-10" transition={{ type: 'spring', stiffness: 400, damping: 30 }} />
+                            <motion.div
+                                layoutId="adminTab"
+                                className="absolute inset-0 bg-card border border-border rounded-lg paper-shadow -z-10"
+                                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                            />
                         )}
                         <span className="flex items-center justify-center gap-1.5">
-                            {t === 'GAMES' ? <FiCommand className="w-3.5 h-3.5" /> : <FiMusic className="w-3.5 h-3.5" />}
+                            {t === 'GAMES' ? (
+                                <FiCommand className="w-3.5 h-3.5" />
+                            ) : (
+                                <FiMusic className="w-3.5 h-3.5" />
+                            )}
                             {t === 'GAMES' ? 'Games' : 'Songs'}
                         </span>
                     </button>
@@ -312,7 +361,11 @@ function AdminDashboard() {
                     <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50" />
                     <input
                         type="text"
-                        placeholder={tab === 'GAMES' ? `Search ${gameSearchPlatform === 'steam' ? 'Steam' : 'Xbox'} games...` : 'Search songs on Last.fm...'}
+                        placeholder={
+                            tab === 'GAMES'
+                                ? `Search ${gameSearchPlatform === 'steam' ? 'Steam' : 'Xbox'} games...`
+                                : 'Search songs on Last.fm...'
+                        }
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-full bg-card border border-border rounded-lg pl-9 pr-20 py-2.5 text-sm focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-all placeholder:text-muted-foreground/40"
@@ -328,17 +381,24 @@ function AdminDashboard() {
                         )}
                         {tab === 'GAMES' && (
                             <button
-                                onClick={() => setGameSearchPlatform(p => p === 'steam' ? 'xbox' : 'steam')}
+                                onClick={() => setGameSearchPlatform((p) => (p === 'steam' ? 'xbox' : 'steam'))}
                                 className={`p-1.5 rounded-md transition-colors ${gameSearchPlatform === 'steam' ? 'text-muted-foreground hover:text-foreground' : 'text-green-500 hover:text-green-400'}`}
                                 title={`Switch to ${gameSearchPlatform === 'steam' ? 'Xbox' : 'Steam'} search`}
                             >
-                                {gameSearchPlatform === 'steam' ? <FaSteam className="w-3.5 h-3.5" /> : <FaXbox className="w-3.5 h-3.5" />}
+                                {gameSearchPlatform === 'steam' ? (
+                                    <FaSteam className="w-3.5 h-3.5" />
+                                ) : (
+                                    <FaXbox className="w-3.5 h-3.5" />
+                                )}
                             </button>
                         )}
                     </div>
                     {isFetchingSearch && isSearching && (
                         <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent/30 overflow-hidden rounded-b-lg">
-                            <div className="h-full w-1/3 bg-accent animate-[shimmer_1s_ease-in-out_infinite] rounded-full" style={{ animation: 'shimmer 1s ease-in-out infinite' }} />
+                            <div
+                                className="h-full w-1/3 bg-accent animate-[shimmer_1s_ease-in-out_infinite] rounded-full"
+                                style={{ animation: 'shimmer 1s ease-in-out infinite' }}
+                            />
                         </div>
                     )}
                 </div>
@@ -364,10 +424,14 @@ function AdminDashboard() {
                     // Search results
                     <div>
                         <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider pl-1 mb-2">
-                            {searchItems.length > 0 ? `${searchItems.length} results` : (isFetchingSearch ? 'Searching...' : 'No results')}
+                            {searchItems.length > 0
+                                ? `${searchItems.length} results`
+                                : isFetchingSearch
+                                  ? 'Searching...'
+                                  : 'No results'}
                         </p>
                         <div className="space-y-0.5">
-                            {searchItems.map(item => (
+                            {searchItems.map((item) => (
                                 <ItemRow
                                     key={item.entityId}
                                     item={item}
@@ -392,7 +456,7 @@ function AdminDashboard() {
                             </div>
                         ) : (
                             <div className="space-y-0.5">
-                                {browseItems.map(item => (
+                                {browseItems.map((item) => (
                                     <ItemRow
                                         key={item.entityId}
                                         item={item}

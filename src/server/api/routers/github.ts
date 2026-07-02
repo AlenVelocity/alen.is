@@ -52,8 +52,8 @@ export const githubRouter = createTRPCRouter({
             const response = await fetch('https://api.github.com/graphql', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${GITHUB_TOKEN}`,
-                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${GITHUB_TOKEN}`,
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     query: GITHUB_GRAPHQL_QUERY,
@@ -67,7 +67,7 @@ export const githubRouter = createTRPCRouter({
             }
 
             const data = await response.json()
-            
+
             if (data.errors) {
                 console.error('GitHub API errors:', data.errors)
                 throw new Error('GitHub API error')
@@ -78,15 +78,16 @@ export const githubRouter = createTRPCRouter({
             const calendar = contributions.contributionCalendar
 
             // Get contribution days for the graph (last 52 weeks)
-            const contributionDays: ContributionDay[] = calendar.weeks
-                .flatMap((week: { contributionDays: ContributionDay[] }) => week.contributionDays)
+            const contributionDays: ContributionDay[] = calendar.weeks.flatMap(
+                (week: { contributionDays: ContributionDay[] }) => week.contributionDays
+            )
 
             // Calculate streak
             let currentStreak = 0
             let longestStreak = 0
             let tempStreak = 0
             const today = new Date().toISOString().split('T')[0]
-            
+
             // Reverse to start from most recent
             const sortedDays = [...contributionDays].reverse()
             for (const day of sortedDays) {
@@ -149,4 +150,3 @@ export const githubRouter = createTRPCRouter({
         }
     })
 })
-

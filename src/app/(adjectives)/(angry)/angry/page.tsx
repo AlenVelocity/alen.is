@@ -4,7 +4,7 @@ import { CenteredPage } from '@/components/ui/centered-page'
 
 export const metadata: Metadata = {
     title: 'angry',
-    description: 'Alen is angry. Probably not but who knows. Don\'t talk to me.',
+    description: "Alen is angry. Probably not but who knows. Don't talk to me.",
     openGraph: {
         title: 'Alen is angry',
         description: 'Alen is angry. Probably not but who knows.',

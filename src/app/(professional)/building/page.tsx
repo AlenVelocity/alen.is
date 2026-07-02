@@ -17,8 +17,8 @@ export const metadata: Metadata = {
 
 export default async function Building() {
     const allProjects = await runGetProjects()
-    const featuredProjects = allProjects.filter(project => project.featured)
-    const otherProjects = allProjects.filter(project => !project.featured)
+    const featuredProjects = allProjects.filter((project) => project.featured)
+    const otherProjects = allProjects.filter((project) => !project.featured)
 
     const projectsSchema = {
         '@context': 'https://schema.org',
@@ -38,13 +38,10 @@ export default async function Building() {
         <PageTransition>
             <JsonLd data={projectsSchema} />
             <div className="container max-w-2xl py-12 md:py-20 px-4">
-
                 {/* ── Header ───────────────────────────────────── */}
                 <div className="mb-16">
                     <p className="mono-label text-muted-foreground/50 mb-4">// work</p>
-                    <h1 className="text-display text-5xl md:text-6xl mb-3">
-                        Projects
-                    </h1>
+                    <h1 className="text-display text-5xl md:text-6xl mb-3">Projects</h1>
                     <p className="text-[0.9rem] text-muted-foreground">
                         Things I&apos;ve built, shipped, and sometimes abandoned.
                     </p>
@@ -73,7 +70,6 @@ export default async function Building() {
                         </div>
                     </section>
                 )}
-
             </div>
         </PageTransition>
     )

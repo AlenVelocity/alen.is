@@ -109,7 +109,7 @@ export const publicProcedure = t.procedure.use(timingMiddleware)
 const authMiddleware = t.middleware(async ({ ctx, next }) => {
     const cookieHeader = ctx.headers.get('cookie') || ''
     const cookies = Object.fromEntries(
-        cookieHeader.split(';').map(c => {
+        cookieHeader.split(';').map((c) => {
             const [key, ...val] = c.trim().split('=')
             return [key, val.join('=')]
         })

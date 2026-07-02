@@ -17,7 +17,7 @@ const steamGameSchema = z.object({
     playtime_2weeks: z.number().optional(),
     playtime_forever: z.number(),
     img_icon_url: z.string().optional(),
-    img_logo_url: z.string().optional(),
+    img_logo_url: z.string().optional()
 })
 
 const steamOwnedGameSchema = z.object({
@@ -26,7 +26,7 @@ const steamOwnedGameSchema = z.object({
     playtime_forever: z.number(),
     img_icon_url: z.string().optional(),
     img_logo_url: z.string().optional(),
-    has_community_visible_stats: z.boolean().optional(),
+    has_community_visible_stats: z.boolean().optional()
 })
 
 const steamAchievementSchema = z.object({
@@ -34,14 +34,14 @@ const steamAchievementSchema = z.object({
     achieved: z.number(),
     unlocktime: z.number(),
     name: z.string().optional(),
-    description: z.string().optional(),
+    description: z.string().optional()
 })
 
 const steamPlayerStatsSchema = z.object({
     steamID: z.string(),
     gameName: z.string(),
     achievements: z.array(steamAchievementSchema).optional(),
-    success: z.boolean(),
+    success: z.boolean()
 })
 
 // Xbox API schemas (for unofficial API)
@@ -53,7 +53,7 @@ const xboxGameSchema = z.object({
     currentAchievements: z.number(),
     totalAchievements: z.number(),
     lastPlayed: z.string().optional(),
-    image: z.string().optional(),
+    image: z.string().optional()
 })
 
 const xboxProfileSchema = z.object({
@@ -64,7 +64,7 @@ const xboxProfileSchema = z.object({
     preferredColor: z.string(),
     location: z.string().optional(),
     bio: z.string().optional(),
-    tenure: z.string().optional(),
+    tenure: z.string().optional()
 })
 
 export const gamingRouter = createTRPCRouter({
@@ -79,26 +79,32 @@ export const gamingRouter = createTRPCRouter({
                     throw new Error(`Steam API failed with status ${response.status}`)
                 }
                 const data = await response.json()
-                const parsedData = z.object({
-                    response: z.object({
-                        total_count: z.number(),
-                        games: z.array(steamGameSchema),
-                    }),
-                }).parse(data);
-                
-                steamData = parsedData.response.games.map(game => ({
-                    ...game,
-                    img_icon_url: game.img_icon_url 
-                        ? `http://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${game.img_icon_url}.jpg`
-                        : `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appid}/header.jpg`,
-                    img_logo_url: game.img_logo_url 
-                        ? `http://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${game.img_logo_url}.jpg`
-                        : `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appid}/header.jpg`,
-                    playtime_2weeks_hours: game.playtime_2weeks ? Math.round(game.playtime_2weeks / 60 * 10) / 10 : 0,
-                    playtime_forever_hours: Math.round(game.playtime_forever / 60 * 10) / 10,
-                })).sort((a, b) => (b.playtime_2weeks || 0) - (a.playtime_2weeks || 0));
+                const parsedData = z
+                    .object({
+                        response: z.object({
+                            total_count: z.number(),
+                            games: z.array(steamGameSchema)
+                        })
+                    })
+                    .parse(data)
+
+                steamData = parsedData.response.games
+                    .map((game) => ({
+                        ...game,
+                        img_icon_url: game.img_icon_url
+                            ? `http://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${game.img_icon_url}.jpg`
+                            : `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appid}/header.jpg`,
+                        img_logo_url: game.img_logo_url
+                            ? `http://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${game.img_logo_url}.jpg`
+                            : `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appid}/header.jpg`,
+                        playtime_2weeks_hours: game.playtime_2weeks
+                            ? Math.round((game.playtime_2weeks / 60) * 10) / 10
+                            : 0,
+                        playtime_forever_hours: Math.round((game.playtime_forever / 60) * 10) / 10
+                    }))
+                    .sort((a, b) => (b.playtime_2weeks || 0) - (a.playtime_2weeks || 0))
             } catch (error) {
-                console.error("Error fetching Steam recent games:", error)
+                console.error('Error fetching Steam recent games:', error)
             }
         }
 
@@ -116,28 +122,32 @@ export const gamingRouter = createTRPCRouter({
                     throw new Error(`Steam API failed with status ${response.status}`)
                 }
                 const data = await response.json()
-                const parsedData = z.object({
-                    response: z.object({
-                        game_count: z.number(),
-                        games: z.array(steamOwnedGameSchema),
-                    }),
-                }).parse(data);
-                
+                const parsedData = z
+                    .object({
+                        response: z.object({
+                            game_count: z.number(),
+                            games: z.array(steamOwnedGameSchema)
+                        })
+                    })
+                    .parse(data)
+
                 steamData = {
                     total_games: parsedData.response.game_count,
-                    games: parsedData.response.games.map(game => ({
-                        ...game,
-                        img_icon_url: game.img_icon_url 
-                            ? `http://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${game.img_icon_url}.jpg`
-                            : `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appid}/header.jpg`,
-                        img_logo_url: game.img_logo_url 
-                            ? `http://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${game.img_logo_url}.jpg`
-                            : `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appid}/header.jpg`,
-                        playtime_forever_hours: Math.round(game.playtime_forever / 60 * 10) / 10,
-                    })).sort((a, b) => b.playtime_forever - a.playtime_forever)
+                    games: parsedData.response.games
+                        .map((game) => ({
+                            ...game,
+                            img_icon_url: game.img_icon_url
+                                ? `http://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${game.img_icon_url}.jpg`
+                                : `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appid}/header.jpg`,
+                            img_logo_url: game.img_logo_url
+                                ? `http://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${game.img_logo_url}.jpg`
+                                : `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appid}/header.jpg`,
+                            playtime_forever_hours: Math.round((game.playtime_forever / 60) * 10) / 10
+                        }))
+                        .sort((a, b) => b.playtime_forever - a.playtime_forever)
                 }
             } catch (error) {
-                console.error("Error fetching Steam owned games:", error)
+                console.error('Error fetching Steam owned games:', error)
             }
         }
 
@@ -145,86 +155,92 @@ export const gamingRouter = createTRPCRouter({
     }),
 
     // Get Steam achievements for a specific game
-    getGameAchievements: publicProcedure
-        .input(z.object({ appid: z.number() }))
-        .query(async ({ input }) => {
-            let steamData = null
-            if (STEAM_API_KEY && STEAM_ID_64) {
-                try {
-                    // Fetch player achievements and game schema in parallel
-                    const [playerResponse, schemaResponse] = await Promise.all([
-                        fetch(`http://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid=${input.appid}&key=${STEAM_API_KEY}&steamid=${STEAM_ID_64}`),
-                        fetch(`http://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?appid=${input.appid}&key=${STEAM_API_KEY}`),
-                    ])
+    getGameAchievements: publicProcedure.input(z.object({ appid: z.number() })).query(async ({ input }) => {
+        let steamData = null
+        if (STEAM_API_KEY && STEAM_ID_64) {
+            try {
+                // Fetch player achievements and game schema in parallel
+                const [playerResponse, schemaResponse] = await Promise.all([
+                    fetch(
+                        `http://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid=${input.appid}&key=${STEAM_API_KEY}&steamid=${STEAM_ID_64}`
+                    ),
+                    fetch(
+                        `http://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?appid=${input.appid}&key=${STEAM_API_KEY}`
+                    )
+                ])
 
-                    if (!playerResponse.ok) {
-                        throw new Error(`Steam API failed with status ${playerResponse.status}`)
-                    }
-
-                    const playerData = await playerResponse.json()
-                    const parsedData = z.object({
-                        playerstats: steamPlayerStatsSchema
-                    }).parse(playerData)
-
-                    // Build a map of apiname → display name/description from schema
-                    const schemaMap = new Map<string, { displayName: string; description: string; icon: string; icongray: string }>()
-                    if (schemaResponse.ok) {
-                        try {
-                            const schemaData = await schemaResponse.json()
-                            const achievements = schemaData?.game?.availableGameStats?.achievements || []
-                            for (const a of achievements) {
-                                schemaMap.set(a.name, {
-                                    displayName: a.displayName || a.name,
-                                    description: a.description || '',
-                                    icon: a.icon || '',
-                                    icongray: a.icongray || '',
-                                })
-                            }
-                        } catch {
-                            // Schema fetch failed, we'll fall back to apiname
-                        }
-                    }
-
-                    if (parsedData.playerstats.success && parsedData.playerstats.achievements) {
-                        steamData = {
-                            gameName: parsedData.playerstats.gameName,
-                            achievements: parsedData.playerstats.achievements.map(achievement => {
-                                const schema = schemaMap.get(achievement.apiname)
-                                return {
-                                    ...achievement,
-                                    name: schema?.displayName || achievement.name || achievement.apiname,
-                                    description: schema?.description || achievement.description || '',
-                                    icon: schema ? (achievement.achieved ? schema.icon : schema.icongray) : '',
-                                    unlockDate: achievement.unlocktime > 0 ? new Date(achievement.unlocktime * 1000).toISOString() : null,
-                                }
-                            }),
-                            totalAchievements: parsedData.playerstats.achievements.length,
-                            unlockedAchievements: parsedData.playerstats.achievements.filter(a => a.achieved === 1).length
-                        }
-                    }
-                } catch (error) {
-                    console.error("Error fetching Steam achievements:", error)
+                if (!playerResponse.ok) {
+                    throw new Error(`Steam API failed with status ${playerResponse.status}`)
                 }
-            }
 
-            return { steam: steamData }
-        }),
+                const playerData = await playerResponse.json()
+                const parsedData = z
+                    .object({
+                        playerstats: steamPlayerStatsSchema
+                    })
+                    .parse(playerData)
+
+                // Build a map of apiname → display name/description from schema
+                const schemaMap = new Map<
+                    string,
+                    { displayName: string; description: string; icon: string; icongray: string }
+                >()
+                if (schemaResponse.ok) {
+                    try {
+                        const schemaData = await schemaResponse.json()
+                        const achievements = schemaData?.game?.availableGameStats?.achievements || []
+                        for (const a of achievements) {
+                            schemaMap.set(a.name, {
+                                displayName: a.displayName || a.name,
+                                description: a.description || '',
+                                icon: a.icon || '',
+                                icongray: a.icongray || ''
+                            })
+                        }
+                    } catch {
+                        // Schema fetch failed, we'll fall back to apiname
+                    }
+                }
+
+                if (parsedData.playerstats.success && parsedData.playerstats.achievements) {
+                    steamData = {
+                        gameName: parsedData.playerstats.gameName,
+                        achievements: parsedData.playerstats.achievements.map((achievement) => {
+                            const schema = schemaMap.get(achievement.apiname)
+                            return {
+                                ...achievement,
+                                name: schema?.displayName || achievement.name || achievement.apiname,
+                                description: schema?.description || achievement.description || '',
+                                icon: schema ? (achievement.achieved ? schema.icon : schema.icongray) : '',
+                                unlockDate:
+                                    achievement.unlocktime > 0
+                                        ? new Date(achievement.unlocktime * 1000).toISOString()
+                                        : null
+                            }
+                        }),
+                        totalAchievements: parsedData.playerstats.achievements.length,
+                        unlockedAchievements: parsedData.playerstats.achievements.filter((a) => a.achieved === 1).length
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching Steam achievements:', error)
+            }
+        }
+
+        return { steam: steamData }
+    }),
 
     // Get Xbox achievements for a specific game
-    getXboxGameAchievements: publicProcedure
-        .input(z.object({ titleId: z.string() }))
-        .query(async ({ input }) => {
-            const achievements = await fetchXboxGameAchievements(input.titleId)
-            return { xbox: achievements }
-        }),
+    getXboxGameAchievements: publicProcedure.input(z.object({ titleId: z.string() })).query(async ({ input }) => {
+        const achievements = await fetchXboxGameAchievements(input.titleId)
+        return { xbox: achievements }
+    }),
 
     // Get game details from Steam Store API
-    getGameDetails: publicProcedure
-        .input(z.object({ appid: z.number() }))
-        .query(async ({ input }) => {
-            const details = await fetchGameDetails(input.appid)
-            return { steam: details }
-        }),
+    getGameDetails: publicProcedure.input(z.object({ appid: z.number() })).query(async ({ input }) => {
+        const details = await fetchGameDetails(input.appid)
+        return { steam: details }
+    }),
 
     // Get Xbox data (using OpenXBL API)
     getXboxData: publicProcedure.query(async () => {
@@ -243,7 +259,7 @@ export const gamingRouter = createTRPCRouter({
                     throw new Error(`Xbox profile API failed with status ${profileResponse.status}`)
                 }
                 const profileData = await profileResponse.json()
-                
+
                 // Get recent games
                 const gamesResponse = await fetch(`https://xbl.io/api/v2/recent-activity/${XBOX_GAMERTAG}`, { headers })
                 if (!gamesResponse.ok) {
@@ -262,19 +278,20 @@ export const gamingRouter = createTRPCRouter({
                         bio: profileData.bio,
                         tenure: profileData.tenure
                     },
-                    recentGames: gamesData.titles?.map((game: any) => ({
-                        name: game.name,
-                        titleId: game.titleId,
-                        currentGamerscore: game.currentGamerscore,
-                        maxGamerscore: game.maxGamerscore,
-                        currentAchievements: game.currentAchievements,
-                        totalAchievements: game.totalAchievements,
-                        lastPlayed: game.lastPlayed,
-                        image: game.displayImage
-                    })) || []
+                    recentGames:
+                        gamesData.titles?.map((game: any) => ({
+                            name: game.name,
+                            titleId: game.titleId,
+                            currentGamerscore: game.currentGamerscore,
+                            maxGamerscore: game.maxGamerscore,
+                            currentAchievements: game.currentAchievements,
+                            totalAchievements: game.totalAchievements,
+                            lastPlayed: game.lastPlayed,
+                            image: game.displayImage
+                        })) || []
                 }
             } catch (error) {
-                console.error("Error fetching Xbox data:", error)
+                console.error('Error fetching Xbox data:', error)
             }
         }
 
@@ -285,65 +302,84 @@ export const gamingRouter = createTRPCRouter({
     getGamingOverview: publicProcedure.query(async () => {
         const [recentGames, ownedGames, xboxData] = await Promise.all([
             // Get recent Steam games
-            STEAM_API_KEY && STEAM_ID_64 ? (async () => {
-                try {
-                    const url = `http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key=${STEAM_API_KEY}&steamid=${STEAM_ID_64}&format=json`
-                    const response = await fetch(url)
-                    if (!response.ok) return null
-                    const data = await response.json()
-                    return data.response?.games || []
-                } catch { return null }
-            })() : null,
+            STEAM_API_KEY && STEAM_ID_64
+                ? (async () => {
+                      try {
+                          const url = `http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key=${STEAM_API_KEY}&steamid=${STEAM_ID_64}&format=json`
+                          const response = await fetch(url)
+                          if (!response.ok) return null
+                          const data = await response.json()
+                          return data.response?.games || []
+                      } catch {
+                          return null
+                      }
+                  })()
+                : null,
 
             // Get owned Steam games count
-            STEAM_API_KEY && STEAM_ID_64 ? (async () => {
-                try {
-                    const url = `http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${STEAM_API_KEY}&steamid=${STEAM_ID_64}&format=json`
-                    const response = await fetch(url)
-                    if (!response.ok) return null
-                    const data = await response.json()
-                    return data.response?.game_count || 0
-                } catch { return null }
-            })() : null,
+            STEAM_API_KEY && STEAM_ID_64
+                ? (async () => {
+                      try {
+                          const url = `http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${STEAM_API_KEY}&steamid=${STEAM_ID_64}&format=json`
+                          const response = await fetch(url)
+                          if (!response.ok) return null
+                          const data = await response.json()
+                          return data.response?.game_count || 0
+                      } catch {
+                          return null
+                      }
+                  })()
+                : null,
 
             // Get Xbox data
-            OXBL_API_KEY && XBOX_GAMERTAG ? (async () => {
-                try {
-                    const headers = { 'X-Authorization': OXBL_API_KEY }
-                    const response = await fetch(`https://xbl.io/api/v2/profile/${XBOX_GAMERTAG}`, { headers })
-                    if (!response.ok) return null
-                    return await response.json()
-                } catch { return null }
-            })() : null
+            OXBL_API_KEY && XBOX_GAMERTAG
+                ? (async () => {
+                      try {
+                          const headers = { 'X-Authorization': OXBL_API_KEY }
+                          const response = await fetch(`https://xbl.io/api/v2/profile/${XBOX_GAMERTAG}`, { headers })
+                          if (!response.ok) return null
+                          return await response.json()
+                      } catch {
+                          return null
+                      }
+                  })()
+                : null
         ])
 
         return {
             steam: {
-                recentGames: recentGames?.slice(0, 6).map((game: any) => ({
-                    ...game,
-                    img_logo_url: game.img_logo_url 
-                        ? `http://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${game.img_logo_url}.jpg`
-                        : `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appid}/header.jpg`,
-                    playtime_2weeks_hours: game.playtime_2weeks ? Math.round(game.playtime_2weeks / 60 * 10) / 10 : 0,
-                    playtime_forever_hours: Math.round(game.playtime_forever / 60 * 10) / 10,
-                })) || null,
+                recentGames:
+                    recentGames?.slice(0, 6).map((game: any) => ({
+                        ...game,
+                        img_logo_url: game.img_logo_url
+                            ? `http://media.steampowered.com/steamcommunity/public/images/apps/${game.appid}/${game.img_logo_url}.jpg`
+                            : `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appid}/header.jpg`,
+                        playtime_2weeks_hours: game.playtime_2weeks
+                            ? Math.round((game.playtime_2weeks / 60) * 10) / 10
+                            : 0,
+                        playtime_forever_hours: Math.round((game.playtime_forever / 60) * 10) / 10
+                    })) || null,
                 totalGames: ownedGames
             },
-            xbox: xboxData ? {
-                profile: {
-                    gamertag: xboxData.gamertag,
-                    gamerscore: xboxData.gamerScore,
-                    accountTier: xboxData.accountTier
-                }
-            } : null
+            xbox: xboxData
+                ? {
+                      profile: {
+                          gamertag: xboxData.gamertag,
+                          gamerscore: xboxData.gamerScore,
+                          accountTier: xboxData.accountTier
+                      }
+                  }
+                : null
         }
     }),
 
     // Search Steam games by name
     searchGames: publicProcedure
-        .input(z.object({
-            query: z.string().min(1)
-        }))
+        .input(
+            z.object({
+                query: z.string().min(1)
+            })
+        )
         .query(async ({ input }) => {
             try {
                 const response = await fetch(
@@ -357,7 +393,7 @@ export const gamingRouter = createTRPCRouter({
                 return items.map((item: any) => ({
                     appid: item.id as number,
                     name: item.name as string,
-                    img: `https://cdn.cloudflare.steamstatic.com/steam/apps/${item.id}/header.jpg`,
+                    img: `https://cdn.cloudflare.steamstatic.com/steam/apps/${item.id}/header.jpg`
                 }))
             } catch (error) {
                 console.error('Error searching Steam games:', error)
@@ -367,24 +403,26 @@ export const gamingRouter = createTRPCRouter({
 
     // Search Xbox games by filtering player's library
     searchXboxGames: publicProcedure
-        .input(z.object({
-            query: z.string().min(1)
-        }))
+        .input(
+            z.object({
+                query: z.string().min(1)
+            })
+        )
         .query(async ({ input }) => {
             try {
                 const { fetchXboxGames } = await import('@/lib/steam')
                 const xboxGames = await fetchXboxGames()
                 const query = input.query.toLowerCase()
                 return xboxGames
-                    .filter(g => g.name.toLowerCase().includes(query))
-                    .map(g => ({
+                    .filter((g) => g.name.toLowerCase().includes(query))
+                    .map((g) => ({
                         appid: g.titleId,
                         name: g.name,
-                        img: g.image || '',
+                        img: g.image || ''
                     }))
             } catch (error) {
                 console.error('Error searching Xbox games:', error)
                 return []
             }
-        }),
-}) 
+        })
+})

@@ -19,7 +19,7 @@ export const appRouter = createTRPCRouter({
     gaming: gamingRouter,
     github: githubRouter,
     fitness: fitnessRouter,
-    reviews: reviewsRouter,
+    reviews: reviewsRouter
 })
 
 // export type definition of API

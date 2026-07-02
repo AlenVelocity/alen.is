@@ -23,10 +23,14 @@ interface ProjectRowProps {
 
 const getTypeLabel = (type: string) => {
     switch (type) {
-        case 'GitHub': return 'repo'
-        case 'NPM': return 'pkg'
-        case 'Bot': return 'bot'
-        default: return 'site'
+        case 'GitHub':
+            return 'repo'
+        case 'NPM':
+            return 'pkg'
+        case 'Bot':
+            return 'bot'
+        default:
+            return 'site'
     }
 }
 
@@ -52,9 +56,7 @@ export function ProjectRow({ project }: ProjectRowProps) {
             </span>
 
             {/* Period */}
-            <span className="mono-label text-muted-foreground/40 shrink-0 hidden sm:inline">
-                {project.period}
-            </span>
+            <span className="mono-label text-muted-foreground/40 shrink-0 hidden sm:inline">{project.period}</span>
 
             {/* Arrow */}
             <FiArrowUpRight className="w-3 h-3 text-muted-foreground/25 group-hover:text-accent shrink-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -81,9 +83,7 @@ export function ProjectDetail({ project }: { project: Project }) {
                             {project.title}
                         </h3>
                         <div className="flex items-center gap-2">
-                            <span className="mono-label text-muted-foreground/40">
-                                {getTypeLabel(project.type)}
-                            </span>
+                            <span className="mono-label text-muted-foreground/40">{getTypeLabel(project.type)}</span>
                             <span className="text-border">·</span>
                             <span className="mono-label text-muted-foreground/40 hidden sm:inline">
                                 {project.period}
@@ -94,15 +94,10 @@ export function ProjectDetail({ project }: { project: Project }) {
                 </div>
 
                 {/* Description */}
-                <p className="text-[0.875rem] text-muted-foreground leading-relaxed mb-3">
-                    {project.description}
-                </p>
+                <p className="text-[0.875rem] text-muted-foreground leading-relaxed mb-3">{project.description}</p>
 
                 {/* Tech stack */}
-                <TechStack
-                    technologies={project.technologies.slice(0, 6)}
-                    alwaysColor
-                />
+                <TechStack technologies={project.technologies.slice(0, 6)} alwaysColor />
             </div>
         </a>
     )

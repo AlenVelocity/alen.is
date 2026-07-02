@@ -8,10 +8,7 @@
  * Example: encodeTrackParam('エン') → 'エン'
  */
 export function encodeTrackParam(value: string): string {
-    return value
-        .trim()
-        .replace(/\s+/g, '-')
-        .toLowerCase()
+    return value.trim().replace(/\s+/g, '-').toLowerCase()
 }
 
 /**

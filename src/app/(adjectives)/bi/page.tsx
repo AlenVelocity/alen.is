@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react'
 const BI_COLORS = {
     pink: '#D60270',
     purple: '#9B4F96',
-    blue: '#0038A8',
+    blue: '#0038A8'
 }
 
 // Particles that float up in flag colors
@@ -40,7 +40,7 @@ function BiParticles() {
             color: colors[Math.floor(Math.random() * 3)],
             speed: 0.3 + Math.random() * 0.7,
             opacity: 0.15 + Math.random() * 0.35,
-            drift: (Math.random() - 0.5) * 0.4,
+            drift: (Math.random() - 0.5) * 0.4
         }))
 
         let raf: number
@@ -66,13 +66,7 @@ function BiParticles() {
         return () => cancelAnimationFrame(raf)
     }, [])
 
-    return (
-        <canvas
-            ref={canvasRef}
-            className="absolute inset-0 w-full h-full pointer-events-none"
-            aria-hidden="true"
-        />
-    )
+    return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden="true" />
 }
 
 // Animated stripe with glow
@@ -85,7 +79,7 @@ function Stripe({ color, delay, thick }: { color: string; delay: string; thick?:
                 backgroundColor: color,
                 animationDelay: delay,
                 animationFillMode: 'forwards',
-                boxShadow: `0 0 18px ${color}60, 0 0 40px ${color}20`,
+                boxShadow: `0 0 18px ${color}60, 0 0 40px ${color}20`
             }}
         >
             {/* Scanline shimmer */}
@@ -93,7 +87,7 @@ function Stripe({ color, delay, thick }: { color: string; delay: string; thick?:
                 className="absolute inset-0"
                 style={{
                     background: `repeating-linear-gradient(90deg, transparent, transparent 3px, ${color}30 3px, ${color}30 4px)`,
-                    opacity: 0.4,
+                    opacity: 0.4
                 }}
             />
         </div>
@@ -124,9 +118,7 @@ function TypedCaption({ text, delay }: { text: string; delay: number }) {
     return (
         <span>
             {displayed}
-            {displayed.length < text.length && (
-                <span className="animate-blink text-accent">▌</span>
-            )}
+            {displayed.length < text.length && <span className="animate-blink text-accent">▌</span>}
         </span>
     )
 }
@@ -166,13 +158,15 @@ export default function Bi() {
                 style={{ animationDelay: '0.55s', animationFillMode: 'forwards' }}
             >
                 <h1 className="text-display text-3xl md:text-4xl animate-glitch-shift">
-                    <span style={{
-                        background: `linear-gradient(90deg, ${BI_COLORS.pink}, ${BI_COLORS.purple}, ${BI_COLORS.blue})`,
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                        backgroundClip: 'text',
-                        filter: 'drop-shadow(0 0 8px rgba(214, 2, 112, 0.3))',
-                    }}>
+                    <span
+                        style={{
+                            background: `linear-gradient(90deg, ${BI_COLORS.pink}, ${BI_COLORS.purple}, ${BI_COLORS.blue})`,
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            backgroundClip: 'text',
+                            filter: 'drop-shadow(0 0 8px rgba(214, 2, 112, 0.3))'
+                        }}
+                    >
                         everyone&apos;s cute
                     </span>
                 </h1>

@@ -22,7 +22,7 @@ export const lastFmRouter = createTRPCRouter({
         .input(
             z.object({
                 artist: z.string().min(1),
-                track: z.string().min(1),
+                track: z.string().min(1)
             })
         )
         .query(async ({ input }) => {
@@ -33,13 +33,13 @@ export const lastFmRouter = createTRPCRouter({
                     track: input.track,
                     api_key: API_KEY,
                     autocorrect: '1',
-                    format: 'json',
+                    format: 'json'
                 })
 
                 if (USER_NAME) params.set('username', USER_NAME)
 
                 const response = await fetch(`https://ws.audioscrobbler.com/2.0/?${params}`, {
-                    next: { revalidate: 3600 },
+                    next: { revalidate: 3600 }
                 })
 
                 if (!response.ok) {
@@ -53,9 +53,7 @@ export const lastFmRouter = createTRPCRouter({
                 }
 
                 const t = data.track
-                const images: string[] = (t.album?.image ?? [])
-                    .map((i: any) => i['#text'])
-                    .filter(Boolean)
+                const images: string[] = (t.album?.image ?? []).map((i: any) => i['#text']).filter(Boolean)
                 const image = images[images.length - 1] ?? null
 
                 return {
@@ -73,7 +71,7 @@ export const lastFmRouter = createTRPCRouter({
                     tags: ((t.toptags?.tag ?? []) as any[]).map((tag: any) => tag.name as string).slice(0, 6),
                     wiki: t.wiki?.summary
                         ? (t.wiki.summary as string).replace(/<a\b[^>]*>.*?<\/a>/gi, '').trim() || null
-                        : null,
+                        : null
                 }
             } catch (error) {
                 console.error('Error fetching track info:', error)
@@ -100,9 +98,7 @@ export const lastFmRouter = createTRPCRouter({
                     }
                 })
             )
-            return results.map((r) =>
-                r.status === 'fulfilled' ? r.value : { artist: '', image: null }
-            )
+            return results.map((r) => (r.status === 'fulfilled' ? r.value : { artist: '', image: null }))
         }),
 
     getRecentTracks: publicProcedure

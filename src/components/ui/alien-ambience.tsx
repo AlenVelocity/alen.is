@@ -48,7 +48,7 @@ export function AlienDataStream() {
                 speed: SPEED_MIN + Math.random() * (SPEED_MAX - SPEED_MIN),
                 opacity: 0.04 + Math.random() * 0.08,
                 glyphs: Array.from({ length: 20 }, () => randomGlyph()),
-                length: 8 + Math.floor(Math.random() * 14),
+                length: 8 + Math.floor(Math.random() * 14)
             }))
         }
 
@@ -115,11 +115,5 @@ export function AlienDataStream() {
 }
 
 export function ScanLine() {
-    return (
-        <div
-            className="scan-line-el"
-            aria-hidden="true"
-            style={{ top: 0 }}
-        />
-    )
+    return <div className="scan-line-el" aria-hidden="true" style={{ top: 0 }} />
 }

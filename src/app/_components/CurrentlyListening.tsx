@@ -12,10 +12,7 @@ import { StreamFade } from '@/components/ui/stream-fade'
  */
 export function CurrentlyListeningSkeleton() {
     return (
-        <div
-            className="border-l-2 border-accent/20 bg-card/60 p-4 flex items-center gap-4"
-            aria-hidden="true"
-        >
+        <div className="border-l-2 border-accent/20 bg-card/60 p-4 flex items-center gap-4" aria-hidden="true">
             <SkeletonTile className="w-10 h-10" />
             <div className="flex-1 min-w-0 space-y-2">
                 <SkeletonBar width="5.5rem" height="0.5rem" delay={0} />

@@ -11,13 +11,13 @@ import './globals.css'
 const syne = Syne({
     variable: '--font-syne',
     subsets: ['latin'],
-    weight: ['400', '500', '600', '700', '800'],
+    weight: ['400', '500', '600', '700', '800']
 })
 
 const jetbrainsMono = JetBrains_Mono({
     variable: '--font-jetbrains-mono',
     subsets: ['latin'],
-    weight: ['400', '500', '600', '700'],
+    weight: ['400', '500', '600', '700']
 })
 
 export const metadata = {
@@ -86,12 +86,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <body className={`${syne.variable} ${jetbrainsMono.variable} font-mono-ui`}>
                 <PostHogProvider>
                     <TRPCReactProvider>
-                        <ThemeProvider
-                            attribute="class"
-                            defaultTheme="dark"
-                            enableSystem
-                            disableTransitionOnChange
-                        >
+                        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
                             <ClientLayout>{children}</ClientLayout>
                         </ThemeProvider>
                     </TRPCReactProvider>

@@ -4,14 +4,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const baseUrl = 'https://alen.is'
 
     // Main routes
-    const routes = ['', '/cool', '/gay', '/projects', '/experience', '/listening', '/meeting', '/angry', '/using', '/playing'].map(
-        (route) => ({
-            url: `${baseUrl}${route}`,
-            lastModified: new Date(),
-            changeFrequency: 'monthly' as const,
-            priority: route === '' ? 1 : 0.8
-        })
-    )
+    const routes = [
+        '',
+        '/cool',
+        '/gay',
+        '/projects',
+        '/experience',
+        '/listening',
+        '/meeting',
+        '/angry',
+        '/using',
+        '/playing'
+    ].map((route) => ({
+        url: `${baseUrl}${route}`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: route === '' ? 1 : 0.8
+    }))
 
     return routes
 }

@@ -72,7 +72,7 @@ export default function CoolPoll({ initialData }: CoolPollProps) {
             return isPositiveMajority ? 'the people have spoken.' : 'controversial.'
         }
         if (isClose) {
-            return 'it\'s close.'
+            return "it's close."
         }
         if (voteData.vote === 'positive') {
             return isPositiveMajority ? 'glad you think so.' : 'a lone voice in the crowd.'

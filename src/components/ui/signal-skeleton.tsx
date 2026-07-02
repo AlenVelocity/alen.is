@@ -34,14 +34,7 @@ export function SkeletonBar({
 
 /** Square placeholder standing in for album art / thumbnails */
 export function SkeletonTile({ className }: { className?: string }) {
-    return (
-        <div
-            className={cn(
-                'skeleton-shimmer rounded-md shrink-0',
-                className
-            )}
-        />
-    )
+    return <div className={cn('skeleton-shimmer rounded-md shrink-0', className)} />
 }
 
 /** Track-list-shaped placeholder: ranked rows with smooth shimmer bars */
@@ -61,16 +54,8 @@ export function SignalRowsSkeleton({ rows, ranked = true }: { rows: number; rank
                     )}
                     <SkeletonTile className="w-9 h-9" />
                     <div className="flex-1 min-w-0 space-y-2">
-                        <SkeletonBar
-                            width={`${55 + ((i * 17) % 30)}%`}
-                            height="0.625rem"
-                            delay={i * 0.12}
-                        />
-                        <SkeletonBar
-                            width={`${30 + ((i * 11) % 20)}%`}
-                            height="0.5rem"
-                            delay={i * 0.12 + 0.15}
-                        />
+                        <SkeletonBar width={`${55 + ((i * 17) % 30)}%`} height="0.625rem" delay={i * 0.12} />
+                        <SkeletonBar width={`${30 + ((i * 11) % 20)}%`} height="0.5rem" delay={i * 0.12 + 0.15} />
                     </div>
                 </div>
             ))}

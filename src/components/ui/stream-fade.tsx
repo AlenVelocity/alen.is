@@ -7,16 +7,6 @@
  * Usage: wrap the async server component's return JSX with <StreamFade>.
  * The CSS animation (animate-signal-resolve) handles the blur→sharp transition.
  */
-export function StreamFade({
-    children,
-    className = ''
-}: {
-    children: React.ReactNode
-    className?: string
-}) {
-    return (
-        <div className={`animate-signal-resolve ${className}`}>
-            {children}
-        </div>
-    )
+export function StreamFade({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+    return <div className={`animate-signal-resolve ${className}`}>{children}</div>
 }

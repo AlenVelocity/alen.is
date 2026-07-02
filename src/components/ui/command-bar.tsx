@@ -287,7 +287,13 @@ export function CommandBar() {
                                         >
                                             {route.mystery ? '?' : '▸'}
                                         </span>
-                                        <span className={cn('shrink-0', isActive && 'glow-text', route.mystery && 'italic')}>
+                                        <span
+                                            className={cn(
+                                                'shrink-0',
+                                                isActive && 'glow-text',
+                                                route.mystery && 'italic'
+                                            )}
+                                        >
                                             /{route.slug}
                                         </span>
                                         <span className="text-[0.68rem] text-muted-foreground/50 truncate flex-1">

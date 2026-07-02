@@ -144,11 +144,11 @@ function TopSignalsSkeleton() {
             </div>
             <div>
                 {[...Array(6)].map((_, i) => (
-                    <div
-                        key={i}
-                        className="grid grid-cols-[auto_1fr_auto] items-center gap-3 py-2.5"
-                    >
-                        <div className="w-8 h-8 rounded-full skeleton-shimmer" style={{ animationDelay: `${i * 0.08}s` }} />
+                    <div key={i} className="grid grid-cols-[auto_1fr_auto] items-center gap-3 py-2.5">
+                        <div
+                            className="w-8 h-8 rounded-full skeleton-shimmer"
+                            style={{ animationDelay: `${i * 0.08}s` }}
+                        />
                         <div className="min-w-0 space-y-2">
                             <SkeletonBar width={`${45 + ((i * 13) % 35)}%`} height="0.625rem" delay={i * 0.1} />
                             <div className="h-1 bg-muted/40 rounded-full overflow-hidden">

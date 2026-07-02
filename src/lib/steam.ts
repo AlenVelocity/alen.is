@@ -60,7 +60,7 @@ export async function fetchOwnedGames(): Promise<SteamOwnedGame[]> {
                 name: game.name,
                 playtime_forever: game.playtime_forever,
                 playtime_forever_hours: Math.round((game.playtime_forever / 60) * 10) / 10,
-                img_icon_url: game.img_icon_url,
+                img_icon_url: game.img_icon_url
             }))
             .sort((a: SteamOwnedGame, b: SteamOwnedGame) => b.playtime_forever - a.playtime_forever)
     } catch {
@@ -91,12 +91,12 @@ export async function fetchXboxGames(): Promise<XboxGame[]> {
         const headers = {
             'X-Authorization': OXBL_API_KEY,
             'Content-Type': 'application/json',
-            'Accept-Language': 'en-US',
+            'Accept-Language': 'en-US'
         }
 
         const response = await fetch(`https://xbl.io/api/v2/achievements/player/${XBOX_XUID}`, {
             headers,
-            next: { revalidate: 3600 },
+            next: { revalidate: 3600 }
         })
         if (!response.ok) return []
 
@@ -111,7 +111,7 @@ export async function fetchXboxGames(): Promise<XboxGame[]> {
             currentAchievements: game.achievement?.currentAchievements || 0,
             totalAchievements: game.achievement?.totalAchievements || 0,
             lastPlayed: game.titleHistory?.lastTimePlayed || undefined,
-            image: game.displayImage || undefined,
+            image: game.displayImage || undefined
         }))
     } catch {
         return []
@@ -135,13 +135,13 @@ export async function fetchXboxGameAchievements(titleId: string): Promise<XboxAc
         const headers = {
             'X-Authorization': OXBL_API_KEY,
             'Content-Type': 'application/json',
-            'Accept-Language': 'en-US',
+            'Accept-Language': 'en-US'
         }
 
-        const response = await fetch(
-            `https://xbl.io/api/v2/achievements/title/${titleId}`,
-            { headers, next: { revalidate: 3600 } }
-        )
+        const response = await fetch(`https://xbl.io/api/v2/achievements/title/${titleId}`, {
+            headers,
+            next: { revalidate: 3600 }
+        })
         if (!response.ok) return []
 
         const data = await response.json()
@@ -156,7 +156,7 @@ export async function fetchXboxGameAchievements(titleId: string): Promise<XboxAc
             gamerscore: a.rewards?.find((r: any) => r.type === 'Gamerscore')?.value
                 ? Number(a.rewards.find((r: any) => r.type === 'Gamerscore')?.value)
                 : 0,
-            icon: a.mediaAssets?.[0]?.url || undefined,
+            icon: a.mediaAssets?.[0]?.url || undefined
         }))
     } catch {
         return []
@@ -174,7 +174,7 @@ export async function fetchAllGames(): Promise<GameEntry[]> {
         slug: slugify(g.name),
         platform: 'steam' as const,
         playtime_forever_hours: g.playtime_forever_hours,
-        image: `https://cdn.cloudflare.steamstatic.com/steam/apps/${g.appid}/header.jpg`,
+        image: `https://cdn.cloudflare.steamstatic.com/steam/apps/${g.appid}/header.jpg`
     }))
 
     const xbox: GameEntry[] = xboxGames.map((g) => ({
@@ -185,7 +185,7 @@ export async function fetchAllGames(): Promise<GameEntry[]> {
         playtime_forever_hours: 0,
         image: g.image || '',
         achievements: { current: g.currentAchievements, total: g.totalAchievements },
-        lastPlayed: g.lastPlayed,
+        lastPlayed: g.lastPlayed
     }))
 
     // Deduplicate — if a game exists on both platforms, prefer Steam (has playtime data)
@@ -214,14 +214,14 @@ const steamStoreDetailsSchema = z.object({
             release_date: z
                 .object({
                     coming_soon: z.boolean(),
-                    date: z.string(),
+                    date: z.string()
                 })
                 .optional(),
             genres: z
                 .array(
                     z.object({
                         id: z.string(),
-                        description: z.string(),
+                        description: z.string()
                     })
                 )
                 .optional(),
@@ -230,14 +230,14 @@ const steamStoreDetailsSchema = z.object({
                     z.object({
                         id: z.number(),
                         path_thumbnail: z.string(),
-                        path_full: z.string(),
+                        path_full: z.string()
                     })
                 )
                 .optional(),
             developers: z.array(z.string()).optional(),
-            publishers: z.array(z.string()).optional(),
+            publishers: z.array(z.string()).optional()
         })
-        .optional(),
+        .optional()
 })
 
 export interface SteamGameDetails {
@@ -272,10 +272,10 @@ export async function fetchGameDetails(appid: number): Promise<SteamGameDetails 
             genres: parsed.data.genres?.map((g) => g.description) || [],
             screenshots: (parsed.data.screenshots || []).slice(0, 4).map((s) => ({
                 thumbnail: s.path_thumbnail,
-                full: s.path_full,
+                full: s.path_full
             })),
             developers: parsed.data.developers || [],
-            publishers: parsed.data.publishers || [],
+            publishers: parsed.data.publishers || []
         }
     } catch {
         return null
