@@ -9,7 +9,7 @@ export default function MeetingPage() {
     const { theme } = useTheme()
 
     useEffect(() => {
-        ;(async function () {
+        ; (async function () {
             const cal = await getCalApi()
             cal('ui', {
                 theme: theme === 'dark' ? 'dark' : 'light',
@@ -24,8 +24,8 @@ export default function MeetingPage() {
         <PageTransition>
             <div className="container max-w-4xl py-12">
                 <Cal
-                    namespace="1-hour-meeting"
-                    calLink="xlxnyx/1-hour-meeting"
+                    namespace="20-min-meeting"
+                    calLink="xlxnyx/20-min"
                     style={{
                         width: '100%',
                         height: 'calc(100dvh - 8rem)',
