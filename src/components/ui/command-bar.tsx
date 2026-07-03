@@ -307,15 +307,15 @@ export function CommandBar() {
                             })}
                         </ul>
 
-                        {/* Hints */}
+                        {/* Hints — keyboard shortcuts are pointless on touch, so they only show sm+ */}
                         <footer className="flex items-center gap-3 px-4 py-2 border-t border-border/60 text-[0.62rem] font-mono-ui text-muted-foreground/40 select-none">
-                            <span>
+                            <span className="hidden sm:inline">
                                 <span className="text-accent/60">↑↓</span> navigate
                             </span>
-                            <span>
+                            <span className="hidden sm:inline">
                                 <span className="text-accent/60">tab</span> complete
                             </span>
-                            <span>
+                            <span className="hidden sm:inline">
                                 <span className="text-accent/60">↵</span> warp
                             </span>
                             {/* Minimal-motion toggle: skips the UFO warp transition, persists in localStorage */}
@@ -327,7 +327,7 @@ export function CommandBar() {
                             >
                                 <span className="text-accent/60">fx</span> {minimalFx ? 'minimal' : 'full'}
                             </button>
-                            <span>
+                            <span className="hidden sm:inline">
                                 <span className="text-accent/60">esc</span> abort
                             </span>
                         </footer>

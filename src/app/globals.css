@@ -636,8 +636,12 @@ body::after {
     opacity: 0.35;
 }
 
-body.custom-cursor * {
-    cursor: none !important;
+/* Hide the native cursor only where the blob actually renders (it's
+   hidden lg:block) — otherwise small windows end up with no cursor at all */
+@media (min-width: 1024px) and (pointer: fine) {
+    body.custom-cursor * {
+        cursor: none !important;
+    }
 }
 
 /* ─── Scan line overlay ──────────────────────────────────────────────── */
