@@ -7,10 +7,10 @@ export const metadata: Metadata = {
     title: 'cool',
     description: 'Am I cool?',
     openGraph: {
-        title: 'cool',
+        title: 'Alen is cool?',
         description: 'Am I cool?',
         url: 'https://alen.is/cool',
-        images: [{ url: '/rinu-cool.webp', width: 250, height: 250, alt: 'Rinu Cool' }]
+        images: [{ url: '/api/og?is=cool', width: 1200, height: 630, alt: 'alen is cool?' }]
     },
     alternates: { canonical: '/cool' }
 }

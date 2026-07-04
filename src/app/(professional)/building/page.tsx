@@ -8,9 +8,10 @@ export const metadata: Metadata = {
     title: 'Projects',
     description: "Things I've built, shipped and sometimes abandoned",
     openGraph: {
-        title: 'Projects',
+        title: 'Alen is Building',
         description: "Things I've built, shipped and sometimes abandoned",
-        url: 'https://alen.is/building'
+        url: 'https://alen.is/building',
+        images: [{ url: '/api/og?is=building', width: 1200, height: 630, alt: 'alen is building' }]
     },
     alternates: { canonical: '/building' }
 }

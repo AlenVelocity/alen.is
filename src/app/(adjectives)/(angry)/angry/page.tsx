@@ -8,7 +8,8 @@ export const metadata: Metadata = {
     openGraph: {
         title: 'Alen is angry',
         description: 'Alen is angry. Probably not but who knows.',
-        url: 'https://alen.is/angry'
+        url: 'https://alen.is/angry',
+        images: [{ url: '/api/og?is=angry', width: 1200, height: 630, alt: 'alen is angry' }]
     },
     alternates: { canonical: '/angry' }
 }

@@ -6,7 +6,8 @@ export const metadata: Metadata = {
     description: 'My hardware setup',
     openGraph: {
         title: 'Alen is Using',
-        description: 'My gear and setup'
+        description: 'My gear and setup',
+        images: [{ url: '/api/og?is=using', width: 1200, height: 630, alt: 'alen is using' }]
     },
     alternates: { canonical: '/using' }
 }
@@ -69,7 +70,7 @@ const gearSections: GearSection[] = [
         items: [
             {
                 name: '7Hz x Crinacle Divine',
-                specs: 'Crinacle Collab Tuning · 3.5mm Wired',
+                specs: 'Planar · Crinacle Collab Tuning · 3.5mm Wired',
                 type: 'IEM · Wired',
                 badge: 'Daily Driver'
             },
@@ -106,8 +107,8 @@ function GearRow({ item }: { item: GearItem }) {
         item.badge === 'Daily Driver'
             ? 'text-accent border-accent/30'
             : item.badge === 'Broken'
-              ? 'text-destructive border-destructive/30'
-              : 'text-muted-foreground border-border/50'
+                ? 'text-destructive border-destructive/30'
+                : 'text-muted-foreground border-border/50'
 
     return (
         <div

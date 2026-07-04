@@ -7,7 +7,8 @@ export const metadata: Metadata = {
     openGraph: {
         title: 'Alen is pan',
         description: 'Alen is pan.',
-        url: 'https://alen.is/pan'
+        url: 'https://alen.is/pan',
+        images: [{ url: '/api/og?is=pan', width: 1200, height: 630, alt: 'alen is pan' }]
     },
     alternates: { canonical: '/pan' }
 }

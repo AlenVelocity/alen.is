@@ -12,6 +12,11 @@ const BORDER = '#d3dade'
 const RED = '#d64545'
 const DARK = '#0b1416' // mini "photo" canvas, matches dark mode bg
 
+// Bisexual flag palette
+const BI_PINK = '#D60270'
+const BI_PURPLE = '#9B4F96'
+const BI_BLUE = '#0038A8'
+
 export const OG_SIZE = { width: 1200, height: 630 }
 
 /** Polaroid-style pinned card with a glowing UFO "photo" */
@@ -206,7 +211,14 @@ export async function renderOgImage(word?: string, kind: OgKind = 'page') {
                             {word ? (
                                 <>
                                     <span style={{ color: MUTED }}>alen is&nbsp;</span>
-                                    <span style={{ color: ACCENT }}>{word}</span>
+                                    {word === 'bi' ? (
+                                        <span style={{ display: 'flex' }}>
+                                            <span style={{ color: BI_PINK }}>b</span>
+                                            <span style={{ color: BI_BLUE }}>i</span>
+                                        </span>
+                                    ) : (
+                                        <span style={{ color: ACCENT }}>{word}</span>
+                                    )}
                                     {suffix && <span style={{ color: suffixColor }}>{suffix}</span>}
                                 </>
                             ) : (

@@ -19,12 +19,13 @@ const getWorkTypeBadge = (workType: string) => {
 }
 
 export const metadata: Metadata = {
-    title: 'working',
+    title: 'Experience',
     description: 'Alen is gaining experience. My professional journey as a Software Engineer.',
     openGraph: {
         title: 'Alen is Working',
         description: 'Alen is gaining experience. My professional journey as a Software Engineer.',
-        url: 'https://alen.is/working'
+        url: 'https://alen.is/working',
+        images: [{ url: '/api/og?is=working', width: 1200, height: 630, alt: 'alen is working' }]
     },
     alternates: { canonical: '/experience' }
 }
@@ -81,9 +82,8 @@ export default async function Experience() {
                                 <div key={experience.id} className="relative pl-8 group/exp">
                                     {/* Timeline dot */}
                                     <div
-                                        className={`absolute left-0 top-1.5 w-2 h-2 -translate-x-[3.5px] border border-border bg-background transition-colors duration-300 group-hover/exp:border-accent/60 ${
-                                            experience.current ? 'bg-accent border-accent ring-4 ring-accent/15' : ''
-                                        }`}
+                                        className={`absolute left-0 top-1.5 w-2 h-2 -translate-x-[3.5px] border border-border bg-background transition-colors duration-300 group-hover/exp:border-accent/60 ${experience.current ? 'bg-accent border-accent ring-4 ring-accent/15' : ''
+                                            }`}
                                     />
 
                                     {/* Entry */}
