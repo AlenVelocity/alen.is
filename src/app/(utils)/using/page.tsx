@@ -107,8 +107,8 @@ function GearRow({ item }: { item: GearItem }) {
         item.badge === 'Daily Driver'
             ? 'text-accent border-accent/30'
             : item.badge === 'Broken'
-                ? 'text-destructive border-destructive/30'
-                : 'text-muted-foreground border-border/50'
+              ? 'text-destructive border-destructive/30'
+              : 'text-muted-foreground border-border/50'
 
     return (
         <div

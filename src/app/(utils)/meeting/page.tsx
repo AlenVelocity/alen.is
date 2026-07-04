@@ -9,7 +9,7 @@ export default function MeetingPage() {
     const { theme } = useTheme()
 
     useEffect(() => {
-        ; (async function () {
+        ;(async function () {
             const cal = await getCalApi()
             cal('ui', {
                 theme: theme === 'dark' ? 'dark' : 'light',
