@@ -14,7 +14,8 @@ export const metadata: Metadata = {
     description: 'What I play',
     openGraph: {
         title: 'Alen is Playing',
-        description: 'What I play'
+        description: 'What I play',
+        images: [{ url: '/api/og?is=playing', width: 1200, height: 630, alt: 'alen is playing' }]
     },
     alternates: { canonical: '/playing' }
 }
@@ -88,7 +89,7 @@ export default async function Playing() {
                     className="text-display text-4xl md:text-5xl mb-6 animate-fade-in-up opacity-0 stagger-2"
                     style={{ animationFillMode: 'forwards' }}
                 >
-                    Playing
+                    <span className="inline-block animate-glitch-shift">Playing</span>
                 </h1>
 
                 {/* Stats HUD */}
@@ -251,7 +252,13 @@ export default async function Playing() {
                                         }}
                                         aria-hidden="true"
                                     />
-                                    <span className="relative mono-label text-muted-foreground/30 w-5 text-right shrink-0 group-hover:text-accent/60 transition-colors">
+                                    <span
+                                        className={`relative mono-label w-5 text-right shrink-0 transition-colors ${
+                                            i < 3
+                                                ? 'text-accent/70 [text-shadow:var(--glow-accent)]'
+                                                : 'text-muted-foreground/30 group-hover:text-accent/60'
+                                        }`}
+                                    >
                                         {String(i + 1).padStart(2, '0')}
                                     </span>
                                     <div className="relative w-16 h-7 rounded overflow-hidden flex-shrink-0 ring-1 ring-border/50 group-hover:ring-accent/30 transition-all">

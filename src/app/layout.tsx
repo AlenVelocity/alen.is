@@ -69,14 +69,13 @@ export const metadata = {
         url: 'https://alen.is',
         title: 'Alen.is',
         description: 'Engineer, developer and creator of cool stuff',
-        siteName: 'Alen Yohannan',
-        images: [{ url: '/og.jpg', width: 1200, height: 630, alt: 'Alen.is' }]
+        siteName: 'Alen Yohannan'
+        // og:image comes from src/app/opengraph-image.tsx (next/og)
     },
     twitter: {
         card: 'summary_large_image',
         title: 'Alen.is',
-        description: 'Engineer and creator of cool stuff',
-        images: ['/og.jpg']
+        description: 'Engineer and creator of cool stuff'
     }
 }
 

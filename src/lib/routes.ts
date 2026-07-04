@@ -29,3 +29,29 @@ export const SITE_ROUTES: SiteRoute[] = [
     // contact
     { slug: 'meeting', description: 'book a call with me', group: 'contact' }
 ]
+
+/** Pages that read as adjectives — their OG card asks "alen is <word>?" (no verdict stamp) */
+export const ADJECTIVE_SLUGS = new Set(['cool', 'bi', 'gay', 'pan', 'straight', 'thinking', 'angry', 'mad'])
+
+/** Professional pages — their OG card declares "alen is <word>!" */
+export const PROFESSIONAL_SLUGS = new Set(['working', 'building', 'experience'])
+
+/**
+ * Every real top-level page slug, including the ones deliberately left out of
+ * the command bar. The OG endpoint uses this to decide between a confident
+ * "alen is <word>" and a doubtful "alen is <word>?".
+ */
+export const ALL_PAGE_SLUGS = new Set([
+    ...SITE_ROUTES.map((r) => r.slug),
+    'angry',
+    'mad',
+    'bi',
+    'gay',
+    'pan',
+    'straight',
+    'thinking',
+    'experience',
+    'coding',
+    'lifting',
+    'lost'
+])
