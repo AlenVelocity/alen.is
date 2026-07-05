@@ -1,16 +1,15 @@
 import { Metadata } from 'next'
 import { PageTransition } from '@/components/ui/page-transition'
 
-export const metadata: Metadata = {
+import { constructMetadata } from '@/lib/metadata'
+
+export const metadata: Metadata = constructMetadata({
     title: 'My Gear',
     description: 'My hardware setup',
-    openGraph: {
-        title: 'Alen is Using',
-        description: 'My gear and setup',
-        images: [{ url: '/api/og?is=using', width: 1200, height: 630, alt: 'alen is using' }]
-    },
-    alternates: { canonical: '/using' }
-}
+    slug: 'using',
+    ogTitle: 'Alen is Using',
+    openGraph: { description: 'My gear and setup' }
+})
 
 type GearItem = {
     name: string

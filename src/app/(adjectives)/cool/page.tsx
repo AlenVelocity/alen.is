@@ -3,17 +3,15 @@ import CoolPoll from '@/components/CoolPoll'
 import { api } from '@/trpc/server'
 import { Metadata } from 'next'
 
-export const metadata: Metadata = {
+import { constructMetadata } from '@/lib/metadata'
+
+export const metadata: Metadata = constructMetadata({
     title: 'cool',
     description: 'Am I cool?',
-    openGraph: {
-        title: 'Alen is cool?',
-        description: 'Am I cool?',
-        url: 'https://alen.is/cool',
-        images: [{ url: '/rinu-cool.webp', width: 250, height: 250, alt: 'Rinu Cool' }]
-    },
-    alternates: { canonical: '/cool' }
-}
+    slug: 'cool',
+    ogTitle: 'Alen is cool?',
+    openGraph: { description: 'Am I cool?' }
+})
 
 export default async function Cool() {
     const initialPollData = await api.poll.getCoolPoll()

@@ -4,16 +4,13 @@ import JsonLd from '@/components/JsonLd'
 import { runGetProjects } from '@/lib/cms-db'
 import { ProjectDetail, ProjectRow } from './_components/ProjectCard'
 
-export const metadata: Metadata = {
+import { constructMetadata } from '@/lib/metadata'
+
+export const metadata: Metadata = constructMetadata({
     title: 'Projects',
     description: "Things I've built, shipped and sometimes abandoned",
-    openGraph: {
-        title: 'Alen is Building',
-        description: "Things I've built, shipped and sometimes abandoned",
-        url: 'https://alen.is/building'
-    },
-    alternates: { canonical: '/building' }
-}
+    slug: 'building'
+})
 
 export default async function Building() {
     const allProjects = await runGetProjects()

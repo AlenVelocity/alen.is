@@ -4,15 +4,15 @@ import { api } from '@/trpc/server'
 import { FiGithub, FiCode, FiGitCommit, FiGitPullRequest } from 'react-icons/fi'
 import { VscIssues } from 'react-icons/vsc'
 
-export const metadata: Metadata = {
+import { constructMetadata } from '@/lib/metadata'
+
+export const metadata: Metadata = constructMetadata({
     title: 'Coding',
     description: 'My GitHub stats and contributions',
-    openGraph: {
-        title: 'Alen is Coding',
-        description: 'My GitHub stats and contributions'
-    },
-    alternates: { canonical: '/coding' }
-}
+    slug: 'coding',
+    ogTitle: 'Alen is Coding',
+    openGraph: { description: 'My GitHub stats and contributions' }
+})
 
 function ContributionGraph({ days }: { days: { date: string; contributionCount: number; color: string }[] }) {
     const weeks: (typeof days)[] = []

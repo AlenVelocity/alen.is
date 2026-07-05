@@ -1,14 +1,9 @@
 import { Metadata } from 'next'
 
-export const metadata: Metadata = {
+import { constructMetadata } from '@/lib/metadata'
+
+export const metadata: Metadata = constructMetadata({
     title: 'Schedule a Meeting',
-    description: 'Book a 20 min meeting with Alen',
-    openGraph: {
-        title: 'Schedule a Meeting',
-        description: 'Book a 20 min meeting with Alen',
-        url: 'https://alen.is/meeting'
-    },
-    alternates: {
-        canonical: '/meeting'
-    }
-}
+    description: 'Book a one-hour meeting with Alen',
+    slug: 'meeting'
+})

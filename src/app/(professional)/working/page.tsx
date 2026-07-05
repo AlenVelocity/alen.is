@@ -1,5 +1,6 @@
 import { LinkButton } from '@/components/ui/link-button'
 import { PageTransition } from '@/components/ui/page-transition'
+import { constructMetadata } from '@/lib/metadata'
 import { FiDownload, FiMapPin, FiWifi, FiHome, FiRepeat } from 'react-icons/fi'
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
@@ -18,17 +19,16 @@ const getWorkTypeBadge = (workType: string) => {
     }
 }
 
-export const metadata: Metadata = {
-    title: 'Experience',
-    description: "Alen's Work Experience",
-    openGraph: {
-        title: 'Alen is Working',
-        description: "Alen's Work Experience",
-        url: 'https://alen.is/working',
-        images: [{ url: '/api/og?is=working', width: 1200, height: 630, alt: 'alen is working' }]
-    },
-    alternates: { canonical: '/experience' }
-}
+export const metadata: Metadata = constructMetadata({
+    title: 'working',
+    description: 'Alen is gaining experience. My professional journey as a Software Engineer.',
+    slug: 'working',
+    ogTitle: 'Alen is Working',
+    noCanonical: true, // It has /experience canonical
+    openGraph: { description: 'Alen is gaining experience. My professional journey as a Software Engineer.' }
+})
+
+metadata.alternates = { canonical: '/experience' }
 
 export default async function Experience() {
     const experiences = await runGetExperiences()

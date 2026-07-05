@@ -9,16 +9,14 @@ import Link from 'next/link'
 import { slugify, fetchXboxGames } from '@/lib/steam'
 import { CollapsibleSection } from '@/components/ui/collapsible-section'
 
-export const metadata: Metadata = {
+import { constructMetadata } from '@/lib/metadata'
+
+export const metadata: Metadata = constructMetadata({
     title: 'Playing',
     description: 'What I play',
-    openGraph: {
-        title: 'Alen is Playing',
-        description: 'What I play',
-        images: [{ url: '/api/og?is=playing', width: 1200, height: 630, alt: 'alen is playing' }]
-    },
-    alternates: { canonical: '/playing' }
-}
+    slug: 'playing',
+    ogTitle: 'Alen is Playing'
+})
 
 function PlatformIcon({ platform }: { platform: 'steam' | 'xbox' }) {
     return platform === 'steam' ? (

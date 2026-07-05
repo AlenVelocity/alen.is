@@ -2,16 +2,15 @@ import Image from 'next/image'
 import { Metadata } from 'next'
 import { CenteredPage } from '@/components/ui/centered-page'
 
-export const metadata: Metadata = {
+import { constructMetadata } from '@/lib/metadata'
+
+export const metadata: Metadata = constructMetadata({
     title: 'thinking',
-    description: 'Alen is thinking...',
-    openGraph: {
-        title: 'Alen is thinking',
-        description: 'Alen is thinking...',
-        url: 'https://alen.is/thinking'
-    },
-    alternates: { canonical: '/thinking' }
-}
+    description: 'Alen is thinking. Thinking about stuff, ideas, and random thoughts over here.',
+    slug: 'thinking',
+    ogTitle: 'Alen is thinking',
+    openGraph: { description: 'Alen is thinking. Ideas and thoughts.' }
+})
 
 export default function Thinking() {
     return (

@@ -1,16 +1,15 @@
 import { redirect } from 'next/navigation'
 import { Metadata } from 'next'
 
-export const metadata: Metadata = {
+import { constructMetadata } from '@/lib/metadata'
+
+export const metadata: Metadata = constructMetadata({
     title: 'gay',
-    description: 'Alen is gay?',
-    openGraph: {
-        title: 'Alen is gay',
-        description: 'Alen is gay.',
-        url: 'https://alen.is/gay'
-    },
-    alternates: { canonical: '/gay' }
-}
+    description: 'Alen is gay? Try bi. Redirecting...',
+    slug: 'gay',
+    ogTitle: 'Alen is gay',
+    openGraph: { description: 'Alen is gay.' }
+})
 
 export default function Gay() {
     redirect('/bi')

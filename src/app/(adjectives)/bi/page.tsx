@@ -1,17 +1,15 @@
 import { Metadata } from 'next'
 import BiClient from './BiClient'
 
-export const metadata: Metadata = {
+import { constructMetadata } from '@/lib/metadata'
+
+export const metadata: Metadata = constructMetadata({
     title: 'bi',
-    description: 'Alen is bi?',
-    openGraph: {
-        title: 'Alen is bi?',
-        description: 'Alen is bi?',
-        url: 'https://alen.is/bi',
-        images: [{ url: '/api/og?is=bi', width: 1200, height: 630, alt: 'alen is bi' }]
-    },
-    alternates: { canonical: '/bi' }
-}
+    description: "Alen is bi. Everyone's cute, not his fault.",
+    slug: 'bi',
+    ogTitle: 'Alen is bi',
+    openGraph: { description: "Alen is bi. Everyone's cute." }
+})
 
 export default function Bi() {
     return <BiClient />

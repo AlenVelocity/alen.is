@@ -14,16 +14,14 @@ import { TopSignals, EqualizerBars } from './_components/top-signals'
 import { SkeletonBar, SkeletonTile, SignalRowsSkeleton } from '@/components/ui/signal-skeleton'
 import { formatDistanceToNow, parse } from 'date-fns'
 
-export const metadata: Metadata = {
+import { constructMetadata } from '@/lib/metadata'
+
+export const metadata: Metadata = constructMetadata({
     title: 'Listening',
     description: 'What I listen to',
-    openGraph: {
-        title: 'Alen is Listening',
-        description: 'What I listen to',
-        images: [{ url: '/sumika-wrapped.png', width: 250, height: 250, alt: "Alen's Year of Sumika" }]
-    },
-    alternates: { canonical: '/listening' }
-}
+    slug: 'listening',
+    ogTitle: 'Alen is Listening'
+})
 
 /**
  * One Last.fm round-trip per request, shared by every section below via

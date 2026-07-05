@@ -2,15 +2,14 @@ import { Metadata } from 'next'
 import { CenteredPage } from '@/components/ui/centered-page'
 import { GiWeightLiftingUp } from 'react-icons/gi'
 
-export const metadata: Metadata = {
+import { constructMetadata } from '@/lib/metadata'
+
+export const metadata: Metadata = constructMetadata({
     title: 'Lifting',
     description: 'My workout and fitness stats',
-    openGraph: {
-        title: 'Alen is Lifting',
-        description: 'My workout and fitness stats'
-    },
-    alternates: { canonical: '/lifting' }
-}
+    slug: 'lifting',
+    ogTitle: 'Alen is Lifting'
+})
 
 export default function Lifting() {
     return (
