@@ -25,7 +25,7 @@ export const metadata = {
         default: "Alen's Personal Website",
         template: 'Alen is %s'
     },
-    description: 'Engineer, developer and creator of cool stuff',
+    description: 'Human* and creator of cool stuff',
     metadataBase: new URL('https://alen.is'),
     manifest: '/manifest.json',
     applicationName: 'Alen.is',
@@ -68,14 +68,14 @@ export const metadata = {
         locale: 'en_US',
         url: 'https://alen.is',
         title: 'Alen.is',
-        description: 'Engineer, developer and creator of cool stuff',
+        description: 'Human* and creator of cool stuff',
         siteName: 'Alen Yohannan'
         // og:image comes from src/app/opengraph-image.tsx (next/og)
     },
     twitter: {
         card: 'summary_large_image',
         title: 'Alen.is',
-        description: 'Engineer and creator of cool stuff'
+        description: 'Human* and creator of cool stuff'
     }
 }
 

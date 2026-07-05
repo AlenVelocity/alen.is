@@ -1,7 +1,7 @@
 {
   "name": "Alen Yohannan | Developer",
   "short_name": "Alen.is",
-  "description": "Personal website of Alen Yohannan - Engineer, developer and creator of cool stuff",
+  "description": "Personal website of Alen Yohannan - Human* and creator of cool stuff",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -32,6 +32,5 @@
       "sizes": "180x180",
       "type": "image/png"
     }
-
   ]
-} 
+}

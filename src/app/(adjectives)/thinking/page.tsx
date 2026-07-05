@@ -4,10 +4,10 @@ import { CenteredPage } from '@/components/ui/centered-page'
 
 export const metadata: Metadata = {
     title: 'thinking',
-    description: 'Alen is thinking. Thinking about stuff, ideas, and random thoughts over here.',
+    description: 'Alen is thinking...',
     openGraph: {
         title: 'Alen is thinking',
-        description: 'Alen is thinking. Ideas and thoughts.',
+        description: 'Alen is thinking...',
         url: 'https://alen.is/thinking',
         images: [{ url: '/api/og?is=thinking', width: 1200, height: 630, alt: 'alen is thinking' }]
     },

@@ -20,10 +20,10 @@ const getWorkTypeBadge = (workType: string) => {
 
 export const metadata: Metadata = {
     title: 'Experience',
-    description: 'Alen is gaining experience. My professional journey as a Software Engineer.',
+    description: "Alen's Work Experience",
     openGraph: {
         title: 'Alen is Working',
-        description: 'Alen is gaining experience. My professional journey as a Software Engineer.',
+        description: "Alen's Work Experience",
         url: 'https://alen.is/working',
         images: [{ url: '/api/og?is=working', width: 1200, height: 630, alt: 'alen is working' }]
     },

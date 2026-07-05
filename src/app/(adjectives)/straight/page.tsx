@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 
 export const metadata: Metadata = {
     title: 'straight',
-    description: 'Alen is straight? Try bi. Redirecting...',
+    description: 'Alen is straight?',
     openGraph: {
         title: 'Alen is straight',
         description: 'Alen is straight.',
