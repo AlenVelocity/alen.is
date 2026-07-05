@@ -226,7 +226,7 @@ function TypedCaption({ text, delay }: { text: string; delay: number }) {
     )
 }
 
-export default function BiClient() {
+export default function Bi() {
     const [selected, setSelected] = useState<StripeKey | null>(null)
 
     return (

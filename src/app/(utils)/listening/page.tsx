@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     openGraph: {
         title: 'Alen is Listening',
         description: 'What I listen to',
-        images: [{ url: '/api/og?is=listening', width: 1200, height: 630, alt: 'alen is listening' }]
+        images: [{ url: '/sumika-wrapped.png', width: 250, height: 250, alt: "Alen's Year of Sumika" }]
     },
     alternates: { canonical: '/listening' }
 }

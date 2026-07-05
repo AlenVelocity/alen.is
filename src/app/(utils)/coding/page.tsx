@@ -9,8 +9,7 @@ export const metadata: Metadata = {
     description: 'My GitHub stats and contributions',
     openGraph: {
         title: 'Alen is Coding',
-        description: 'My GitHub stats and contributions',
-        images: [{ url: '/api/og?is=coding', width: 1200, height: 630, alt: 'alen is coding' }]
+        description: 'My GitHub stats and contributions'
     },
     alternates: { canonical: '/coding' }
 }

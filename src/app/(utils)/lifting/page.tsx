@@ -7,8 +7,7 @@ export const metadata: Metadata = {
     description: 'My workout and fitness stats',
     openGraph: {
         title: 'Alen is Lifting',
-        description: 'My workout and fitness stats',
-        images: [{ url: '/api/og?is=lifting', width: 1200, height: 630, alt: 'alen is lifting' }]
+        description: 'My workout and fitness stats'
     },
     alternates: { canonical: '/lifting' }
 }
