@@ -37,6 +37,16 @@ const nextConfig = {
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
   },
+  // /sharing/<file> serves files straight from the Vercel Blob store (alen-is-blob)
+  // while keeping the URL on this domain. Proxied by Vercel's routing layer — no function runs.
+  async rewrites() {
+    return [
+      {
+        source: '/sharing/:path+',
+        destination: 'https://r8h8rkqgn3wryrnj.public.blob.vercel-storage.com/:path+',
+      },
+    ]
+  },
   trailingSlash: true,
   poweredByHeader: false,
   compress: true,

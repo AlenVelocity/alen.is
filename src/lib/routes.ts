@@ -53,5 +53,6 @@ export const ALL_PAGE_SLUGS = new Set([
     'experience',
     'coding',
     'lifting',
-    'lost'
+    'lost',
+    'sharing'
 ])
