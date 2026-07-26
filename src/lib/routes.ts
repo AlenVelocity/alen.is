@@ -25,6 +25,7 @@ export const SITE_ROUTES: SiteRoute[] = [
     { slug: 'playing', description: 'steam & xbox stats', group: 'life' },
     { slug: 'using', description: 'gear & tools', group: 'life' },
     { slug: 'cool', description: 'am I cool?', group: 'life' },
+    { slug: 'blogging', description: 'thoughts, rants, and half-finished ideas', group: 'life' },
 
     // contact
     { slug: 'meeting', description: 'book a call with me', group: 'contact' }

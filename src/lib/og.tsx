@@ -263,3 +263,203 @@ export async function renderOgImage(word?: string, kind: OgKind = 'page') {
         }
     )
 }
+
+export interface BlogOgInput {
+    title: string
+    date: string
+    readingMinutes: number
+    tags: string[]
+    transmissionNumber: string
+}
+
+/** Small saucer glyph used as the ticket's letterhead mark */
+function TicketUfo() {
+    return (
+        <svg width="40" height="22" viewBox="0 0 40 22">
+            <ellipse cx="20" cy="8" rx="7" ry="5" fill={ACCENT} opacity="0.5" />
+            <ellipse cx="20" cy="12" rx="19" ry="5" fill={ACCENT} />
+        </svg>
+    )
+}
+
+/**
+ * Blog-post OG card — a printed dispatch ticket, distinct from the
+ * investigation-board look used for the rest of the site. Perforated top
+ * edge, transmission number + date letterhead, the post title (wraps up to
+ * two lines), and a footer with a reading-time signal meter and tags.
+ */
+export async function renderBlogOgImage({ title, date, readingMinutes, tags, transmissionNumber }: BlogOgInput) {
+    const [bold, regular] = await Promise.all([
+        readFile(join(process.cwd(), 'src/fonts/JetBrainsMono-Bold.ttf')),
+        readFile(join(process.cwd(), 'src/fonts/JetBrainsMono-Regular.ttf'))
+    ])
+
+    const titleSize = title.length > 60 ? 46 : title.length > 40 ? 56 : title.length > 22 ? 66 : 76
+    const barHeights = [10, 16, 24, 16, 10]
+    const litBars = Math.max(1, Math.min(5, Math.round((readingMinutes / 10) * 5)))
+
+    return new ImageResponse(
+        (
+            <div
+                style={{
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: BG,
+                    fontFamily: 'JetBrains Mono',
+                    position: 'relative'
+                }}
+            >
+                {/* Graph-paper grid, same family as the rest of the site's OG cards */}
+                <svg width="1200" height="630" viewBox="0 0 1200 630" style={{ position: 'absolute', inset: 0 }}>
+                    <g stroke={ACCENT} strokeWidth="1" opacity="0.07">
+                        {Array.from({ length: 49 }, (_, i) => (
+                            <line key={`fv${i}`} x1={(i + 1) * 24} y1={0} x2={(i + 1) * 24} y2={630} />
+                        ))}
+                        {Array.from({ length: 26 }, (_, i) => (
+                            <line key={`fh${i}`} x1={0} y1={(i + 1) * 24} x2={1200} y2={(i + 1) * 24} />
+                        ))}
+                    </g>
+                    <g stroke={ACCENT} strokeWidth="1" opacity="0.16">
+                        {Array.from({ length: 12 }, (_, i) => (
+                            <line key={`cv${i}`} x1={(i + 1) * 96} y1={0} x2={(i + 1) * 96} y2={630} />
+                        ))}
+                        {Array.from({ length: 6 }, (_, i) => (
+                            <line key={`ch${i}`} x1={0} y1={(i + 1) * 96} x2={1200} y2={(i + 1) * 96} />
+                        ))}
+                    </g>
+                </svg>
+
+                {/* The dispatch ticket */}
+                <div
+                    style={{
+                        position: 'relative',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        width: 1000,
+                        backgroundColor: CARD,
+                        border: `1px solid ${BORDER}`,
+                        boxShadow: '10px 12px 0 rgba(16, 26, 29, 0.08)',
+                        padding: '46px 60px',
+                        transform: 'rotate(-1deg)'
+                    }}
+                >
+                    {/* Perforation dots along the top edge */}
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: -5,
+                            left: 30,
+                            right: 30,
+                            display: 'flex',
+                            justifyContent: 'space-between'
+                        }}
+                    >
+                        {Array.from({ length: 26 }, (_, i) => (
+                            <div key={i} style={{ width: 8, height: 8, borderRadius: 9999, backgroundColor: BG }} />
+                        ))}
+                    </div>
+
+                    {/* Letterhead */}
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            marginBottom: 34
+                        }}
+                    >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                            <TicketUfo />
+                            <span style={{ display: 'flex', fontSize: 19, letterSpacing: 4, color: MUTED }}>
+                                TRANSMISSION // {transmissionNumber}
+                            </span>
+                        </div>
+                        <span style={{ display: 'flex', fontSize: 18, color: MUTED }}>{date}</span>
+                    </div>
+
+                    {/* Title — wraps up to two lines */}
+                    <div
+                        style={{
+                            display: 'flex',
+                            fontSize: titleSize,
+                            fontWeight: 700,
+                            color: FG,
+                            lineHeight: 1.12,
+                            letterSpacing: -1.5,
+                            marginBottom: 36
+                        }}
+                    >
+                        {title}
+                    </div>
+
+                    {/* Footer: reading-time signal meter + tags */}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 4 }}>
+                                {barHeights.map((h, i) => (
+                                    <div
+                                        key={i}
+                                        style={{
+                                            width: 7,
+                                            height: h,
+                                            backgroundColor: ACCENT,
+                                            opacity: i < litBars ? 0.9 : 0.15
+                                        }}
+                                    />
+                                ))}
+                            </div>
+                            <span style={{ display: 'flex', fontSize: 19, color: ACCENT }}>
+                                {readingMinutes} min read
+                            </span>
+                        </div>
+                        {tags.length > 0 && (
+                            <div style={{ display: 'flex', gap: 10 }}>
+                                {tags.slice(0, 3).map((tag) => (
+                                    <div
+                                        key={tag}
+                                        style={{
+                                            display: 'flex',
+                                            fontSize: 17,
+                                            color: MUTED,
+                                            border: `1px solid ${BORDER}`,
+                                            borderRadius: 9999,
+                                            padding: '6px 16px'
+                                        }}
+                                    >
+                                        {tag}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Watermark */}
+                <div
+                    style={{
+                        position: 'absolute',
+                        bottom: 40,
+                        right: 96,
+                        display: 'flex',
+                        fontSize: 17,
+                        letterSpacing: 2,
+                        color: MUTED,
+                        opacity: 0.7
+                    }}
+                >
+                    alen.is/blogging
+                </div>
+            </div>
+        ),
+        {
+            ...OG_SIZE,
+            fonts: [
+                { name: 'JetBrains Mono', data: bold, weight: 700, style: 'normal' },
+                { name: 'JetBrains Mono', data: regular, weight: 400, style: 'normal' }
+            ]
+        }
+    )
+}

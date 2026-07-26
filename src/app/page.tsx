@@ -1,4 +1,6 @@
 import { Suspense } from 'react'
+import Link from 'next/link'
+import { format } from 'date-fns'
 import { LinkButton } from '@/components/ui/link-button'
 import { PageTransition } from '@/components/ui/page-transition'
 import { DiscordCopy } from '@/components/ui/discord-copy'
@@ -6,9 +8,10 @@ import { Signature } from '@/components/ui/signature'
 import { GlitchPersonWord } from '@/components/ui/glitch-word'
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
-import { FiMail, FiCalendar } from 'react-icons/fi'
+import { FiMail, FiCalendar, FiArrowUpRight } from 'react-icons/fi'
 import { FaLinkedin, FaGithub, FaWhatsapp } from 'react-icons/fa'
 import { runGetPersonalInfo, runGetSocialLinks } from '@/lib/cms-db'
+import { getAllPosts } from '@/lib/blog'
 import { CurrentlyListening, CurrentlyListeningSkeleton } from './_components/CurrentlyListening'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -70,6 +73,7 @@ function parseTextWithLinks(text: string): React.ReactNode[] {
  */
 export default async function Home() {
     const [personalInfo, socialLinks] = await Promise.all([runGetPersonalInfo(), runGetSocialLinks()])
+    const recentPosts = getAllPosts().slice(0, 3)
 
     const personSchema = {
         '@context': 'https://schema.org',
@@ -175,6 +179,42 @@ export default async function Home() {
                         <CurrentlyListening />
                     </Suspense>
                 </section>
+
+                {/* ── Recent Blogs ────────────────────────────────── */}
+                {recentPosts.length > 0 && (
+                    <section className="mb-20">
+                        <div className="flex items-center justify-between mb-5">
+                            <div className="section-label">recent blogs</div>
+                            <Link
+                                href="/blogging"
+                                className="mono-label text-muted-foreground/50 hover:text-accent transition-colors"
+                            >
+                                all transmissions →
+                            </Link>
+                        </div>
+                        <div>
+                            {recentPosts.map((post) => (
+                                <Link
+                                    key={post.slug}
+                                    href={`/blogging/about/${post.slug}`}
+                                    className="group flex items-center gap-4 py-3.5 border-b border-dashed border-border/50 last:border-b-0 hover:border-accent/40 transition-all duration-200"
+                                >
+                                    <div className="flex-1 min-w-0">
+                                        <p className="font-mono-ui text-sm font-medium truncate group-hover:text-accent transition-colors">
+                                            {post.title}
+                                        </p>
+                                        <p className="mono-label text-muted-foreground/40 mt-0.5">
+                                            {format(new Date(post.date), 'MMM d, yyyy')}
+                                            <span className="mx-1.5">·</span>
+                                            {post.readingMinutes} min read
+                                        </p>
+                                    </div>
+                                    <FiArrowUpRight className="w-3.5 h-3.5 text-muted-foreground/25 group-hover:text-accent shrink-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                                </Link>
+                            ))}
+                        </div>
+                    </section>
+                )}
 
                 {/* ── Contact ──────────────────────────────────────── */}
                 <section className="mb-4">
