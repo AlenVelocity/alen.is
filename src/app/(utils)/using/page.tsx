@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import Image from 'next/image'
 import { PageTransition } from '@/components/ui/page-transition'
 
 import { constructMetadata } from '@/lib/metadata'
@@ -57,6 +58,13 @@ const gearSections: GearSection[] = [
                 type: 'Monitor',
                 badge: 'Secondary'
             }
+        ]
+    },
+    {
+        title: 'Peripherals',
+        items: [
+            { name: 'Cosmic Byte Phantom TKL', specs: 'Hot-swap · Gasket Mount · TKL', type: 'Keyboard' },
+            { name: 'Logitech G304', specs: 'Lightspeed Wireless · 12000 DPI', type: 'Mouse' }
         ]
     },
     {
@@ -185,6 +193,32 @@ export default function Using() {
                     >
                         The stuff I actually use.
                     </p>
+                </div>
+
+                {/* My Setup */}
+                <div className="mb-12 animate-fade-in-up opacity-0 stagger-4" style={{ animationFillMode: 'forwards' }}>
+                    <div className="section-label mb-3">my setup</div>
+                    <div className="relative p-2 rounded-lg border border-border/50 bg-muted/10 shadow-sm">
+                        {/* Corner brackets, matching the schematic feel of the rest of the page */}
+                        <span className="absolute left-0 top-0 w-3 h-3 border-l border-t border-accent/40 -translate-x-px -translate-y-px" />
+                        <span className="absolute right-0 top-0 w-3 h-3 border-r border-t border-accent/40 translate-x-px -translate-y-px" />
+                        <span className="absolute left-0 bottom-0 w-3 h-3 border-l border-b border-accent/40 -translate-x-px translate-y-px" />
+                        <span className="absolute right-0 bottom-0 w-3 h-3 border-r border-b border-accent/40 translate-x-px translate-y-px" />
+
+                        <div className="relative w-full aspect-[4032/3024] rounded-md overflow-hidden ring-1 ring-border/40 shadow-inner">
+                            <Image
+                                src="/images/setup.jpg"
+                                alt="My desk setup"
+                                fill
+                                sizes="(min-width: 768px) 672px, 100vw"
+                                className="object-cover brightness-[1.05]"
+                                priority
+                            />
+                            {/* Tints the whole photo toward the page background while keeping its own color, follows light/dark mode */}
+                            <div className="absolute inset-0 bg-background/40 mix-blend-soft-light pointer-events-none" />
+                            <div className="absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.25)] pointer-events-none" />
+                        </div>
+                    </div>
                 </div>
 
                 {/* Sections */}
