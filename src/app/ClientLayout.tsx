@@ -39,7 +39,7 @@ function getBreadcrumbs(currentPath: string) {
         if (navMatch && navMatch.label !== 'alen.is') {
             label = navMatch.label
         } else {
-            label = humanize(decodeURIComponent(parts[i]))
+            label = decodeURIComponent(parts[i])
         }
         breadcrumbs.push({ href, label })
     }
@@ -72,7 +72,7 @@ function MarqueeBreadcrumb({ children }: { children: React.ReactNode }) {
         <span
             ref={outerRef}
             className={cn(
-                'relative max-w-[8rem] sm:max-w-[10rem] overflow-hidden inline-block align-middle',
+                'relative max-w-[5rem] sm:max-w-[10rem] overflow-hidden inline-block align-middle',
                 shouldMarquee && 'will-change-transform'
             )}
             tabIndex={0}
@@ -203,12 +203,12 @@ function Navigation() {
     const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
 
     return (
-        <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50">
+        <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50 max-w-[calc(100vw-2rem)]">
             <motion.nav
                 layout
                 transition={{ layout: { type: 'spring', stiffness: 500, damping: 35 } }}
                 className={cn(
-                    'flex items-center gap-0 px-1 py-1 border border-border/60',
+                    'flex items-center gap-0 px-1 py-1 border border-border/60 max-w-full',
                     'bg-background/90 backdrop-blur-md shadow-lg shadow-background/20',
                     'rounded-sm'
                 )}
@@ -262,10 +262,11 @@ function Navigation() {
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95 }}
                             transition={{ duration: 0.15 }}
+                            className="min-w-0"
                         >
                             <nav
                                 aria-label="Breadcrumb"
-                                className="flex items-center px-3 py-1.5 text-xs font-mono-ui tracking-wide gap-2"
+                                className="no-scrollbar flex items-center px-3 py-1.5 text-xs font-mono-ui tracking-wide gap-2 overflow-x-auto min-w-0"
                             >
                                 {breadcrumbs.map((crumb, i) => {
                                     const isLast = i === breadcrumbs.length - 1
@@ -297,25 +298,25 @@ function Navigation() {
                     )}
                 </AnimatePresence>
 
-                <div className="w-px h-3 bg-border mx-1" />
+                <div className="w-px h-3 bg-border mx-1 shrink-0" />
 
                 {/* Theme toggle — text style */}
                 {mounted ? (
                     <button
                         onClick={toggleTheme}
-                        className="px-2 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-150 whitespace-nowrap"
+                        className="px-2 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-150 whitespace-nowrap shrink-0"
                         aria-label="Toggle theme"
                     >
                         [{theme === 'dark' ? 'light' : 'dark'}]
                     </button>
                 ) : (
-                    <div className="px-2 py-1.5 text-xs opacity-0 select-none">[dark]</div>
+                    <div className="px-2 py-1.5 text-xs opacity-0 select-none shrink-0">[dark]</div>
                 )}
 
                 {/* Command bar trigger — the "alen.is/…" warp drive (also opens with / or Ctrl+K) */}
                 <button
                     onClick={openCommandBar}
-                    className="px-2 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-150 whitespace-nowrap"
+                    className="px-2 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-150 whitespace-nowrap shrink-0"
                     aria-label="Open site navigator (press / or Ctrl+K)"
                     title="alen.is/… — press / to warp"
                 >
