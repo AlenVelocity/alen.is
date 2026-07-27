@@ -37,6 +37,22 @@ const nextConfig = {
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
   },
+  // /blogging moved to /writing. Kept permanently so old links and anything
+  // already shared keep resolving.
+  async redirects() {
+    return [
+      {
+        source: '/blogging',
+        destination: '/writing/',
+        permanent: true,
+      },
+      {
+        source: '/blogging/:path*',
+        destination: '/writing/:path*',
+        permanent: true,
+      },
+    ]
+  },
   // /sharing/<file> serves files straight from the Vercel Blob store (alen-is-blob)
   // while keeping the URL on this domain. Proxied by Vercel's routing layer — no function runs.
   async rewrites() {

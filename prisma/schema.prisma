@@ -16,6 +16,16 @@ model BinaryPoll {
   updatedAt DateTime
 }
 
+/// Signal boosts per blog post (this site's clap), keyed by the post's mdx slug.
+/// Totals are intentionally write-only for now — nothing reads them back out
+/// over the API, so the counts stay private until they're worth revealing.
+model PostSignal {
+  slug      String   @id
+  count     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 // CMS Models
 model Experience {
   id          String   @id @default(cuid())

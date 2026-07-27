@@ -40,7 +40,7 @@ function toMeta(slug: string, data: Frontmatter, content: string): PostMeta {
     }
 }
 
-/** All published posts, newest first. Used by the /blogging index. */
+/** All published posts, newest first. Used by the /writing index. */
 export function getAllPosts(): PostMeta[] {
     const slugs = readdirSync(BLOG_DIR)
         .filter((file) => file.endsWith('.mdx'))

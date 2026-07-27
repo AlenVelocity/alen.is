@@ -25,14 +25,28 @@ export const SITE_ROUTES: SiteRoute[] = [
     { slug: 'playing', description: 'steam & xbox stats', group: 'life' },
     { slug: 'using', description: 'gear & tools', group: 'life' },
     { slug: 'cool', description: 'am I cool?', group: 'life' },
-    { slug: 'blogging', description: 'thoughts, rants, and half-finished ideas', group: 'life' },
+    { slug: 'writing', description: 'thoughts, rants, and half-finished ideas', group: 'life' },
 
     // contact
     { slug: 'meeting', description: 'book a call with me', group: 'contact' }
 ]
 
 /** Pages that read as adjectives — their OG card asks "alen is <word>?" (no verdict stamp) */
-export const ADJECTIVE_SLUGS = new Set(['cool', 'bi', 'gay', 'pan', 'straight', 'thinking', 'angry', 'mad'])
+export const ADJECTIVE_SLUGS = new Set([
+    'cool',
+    'bi',
+    'gay',
+    'pan',
+    'straight',
+    'thinking',
+    'angry',
+    'mad',
+    'human',
+    'definitely-human',
+    // the OG card spells it out with a space so it reads as a sentence
+    'definitely human',
+    'alien'
+])
 
 /** Professional pages — their OG card declares "alen is <word>!" */
 export const PROFESSIONAL_SLUGS = new Set(['working', 'building', 'experience'])
@@ -55,5 +69,11 @@ export const ALL_PAGE_SLUGS = new Set([
     'coding',
     'lifting',
     'lost',
-    'sharing'
+    'sharing',
+    'human',
+    'definitely-human',
+    // the OG card spells it out with a space so it reads as a sentence
+    'definitely human',
+    'alien',
+    'thankful'
 ])

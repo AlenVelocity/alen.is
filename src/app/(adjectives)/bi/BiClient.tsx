@@ -282,7 +282,7 @@ export default function Bi() {
                 className="text-center space-y-2 relative z-10 animate-fade-in-up opacity-0"
                 style={{ animationDelay: '0.55s', animationFillMode: 'forwards' }}
             >
-                <h1 className="text-display text-3xl md:text-4xl animate-glitch-shift">
+                <h1 className="text-display text-3xl md:text-4xl">
                     <span
                         style={{
                             background: `linear-gradient(90deg, ${BI_COLORS.pink}, ${BI_COLORS.purple}, ${BI_COLORS.blue})`,

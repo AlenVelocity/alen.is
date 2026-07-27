@@ -63,7 +63,7 @@ export default async function Cool() {
 
             {/* Question */}
             <p
-                className="text-display text-3xl text-center animate-fade-in-up opacity-0 stagger-3 animate-glitch-shift"
+                className="text-display text-3xl text-center animate-fade-in-up opacity-0 stagger-3"
                 style={{ rotate: '0.5deg', animationFillMode: 'forwards' }}
             >
                 am I cool?

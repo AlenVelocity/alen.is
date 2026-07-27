@@ -269,7 +269,7 @@ export interface BlogOgInput {
     date: string
     readingMinutes: number
     tags: string[]
-    transmissionNumber: string
+    entryNumber: string
 }
 
 /** Small saucer glyph used as the ticket's letterhead mark */
@@ -286,9 +286,9 @@ function TicketUfo() {
  * Blog-post OG card — a printed dispatch ticket, distinct from the
  * investigation-board look used for the rest of the site. Perforated top
  * edge, transmission number + date letterhead, the post title (wraps up to
- * two lines), and a footer with a reading-time signal meter and tags.
+ * two lines), and a footer with a reading-time meter and tags.
  */
-export async function renderBlogOgImage({ title, date, readingMinutes, tags, transmissionNumber }: BlogOgInput) {
+export async function renderBlogOgImage({ title, date, readingMinutes, tags, entryNumber }: BlogOgInput) {
     const [bold, regular] = await Promise.all([
         readFile(join(process.cwd(), 'src/fonts/JetBrainsMono-Bold.ttf')),
         readFile(join(process.cwd(), 'src/fonts/JetBrainsMono-Regular.ttf'))
@@ -374,7 +374,7 @@ export async function renderBlogOgImage({ title, date, readingMinutes, tags, tra
                         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
                             <TicketUfo />
                             <span style={{ display: 'flex', fontSize: 19, letterSpacing: 4, color: MUTED }}>
-                                TRANSMISSION // {transmissionNumber}
+                                ENTRY // {entryNumber}
                             </span>
                         </div>
                         <span style={{ display: 'flex', fontSize: 18, color: MUTED }}>{date}</span>
@@ -395,7 +395,7 @@ export async function renderBlogOgImage({ title, date, readingMinutes, tags, tra
                         {title}
                     </div>
 
-                    {/* Footer: reading-time signal meter + tags */}
+                    {/* Footer: reading-time meter + tags */}
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                             <div style={{ display: 'flex', alignItems: 'flex-end', gap: 4 }}>
@@ -450,7 +450,7 @@ export async function renderBlogOgImage({ title, date, readingMinutes, tags, tra
                         opacity: 0.7
                     }}
                 >
-                    alen.is/blogging
+                    alen.is/writing
                 </div>
             </div>
         ),

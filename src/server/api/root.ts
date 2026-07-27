@@ -1,5 +1,6 @@
 import { createCallerFactory, createTRPCRouter, publicProcedure } from '@/server/api/trpc'
 import { pollRouter } from './routers/poll'
+import { signalsRouter } from './routers/signals'
 import { lastFmRouter } from './routers/lastfm'
 import { spotifyRouter } from './routers/spotify'
 import { gamingRouter } from './routers/gaming'
@@ -15,6 +16,7 @@ import { reviewsRouter } from './routers/reviews'
 export const appRouter = createTRPCRouter({
     lastfm: lastFmRouter,
     poll: pollRouter,
+    signals: signalsRouter,
     spotify: spotifyRouter,
     gaming: gamingRouter,
     github: githubRouter,

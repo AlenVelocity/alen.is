@@ -46,13 +46,64 @@ const WARP_OUT_MS = 750
 /** Enter phase duration — must outlast the 0.9s abductReturn animation */
 const WARP_IN_MS = 950
 
-type Phase = 'idle' | 'arrive' | 'beam' | 'swallow' | 'depart' | 'warp-out' | 'warp-in'
+export type Phase = 'idle' | 'arrive' | 'beam' | 'swallow' | 'depart' | 'warp-out' | 'warp-in'
+
+/** Who asked for the abduction — each source gets its own pacing */
+export type AbductionSource = 'konami' | 'alien_page'
+
+interface AbductionTiming {
+    /** Saucer swoop-in, in seconds — drives the CSS arrival animation */
+    arriveSec: number
+    /** Beam switches on and the page starts shredding */
+    beamAt: number
+    /** Beam off, saucer gulps */
+    swallowAt: number
+    /** Saucer leaves, content beamed back down */
+    departAt: number
+    /** Everything settles */
+    doneAt: number
+    shred: ShredOptions
+}
+
+/**
+ * The Konami easter egg gets the theatrical version. /alien runs the same
+ * choreography at the navigation warp's pace — it fires on every visit, so it
+ * has to feel like a page transition rather than a cutscene.
+ */
+export const ABDUCTION_TIMINGS: Record<AbductionSource, AbductionTiming> = {
+    konami: {
+        arriveSec: 0.9,
+        beamAt: 900,
+        swallowAt: 2900,
+        departAt: 3400,
+        doneAt: 4400,
+        shred: { duration: 1.15, step: 0.07, maxStagger: 0.6, jitter: 0.1 }
+    },
+    alien_page: {
+        arriveSec: 0.35,
+        beamAt: 300,
+        swallowAt: 1050,
+        departAt: 1300,
+        doneAt: 1950,
+        shred: { duration: 0.55, step: 0.03, maxStagger: 0.12, jitter: 0.05 }
+    }
+}
+
+/** Emitted on every phase change so effects (e.g. the /alien shader) can follow along */
+export const UFO_PHASE_EVENT = 'alen:ufo-phase'
 
 /** Custom event other components (e.g. the command bar) dispatch to navigate via abduction */
 export const UFO_WARP_EVENT = 'alen:ufo-warp'
 
 export function ufoWarp(href: string) {
     if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent<string>(UFO_WARP_EVENT, { detail: href }))
+}
+
+/** Custom event that triggers the full theatrical abduction (same show as the Konami code) */
+export const UFO_ABDUCT_EVENT = 'alen:ufo-abduct'
+
+export function ufoAbduct() {
+    if (typeof window !== 'undefined') window.dispatchEvent(new Event(UFO_ABDUCT_EVENT))
 }
 
 /**
@@ -127,11 +178,14 @@ export function UfoAbduction() {
     const timersRef = useRef<ReturnType<typeof setTimeout>[]>([])
     const piecesRef = useRef<HTMLElement[]>([])
     const warpPendingRef = useRef(false)
+    /** Pacing of the abduction currently on screen — read during render for the arrival speed */
+    const timingRef = useRef<AbductionTiming>(ABDUCTION_TIMINGS.konami)
 
     /** setState + ref in one step so event handlers can read the current phase synchronously */
     const changePhase = useCallback((p: Phase) => {
         phaseRef.current = p
         setPhase(p)
+        window.dispatchEvent(new CustomEvent<Phase>(UFO_PHASE_EVENT, { detail: p }))
     }, [])
 
     const clearTimers = useCallback(() => {
@@ -237,46 +291,53 @@ export function UfoAbduction() {
 
     /* ── Flavor 2: Konami code, the full show ───────────────────────────── */
 
-    const konamiTrigger = useCallback(() => {
-        // One abduction at a time — the mothership has limited beam capacity
-        if (phaseRef.current !== 'idle') return
+    const fullAbduction = useCallback(
+        (source: AbductionSource = 'konami') => {
+            // One abduction at a time — the mothership has limited beam capacity
+            if (phaseRef.current !== 'idle') return
 
-        posthog.capture('konami_ufo_triggered')
+            posthog.capture('ufo_abduction_triggered', { source })
 
-        // Motion-sensitive visitors get acknowledged without the full light show
-        if (prefersReducedMotion()) {
-            toast('signal received. the mothership sends its regards.')
-            return
-        }
-
-        clearTimers()
-        const main = document.querySelector('main')
-
-        changePhase('arrive')
-        at(900, () => {
-            changePhase('beam')
-            document.body.classList.add('ufo-abduct')
-            if (main) {
-                piecesRef.current = shredPieces(main, { duration: 1.15, step: 0.07, maxStagger: 0.6, jitter: 0.1 })
+            // Motion-sensitive visitors get acknowledged without the full light show.
+            // Only the Konami egg says anything — /alien abducts on every visit, so a
+            // toast each time would just be noise on top of its own narration.
+            if (prefersReducedMotion()) {
+                if (source === 'konami') toast('message received. the mothership sends its regards.')
+                return
             }
-        })
-        at(2900, () => {
-            // All pieces consumed — beam off, saucer does a little gulp
-            changePhase('swallow')
-        })
-        at(3400, () => {
-            changePhase('depart')
-            // Beam the content back down while the saucer leaves
-            restorePieces()
-            document.body.classList.remove('ufo-abduct')
-            document.body.classList.add('ufo-return')
-        })
-        at(4400, () => {
-            document.body.classList.remove('ufo-return')
-            changePhase('idle')
-            toast('abduction complete. subject returned mostly intact.')
-        })
-    }, [changePhase, clearTimers, at, restorePieces])
+
+            clearTimers()
+            const main = document.querySelector('main')
+            const t = ABDUCTION_TIMINGS[source]
+            timingRef.current = t
+
+            changePhase('arrive')
+            at(t.beamAt, () => {
+                changePhase('beam')
+                document.body.classList.add('ufo-abduct')
+                if (main) {
+                    piecesRef.current = shredPieces(main, t.shred)
+                }
+            })
+            at(t.swallowAt, () => {
+                // All pieces consumed — beam off, saucer does a little gulp
+                changePhase('swallow')
+            })
+            at(t.departAt, () => {
+                changePhase('depart')
+                // Beam the content back down while the saucer leaves
+                restorePieces()
+                document.body.classList.remove('ufo-abduct')
+                document.body.classList.add('ufo-return')
+            })
+            at(t.doneAt, () => {
+                document.body.classList.remove('ufo-return')
+                changePhase('idle')
+                if (source === 'konami') toast('abduction complete. subject returned mostly intact.')
+            })
+        },
+        [changePhase, clearTimers, at, restorePieces]
+    )
 
     useEffect(() => {
         const onKeyDown = (e: KeyboardEvent) => {
@@ -285,7 +346,7 @@ export function UfoAbduction() {
                 key === KONAMI[progressRef.current] ? progressRef.current + 1 : key === KONAMI[0] ? 1 : 0
             if (progressRef.current === KONAMI.length) {
                 progressRef.current = 0
-                konamiTrigger()
+                fullAbduction('konami')
             }
         }
         window.addEventListener('keydown', onKeyDown)
@@ -295,14 +356,21 @@ export function UfoAbduction() {
             restorePieces()
             document.body.classList.remove('ufo-abduct', 'ufo-return')
         }
-    }, [konamiTrigger, clearTimers, restorePieces])
+    }, [fullAbduction, clearTimers, restorePieces])
+
+    // Programmatic abductions (the /alien page welcoming its own)
+    useEffect(() => {
+        const onAbduct = () => fullAbduction('alien_page')
+        window.addEventListener(UFO_ABDUCT_EVENT, onAbduct)
+        return () => window.removeEventListener(UFO_ABDUCT_EVENT, onAbduct)
+    }, [fullAbduction])
 
     /* ── Render ─────────────────────────────────────────────────────────── */
 
     if (phase === 'idle') return null
 
     const saucerAnimation = {
-        arrive: 'ufoArrive 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+        arrive: `ufoArrive ${timingRef.current.arriveSec}s cubic-bezier(0.22, 1, 0.36, 1) forwards`,
         beam: 'ufoBob 2s ease-in-out infinite',
         swallow: 'ufoSwallow 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
         depart: 'ufoDepart 0.9s cubic-bezier(0.55, 0, 0.9, 0.4) forwards',

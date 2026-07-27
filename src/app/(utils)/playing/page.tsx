@@ -87,7 +87,7 @@ export default async function Playing() {
                     className="text-display text-4xl md:text-5xl mb-6 animate-fade-in-up opacity-0 stagger-2"
                     style={{ animationFillMode: 'forwards' }}
                 >
-                    <span className="inline-block animate-glitch-shift">Playing</span>
+                    Playing
                 </h1>
 
                 {/* Stats HUD */}

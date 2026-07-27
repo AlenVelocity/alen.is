@@ -184,19 +184,19 @@ export default async function Home() {
                 {recentPosts.length > 0 && (
                     <section className="mb-20">
                         <div className="flex items-center justify-between mb-5">
-                            <div className="section-label">recent blogs</div>
+                            <div className="section-label">recent writing</div>
                             <Link
-                                href="/blogging"
+                                href="/writing"
                                 className="mono-label text-muted-foreground/50 hover:text-accent transition-colors"
                             >
-                                all transmissions →
+                                all posts →
                             </Link>
                         </div>
                         <div>
                             {recentPosts.map((post) => (
                                 <Link
                                     key={post.slug}
-                                    href={`/blogging/about/${post.slug}`}
+                                    href={`/writing/about/${post.slug}`}
                                     className="group flex items-center gap-4 py-3.5 border-b border-dashed border-border/50 last:border-b-0 hover:border-accent/40 transition-all duration-200"
                                 >
                                     <div className="flex-1 min-w-0">

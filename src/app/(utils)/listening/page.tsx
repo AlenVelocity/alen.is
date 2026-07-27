@@ -40,7 +40,7 @@ export default function Listening() {
                     className="mono-label text-muted-foreground/50 mb-4 animate-fade-in-up opacity-0 stagger-1"
                     style={{ animationFillMode: 'forwards' }}
                 >
-                    // intercepted audio transmissions
+                    // what's on loop
                 </p>
                 <h1
                     className="text-display text-4xl md:text-5xl mb-10 flex items-center gap-4 animate-fade-in-up opacity-0 stagger-2"
@@ -98,7 +98,7 @@ export default function Listening() {
                     </div>
                 </section>
 
-                {/* Top signals — streams in from Last.fm */}
+                {/* Most played — streams in from Last.fm */}
                 <Suspense fallback={<TopSignalsSkeleton />}>
                     <TopSignalsSection />
                 </Suspense>
@@ -137,7 +137,7 @@ function TopSignalsSkeleton() {
     return (
         <section className="mb-14" aria-hidden="true">
             <div className="section-label mb-4">
-                strongest signals
+                most played
                 <span className="text-accent/30 animate-blink ml-1">▮</span>
             </div>
             <div>
@@ -262,7 +262,7 @@ async function NowPlayingSection() {
 async function TopSignalsSection() {
     const lastFmData = await getScrobbles()
 
-    // Top artists across the whole scrobble window — feeds the signal chart
+    // Top artists across the whole scrobble window — feeds the play-count chart
     const artistCounts = lastFmData.recentlyPlayed.reduce((map, track) => {
         map.set(track.artist, (map.get(track.artist) ?? 0) + 1)
         return map
@@ -294,7 +294,7 @@ async function TopSignalsSection() {
     return (
         <StreamFade>
             <section className="mb-14">
-                <div className="section-label mb-4">strongest signals</div>
+                <div className="section-label mb-4">most played</div>
                 <TopSignals signals={signalsWithImages} />
             </section>
         </StreamFade>

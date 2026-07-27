@@ -6,17 +6,17 @@ import { PageTransition } from '@/components/ui/page-transition'
 import { getAllPosts } from '@/lib/blog'
 
 export const metadata: Metadata = {
-    title: 'Blogging',
+    title: 'Writing',
     description: 'Thoughts, rants, and half-finished ideas',
     openGraph: {
-        title: 'Alen is Blogging',
+        title: 'Alen is Writing',
         description: 'Thoughts, rants, and half-finished ideas',
-        images: [{ url: '/api/og?is=blogging', width: 1200, height: 630, alt: 'alen is blogging' }]
+        images: [{ url: '/api/og?is=writing', width: 1200, height: 630, alt: 'alen is writing' }]
     },
-    alternates: { canonical: '/blogging' }
+    alternates: { canonical: '/writing' }
 }
 
-export default function Blogging() {
+export default function Writing() {
     const posts = getAllPosts()
 
     return (
@@ -28,19 +28,19 @@ export default function Blogging() {
                         className="mono-label text-muted-foreground/50 mb-4 animate-fade-in-up opacity-0 stagger-1"
                         style={{ animationFillMode: 'forwards' }}
                     >
-                        // outgoing transmissions
+                        // things i wrote down
                     </p>
                     <h1
                         className="text-display text-5xl md:text-6xl mb-3 animate-fade-in-up opacity-0 stagger-2"
                         style={{ animationFillMode: 'forwards' }}
                     >
-                        <span className="inline-block animate-glitch-shift">Blogging</span>
+                        Writing
                     </h1>
                     <p
                         className="text-[0.9rem] text-muted-foreground animate-fade-in-up opacity-0 stagger-3"
                         style={{ animationFillMode: 'forwards' }}
                     >
-                        Thoughts, rants, and half-finished ideas.
+                        Thoughts and stuff.
                     </p>
                 </div>
 
@@ -50,7 +50,7 @@ export default function Blogging() {
                         {posts.map((post, i) => (
                             <Link
                                 key={post.slug}
-                                href={`/blogging/about/${post.slug}`}
+                                href={`/writing/about/${post.slug}`}
                                 className="group flex items-start gap-4 py-5 border-b border-dashed border-border/50 hover:border-accent/40 transition-all duration-200 scanline-hover"
                             >
                                 <span className="mono-label text-muted-foreground/30 w-14 shrink-0 pt-1 group-hover:text-accent/60 transition-colors">
@@ -84,7 +84,7 @@ export default function Blogging() {
                         className="mono-label text-muted-foreground/40 animate-fade-in-up opacity-0 stagger-4"
                         style={{ animationFillMode: 'forwards' }}
                     >
-                        // no signal detected yet
+                        // nothing written yet
                     </p>
                 )}
             </div>

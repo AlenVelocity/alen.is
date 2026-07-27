@@ -46,10 +46,16 @@ const gearSections: GearSection[] = [
         title: 'Display',
         items: [
             {
+                name: 'Alienware AW2726DM',
+                specs: 'QD-OLED · QHD 1440p · 240Hz',
+                type: 'Monitor',
+                badge: 'Daily Driver'
+            },
+            {
                 name: 'Lenovo Legion R27qc-30',
                 specs: '27" QHD 1440p · 180Hz · 1500R VA',
                 type: 'Monitor',
-                badge: 'Daily Driver'
+                badge: 'Secondary'
             }
         ]
     },
@@ -109,10 +115,19 @@ function GearRow({ item }: { item: GearItem }) {
               ? 'text-destructive border-destructive/30'
               : 'text-muted-foreground border-border/50'
 
+    const isDaily = item.badge === 'Daily Driver'
+
     return (
         <div
-            className={`group flex items-baseline gap-3 py-3 border-b border-dashed border-border/40 transition-colors duration-150 ${item.inactive ? 'opacity-35' : 'hover:border-accent/30'}`}
+            className={`group relative flex items-baseline gap-3 py-3 border-b border-dashed border-border/40 transition-colors duration-150 ${item.inactive ? 'opacity-35' : 'hover:border-accent/30'}`}
         >
+            {/* Powered-on marker for the kit actually in use */}
+            {isDaily && (
+                <span
+                    className="absolute -left-3 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-accent [box-shadow:var(--glow-accent)] hidden md:block"
+                    aria-hidden="true"
+                />
+            )}
             {/* Type label */}
             <span className="mono-label text-muted-foreground/40 w-28 shrink-0 text-right hidden sm:block">
                 {item.type}
@@ -152,15 +167,34 @@ export default function Using() {
             <div className="container max-w-2xl py-12 md:py-20 px-4">
                 {/* Header */}
                 <div className="mb-16">
-                    <p className="mono-label text-muted-foreground/50 mb-4">// setup</p>
-                    <h1 className="text-display text-5xl md:text-6xl mb-3">Gear</h1>
-                    <p className="text-[0.9rem] text-muted-foreground">My current hardware setup.</p>
+                    <p
+                        className="mono-label text-muted-foreground/50 mb-4 animate-fade-in-up opacity-0 stagger-1"
+                        style={{ animationFillMode: 'forwards' }}
+                    >
+                        // setup
+                    </p>
+                    <h1
+                        className="text-display text-5xl md:text-6xl mb-3 animate-fade-in-up opacity-0 stagger-2"
+                        style={{ animationFillMode: 'forwards' }}
+                    >
+                        Gear
+                    </h1>
+                    <p
+                        className="text-[0.9rem] text-muted-foreground animate-fade-in-up opacity-0 stagger-3"
+                        style={{ animationFillMode: 'forwards' }}
+                    >
+                        The stuff I actually use.
+                    </p>
                 </div>
 
                 {/* Sections */}
                 <div className="space-y-12">
-                    {gearSections.map((section) => (
-                        <section key={section.title}>
+                    {gearSections.map((section, i) => (
+                        <section
+                            key={section.title}
+                            className={`animate-fade-in-up opacity-0 stagger-${Math.min(i + 3, 6)}`}
+                            style={{ animationFillMode: 'forwards' }}
+                        >
                             <div className="section-label mb-3">{section.title.toLowerCase()}</div>
                             <div>
                                 {section.items.map((item) => (

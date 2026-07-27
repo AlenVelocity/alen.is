@@ -7,6 +7,7 @@ import { FiArrowLeft } from 'react-icons/fi'
 import { PageTransition } from '@/components/ui/page-transition'
 import { getAllPosts, getPostBySlug, getPostSlugs } from '@/lib/blog'
 import { mdxComponents } from '@/components/ui/mdx-components'
+import { BeamUp } from '@/components/ui/beam-up'
 
 export function generateStaticParams() {
     return getPostSlugs().map((slug) => ({ slug }))
@@ -23,9 +24,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         openGraph: {
             title: post.meta.title,
             description: post.meta.description,
-            url: `https://alen.is/blogging/about/${slug}`
+            url: `https://alen.is/writing/about/${slug}`
         },
-        alternates: { canonical: `/blogging/about/${slug}` }
+        alternates: { canonical: `/writing/about/${slug}` }
     }
 }
 
@@ -36,20 +37,20 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
 
     const allPosts = getAllPosts()
     const index = allPosts.findIndex((p) => p.slug === slug)
-    const transmissionNumber = String((index >= 0 ? index : allPosts.length) + 1).padStart(3, '0')
+    const entryNumber = String((index >= 0 ? index : allPosts.length) + 1).padStart(3, '0')
 
     return (
         <PageTransition>
             <div className="container max-w-2xl py-12 md:py-20 px-4">
                 <Link
-                    href="/blogging"
+                    href="/writing"
                     className="inline-flex items-center gap-1.5 mono-label text-muted-foreground/50 hover:text-accent transition-colors mb-10"
                 >
                     <FiArrowLeft className="w-3 h-3" />
-                    all transmissions
+                    all posts
                 </Link>
 
-                <p className="mono-label text-muted-foreground/50 mb-4">// transmission_{transmissionNumber}</p>
+                <p className="mono-label text-muted-foreground/50 mb-4">// entry_{entryNumber}</p>
                 <h1 className="text-display text-4xl md:text-5xl mb-4">{post.meta.title}</h1>
 
                 <div className="flex items-center gap-2 mono-label text-muted-foreground/45 mb-12">
@@ -67,6 +68,10 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
                 <article>
                     <MDXRemote source={post.content} components={mdxComponents} />
                 </article>
+
+                <div className="mt-14 pt-10 border-t border-dashed border-border/50">
+                    <BeamUp slug={slug} />
+                </div>
             </div>
         </PageTransition>
     )
