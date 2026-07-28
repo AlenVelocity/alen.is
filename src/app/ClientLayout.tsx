@@ -46,56 +46,6 @@ function getBreadcrumbs(currentPath: string) {
     return breadcrumbs
 }
 
-function MarqueeBreadcrumb({ children }: { children: React.ReactNode }) {
-    const outerRef = useRef<HTMLSpanElement>(null)
-    const innerRef = useRef<HTMLSpanElement>(null)
-    const [shouldMarquee, setShouldMarquee] = useState(false)
-    const [marqueeOffset, setMarqueeOffset] = useState(0)
-
-    useEffect(() => {
-        if (!outerRef.current || !innerRef.current) {
-            setShouldMarquee(false)
-            return
-        }
-        const outer = outerRef.current
-        const inner = innerRef.current
-        const overflow = inner.scrollWidth - outer.offsetWidth
-        if (overflow > 4) {
-            setShouldMarquee(true)
-            setMarqueeOffset(overflow)
-        } else {
-            setShouldMarquee(false)
-        }
-    }, [children])
-
-    return (
-        <span
-            ref={outerRef}
-            className={cn(
-                'relative max-w-[5rem] sm:max-w-[10rem] overflow-hidden inline-block align-middle',
-                shouldMarquee && 'will-change-transform'
-            )}
-            tabIndex={0}
-        >
-            <span
-                ref={innerRef}
-                className="block whitespace-nowrap"
-                style={
-                    shouldMarquee
-                        ? ({
-                              animation: 'breadcrumb-marquee 4s ease-in-out infinite',
-                              '--marquee-offset': `-${marqueeOffset}px`
-                          } as React.CSSProperties)
-                        : undefined
-                }
-                aria-label={typeof children === 'string' ? children : undefined}
-            >
-                {children}
-            </span>
-        </span>
-    )
-}
-
 // Custom cursor blob
 function CursorBlob() {
     const blobRef = useRef<HTMLDivElement>(null)
@@ -277,18 +227,16 @@ function Navigation() {
                                                 <Link
                                                     href={crumb.href}
                                                     className={cn(
+                                                        'whitespace-nowrap',
                                                         i === 0
                                                             ? 'text-muted-foreground font-semibold hover:text-foreground'
                                                             : 'text-muted-foreground hover:text-foreground'
                                                     )}
-                                                    tabIndex={0}
                                                 >
-                                                    <MarqueeBreadcrumb>{crumb.label}</MarqueeBreadcrumb>
+                                                    {crumb.label}
                                                 </Link>
                                             ) : (
-                                                <span className="text-foreground">
-                                                    <MarqueeBreadcrumb>{crumb.label}</MarqueeBreadcrumb>
-                                                </span>
+                                                <span className="text-foreground whitespace-nowrap">{crumb.label}</span>
                                             )}
                                         </React.Fragment>
                                     )

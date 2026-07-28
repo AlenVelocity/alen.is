@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     if (!post) return {}
 
     return {
-        title: post.meta.title,
+        title: `writing about ${post.meta.title}`,
         description: post.meta.description,
         openGraph: {
             title: post.meta.title,
