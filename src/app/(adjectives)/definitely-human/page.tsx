@@ -18,6 +18,7 @@ const CREDENTIALS = [
     'has a favourite persona character',
     'has human friends',
     'experiences the emotion',
+    'likes klance',
     'has the normal amount of blood',
     'photosynthesizes to sumika songs'
 ]
