@@ -8,6 +8,7 @@ import { PageTransition } from '@/components/ui/page-transition'
 import { getAllPosts, getPostBySlug, getPostSlugs } from '@/lib/blog'
 import { mdxComponents } from '@/components/ui/mdx-components'
 import { BeamUp } from '@/components/ui/beam-up'
+import JsonLd from '@/components/JsonLd'
 
 export function generateStaticParams() {
     return getPostSlugs().map((slug) => ({ slug }))
@@ -39,8 +40,24 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
     const index = allPosts.findIndex((p) => p.slug === slug)
     const entryNumber = String((index >= 0 ? index : allPosts.length) + 1).padStart(3, '0')
 
+    // Gets the publish date and author onto the search result instead of a bare title.
+    const articleSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        headline: post.meta.title,
+        description: post.meta.description,
+        datePublished: post.meta.date,
+        dateModified: post.meta.date,
+        keywords: post.meta.tags,
+        author: { '@type': 'Person', name: 'Alen Yohannan', url: 'https://alen.is/' },
+        publisher: { '@type': 'Person', name: 'Alen Yohannan', url: 'https://alen.is/' },
+        mainEntityOfPage: { '@type': 'WebPage', '@id': `https://alen.is/writing/about/${slug}/` },
+        image: 'https://alen.is/api/og?is=writing'
+    }
+
     return (
         <PageTransition>
+            <JsonLd data={articleSchema} />
             <div className="container max-w-2xl py-12 md:py-20 px-4">
                 <Link
                     href="/writing"
@@ -50,7 +67,9 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
                     all posts
                 </Link>
 
-                <p className="mono-label text-muted-foreground/50 mb-4">// entry_{entryNumber}</p>
+                <p className="mono-label text-muted-foreground/50 mb-4">
+                    <span data-nosnippet>// entry_{entryNumber}</span>
+                </p>
                 <h1 className="text-display text-4xl md:text-5xl mb-4">{post.meta.title}</h1>
 
                 <div className="flex items-center gap-2 mono-label text-muted-foreground/45 mb-12">

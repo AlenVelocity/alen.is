@@ -8,7 +8,8 @@ import { constructMetadata } from '@/lib/metadata'
 
 export const metadata: Metadata = constructMetadata({
     title: 'Projects',
-    description: "Things I've built, shipped and sometimes abandoned",
+    description:
+        'Things Alen has built, shipped and sometimes abandoned — side projects, tools and experiments, each with the stack it was made with and where the code lives.',
     slug: 'building'
 })
 

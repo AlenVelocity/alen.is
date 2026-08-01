@@ -8,10 +8,10 @@ import { constructMetadata } from '@/lib/metadata'
 
 export const metadata: Metadata = constructMetadata({
     title: 'Coding',
-    description: 'My GitHub stats and contributions',
+    description:
+        'What Alen is coding — a live view of GitHub activity: contribution graph, commits, pull requests, issues and the languages getting the most use.',
     slug: 'coding',
-    ogTitle: 'Alen is Coding',
-    openGraph: { description: 'My GitHub stats and contributions' }
+    ogTitle: 'Alen is Coding'
 })
 
 function ContributionGraph({ days }: { days: { date: string; contributionCount: number; color: string }[] }) {

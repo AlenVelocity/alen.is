@@ -6,10 +6,10 @@ import { constructMetadata } from '@/lib/metadata'
 
 export const metadata: Metadata = constructMetadata({
     title: 'My Gear',
-    description: 'My hardware setup',
+    description:
+        'The gear Alen is using day to day — the PC build part by part, plus the peripherals, phone and everything else that makes up the setup.',
     slug: 'using',
-    ogTitle: 'Alen is Using',
-    openGraph: { description: 'My gear and setup' }
+    ogTitle: 'Alen is Using'
 })
 
 type GearItem = {

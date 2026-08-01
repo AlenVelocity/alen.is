@@ -78,16 +78,34 @@ export default async function Home() {
     const personSchema = {
         '@context': 'https://schema.org',
         '@type': 'Person',
-        name: personalInfo.meta_title,
-        url: 'https://alen.is',
+        // meta_title is "Alen.is" — the site, not the person. Naming the Person
+        // after the domain is what leaves Google unsure who the page is about.
+        name: 'Alen Yohannan',
+        alternateName: 'Alen',
+        url: 'https://alen.is/',
         image: 'https://alen.is/opengraph-image',
         jobTitle: personalInfo.job_title,
-        worksFor: { '@type': 'Organization', name: personalInfo.company },
+        // company is blank in the CMS more often than not — an Organization with
+        // an empty name is worse than no employer at all
+        ...(personalInfo.company && { worksFor: { '@type': 'Organization', name: personalInfo.company } }),
         sameAs: [
             'https://github.com/AlenVelocity',
             'https://www.linkedin.com/in/alen-%F0%9F%8E%B6-yohannan-6794a81ba/'
         ],
         knowsAbout: personalInfo.skills
+    }
+
+    // Drives the site name Google prints above the result — without it the
+    // crawler guesses one from the <title>, which is how you end up with
+    // "Alen's Personal Website" sitting where "alen.is" should be.
+    const siteSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'alen.is',
+        alternateName: ['Alen.is', 'Alen Yohannan'],
+        url: 'https://alen.is/',
+        description: personalInfo.meta_description,
+        publisher: { '@type': 'Person', name: 'Alen Yohannan', url: 'https://alen.is/' }
     }
 
     const heroSocialLinks = socialLinks.filter((link) =>
@@ -96,6 +114,7 @@ export default async function Home() {
 
     return (
         <PageTransition>
+            <JsonLd data={siteSchema} />
             <JsonLd data={personSchema} />
             <div className="container max-w-2xl py-12 md:py-20 px-4">
                 {/* ── Hero ─────────────────────────────────────────── */}

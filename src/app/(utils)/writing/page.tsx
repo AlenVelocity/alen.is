@@ -7,10 +7,12 @@ import { getAllPosts } from '@/lib/blog'
 
 export const metadata: Metadata = {
     title: 'Writing',
-    description: 'Thoughts, rants, and half-finished ideas',
+    description:
+        'Thoughts, rants and half-finished ideas from Alen Yohannan — writing about software, the web and whatever else was worth sitting down to explain.',
     openGraph: {
         title: 'Alen is Writing',
-        description: 'Thoughts, rants, and half-finished ideas',
+        description:
+            'Thoughts, rants and half-finished ideas from Alen Yohannan — writing about software, the web and whatever else was worth sitting down to explain.',
         images: [{ url: '/api/og?is=writing', width: 1200, height: 630, alt: 'alen is writing' }]
     },
     alternates: { canonical: '/writing' }
@@ -28,7 +30,7 @@ export default function Writing() {
                         className="mono-label text-muted-foreground/50 mb-4 animate-fade-in-up opacity-0 stagger-1"
                         style={{ animationFillMode: 'forwards' }}
                     >
-                        // things i wrote down
+                        <span data-nosnippet>// things i wrote down</span>
                     </p>
                     <h1
                         className="text-display text-5xl md:text-6xl mb-3 animate-fade-in-up opacity-0 stagger-2"

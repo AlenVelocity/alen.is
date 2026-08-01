@@ -238,7 +238,7 @@ export default function Bi() {
                 className="mono-label text-muted-foreground/35 animate-fade-in-up opacity-0 tracking-[0.25em] relative z-10"
                 style={{ animationDelay: '0.05s', animationFillMode: 'forwards' }}
             >
-                // identity.flag
+                <span data-nosnippet>// identity.flag</span>
             </p>
 
             {/* Flag */}

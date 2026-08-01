@@ -4,10 +4,10 @@ import { Metadata } from 'next'
 
 export const metadata: Metadata = constructMetadata({
     title: 'straight',
-    description: 'Alen is straight? Try bi. Redirecting...',
+    description:
+        'Alen is straight? Not quite — bi, actually. This page sends you along to alen.is/bi where that gets a proper answer.',
     slug: 'straight',
-    ogTitle: 'Alen is straight',
-    openGraph: { description: 'Alen is straight.' }
+    ogTitle: 'Alen is straight'
 })
 
 export default function Straight() {
