@@ -5,8 +5,7 @@ export const metadata: Metadata = {
         default: '',
         template: '%s | Alen.is'
     },
-    description:
-        'Alen Yohannan — software engineer, human* and creator of cool stuff. Experience, projects and everything else worth putting on a page.'
+    description: 'Human* and creator of cool stuff'
 }
 
 export default function ProfessionalLayout({ children }: { children: React.ReactNode }) {

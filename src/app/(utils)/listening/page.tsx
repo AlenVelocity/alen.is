@@ -18,8 +18,7 @@ import { constructMetadata } from '@/lib/metadata'
 
 export const metadata: Metadata = constructMetadata({
     title: 'Listening',
-    description:
-        'What Alen is listening to, straight from Last.fm — the track playing right now, recent scrobbles, and the artists on heaviest rotation.',
+    description: 'What I listen to',
     slug: 'listening',
     ogTitle: 'Alen is Listening'
 })

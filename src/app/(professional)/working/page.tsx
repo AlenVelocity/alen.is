@@ -19,16 +19,16 @@ const getWorkTypeBadge = (workType: string) => {
     }
 }
 
-// The canonical used to be forced to /experience, but /experience only
-// redirects back here — a canonical aimed at a redirect is one Google discards.
-// /working is the real URL, so it canonicalises to itself.
 export const metadata: Metadata = constructMetadata({
     title: 'working',
-    description:
-        'Alen is working. The full timeline of where Alen Yohannan has been as a software engineer — roles, companies, dates and what actually got built at each.',
+    description: 'Alen is gaining experience. My professional journey as a Software Engineer.',
     slug: 'working',
-    ogTitle: 'Alen is Working'
+    ogTitle: 'Alen is Working',
+    noCanonical: true, // It has /experience canonical
+    openGraph: { description: 'Alen is gaining experience. My professional journey as a Software Engineer.' }
 })
+
+metadata.alternates = { canonical: '/experience' }
 
 export default async function Experience() {
     const experiences = await runGetExperiences()

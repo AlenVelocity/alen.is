@@ -25,8 +25,7 @@ export const metadata = {
         default: "Alen's Personal Website",
         template: 'Alen is %s'
     },
-    description:
-        'Alen Yohannan — human* and creator of cool stuff. Software engineer building for the web with TypeScript, Next.js and a bit of AI. Work, projects and the rest of it.',
+    description: 'Human* and creator of cool stuff',
     metadataBase: new URL('https://alen.is'),
     manifest: '/manifest.json',
     applicationName: 'Alen.is',

@@ -49,14 +49,6 @@ export function constructMetadata({
             ],
             ...openGraph
         },
-        // Without this every page inherits the root layout's twitter card, so a
-        // link to /using previews as "Human* and creator of cool stuff".
-        twitter: {
-            card: 'summary_large_image',
-            title: finalOgTitle,
-            description,
-            images: [finalImage]
-        },
         ...(canonical && { alternates: { canonical } })
     }
 }

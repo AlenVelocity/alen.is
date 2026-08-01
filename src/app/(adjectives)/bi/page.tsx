@@ -5,10 +5,10 @@ import { constructMetadata } from '@/lib/metadata'
 
 export const metadata: Metadata = constructMetadata({
     title: 'bi',
-    description:
-        "Alen is bi. Everyone's cute and that is frankly not his fault. One of the shorter answers on alen.is, and one of the easier ones.",
+    description: "Alen is bi. Everyone's cute, not his fault.",
     slug: 'bi',
-    ogTitle: 'Alen is bi'
+    ogTitle: 'Alen is bi',
+    openGraph: { description: "Alen is bi. Everyone's cute." }
 })
 
 export default function Bi() {

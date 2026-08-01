@@ -5,10 +5,10 @@ import { constructMetadata } from '@/lib/metadata'
 
 export const metadata: Metadata = constructMetadata({
     title: 'human',
-    description:
-        'Alen is human. Obviously. Why would you even check? A short and entirely unsuspicious page confirming the species of one Alen Yohannan.',
+    description: 'Alen is human. Obviously. Why would you even check?',
     slug: 'human',
-    ogTitle: 'Alen is human'
+    ogTitle: 'Alen is human',
+    openGraph: { description: 'Alen is human. Obviously.' }
 })
 
 export default function Human() {
@@ -20,7 +20,7 @@ export default function Human() {
                     className="mono-label text-muted-foreground/35 tracking-[0.25em] animate-fade-in-up opacity-0 stagger-1"
                     style={{ animationFillMode: 'forwards' }}
                 >
-                    <span data-nosnippet>// species: verified?</span>
+                    // species: verified?
                 </p>
 
                 {/* The claim */}
@@ -35,8 +35,7 @@ export default function Human() {
                     className="text-[0.9rem] text-muted-foreground max-w-sm animate-fade-in-up opacity-0 stagger-3"
                     style={{ animationFillMode: 'forwards' }}
                 >
-                    i like uh, games and stuff, just like you and every other human. I also breathe the normal air and
-                    everything.
+                    i like uh, games and stuff, just like you and every other human. I also breathe the normal air and everything.
                 </p>
 
                 {/* The doubt */}
