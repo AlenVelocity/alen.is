@@ -1,0 +1,99 @@
+---
+title: How I made my PC boot into "console mode" when woken by a controller (took way longer than it should've)
+description: Wiring a controller to wake the PC straight into Xbox Full Screen Experience, and a mouse to wake it into a normal desktop — a multi-day trip through BIOS settings, USB power management, a firmware reflash, and a race condition in Windows' own event logging.
+date: "2026-07-28"
+tags: [windows, hardware, csharp]
+published: true
+---
+
+## The goal
+
+I wanted my desktop to actually feel like a console. Not "kinda like one if you squint," I mean pick up the controller, press a button, PC wakes up, no lock screen, no click to sign in, straight into Windows 11's Xbox Full Screen Experience (FSE). Wake it with the mouse instead and it just behaves like a normal PC and goes to desktop.
+
+Sounded simple. Turned into a multi-day rabbit hole through BIOS settings, USB power management internals, a firmware reflash, a race condition in Windows' own event logging, and eventually a compiled C# app. Writing down the whole thing in order, dead ends included, cause I would've wanted this post to exist when I started.
+
+## Step 1: getting FSE working
+
+This part's easy and well documented already. Windows 11 has a controller-first shell called the Xbox Full Screen Experience, originally built for handhelds like the ROG Ally, later rolled out more broadly.
+
+- Settings → Gaming → Full Screen Experience → set "Choose home app" to Xbox
+- Toggle "Enter full screen experience on start up"
+- Manual shortcut once it's on: **Win + F11**
+
+That's it. Reboot and Windows drops you straight into FSE. No issues here, moving on.
+
+## Step 2: killing the sign-in screen
+
+Two separate settings, and missing the second one bit me later.
+
+**Skip the password entirely:**
+`netplwiz` → uncheck "Users must enter a user name and password to use this computer."
+
+**Skip the "click to continue" screen after waking from sleep** (easy to miss — even with no password, Windows still makes you click a button to dismiss a lock screen after resume):
+Settings → Accounts → Sign-in options → "If you've been away, when should Windows require you to sign in again?" → **Never**
+
+Combined, waking the PC now skips both screens completely. Obvious tradeoff: anyone who wakes your PC gets straight into your account. Fine for a living room setup, not something I'd do on a laptop I carry around.
+
+## Step 3: waking the PC with a controller (the actual hard part)
+
+I'm running a DualSense connected via a Raspberry Pi Pico 2 W acting as a USB bridge (the open source **ds5dongle** project), plus a GameSir Cyclone 2 with its own 2.4GHz dongle. Neither would wake the PC from sleep.
+
+**First pass, the "obvious" settings — all done correctly and none of it fixed anything:**
+
+- BIOS (MSI B850 Gaming WiFi Plus): Settings → Advanced → Wake Up Event Setup → "Wake Up Event By" set to [BIOS], "Resume By USB Device" enabled
+- Settings → Advanced → Power Management Setup → "ERP Ready" disabled
+- Windows: disabled USB selective suspend
+- Disabled fast startup (had to click "Change settings that are currently unavailable" first since it was greyed out)
+- Checked Device Manager → each controller's entry → Power Management tab → "Allow this device to wake the computer"
+
+None of it worked. Mouse could wake the PC fine. Controllers couldn't.
+
+**The actual diagnosis:**
+
+The "Allow this device to wake the computer" checkbox was **greyed out** on both controller dongles. That's not a setting I'm missing, it's the device's own USB descriptor telling Windows "I do not support remote wakeup," full stop. Every USB device reports a remote wakeup capability bit when it connects. Mice and keyboards basically always set it cause waking a PC with a keypress is a baseline tested use case. Consumer gamepad dongles usually never bother implementing it, it's not something manufacturers test for.
+
+Also checked if it was a USB hub issue (some hubs don't forward wake signals even when the downstream device supports it), moved everything to direct motherboard ports, no hub in the chain, same result. Checked if it was the root hub entries in Device Manager blocking it too — turned out on this AMD chipset, wake control is fixed at the BIOS/firmware layer and greyed out identically regardless of the actual device, so that was a dead end as well.
+
+**One genuinely unrelated bug I found along the way:** my WiFi adapter (Qualcomm FastConnect 7800) was intermittently waking the PC on its own from ordinary LAN traffic — ARP broadcasts, other devices on the network, whatever. Nothing to do with the controllers, but it was polluting my test results until I found it via Event Viewer and either disabled its wake permission or restricted it to magic packet only.
+
+**The fix:** the DualSense's bridge firmware, ds5dongle, has an actively developed feature specifically for this — a build variant/flag that implements proper USB remote wakeup support. I was on an older firmware version. Reflashing to the latest release (hold BOOTSEL, plug in, drag the new `.uf2` file onto the `RPI-RP2` drive that mounts) fixed it immediately. The wake checkbox in Device Manager went from greyed out to available, checked it, and the DualSense could now wake the PC from sleep.
+
+One limitation that doesn't go away no matter the firmware: this only works waking from **sleep**, not a full cold shutdown. USB wake circuitry in standby power states only recognizes keyboard/mouse class input at true S5/shutdown, nothing at the software level gets around that. The only real fix would've been a hardware mod simulating an actual power button press on the motherboard's front panel header — decided that wasn't worth it. Sleep as my off state it is.
+
+## Step 4: making it launch FSE only when the controller wakes it (not the mouse)
+
+This ate the most time by far, cause it needed understanding some genuinely obscure Windows internals.
+
+**The idea:** Windows logs which device woke the PC, in Event Viewer under System → source `Microsoft-Windows-Power-Troubleshooter`, event ID 1, in a field called `WakeSourceText`. My DualSense showed up as `"USB Composite Device"`, my mouse (a Logitech) showed up as `"LIGHTSPEED Receiver"` — different enough to tell apart reliably.
+
+**First attempt: Task Scheduler.** Attach a task directly to that event, have it run a script that checks the wake source and sends Win+F11 if it matches. Technically worked but way too slow — you'd see your actual desktop for several seconds before FSE launched, cause Task Scheduler's event trigger pipeline has real latency between the event firing and your task actually starting.
+
+**Second attempt: an AutoHotkey script,** compiled to a standalone `.exe` instead of run through PowerShell (PowerShell's own startup cost — spinning up the .NET runtime, compiling inline C# via `Add-Type` — was adding a second or two of dead time on top of Task Scheduler's own lag).
+
+**Bug #1, `wevtutil`'s text output lies by omission.** First version queried the event log with `wevtutil qe ... /f:text` and I could not figure out why the wake source match kept failing even though Event Viewer clearly showed the right text. Turns out `/f:text` sometimes fails to render the event's description body at all (depends on Windows resolving message resources correctly) — it silently gives you just the header metadata (log name, date, event ID, level) and nothing else. My script was checking a string that was never there in the first place. Switching to `/f:xml` fixed it — the raw data fields, including `WakeSourceText`, come through reliably in XML regardless of description rendering issues.
+
+**Bug #2, still too slow — root cause was architectural, not code level.** Even the compiled AHK exe, triggered via Task Scheduler, still showed a flash of desktop before the transition. The actual bottleneck wasn't my script's execution speed at all, it was Task Scheduler's own latency in noticing the event and launching anything in response. No amount of optimizing the exe helps if it hasn't even started yet.
+
+**The real fix: stop waiting for the event and react to the wake signal directly.** Windows broadcasts a `WM_POWERBROADCAST` message the moment the system resumes — this fires way earlier than Task Scheduler's event-log-based trigger ever could. So instead of a script that gets *launched* on wake, I built a small persistent background app that's *already running*, sitting idle (near-zero CPU, a few MB of RAM) and listening for that broadcast directly. The instant it fires, it throws up a solid black fullscreen overlay to mask whatever's left of the transition, then does the wake source check.
+
+**Bug #3, the stale event race condition.** This one took the longest to actually understand. My polling logic would query the event log repeatedly until it found a matching entry, but "matching" alone isn't enough, cause if my *previous* wake had also been from the controller, that old entry is still sitting there as the "latest" event, and my script would match against it before the new event for the *current* wake had even been written. Practically: wake with the controller, works fine. Wake with the mouse right after, false match, FSE launches anyway, cause it's still seeing yesterday's controller wake log entry.
+
+The fix: record a timestamp the instant the wake broadcast fires, then only ever accept an event whose own `SystemTime` (from the XML) is newer than that moment, comparing the two as sortable `YYYYMMDDHHMMSS` strings, with a small safety margin for clock skew between the broadcast and the log write. Stale events get skipped and the loop keeps polling until a genuinely fresh entry shows up. That killed both failure modes — no more false positives from old entries, no more missed detections from reading the log too early.
+
+**Final result:** controller wake → near-instant black overlay → freshness-checked event match → Win+F11 sent → FSE loads → overlay drops. Mouse wake → same detection runs, doesn't match, overlay never even shows, straight to normal desktop.
+
+## Step 5: sharing it
+
+Posted a video of it working (controller wakes the PC into Xbox mode, mouse wakes it into normal desktop) across a few subreddits without much preamble, just the demo and a short explanation. Did way better than expected — more people wanted the actual guide/scripts than I thought, including someone who apparently got a PlayStation controller to wake their own PC independently after seeing the post.
+
+Turned the whole thing into a proper open source app afterward — a real C# tray application instead of a standalone compiled AHK script, with logging, a settings UI, and (via a community pull request) an attempt at extending wake detection to work on Modern Standby (S0ix) systems too, since that class of hardware doesn't log wake sources the same way classic sleep (S3) does.
+
+## The actual lessons if you're trying something similar
+
+- **A greyed-out "allow to wake" checkbox is a hard stop, not a config problem.** It reflects the device's own USB descriptor. No BIOS or Windows setting overrides it, you need firmware that actually declares remote wakeup support.
+- **Cold boot from full shutdown and wake from sleep are not the same problem.** USB wake circuitry generally only recognizes keyboard/mouse input at true S5, there's no software fix here, only a hardware one (simulating a physical power button press).
+- **Task Scheduler is too slow for anything latency sensitive.** If timing matters, hook the actual Windows message/signal directly (`WM_POWERBROADCAST` in this case) from a process that's already running, instead of waiting for something else to notice an event and launch you.
+- **Don't trust `wevtutil`'s text output** for anything you're gonna parse programmatically, query in XML and read the actual data fields.
+- **"Get the latest event" isn't the same as "get the event for what just happened."** Logs lag behind the real-world event that caused them. If you're reacting to something time sensitive, timestamp your own trigger moment and only accept log entries that postdate it.
+
+Total time from "I want this" to "this reliably works": a lot longer than a weekend. Worth it for the part where my PlayStation controller turns my desktop into a game console tho.
