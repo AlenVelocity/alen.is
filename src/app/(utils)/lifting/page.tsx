@@ -6,7 +6,8 @@ import { constructMetadata } from '@/lib/metadata'
 
 export const metadata: Metadata = constructMetadata({
     title: 'Lifting',
-    description: 'My workout and fitness stats',
+    description:
+        'Alen is lifting — workout logs and fitness stats, once the API is convinced any of it actually happened. Work in progress for now.',
     slug: 'lifting',
     ogTitle: 'Alen is Lifting'
 })

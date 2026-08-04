@@ -7,10 +7,10 @@ import { constructMetadata } from '@/lib/metadata'
 
 export const metadata: Metadata = constructMetadata({
     title: 'cool',
-    description: 'Am I cool?',
+    description:
+        'Am I cool? Nobody agreed on an answer, so alen.is/cool put it to a public vote. Cast yours, then watch the running tally decide it.',
     slug: 'cool',
-    ogTitle: 'Alen is cool?',
-    openGraph: { description: 'Am I cool?' }
+    ogTitle: 'Alen is cool?'
 })
 
 export default async function Cool() {
@@ -23,7 +23,7 @@ export default async function Cool() {
                 className="mono-label text-muted-foreground/35 animate-fade-in-up opacity-0 stagger-1 tracking-[0.25em]"
                 style={{ animationFillMode: 'forwards' }}
             >
-                // query: am_i_cool
+                <span data-nosnippet>// query: am_i_cool</span>
             </p>
 
             {/* Polaroid */}
@@ -57,7 +57,9 @@ export default async function Cool() {
                         className="group-hover:scale-[1.03] transition-transform duration-700"
                         priority
                     />
-                    <p className="text-center mono-label text-muted-foreground/40 mt-4">exhibit_A.jpg</p>
+                    <p className="text-center mono-label text-muted-foreground/40 mt-4">
+                        <span data-nosnippet>exhibit_A.jpg</span>
+                    </p>
                 </div>
             </div>
 

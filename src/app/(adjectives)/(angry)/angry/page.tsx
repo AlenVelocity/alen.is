@@ -6,10 +6,10 @@ import { constructMetadata } from '@/lib/metadata'
 
 export const metadata: Metadata = constructMetadata({
     title: 'angry',
-    description: "Alen is angry. Probably not but who knows. Don't talk to me.",
+    description:
+        "Alen is angry. Probably not, but who knows. Don't talk to me — a very small page on alen.is for the days when that is the whole mood.",
     slug: 'angry',
-    ogTitle: 'Alen is angry',
-    openGraph: { description: 'Alen is angry. Probably not but who knows.' }
+    ogTitle: 'Alen is angry'
 })
 
 export default function Angry() {

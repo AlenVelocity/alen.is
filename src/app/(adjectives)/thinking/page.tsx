@@ -6,10 +6,10 @@ import { constructMetadata } from '@/lib/metadata'
 
 export const metadata: Metadata = constructMetadata({
     title: 'thinking',
-    description: 'Alen is thinking. Thinking about stuff, ideas, and random thoughts over here.',
+    description:
+        'Alen is thinking. Stuff, ideas and half-formed thoughts, parked here on alen.is until they turn into something worth writing down.',
     slug: 'thinking',
-    ogTitle: 'Alen is thinking',
-    openGraph: { description: 'Alen is thinking. Ideas and thoughts.' }
+    ogTitle: 'Alen is thinking'
 })
 
 export default function Thinking() {
