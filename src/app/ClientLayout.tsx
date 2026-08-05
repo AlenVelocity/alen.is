@@ -12,7 +12,6 @@ import { posthog } from '@/components/posthog-provider'
 import { AlienDataStream } from '@/components/ui/alien-ambience'
 import { CommandBar, openCommandBar } from '@/components/ui/command-bar'
 import { UfoAbduction } from '@/components/ui/ufo-abduction'
-import JsonLd from '@/components/JsonLd'
 
 // NAV ITEMS
 const NAV_ITEMS = [
@@ -23,25 +22,6 @@ const NAV_ITEMS = [
 
 function humanize(slug: string) {
     return slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
-}
-
-/**
- * BreadcrumbList mirroring the visible trail, so search results render
- * "alen.is › writing › about" instead of a bare URL. Built from the same
- * breadcrumb array the nav renders, so the two can't drift apart.
- */
-function breadcrumbSchema(crumbs: { href: string; label: string }[]) {
-    return {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: crumbs.map((crumb, i) => ({
-            '@type': 'ListItem',
-            position: i + 1,
-            name: i === 0 ? 'alen.is' : humanize(crumb.label),
-            // trailingSlash is on — these have to match the canonical exactly
-            item: `https://alen.is${crumb.href === '/' ? '' : crumb.href}/`
-        }))
-    }
 }
 
 const SKIP_SEGMENTS = new Set(['to'])
@@ -174,153 +154,143 @@ function Navigation() {
 
     return (
         <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50 max-w-[calc(100vw-2rem)]">
-            {/*
-             * data-nosnippet keeps the whole bar out of search snippets. Without it Google
-             * scrapes the breadcrumb and the [light] / [/] buttons and splices them into the
-             * result description, which reads like nonsense next to the actual page copy.
-             * Only div/span/section are honoured, hence the wrapper rather than <header>.
-             */}
-            <div data-nosnippet className="max-w-full">
-                <motion.nav
-                    layout
-                    transition={{ layout: { type: 'spring', stiffness: 500, damping: 35 } }}
-                    className={cn(
-                        'flex items-center gap-0 px-1 py-1 border border-border/60 max-w-full',
-                        'bg-background/90 backdrop-blur-md shadow-lg shadow-background/20',
-                        'rounded-sm'
-                    )}
-                >
-                    <AnimatePresence mode="popLayout" initial={false}>
-                        {isMainNav ? (
-                            <motion.div
-                                key="main-nav"
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.95 }}
-                                transition={{ duration: 0.15 }}
-                                className="flex items-center gap-0"
-                            >
-                                <AnimatePresence mode="popLayout" initial={false}>
-                                    {visibleNavItems.map((item) => {
-                                        const isActive = currentPath === item.href
-                                        const isHome = item.href === '/'
+            <motion.nav
+                layout
+                transition={{ layout: { type: 'spring', stiffness: 500, damping: 35 } }}
+                className={cn(
+                    'flex items-center gap-0 px-1 py-1 border border-border/60 max-w-full',
+                    'bg-background/90 backdrop-blur-md shadow-lg shadow-background/20',
+                    'rounded-sm'
+                )}
+            >
+                <AnimatePresence mode="popLayout" initial={false}>
+                    {isMainNav ? (
+                        <motion.div
+                            key="main-nav"
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.15 }}
+                            className="flex items-center gap-0"
+                        >
+                            <AnimatePresence mode="popLayout" initial={false}>
+                                {visibleNavItems.map((item) => {
+                                    const isActive = currentPath === item.href
+                                    const isHome = item.href === '/'
 
-                                        return (
-                                            <motion.div
-                                                key={item.href}
-                                                layout
-                                                initial={{ opacity: 0, x: -4 }}
-                                                animate={{ opacity: 1, x: 0 }}
-                                                exit={{ opacity: 0, x: -4 }}
-                                                transition={{ duration: 0.15 }}
+                                    return (
+                                        <motion.div
+                                            key={item.href}
+                                            layout
+                                            initial={{ opacity: 0, x: -4 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, x: -4 }}
+                                            transition={{ duration: 0.15 }}
+                                        >
+                                            <Link
+                                                href={item.href}
+                                                className={cn(
+                                                    'relative px-3 py-1.5 text-xs font-mono-ui tracking-wide block whitespace-nowrap transition-all duration-150',
+                                                    isHome ? 'font-semibold' : 'font-medium',
+                                                    isActive
+                                                        ? 'text-accent bg-accent/8'
+                                                        : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
+                                                )}
                                             >
+                                                {isActive && <span className="mr-1 text-accent font-bold">//</span>}
+                                                {item.label}
+                                            </Link>
+                                        </motion.div>
+                                    )
+                                })}
+                            </AnimatePresence>
+                        </motion.div>
+                    ) : (
+                        <motion.div
+                            key="breadcrumb"
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.15 }}
+                            className="min-w-0"
+                        >
+                            <nav
+                                aria-label="Breadcrumb"
+                                className="no-scrollbar flex items-center px-3 py-1.5 text-xs font-mono-ui tracking-wide gap-2 overflow-x-auto min-w-0"
+                            >
+                                {breadcrumbs.map((crumb, i) => {
+                                    const isLast = i === breadcrumbs.length - 1
+                                    return (
+                                        <React.Fragment key={crumb.href}>
+                                            {i !== 0 && <span className="text-accent font-bold">/</span>}
+                                            {!isLast ? (
                                                 <Link
-                                                    href={item.href}
+                                                    href={crumb.href}
                                                     className={cn(
-                                                        'relative px-3 py-1.5 text-xs font-mono-ui tracking-wide block whitespace-nowrap transition-all duration-150',
-                                                        isHome ? 'font-semibold' : 'font-medium',
-                                                        isActive
-                                                            ? 'text-accent bg-accent/8'
-                                                            : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
+                                                        'whitespace-nowrap',
+                                                        i === 0
+                                                            ? 'text-muted-foreground font-semibold hover:text-foreground'
+                                                            : 'text-muted-foreground hover:text-foreground'
                                                     )}
                                                 >
-                                                    {isActive && <span className="mr-1 text-accent font-bold">//</span>}
-                                                    {item.label}
+                                                    {crumb.label}
                                                 </Link>
-                                            </motion.div>
-                                        )
-                                    })}
-                                </AnimatePresence>
-                            </motion.div>
-                        ) : (
-                            <motion.div
-                                key="breadcrumb"
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.95 }}
-                                transition={{ duration: 0.15 }}
-                                className="min-w-0"
-                            >
-                                <nav
-                                    aria-label="Breadcrumb"
-                                    className="no-scrollbar flex items-center px-3 py-1.5 text-xs font-mono-ui tracking-wide gap-2 overflow-x-auto min-w-0"
-                                >
-                                    {breadcrumbs.map((crumb, i) => {
-                                        const isLast = i === breadcrumbs.length - 1
-                                        return (
-                                            <React.Fragment key={crumb.href}>
-                                                {i !== 0 && <span className="text-accent font-bold">/</span>}
-                                                {!isLast ? (
-                                                    <Link
-                                                        href={crumb.href}
-                                                        className={cn(
-                                                            'whitespace-nowrap',
-                                                            i === 0
-                                                                ? 'text-muted-foreground font-semibold hover:text-foreground'
-                                                                : 'text-muted-foreground hover:text-foreground'
-                                                        )}
-                                                    >
-                                                        {crumb.label}
-                                                    </Link>
-                                                ) : (
-                                                    <span className="text-foreground whitespace-nowrap">
-                                                        {crumb.label}
-                                                    </span>
-                                                )}
-                                            </React.Fragment>
-                                        )
-                                    })}
-                                </nav>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-
-                    <div className="w-px h-3 bg-border mx-1 shrink-0" />
-
-                    {/* Theme toggle — text style */}
-                    {mounted ? (
-                        <button
-                            onClick={toggleTheme}
-                            className="px-2 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-150 whitespace-nowrap shrink-0"
-                            aria-label="Toggle theme"
-                        >
-                            [{theme === 'dark' ? 'light' : 'dark'}]
-                        </button>
-                    ) : (
-                        <div className="px-2 py-1.5 text-xs opacity-0 select-none shrink-0">[dark]</div>
+                                            ) : (
+                                                <span className="text-foreground whitespace-nowrap">{crumb.label}</span>
+                                            )}
+                                        </React.Fragment>
+                                    )
+                                })}
+                            </nav>
+                        </motion.div>
                     )}
+                </AnimatePresence>
 
-                    {/* Command bar trigger — the "alen.is/…" warp drive (also opens with / or Ctrl+K) */}
+                <div className="w-px h-3 bg-border mx-1 shrink-0" />
+
+                {/* Theme toggle — text style */}
+                {mounted ? (
                     <button
-                        onClick={openCommandBar}
+                        onClick={toggleTheme}
                         className="px-2 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-150 whitespace-nowrap shrink-0"
-                        aria-label="Open site navigator (press / or Ctrl+K)"
-                        title="alen.is/… — press / to warp"
+                        aria-label="Toggle theme"
                     >
-                        [/]
+                        [{theme === 'dark' ? 'light' : 'dark'}]
                     </button>
+                ) : (
+                    <div className="px-2 py-1.5 text-xs opacity-0 select-none shrink-0">[dark]</div>
+                )}
 
-                    <AnimatePresence initial={false}>
-                        {showScrollBtn && (
-                            <motion.div
-                                initial={{ width: 0, opacity: 0 }}
-                                animate={{ width: 'auto', opacity: 1 }}
-                                exit={{ width: 0, opacity: 0 }}
-                                transition={{ duration: 0.15 }}
-                                className="overflow-hidden"
+                {/* Command bar trigger — the "alen.is/…" warp drive (also opens with / or Ctrl+K) */}
+                <button
+                    onClick={openCommandBar}
+                    className="px-2 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-150 whitespace-nowrap shrink-0"
+                    aria-label="Open site navigator (press / or Ctrl+K)"
+                    title="alen.is/… — press / to warp"
+                >
+                    [/]
+                </button>
+
+                <AnimatePresence initial={false}>
+                    {showScrollBtn && (
+                        <motion.div
+                            initial={{ width: 0, opacity: 0 }}
+                            animate={{ width: 'auto', opacity: 1 }}
+                            exit={{ width: 0, opacity: 0 }}
+                            transition={{ duration: 0.15 }}
+                            className="overflow-hidden"
+                        >
+                            <button
+                                onClick={scrollToTop}
+                                className="px-2 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-150"
+                                aria-label="Scroll to top"
                             >
-                                <button
-                                    onClick={scrollToTop}
-                                    className="px-2 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-150"
-                                    aria-label="Scroll to top"
-                                >
-                                    ↑
-                                </button>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                </motion.nav>
-            </div>
+                                ↑
+                            </button>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.nav>
         </header>
     )
 }
@@ -329,11 +299,9 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     const pathname = usePathname()
     const showNavbar = !pathname.startsWith('/lost')
     const showFooter = pathname === '/' || pathname.startsWith('/working') || pathname.startsWith('/building')
-    const crumbs = getBreadcrumbs(pathname === '/' ? '/' : pathname.replace(/\/$/, ''))
 
     return (
         <div className="min-h-screen flex flex-col">
-            {crumbs.length > 1 && <JsonLd data={breadcrumbSchema(crumbs)} />}
             <AlienDataStream />
             <CursorBlob />
             <CommandBar />
@@ -342,7 +310,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
             <main className={cn('flex-1 relative z-10', showNavbar && 'pt-[var(--navbar-height)]')}>{children}</main>
             {showFooter && (
                 <footer className="relative z-10 border-t border-dashed border-border/40 py-8">
-                    <div className="container max-w-4xl" data-nosnippet>
+                    <div className="container max-w-4xl">
                         <p className="text-xs font-mono-ui text-muted-foreground/50 text-center tracking-wide">
                             © {new Date().getFullYear()} alen yohannan
                             <span className="animate-blink ml-0.5">_</span>

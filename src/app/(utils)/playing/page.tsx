@@ -13,8 +13,7 @@ import { constructMetadata } from '@/lib/metadata'
 
 export const metadata: Metadata = constructMetadata({
     title: 'Playing',
-    description:
-        'What Alen is playing — the games currently in rotation, hours sunk into each, and the size of the backlog, pulled live from Steam and Xbox.',
+    description: 'What I play',
     slug: 'playing',
     ogTitle: 'Alen is Playing'
 })

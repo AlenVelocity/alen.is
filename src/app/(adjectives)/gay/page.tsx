@@ -5,10 +5,10 @@ import { constructMetadata } from '@/lib/metadata'
 
 export const metadata: Metadata = constructMetadata({
     title: 'gay',
-    description:
-        'Alen is gay? Close, but bi is the accurate one — this page hands you straight over to alen.is/bi where the answer is spelled out.',
+    description: 'Alen is gay? Try bi. Redirecting...',
     slug: 'gay',
-    ogTitle: 'Alen is gay'
+    ogTitle: 'Alen is gay',
+    openGraph: { description: 'Alen is gay.' }
 })
 
 export default function Gay() {

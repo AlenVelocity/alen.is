@@ -4,10 +4,10 @@ import { constructMetadata } from '@/lib/metadata'
 
 export const metadata: Metadata = constructMetadata({
     title: 'Thankful',
-    description:
-        'Things and people Alen is glad about — a running list of everyone and everything worth being thankful for, added to whenever one comes to mind.',
+    description: "Things and people I'm glad about",
     slug: 'thankful',
-    ogTitle: 'Alen is Thankful'
+    ogTitle: 'Alen is Thankful',
+    openGraph: { description: "Things and people I'm glad about" }
 })
 
 type Gratitude = {
@@ -78,7 +78,7 @@ export default function Thankful() {
                         className="mono-label text-muted-foreground/50 mb-4 animate-fade-in-up opacity-0 stagger-1"
                         style={{ animationFillMode: 'forwards' }}
                     >
-                        <span data-nosnippet>// keeping track</span>
+                        // keeping track
                     </p>
                     <h1
                         className="text-display text-5xl md:text-6xl mb-3 animate-fade-in-up opacity-0 stagger-2"

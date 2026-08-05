@@ -5,11 +5,11 @@ import { constructMetadata } from '@/lib/metadata'
 
 export const metadata: Metadata = constructMetadata({
     title: 'definitely human',
-    description:
-        'Alen is definitely human. Trust me. Here is the full list of completely normal human credentials, offered as reassurance and not at all as evidence.',
+    description: 'Alen is definitely human. Trust me.',
     slug: 'definitely-human',
     image: '/api/og?is=definitely%20human',
-    ogTitle: 'Alen is definitely human'
+    ogTitle: 'Alen is definitely human',
+    openGraph: { description: 'Alen is definitely human. Trust me.' }
 })
 
 /** Reassuring facts that get progressively less reassuring */
@@ -32,7 +32,7 @@ export default function DefinitelyHuman() {
                     className="mono-label text-muted-foreground/35 tracking-[0.25em] animate-fade-in-up opacity-0 stagger-1"
                     style={{ animationFillMode: 'forwards' }}
                 >
-                    <span data-nosnippet>// re-verified?</span>
+                    // re-verified?
                 </p>
 
                 {/* The insistence */}

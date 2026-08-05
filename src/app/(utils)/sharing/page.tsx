@@ -6,8 +6,7 @@ import { constructMetadata } from '@/lib/metadata'
 
 export const metadata: Metadata = constructMetadata({
     title: 'Sharing',
-    description:
-        'Files Alen is sharing, hosted straight off alen.is — direct downloads on a real domain, no link shorteners and no sign-up wall in the way.',
+    description: 'Files hosted straight off the site',
     slug: 'sharing',
     ogTitle: 'Alen is Sharing'
 })
