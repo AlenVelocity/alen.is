@@ -50,7 +50,7 @@ const gearSections: GearSection[] = [
                 name: 'Alienware AW2726DM',
                 specs: 'QD-OLED · QHD 1440p · 240Hz',
                 type: 'Monitor',
-                badge: 'Daily Driver'
+                badge: 'Primary'
             },
             {
                 name: 'Lenovo Legion R27qc-30',
@@ -81,6 +81,11 @@ const gearSections: GearSection[] = [
     {
         title: 'Audio',
         items: [
+            {
+                name: 'JCALLY JM6 Pro 2',
+                specs: 'Dual CS43198 · Balanced 4.4mm + 3.5mm · USB-C',
+                type: 'DAC/Amp'
+            },
             {
                 name: '7Hz x Crinacle Divine',
                 specs: 'Planar · Crinacle Collab Tuning · 3.5mm Wired',
@@ -117,13 +122,13 @@ const gearSections: GearSection[] = [
 
 function GearRow({ item }: { item: GearItem }) {
     const badgeColor =
-        item.badge === 'Daily Driver'
+        item.badge === 'Daily Driver' || item.badge === 'Primary'
             ? 'text-accent border-accent/30'
             : item.badge === 'Broken'
               ? 'text-destructive border-destructive/30'
               : 'text-muted-foreground border-border/50'
 
-    const isDaily = item.badge === 'Daily Driver'
+    const isDaily = item.badge === 'Daily Driver' || item.badge === 'Primary'
 
     return (
         <div
