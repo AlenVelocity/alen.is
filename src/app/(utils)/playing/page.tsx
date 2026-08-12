@@ -139,10 +139,10 @@ export default async function Playing() {
                                     {gameReviews.map((review) => (
                                         <div
                                             key={review.id}
-                                            className="group flex items-start gap-4 p-3 -mx-3 rounded-xl hover:bg-muted/40 transition-all"
+                                            className="group flex items-start gap-4 py-3 border-b border-dashed border-border/40 last:border-b-0"
                                         >
                                             {review.image ? (
-                                                <div className="relative w-28 h-[52px] rounded-md overflow-hidden flex-shrink-0 shadow-sm ring-1 ring-border/50">
+                                                <div className="relative w-28 h-[52px] rounded overflow-hidden flex-shrink-0 shadow-sm ring-1 ring-border/50">
                                                     <Image
                                                         src={review.image}
                                                         alt={review.name}
@@ -151,7 +151,7 @@ export default async function Playing() {
                                                     />
                                                 </div>
                                             ) : (
-                                                <div className="w-28 h-[52px] rounded-md bg-muted flex items-center justify-center flex-shrink-0 border border-border/50">
+                                                <div className="w-28 h-[52px] rounded bg-muted flex items-center justify-center flex-shrink-0 border border-border/50">
                                                     <GiGamepad className="w-5 h-5 text-muted-foreground/40" />
                                                 </div>
                                             )}
@@ -159,7 +159,7 @@ export default async function Playing() {
                                                 <div className="flex items-center gap-2 mb-0.5">
                                                     <p className="font-semibold truncate">{review.name}</p>
                                                     {review.rating && (
-                                                        <span className="shrink-0 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent/10 border border-accent/20 text-xs font-semibold text-accent">
+                                                        <span className="shrink-0 mono-label border border-accent/30 text-accent px-1.5 py-0.5 rounded-sm">
                                                             {review.rating}/10
                                                         </span>
                                                     )}
@@ -342,8 +342,8 @@ export default async function Playing() {
                 {/* Empty State */}
                 {!hasData && (
                     <div className="text-center py-12">
-                        <GiGamepad className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                        <p className="text-muted-foreground">No gaming data available right now.</p>
+                        <GiGamepad className="w-12 h-12 text-muted-foreground/40 mx-auto mb-4" />
+                        <p className="mono-label text-muted-foreground/50">// no signal from the consoles</p>
                     </div>
                 )}
             </div>

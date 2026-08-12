@@ -5,7 +5,7 @@ import { PageTransition } from '@/components/ui/page-transition'
 import { constructMetadata } from '@/lib/metadata'
 
 export const metadata: Metadata = constructMetadata({
-    title: 'My Gear',
+    title: 'Using',
     description: 'My hardware setup',
     slug: 'using',
     ogTitle: 'Alen is Using',

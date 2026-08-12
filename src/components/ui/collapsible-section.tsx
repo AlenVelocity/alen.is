@@ -20,10 +20,10 @@ export function CollapsibleSection({
         <section className="mb-12">
             <button
                 onClick={() => setOpen(!open)}
-                className="group flex items-center gap-2 w-full text-left text-sm font-medium text-muted-foreground uppercase tracking-wider border-l-2 border-accent pl-3 mb-4 hover:text-foreground transition-colors"
+                className="section-label group flex items-center gap-2 w-full text-left mb-4 hover:text-foreground transition-colors"
             >
                 {icon}
-                {title}
+                {title.toLowerCase()}
                 <FiChevronDown
                     className={`w-3.5 h-3.5 ml-auto transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
                 />

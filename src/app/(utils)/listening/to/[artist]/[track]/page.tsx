@@ -4,11 +4,12 @@ import { PageTransition } from '@/components/ui/page-transition'
 import { api } from '@/trpc/server'
 import { decodeTrackParam, encodeTrackParam } from '@/lib/lastfm'
 import { calculateFrequency, getStreakInfo } from '@/lib/streak'
-import { FiArrowLeft, FiArrowUpRight, FiHeadphones, FiHeart, FiClock, FiUsers, FiDisc, FiStar } from 'react-icons/fi'
+import { FiArrowLeft, FiArrowUpRight, FiHeadphones, FiHeart, FiClock, FiDisc, FiStar } from 'react-icons/fi'
 import { SiLastdotfm } from 'react-icons/si'
 import { FaSpotify, FaYoutube, FaApple } from 'react-icons/fa'
 import Image from 'next/image'
 import Link from 'next/link'
+import { EqualizerBars } from '../../../_components/top-signals'
 
 // ─── Metadata ───────────────────────────────────────────────────────────────
 
@@ -95,6 +96,7 @@ export default async function TrackPage({ params }: Props) {
         isNowPlaying,
         'large'
     )
+    const onStreak = isNowPlaying && nowPlayingFrequency >= 3
 
     // Build search query for streaming links
     const searchQuery = encodeURIComponent(`${track.artist} ${track.name}`)
@@ -105,14 +107,14 @@ export default async function TrackPage({ params }: Props) {
                 {/* Back link */}
                 <Link
                     href="/listening"
-                    className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-accent transition-colors mb-8"
+                    className="inline-flex items-center gap-1.5 mono-label text-muted-foreground/50 hover:text-accent transition-colors mb-10"
                 >
-                    <FiArrowLeft className="w-3.5 h-3.5" />
-                    Back to Listening
+                    <FiArrowLeft className="w-3 h-3" />
+                    back to listening
                 </Link>
 
                 {/* Full page ambient streak glow */}
-                {nowPlayingFrequency >= 3 && (
+                {onStreak && (
                     <div className="fixed inset-0 pointer-events-none z-[-5] overflow-hidden">
                         <div
                             className="absolute top-[-20vw] left-[50%] w-[120vw] h-[100vw] ml-[-60vw] rounded-full blur-[120px] opacity-25 mix-blend-screen"
@@ -121,113 +123,117 @@ export default async function TrackPage({ params }: Props) {
                     </div>
                 )}
 
-                {/* Album art */}
-                {track.image ? (
-                    <div
-                        className="relative w-full max-w-[300px] aspect-square rounded-lg overflow-hidden mb-8 shadow-xl"
-                        style={{ rotate: '-0.5deg' }}
-                    >
-                        <Image
-                            src={track.image}
-                            alt={`${track.name} album art`}
-                            fill
-                            className="object-cover"
-                            priority
-                        />
-                    </div>
-                ) : (
-                    <div
-                        className="w-full max-w-[300px] aspect-square rounded-lg bg-muted flex items-center justify-center mb-8 shadow-xl"
-                        style={{ rotate: '-0.5deg' }}
-                    >
-                        <FiHeadphones className="w-12 h-12 text-muted-foreground/30" />
-                    </div>
-                )}
-
-                {/* Now playing indicator */}
-                {isNowPlaying && (
-                    <div className="flex items-center gap-2 mb-4">
-                        <span className="inline-block w-1.5 h-1.5 rounded-full bg-accent animate-pulse-subtle" />
-                        <span className="text-xs font-medium text-accent">
-                            {subtitle}
-                            {nowPlayingFrequency >= 3 && (
-                                <span className="ml-1.5 opacity-80 lowercase">x{nowPlayingFrequency}</span>
-                            )}
-                        </span>
-                    </div>
-                )}
-
-                {/* Title + artist */}
-                <div className="mb-1">
-                    <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{track.name}</h1>
+                {/* Album art — gets the spinning conic border once it's in heavy rotation, same as the now-playing card on /listening */}
+                <div
+                    className={`relative mb-8 w-full max-w-[300px] ${onStreak ? 'p-[2px] rounded-xl overflow-visible' : ''}`}
+                    style={{ rotate: '-0.5deg' }}
+                >
+                    {onStreak && (
+                        <>
+                            <div
+                                className="absolute inset-[2px] rounded-[10px] z-[-1]"
+                                style={{ boxShadow: shadowStyle }}
+                            />
+                            <div className="absolute inset-0 rounded-xl overflow-hidden z-[-2]">
+                                <div
+                                    className="absolute left-[50%] top-[50%] w-[1000px] h-[1000px] ml-[-500px] mt-[-500px] origin-center"
+                                    style={{
+                                        backgroundImage: borderGradient,
+                                        animation: `spin-slow ${Math.max(0.4, 4.5 - nowPlayingFrequency * 0.25)}s linear infinite`
+                                    }}
+                                />
+                            </div>
+                        </>
+                    )}
+                    {track.image ? (
+                        <div
+                            className={`relative w-full aspect-square overflow-hidden shadow-xl ${onStreak ? 'rounded-[10px]' : 'rounded-lg'}`}
+                        >
+                            <Image
+                                src={track.image}
+                                alt={`${track.name} album art`}
+                                fill
+                                className="object-cover"
+                                priority
+                            />
+                        </div>
+                    ) : (
+                        <div
+                            className={`w-full aspect-square bg-muted flex items-center justify-center shadow-xl ${onStreak ? 'rounded-[10px]' : 'rounded-lg'}`}
+                        >
+                            <FiHeadphones className="w-12 h-12 text-muted-foreground/30" />
+                        </div>
+                    )}
                 </div>
 
-                <p className="text-lg text-muted-foreground mb-2">{track.artist}</p>
-                {/* Loved badge */}
-                {track.userLoved && (
-                    <div className="flex items-center gap-1.5 text-sm text-accent mb-6">
-                        <FiHeart className="w-4 h-4 fill-current" />
-                        <span className="font-medium">Loved</span>
+                {/* Title + artist */}
+                <p className="mono-label text-muted-foreground/50 mb-4">// last.fm scrobble</p>
+                <h1 className="text-display text-3xl md:text-4xl mb-1">{track.name}</h1>
+                <p className="text-lg text-muted-foreground mb-4">{track.artist}</p>
+
+                {/* Now playing + loved badges */}
+                {(isNowPlaying || track.userLoved) && (
+                    <div className="flex flex-wrap items-center gap-3 mb-8">
+                        {isNowPlaying && (
+                            <div className="flex items-center gap-2">
+                                <EqualizerBars className="h-3 scale-75 origin-left" />
+                                <span className="text-xs font-medium text-accent uppercase tracking-wider">
+                                    {subtitle}
+                                    {nowPlayingFrequency >= 3 && (
+                                        <span className="ml-1.5 opacity-80 lowercase">x{nowPlayingFrequency}</span>
+                                    )}
+                                </span>
+                            </div>
+                        )}
+                        {track.userLoved && (
+                            <span className="inline-flex items-center gap-1.5 mono-label border border-accent/30 text-accent px-1.5 py-0.5 rounded-sm">
+                                <FiHeart className="w-3 h-3 fill-current" />
+                                loved
+                            </span>
+                        )}
                     </div>
                 )}
 
-                {/* Spacer when neither now-playing nor loved */}
-                {!isNowPlaying && !track.userLoved && <div className="mb-4" />}
+                {/* Stats HUD */}
+                <div className="flex flex-wrap items-center gap-1.5 mb-12">
+                    {track.duration != null && track.duration > 0 && (
+                        <span className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm border border-border/50 font-mono-ui text-xs text-muted-foreground">
+                            <FiClock className="w-3.5 h-3.5 text-accent/70" />
+                            {formatDuration(track.duration)}
+                        </span>
+                    )}
+                    {track.userPlaycount != null && track.userPlaycount > 0 && (
+                        <span className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm border border-accent/30 font-mono-ui text-xs text-accent">
+                            <FiHeadphones className="w-3.5 h-3.5" />
+                            {formatNumber(track.userPlaycount)} scrobbles
+                        </span>
+                    )}
+                </div>
 
                 {/* Review */}
                 {reviewData && (
-                    <section className="mb-10 animate-fade-in-up">
-                        <div className="p-6 rounded-2xl bg-card border border-border flex flex-col gap-3 shadow-sm hover:shadow-md transition-shadow">
-                            <div className="flex items-center justify-between border-b pb-2 border-border/50">
-                                <h3 className="font-bold text-lg tracking-tight">Alen's Review</h3>
-                                {reviewData.rating && (
-                                    <div className="flex items-center gap-1.5 text-accent font-bold">
-                                        <FiStar className="fill-current w-4 h-4" />
-                                        <span>
-                                            {reviewData.rating}{' '}
-                                            <span className="text-muted-foreground/50 text-sm">/ 10</span>
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-                            <p className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
+                    <section className="mb-12">
+                        <div className="section-label mb-3">alen&apos;s review</div>
+                        <div className="p-4 rounded-lg border border-dashed border-border/60 flex flex-col gap-2">
+                            {reviewData.rating && (
+                                <div className="flex items-center gap-1.5 text-accent font-mono-ui text-sm">
+                                    <FiStar className="fill-current w-3.5 h-3.5" />
+                                    {reviewData.rating}
+                                    <span className="text-muted-foreground/50">/10</span>
+                                </div>
+                            )}
+                            <p className="text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed">
                                 {reviewData.content}
                             </p>
                         </div>
                     </section>
                 )}
 
-                {/* Stats */}
-                <section className="mb-10">
-                    <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider border-l-2 border-accent pl-3 mb-4">
-                        Stats
-                    </h2>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-4 gap-x-6">
-                        {track.duration != null && track.duration > 0 && (
-                            <div>
-                                <div className="flex items-center gap-1.5 mb-0.5">
-                                    <FiClock className="w-3.5 h-3.5 text-muted-foreground/50" />
-                                    <p className="text-2xl font-bold">{formatDuration(track.duration)}</p>
-                                </div>
-                                <p className="text-xs text-muted-foreground/60">duration</p>
-                            </div>
-                        )}
-                        {track.userPlaycount != null && track.userPlaycount > 0 && (
-                            <div>
-                                <p className="text-2xl font-bold text-accent">{formatNumber(track.userPlaycount)}</p>
-                                <p className="text-xs text-muted-foreground/60">my scrobbles</p>
-                            </div>
-                        )}
-                    </div>
-                </section>
-
                 {/* Album */}
                 {track.album && (
                     <section className="mb-10">
-                        <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider border-l-2 border-accent pl-3 mb-4">
-                            Album
-                        </h2>
-                        <div className="flex items-center gap-3">
+                        <div className="section-label mb-3">album</div>
+                        <div className="flex items-center gap-2.5 text-sm">
                             <FiDisc className="w-4 h-4 text-muted-foreground/50 shrink-0" />
                             {track.albumUrl ? (
                                 <a
@@ -249,14 +255,12 @@ export default async function TrackPage({ params }: Props) {
                 {/* Tags */}
                 {track.tags.length > 0 && (
                     <section className="mb-10">
-                        <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider border-l-2 border-accent pl-3 mb-4">
-                            Tags
-                        </h2>
+                        <div className="section-label mb-3">tags</div>
                         <div className="flex flex-wrap gap-2">
                             {track.tags.map((tag) => (
                                 <span
                                     key={tag}
-                                    className="px-2.5 py-1 text-xs font-medium rounded-full bg-muted text-muted-foreground border border-dashed border-border"
+                                    className="mono-label border border-border/50 text-muted-foreground/60 px-1.5 py-0.5 rounded-sm"
                                 >
                                     {tag}
                                 </span>
@@ -268,70 +272,66 @@ export default async function TrackPage({ params }: Props) {
                 {/* Wiki / Description */}
                 {track.wiki && (
                     <section className="mb-10">
-                        <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider border-l-2 border-accent pl-3 mb-4">
-                            About
-                        </h2>
+                        <div className="section-label mb-3">about</div>
                         <p className="text-sm text-muted-foreground leading-relaxed">{track.wiki}</p>
                     </section>
                 )}
 
                 {/* External links */}
                 <section>
-                    <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider border-l-2 border-accent pl-3 mb-4">
-                        Links
-                    </h2>
-                    <div className="flex flex-col gap-2">
+                    <div className="section-label mb-3">links</div>
+                    <div>
                         <a
                             href={track.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-accent transition-colors"
+                            className="group flex items-center gap-2.5 py-2.5 border-b border-dashed border-border/40 last:border-b-0 mono-label text-muted-foreground/60 hover:text-accent hover:border-accent/30 transition-colors"
                         >
-                            <SiLastdotfm className="w-4 h-4" />
-                            View on Last.fm
-                            <FiArrowUpRight className="w-3.5 h-3.5" />
+                            <SiLastdotfm className="w-3.5 h-3.5 shrink-0" />
+                            view on last.fm
+                            <FiArrowUpRight className="w-3 h-3 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                         </a>
                         {track.albumUrl && (
                             <a
                                 href={track.albumUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-accent transition-colors"
+                                className="group flex items-center gap-2.5 py-2.5 border-b border-dashed border-border/40 last:border-b-0 mono-label text-muted-foreground/60 hover:text-accent hover:border-accent/30 transition-colors"
                             >
-                                <FiDisc className="w-4 h-4" />
-                                View album on Last.fm
-                                <FiArrowUpRight className="w-3.5 h-3.5" />
+                                <FiDisc className="w-3.5 h-3.5 shrink-0" />
+                                view album on last.fm
+                                <FiArrowUpRight className="w-3 h-3 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                             </a>
                         )}
                         <a
                             href={`https://open.spotify.com/search/${searchQuery}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-accent transition-colors"
+                            className="group flex items-center gap-2.5 py-2.5 border-b border-dashed border-border/40 last:border-b-0 mono-label text-muted-foreground/60 hover:text-accent hover:border-accent/30 transition-colors"
                         >
-                            <FaSpotify className="w-4 h-4" />
-                            Search on Spotify
-                            <FiArrowUpRight className="w-3.5 h-3.5" />
+                            <FaSpotify className="w-3.5 h-3.5 shrink-0" />
+                            search on spotify
+                            <FiArrowUpRight className="w-3 h-3 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                         </a>
                         <a
                             href={`https://music.youtube.com/search?q=${searchQuery}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-accent transition-colors"
+                            className="group flex items-center gap-2.5 py-2.5 border-b border-dashed border-border/40 last:border-b-0 mono-label text-muted-foreground/60 hover:text-accent hover:border-accent/30 transition-colors"
                         >
-                            <FaYoutube className="w-4 h-4" />
-                            Search on YouTube Music
-                            <FiArrowUpRight className="w-3.5 h-3.5" />
+                            <FaYoutube className="w-3.5 h-3.5 shrink-0" />
+                            search on youtube music
+                            <FiArrowUpRight className="w-3 h-3 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                         </a>
                         <a
                             href={`https://music.apple.com/us/search?term=${searchQuery}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-accent transition-colors"
+                            className="group flex items-center gap-2.5 py-2.5 border-b border-dashed border-border/40 last:border-b-0 mono-label text-muted-foreground/60 hover:text-accent hover:border-accent/30 transition-colors"
                         >
-                            <FaApple className="w-4 h-4" />
-                            Search on Apple Music
-                            <FiArrowUpRight className="w-3.5 h-3.5" />
+                            <FaApple className="w-3.5 h-3.5 shrink-0" />
+                            search on apple music
+                            <FiArrowUpRight className="w-3 h-3 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                         </a>
                     </div>
                 </section>
