@@ -39,12 +39,6 @@ const gearSections: GearSection[] = [
                 href: 'https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-9-9950x.html'
             },
             {
-                name: 'Deepcool LD360',
-                specs: '360mm AIO Liquid Cooler',
-                type: 'Cooler',
-                href: 'https://www.deepcool.com/products/Cooling/cpuliquidcoolers/LD360-Liquid-Cooler-with-a-Multi-Line-Display-1851-1700-AM5/2024/17717.shtml'
-            },
-            {
                 name: 'MSI B850 Gaming Plus WiFi',
                 specs: 'AMD B850 · AM5 · DDR5 · ATX',
                 type: 'Motherboard',
@@ -57,16 +51,22 @@ const gearSections: GearSection[] = [
                 href: 'https://www.gskill.com/product/165/377/1648538953/F5-5600J3636D32GX2-RS5K-F5-5600J3636D32GA2-RS5K'
             },
             {
-                name: 'Adata XPG Gammix S60',
-                specs: '1TB · M.2 NVMe Gen4',
-                type: 'SSD',
-                href: 'https://www.xpg.com/us/xpg/solid-state-drive-gammix-s60?tab=spec'
+                name: 'Deepcool LD360',
+                specs: '360mm AIO Liquid Cooler',
+                type: 'Cooler',
+                href: 'https://www.deepcool.com/products/Cooling/cpuliquidcoolers/LD360-Liquid-Cooler-with-a-Multi-Line-Display-1851-1700-AM5/2024/17717.shtml'
             },
             {
                 name: 'Colorful RTX 5070',
                 specs: '12GB GDDR7X · Gaming OC',
                 type: 'GPU',
                 href: 'https://www.colorfulgroup.com/en/home/product?mid=102&id=28406f28-c515-4150-902a-66092a882095'
+            },
+            {
+                name: 'Adata XPG Gammix S60',
+                specs: '1TB · M.2 NVMe Gen4',
+                type: 'SSD',
+                href: 'https://www.xpg.com/us/xpg/solid-state-drive-gammix-s60?tab=spec'
             },
             {
                 name: 'Deepcool CG530 4F',
