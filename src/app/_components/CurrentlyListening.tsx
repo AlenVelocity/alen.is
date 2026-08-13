@@ -92,7 +92,7 @@ export async function CurrentlyListening() {
                         {/* Status label */}
                         <div className="flex items-center gap-2 mb-0.5">
                             {isNowPlaying && (
-                                <span className="inline-block w-1.5 h-1.5 rounded-full bg-accent animate-pulse-dot shrink-0" />
+                                <span className="inline-block w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
                             )}
                             <span className="mono-label text-accent">
                                 {subtitle}
