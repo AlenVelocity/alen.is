@@ -101,7 +101,7 @@ export async function fetchXboxGames(): Promise<XboxGame[]> {
         if (!response.ok) return []
 
         const data = await response.json()
-        const titles = data.titles || []
+        const titles = data.content?.titles || []
 
         return titles.map((game: any) => ({
             titleId: String(game.titleId),
@@ -145,7 +145,7 @@ export async function fetchXboxGameAchievements(titleId: string): Promise<XboxAc
         if (!response.ok) return []
 
         const data = await response.json()
-        const achievements = data.achievements || []
+        const achievements = data.content?.achievements || []
 
         return achievements.map((a: any) => ({
             id: String(a.id),
