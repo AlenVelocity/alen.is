@@ -174,14 +174,16 @@ const gearSections: GearSection[] = [
                 specs: '40mm Drivers · 43dB ANC',
                 type: 'Over-ear · Wireless',
                 href: 'https://buy.realme.com/in/goods/729',
-                image: '/gear/realme-studio-h1.png'
+                image: '/gear/realme-studio-h1.png',
+                inactive: true
             },
             {
                 name: 'boAt Airdopes 161',
                 specs: 'BT 5.3 · ENx™ ENC',
                 type: 'Earbuds · Wireless',
                 href: 'https://www.boat-lifestyle.com/products/airdopes-161',
-                image: '/gear/boat-airdopes-161.png'
+                image: '/gear/boat-airdopes-161.png',
+                inactive: true
             },
             {
                 name: 'Moondrop Chu 2 DSP',
@@ -189,6 +191,7 @@ const gearSections: GearSection[] = [
                 type: 'IEM · Wired',
                 href: 'https://www.headphonezone.in/products/moondrop-chu-ii',
                 image: '/gear/moondrop-chu-2-dsp.png',
+                badge: 'Broken',
                 inactive: true
             },
             {
@@ -197,6 +200,7 @@ const gearSections: GearSection[] = [
                 type: 'IEM · Wired',
                 href: 'https://www.headphonezone.in/products/headphone-zone-x-tangzu-waner-s-g-2',
                 image: '/gear/headphone-zone-x-tangzu-waner-s-g-2.png',
+                badge: 'Broken',
                 inactive: true
             },
             {
@@ -205,6 +209,7 @@ const gearSections: GearSection[] = [
                 type: 'IEM · Wired',
                 href: 'https://www.linsoul.com/products/7hz-salnotes-zero',
                 image: '/gear/7hz-salnotes-zero.png',
+                badge: 'Broken',
                 inactive: true
             }
         ]
