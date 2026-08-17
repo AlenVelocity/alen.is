@@ -170,22 +170,6 @@ const gearSections: GearSection[] = [
                 badge: 'Broken'
             },
             {
-                name: 'Realme TechLife Studio H1',
-                specs: '40mm Drivers · 43dB ANC',
-                type: 'Over-ear · Wireless',
-                href: 'https://buy.realme.com/in/goods/729',
-                image: '/gear/realme-studio-h1.png',
-                inactive: true
-            },
-            {
-                name: 'boAt Airdopes 161',
-                specs: 'BT 5.3 · ENx™ ENC',
-                type: 'Earbuds · Wireless',
-                href: 'https://www.boat-lifestyle.com/products/airdopes-161',
-                image: '/gear/boat-airdopes-161.png',
-                inactive: true
-            },
-            {
                 name: 'Moondrop Chu 2 DSP',
                 specs: '10mm Dynamic · USB-C DSP',
                 type: 'IEM · Wired',
@@ -210,6 +194,22 @@ const gearSections: GearSection[] = [
                 href: 'https://www.linsoul.com/products/7hz-salnotes-zero',
                 image: '/gear/7hz-salnotes-zero.png',
                 badge: 'Broken',
+                inactive: true
+            },
+            {
+                name: 'Realme TechLife Studio H1',
+                specs: '40mm Drivers · 43dB ANC',
+                type: 'Over-ear · Wireless',
+                href: 'https://buy.realme.com/in/goods/729',
+                image: '/gear/realme-studio-h1.png',
+                inactive: true
+            },
+            {
+                name: 'boAt Airdopes 161',
+                specs: 'BT 5.3 · ENx™ ENC',
+                type: 'Earbuds · Wireless',
+                href: 'https://www.boat-lifestyle.com/products/airdopes-161',
+                image: '/gear/boat-airdopes-161.png',
                 inactive: true
             }
         ]
