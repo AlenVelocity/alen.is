@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { posthog } from '@/components/posthog-provider'
 import { isMinimalMotion } from '@/lib/motion-pref'
+import { collectPieces } from '@/lib/shred'
 
 /**
  * The site's UFO abduction, in two flavors:
@@ -104,32 +105,6 @@ export const UFO_ABDUCT_EVENT = 'alen:ufo-abduct'
 
 export function ufoAbduct() {
     if (typeof window !== 'undefined') window.dispatchEvent(new Event(UFO_ABDUCT_EVENT))
-}
-
-/**
- * Split the page into abductable pieces: descend through single-child
- * wrappers (PageTransition, containers), take the content blocks, and explode
- * small blocks into their children for a confetti-like shredding.
- */
-function collectPieces(root: HTMLElement): HTMLElement[] {
-    let node: HTMLElement = root
-    while (node.children.length === 1 && node.firstElementChild instanceof HTMLElement) {
-        node = node.firstElementChild
-    }
-    const blocks = [...node.children].filter((el): el is HTMLElement => el instanceof HTMLElement)
-    const explode = (els: HTMLElement[]) =>
-        els.flatMap((el) => {
-            const kids = [...el.children].filter((k): k is HTMLElement => k instanceof HTMLElement)
-            return kids.length >= 2 && kids.length <= 8 ? kids : [el]
-        })
-    // Two explosion passes: container → sections → headings/paragraphs/rows
-    const exploded = explode(explode(blocks))
-    // Cap the piece count so huge pages don't animate 100 elements at once
-    const pieces = exploded.length <= 30 ? exploded : explode(blocks).length <= 30 ? explode(blocks) : blocks
-    return pieces.filter((el) => {
-        const rect = el.getBoundingClientRect()
-        return rect.width > 0 && rect.height > 0
-    })
 }
 
 interface ShredOptions {

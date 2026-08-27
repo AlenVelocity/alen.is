@@ -15,7 +15,8 @@
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
     "cms:migrate": "tsx scripts/migrate-cms-data.ts",
-    "cms:seed": "npm run cms:migrate"
+    "cms:seed": "npm run cms:migrate",
+    "drowning:art": "tsx scripts/import-drowning-art.ts"
   },
   "dependencies": {
     "@calcom/embed-react": "^1.5.2",

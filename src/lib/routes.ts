@@ -75,5 +75,7 @@ export const ALL_PAGE_SLUGS = new Set([
     // the OG card spells it out with a space so it reads as a sentence
     'definitely human',
     'alien',
-    'thankful'
+    'thankful',
+    // unlisted: found by typing 'drown' anywhere, or by guessing
+    'drowning'
 ])

@@ -12,6 +12,7 @@ import { posthog } from '@/components/posthog-provider'
 import { AlienDataStream } from '@/components/ui/alien-ambience'
 import { CommandBar, openCommandBar } from '@/components/ui/command-bar'
 import { UfoAbduction } from '@/components/ui/ufo-abduction'
+import { DrownTrigger } from '@/components/ui/drown-trigger'
 
 // NAV ITEMS
 const NAV_ITEMS = [
@@ -306,6 +307,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
             <CursorBlob />
             <CommandBar />
             <UfoAbduction />
+            <DrownTrigger />
             {showNavbar && <Navigation />}
             <main className={cn('flex-1 relative z-10', showNavbar && 'pt-[var(--navbar-height)]')}>{children}</main>
             {showFooter && (

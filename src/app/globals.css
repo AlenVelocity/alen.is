@@ -967,6 +967,740 @@ body.ufo-return main {
     animation: abductReturn 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════
+   /drowning — the abduction's underwater sibling (see drowning/descent.tsx)
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* The page letting go. Same idea as abductPiece, opposite direction and no
+   beam to keep things tidy: a moment of buoyancy, then a swaying fall into
+   the dark. Each piece gets --sink-dy (distance to below the fold),
+   --sink-dx/--sink-sway (lateral drift) and --sink-spin/--sink-tilt inline. */
+@keyframes sinkPiece {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 1;
+        filter: blur(0);
+    }
+
+    /* Buoyancy: it hangs, and lifts slightly, before it believes what is happening */
+    14% {
+        transform: translate(0, -9px) rotate(var(--sink-tilt));
+        opacity: 1;
+    }
+
+    /* Swaying down through the water column */
+    45% {
+        transform: translate(var(--sink-sway), calc(var(--sink-dy) * 0.32)) rotate(calc(var(--sink-spin) * 0.5));
+        opacity: 0.8;
+        filter: blur(1px);
+    }
+
+    72% {
+        transform: translate(calc(var(--sink-sway) * -0.6), calc(var(--sink-dy) * 0.66))
+            rotate(calc(var(--sink-spin) * 0.8));
+        opacity: 0.45;
+        filter: blur(2px);
+    }
+
+    100% {
+        transform: translate(var(--sink-dx), var(--sink-dy)) rotate(var(--sink-spin));
+        opacity: 0;
+        filter: blur(4px);
+    }
+}
+
+/* Bubbles going the other way */
+@keyframes bubbleRise {
+    0% {
+        transform: translateY(0) translateX(0);
+        opacity: 0;
+    }
+
+    12% {
+        opacity: 0.7;
+    }
+
+    100% {
+        transform: translateY(-102vh) translateX(14px);
+        opacity: 0;
+    }
+}
+
+/* ─── One keyframe per creature ──────────────────────────────────────────
+   Every beat of the bridge gets its own motion, because being bitten by a
+   shark and being strangled by an octopus are not the same event. Each one
+   starts and ends offscreen via --strike-x/--strike-y (set per beat, in
+   vmin) and is handed the beat's duration inline, so slowing the gauntlet
+   down slows every creature with it. Shared easing lives on the element;
+   the character is all in the percentages. */
+
+/* Scuttles up, snips twice, scuttles off the far side */
+@keyframes crabScuttle {
+    0% {
+        transform: translate(var(--strike-x), var(--strike-y)) scale(0.8);
+        opacity: 0;
+    }
+    18% {
+        transform: translate(calc(var(--strike-x) - 6vmin), calc(var(--strike-y) * 0.3)) scale(1);
+        opacity: 1;
+    }
+    32% {
+        transform: translate(3vmin, 2vmin) scale(1);
+    }
+    40% {
+        transform: translate(0, 1vmin) scale(1.12);
+    }
+    48% {
+        transform: translate(0.6vmin, 1vmin) scale(1);
+    }
+    56% {
+        transform: translate(-0.4vmin, 1vmin) scale(1.12);
+    }
+    66% {
+        transform: translate(0, 1vmin) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(calc(var(--strike-x) * -1), var(--strike-y)) scale(0.8);
+        opacity: 0;
+    }
+}
+
+/* Glides in, opens up, and squeezes */
+@keyframes octopusWrap {
+    0% {
+        transform: translate(var(--strike-x), var(--strike-y)) scale(0.7) rotate(-8deg);
+        opacity: 0;
+    }
+    26% {
+        transform: translate(0, 0) scale(1.15) rotate(0deg);
+        opacity: 1;
+    }
+    40% {
+        transform: translate(0, 0) scale(1.5);
+    }
+    52% {
+        transform: translate(0, 0) scale(1.3);
+    }
+    64% {
+        transform: translate(0, 0) scale(1.5);
+    }
+    78% {
+        transform: translate(0, 0) scale(1.32);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(calc(var(--strike-x) * 0.5), calc(var(--strike-y) * 0.5)) scale(0.9);
+        opacity: 0;
+    }
+}
+
+/* Straight through and out the other side. No hesitation. */
+@keyframes sharkPass {
+    0% {
+        transform: translate(var(--strike-x), var(--strike-y)) scale(1);
+        opacity: 0;
+    }
+    12% {
+        opacity: 1;
+    }
+    50% {
+        transform: translate(0, 0) scale(1.05);
+        opacity: 1;
+    }
+    88% {
+        opacity: 1;
+    }
+    100% {
+        transform: translate(calc(var(--strike-x) * -1), calc(var(--strike-y) * -1)) scale(1);
+        opacity: 0;
+    }
+}
+
+/* Drifts down, pulsing its bell, entirely uninterested */
+@keyframes jellyfishDrift {
+    0% {
+        transform: translate(var(--strike-x), var(--strike-y)) scale(0.9);
+        opacity: 0;
+    }
+    15% {
+        opacity: 0.9;
+    }
+    30% {
+        transform: translate(calc(var(--strike-x) * 0.4), calc(var(--strike-y) * 0.4)) scale(1.1);
+    }
+    45% {
+        transform: translate(calc(var(--strike-x) * 0.15), calc(var(--strike-y) * 0.15)) scale(0.94);
+    }
+    58% {
+        transform: translate(0, 0) scale(1.12);
+        opacity: 1;
+    }
+    72% {
+        transform: translate(0, 2vmin) scale(0.96);
+    }
+    100% {
+        transform: translate(calc(var(--strike-x) * -0.3), calc(var(--strike-y) * -1)) scale(1);
+        opacity: 0;
+    }
+}
+
+/* Does not attack. Just is there, and flares when stood on. */
+@keyframes urchinSettle {
+    0% {
+        transform: translate(var(--strike-x), var(--strike-y)) scale(0.85);
+        opacity: 0;
+    }
+    30% {
+        transform: translate(0, 1vmin) scale(1);
+        opacity: 1;
+    }
+    44% {
+        transform: translate(0, 1vmin) scale(1.2);
+    }
+    56% {
+        transform: translate(0, 1vmin) scale(1.02);
+    }
+    70% {
+        transform: translate(0, 1vmin) scale(1.08);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(calc(var(--strike-x) * 0.4), var(--strike-y)) scale(0.9);
+        opacity: 0;
+    }
+}
+
+/* One thrust, dead stop, withdraw the way it came */
+@keyframes marlinLance {
+    0% {
+        transform: translate(var(--strike-x), var(--strike-y)) scale(1);
+        opacity: 0;
+    }
+    8% {
+        opacity: 1;
+    }
+    26% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    34% {
+        transform: translate(calc(var(--strike-x) * -0.06), 0) scale(1.03);
+    }
+    48% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--strike-x), var(--strike-y)) scale(0.95);
+        opacity: 0;
+    }
+}
+
+/* Arrives, then works back and forth */
+@keyframes sawfishSaw {
+    0% {
+        transform: translate(var(--strike-x), var(--strike-y)) scale(0.9);
+        opacity: 0;
+    }
+    22% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    32% {
+        transform: translate(3vmin, 0) scale(1);
+    }
+    40% {
+        transform: translate(-2vmin, 0) scale(1);
+    }
+    48% {
+        transform: translate(3vmin, 0) scale(1);
+    }
+    56% {
+        transform: translate(-2vmin, 0) scale(1);
+    }
+    64% {
+        transform: translate(2.5vmin, 0) scale(1);
+    }
+    74% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--strike-x), var(--strike-y)) scale(0.9);
+        opacity: 0;
+    }
+}
+
+/* Not a creature so much as a situation: it spins up and takes the frame */
+@keyframes charybdisSpin {
+    0% {
+        transform: translate(var(--strike-x), var(--strike-y)) scale(0.4) rotate(0deg);
+        opacity: 0;
+    }
+    25% {
+        transform: translate(0, 0) scale(0.9) rotate(180deg);
+        opacity: 1;
+    }
+    55% {
+        transform: translate(0, 0) scale(1.6) rotate(520deg);
+        opacity: 1;
+    }
+    80% {
+        transform: translate(0, 0) scale(2.1) rotate(760deg);
+        opacity: 0.6;
+    }
+    100% {
+        transform: translate(0, 0) scale(2.6) rotate(900deg);
+        opacity: 0;
+    }
+}
+
+/* Winds up, connects once, flops off */
+@keyframes bassSlap {
+    0% {
+        transform: translate(var(--strike-x), var(--strike-y)) scale(0.9) rotate(0deg);
+        opacity: 0;
+    }
+    34% {
+        transform: translate(calc(var(--strike-x) * 0.18), 0) scale(1) rotate(-6deg);
+        opacity: 1;
+    }
+    44% {
+        transform: translate(calc(var(--strike-x) * 0.24), 0) scale(1) rotate(-28deg);
+    }
+    52% {
+        transform: translate(0, 0) scale(1.1) rotate(20deg);
+    }
+    64% {
+        transform: translate(calc(var(--strike-x) * 0.12), 1vmin) scale(1) rotate(4deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--strike-x), 6vmin) scale(0.9) rotate(-10deg);
+        opacity: 0;
+    }
+}
+
+/* Clean line in, clean line out — the tidiest thing down here */
+@keyframes sturgeonSlice {
+    0% {
+        transform: translate(var(--strike-x), var(--strike-y)) scale(1);
+        opacity: 0;
+    }
+    16% {
+        opacity: 1;
+    }
+    44% {
+        transform: translate(0, 0) scale(1);
+    }
+    56% {
+        transform: translate(calc(var(--strike-x) * -0.18), calc(var(--strike-y) * -0.18)) scale(1.03);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(calc(var(--strike-x) * -1), calc(var(--strike-y) * -1)) scale(1);
+        opacity: 0;
+    }
+}
+
+/* Whatever a Charp is, it does not move in straight lines */
+@keyframes charpDart {
+    0% {
+        transform: translate(var(--strike-x), var(--strike-y)) scale(0.8);
+        opacity: 0;
+    }
+    14% {
+        transform: translate(calc(var(--strike-x) + 10vmin), calc(var(--strike-y) * 0.7)) scale(0.9);
+        opacity: 1;
+    }
+    26% {
+        transform: translate(-8vmin, calc(var(--strike-y) * 0.45)) scale(1);
+    }
+    38% {
+        transform: translate(7vmin, calc(var(--strike-y) * 0.2)) scale(1);
+    }
+    50% {
+        transform: translate(0, 0) scale(1.12);
+    }
+    60% {
+        transform: translate(-6vmin, 2vmin) scale(1);
+    }
+    74% {
+        transform: translate(5vmin, -1vmin) scale(0.95);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(calc(var(--strike-x) * -1.2), calc(var(--strike-y) * 0.8)) scale(0.8);
+        opacity: 0;
+    }
+}
+
+/* Bobs up and comes down again. Three times. */
+@keyframes hippocampusStomp {
+    0% {
+        transform: translate(var(--strike-x), var(--strike-y)) scale(0.85);
+        opacity: 0;
+    }
+    22% {
+        transform: translate(0, -6vmin) scale(1);
+        opacity: 1;
+    }
+    34% {
+        transform: translate(0, 1vmin) scale(1.06);
+    }
+    46% {
+        transform: translate(0, -4vmin) scale(1);
+    }
+    56% {
+        transform: translate(0, 1vmin) scale(1.06);
+    }
+    66% {
+        transform: translate(0, -3vmin) scale(1);
+    }
+    76% {
+        transform: translate(0, 1vmin) scale(1.04);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(calc(var(--strike-x) * 0.8), -8vmin) scale(0.85);
+        opacity: 0;
+    }
+}
+
+/* Slow, heavy, and telegraphed. Lands anyway. */
+@keyframes knuckleheadSmash {
+    0% {
+        transform: translate(var(--strike-x), var(--strike-y)) scale(0.8);
+        opacity: 0;
+    }
+    34% {
+        transform: translate(0, 12vmin) scale(1);
+        opacity: 1;
+    }
+    46% {
+        transform: translate(0, 15vmin) scale(1.02);
+    }
+    56% {
+        transform: translate(0, 0) scale(1.25);
+    }
+    70% {
+        transform: translate(0, 3vmin) scale(1.06);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(calc(var(--strike-x) * 0.6), var(--strike-y)) scale(0.85);
+        opacity: 0;
+    }
+}
+
+/* Creeps in and throbs. Nothing about this looks healthy. */
+@keyframes scufferThrob {
+    0% {
+        transform: translate(var(--strike-x), var(--strike-y)) scale(0.8);
+        opacity: 0;
+    }
+    28% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    40% {
+        transform: translate(0, 0) scale(1.22);
+    }
+    50% {
+        transform: translate(0, 0) scale(0.96);
+    }
+    60% {
+        transform: translate(0, 0) scale(1.2);
+    }
+    70% {
+        transform: translate(0, 0) scale(0.98);
+    }
+    82% {
+        transform: translate(0, 0) scale(1.12);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(calc(var(--strike-x) * 0.5), calc(var(--strike-y) * 0.5)) scale(0.9);
+        opacity: 0;
+    }
+}
+
+/* Vibrates and flickers, because it is somehow on fire */
+@keyframes slavugBurn {
+    0% {
+        transform: translate(var(--strike-x), var(--strike-y)) scale(0.85);
+        opacity: 0;
+    }
+    26% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    34% {
+        transform: translate(0.8vmin, -0.5vmin) scale(1.07);
+        opacity: 0.75;
+    }
+    41% {
+        transform: translate(-0.7vmin, 0.5vmin) scale(1);
+        opacity: 1;
+    }
+    48% {
+        transform: translate(0.6vmin, 0.4vmin) scale(1.08);
+        opacity: 0.7;
+    }
+    55% {
+        transform: translate(-0.6vmin, -0.4vmin) scale(1);
+        opacity: 1;
+    }
+    62% {
+        transform: translate(0.5vmin, 0.3vmin) scale(1.06);
+        opacity: 0.85;
+    }
+    72% {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(calc(var(--strike-x) * 0.7), 0) scale(0.9);
+        opacity: 0;
+    }
+}
+
+/* The last one, and the only one that finishes the job. It swims in from the
+   right, mouth already opening, scoops the figure up as it passes, shuts, and
+   keeps going. Runs over two and a half beats (speed 2.4) so all three moves
+   have room. */
+@keyframes whaleSwallow {
+    0% {
+        transform: translate(var(--strike-x), var(--strike-y)) scale(1.1);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    /* Mouth reaches the figure */
+    45% {
+        transform: translate(7vmin, 0) scale(1.35);
+        opacity: 1;
+    }
+    /* Closed around it, still moving */
+    64% {
+        transform: translate(-6vmin, 0) scale(1.4);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(calc(var(--strike-x) * -1.15), calc(var(--strike-y) * -1)) scale(1.3);
+        opacity: 0;
+    }
+}
+
+/* The jaw, hinged at the back of the mouth. Open on approach, shut on contact,
+   one small settle afterwards. Duration comes from --strike-ms so it stays in
+   step with the whale carrying it. */
+/* Angles are negative because the jaw hangs to the LEFT of its hinge and SVG
+   rotates clockwise on positive values — which would lift the snout up into
+   the head. Negative drops it open. */
+@keyframes whaleJaw {
+    0%,
+    18% {
+        transform: rotate(0deg);
+    }
+    38% {
+        transform: rotate(-22deg);
+    }
+    /* Widest exactly as the figure goes in */
+    56% {
+        transform: rotate(-27deg);
+    }
+    /* Shut */
+    66% {
+        transform: rotate(-1deg);
+    }
+    74% {
+        transform: rotate(-5deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+/* ─── …and five ways of taking it ───────────────────────────────────────── */
+
+/* Default: knocked back along the axis it was hit from */
+@keyframes figureHit {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    22% {
+        transform: translate(var(--hit-x), var(--hit-y)) rotate(var(--hit-r));
+    }
+    52% {
+        transform: translate(calc(var(--hit-x) * -0.35), calc(var(--hit-y) * -0.2)) rotate(calc(var(--hit-r) * -0.45));
+    }
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+}
+
+/* Compressed — octopus, whirlpool, whale */
+@keyframes figureSqueeze {
+    0% {
+        transform: scale(1, 1);
+    }
+    30% {
+        transform: scale(0.9, 1.07);
+    }
+    55% {
+        transform: scale(0.76, 1.14);
+    }
+    78% {
+        transform: scale(0.87, 1.05);
+    }
+    100% {
+        transform: scale(1, 1);
+    }
+}
+
+/* Rattled — sawing, stinging, burning, and whatever the Charp is doing */
+@keyframes figureShake {
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    15% {
+        transform: translate(-3px, 1px) rotate(-3deg);
+    }
+    28% {
+        transform: translate(3px, -1px) rotate(3deg);
+    }
+    40% {
+        transform: translate(-3px, 0) rotate(-2deg);
+    }
+    52% {
+        transform: translate(2px, 1px) rotate(2deg);
+    }
+    66% {
+        transform: translate(-2px, 0) rotate(-1deg);
+    }
+    82% {
+        transform: translate(1px, 0) rotate(0deg);
+    }
+}
+
+/* Flattened — anything that arrives from directly underneath */
+@keyframes figureCrumple {
+    0% {
+        transform: translateY(0) scaleY(1);
+    }
+    20% {
+        transform: translateY(10px) scaleY(0.88);
+    }
+    45% {
+        transform: translateY(-7px) scaleY(1.08);
+    }
+    70% {
+        transform: translateY(3px) scaleY(0.97);
+    }
+    100% {
+        transform: translateY(0) scaleY(1);
+    }
+}
+
+/* Swallowed — shoved by the snout, dragged into the mouth, gone before it shuts */
+@keyframes figureEaten {
+    /* Treading water, unaware */
+    0%,
+    26% {
+        transform: translate(0, 0) scale(1, 1) rotate(0deg);
+        opacity: 1;
+    }
+
+    /* The pull starts. Dragged toward the mouth coming in from the right, and
+       stretched along the pull — the wide-then-thin scale is what sells suction. */
+    40% {
+        transform: translate(10px, -2px) scale(1.14, 0.88) rotate(9deg);
+        opacity: 1;
+    }
+
+    /* Off the spot entirely, tumbling in */
+    52% {
+        transform: translate(23px, 3px) scale(1.28, 0.68) rotate(21deg);
+        opacity: 1;
+    }
+
+    /* Inside. Now it travels with the whale and starts down the throat,
+       shrinking fast — the jaw is already on its way shut. */
+    60% {
+        transform: translate(4px, 8px) scale(0.6, 0.6) rotate(-16deg);
+        opacity: 0.9;
+    }
+
+    /* Gone before the jaw closes at 66% */
+    66% {
+        transform: translate(-16px, 11px) scale(0.2, 0.2) rotate(-38deg);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(-16px, 11px) scale(0.2, 0.2) rotate(-38deg);
+        opacity: 0;
+    }
+}
+
+/* A hand-drawn sprite strip, stepped one frame at a time. --sprite-travel is
+   the full width of the sheet, set inline from the frame count. */
+@keyframes spriteStrip {
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: var(--sprite-travel) 0;
+    }
+}
+
+/* Contact sheet only. A creature's moving parts run once per strike, which on
+   a still page means they play at load and then sit at their resting frame.
+   Here there is no strike to carry them, so let them loop. */
+.sprite-loop * {
+    animation-iteration-count: infinite !important;
+}
+
+/* Creature name / aside, flashed for the length of one beat */
+@keyframes captionFlash {
+    0% {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    22%,
+    78% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0.35;
+        transform: translateY(0);
+    }
+}
+
+.animate-caption {
+    animation: captionFlash 640ms ease-out both;
+}
+
+/* Swallowed */
+@keyframes blackout {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.animate-blackout {
+    animation: blackout 500ms ease-in both;
+}
 /* ─── Stat bars (listening/playing pages) grow in from the left ─────────── */
 @keyframes barGrow {
     from {

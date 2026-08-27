@@ -1,0 +1,8 @@
+{
+    "whale": {
+        "jaw": {
+            "anim": "whaleJaw",
+            "origin": "14.5 21"
+        }
+    }
+}
