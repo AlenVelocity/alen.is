@@ -89,7 +89,9 @@ const APPROACH_VECTOR: Record<Approach, [number, number]> = {
 /** Aim every piece of the page at the seabed and let it go */
 function sinkPieces(main: HTMLElement): HTMLElement[] {
     const floor = window.innerHeight
-    const pieces = collectPieces(main)
+    // data-no-sink opts an element out — anything that belongs to the page rather
+    // than to the scene playing out on it
+    const pieces = collectPieces(main).filter((el) => !el.hasAttribute('data-no-sink'))
     pieces.forEach((el, i) => {
         const rect = el.getBoundingClientRect()
         el.style.setProperty('--sink-dy', `${floor - rect.top + 80}px`)
@@ -130,7 +132,10 @@ function Bubbles() {
                         left: `${b.left}%`,
                         width: b.size,
                         height: b.size,
-                        animation: `bubbleRise ${b.duration}s linear ${b.delay}s infinite`
+                        // "backwards" holds the 0% frame — opacity 0 — through the
+                        // stagger delay. Without it each bubble sits fully visible on
+                        // the seabed for up to five seconds waiting for its turn.
+                        animation: `bubbleRise ${b.duration}s linear ${b.delay}s infinite backwards`
                     }}
                 />
             ))}
@@ -140,7 +145,6 @@ function Bubbles() {
 
 /** Depth telemetry — the numbers climb for real, the commentary does not */
 function DepthReadout({ depth, zone }: { depth: number; zone: number }) {
-
     return (
         <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 mono-label text-muted-foreground/60">
             <span>
@@ -450,15 +454,20 @@ export function Descent() {
                             <span className="animate-blink ml-1">▌</span>
                         </p>
                         <h1 className="text-display text-4xl md:text-6xl glow-text">the water looks fine</h1>
-                        <p className="max-w-sm text-[0.9rem] text-muted-foreground">
-                           or does it?
-                        </p>
+                        <p className="max-w-sm text-[0.9rem] text-muted-foreground">or does it?</p>
                     </div>
                 )}
             </CenteredPage>
 
-            {/* Credit where the bridge came from */}
-            <p className="pointer-events-none fixed bottom-4 left-1/2 z-[95] -translate-x-1/2 mono-label text-muted-foreground/35">
+            {/* Credit where the bridge came from. data-no-sink keeps it out of the
+                shred — it belongs to the page, not to the thing happening on it, so it
+                fades rather than being dragged under. Clamped to two lines: the title
+                is long enough to wrap to three on a narrow screen. */}
+            <p
+                data-no-sink
+                className="pointer-events-none fixed bottom-4 left-1/2 z-[95] line-clamp-2 max-w-[min(92vw,44rem)] -translate-x-1/2 text-balance px-4 text-center mono-label text-muted-foreground/35 transition-opacity duration-700"
+                style={{ opacity: stage === 'intro' || stage === 'surfaced' ? 1 : 0 }}
+            >
                 after &ldquo;I am gonna claw (out your eyes then drown You to Death)&rdquo; · Darren Korb · Hades II
             </p>
         </>
