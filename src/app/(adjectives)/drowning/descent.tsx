@@ -6,6 +6,7 @@ import { CenteredPage } from '@/components/ui/centered-page'
 import { posthog } from '@/components/posthog-provider'
 import { isMinimalMotion } from '@/lib/motion-pref'
 import { collectPieces } from '@/lib/shred'
+import { cn } from '@/lib/utils'
 import { BEATS, type Approach, type Reaction } from './creatures'
 import { CreatureArt } from './creature-art'
 import { Figure } from './figure'
@@ -33,6 +34,21 @@ const WHALE_HOLD_MS = 1750
 const CONTACT_AT = 0.5
 /** Blackout after the whale, before washing back up */
 const SWALLOWED_MS = 1600
+
+/** Playback rates offered mid-dive. 1 is the authored pace; 0.5 runs it half speed. */
+const RATES = [1, 0.5]
+/** Remembered across visits, like the site's minimal-motion toggle */
+const RATE_KEY = 'alen-drowning-rate'
+
+function storedRate(): number {
+    try {
+        const saved = Number(window.localStorage.getItem(RATE_KEY))
+        return RATES.includes(saved) ? saved : 1
+    } catch {
+        // localStorage unavailable (private mode etc.) — fall back to full speed
+        return 1
+    }
+}
 
 type Stage = 'intro' | 'sinking' | 'descent' | 'swallowed' | 'surfaced'
 
@@ -179,6 +195,34 @@ export function Descent() {
     /** Hits landed so far. Trails the beat index until the strike actually connects. */
     const [damage, setDamage] = useState(0)
     const [depth, setDepth] = useState(0)
+    /**
+     * `rate` is what the visitor has chosen; `beatRate` is what the beat on screen is
+     * running at. They are separate so changing speed mid-beat does not rewrite the
+     * in-flight animation's duration and restart it — the new rate takes effect on the
+     * next beat instead.
+     */
+    const [rate, setRate] = useState(1)
+    const rateRef = useRef(1)
+    const [beatRate, setBeatRate] = useState(1)
+
+    /** Pick a pace and remember it. The ref is what the beat timers read. */
+    const chooseRate = useCallback((r: number) => {
+        rateRef.current = r
+        setRate(r)
+        try {
+            window.localStorage.setItem(RATE_KEY, String(r))
+        } catch {
+            // Unavailable — the choice just will not survive the visit
+        }
+    }, [])
+
+    // Restore the last choice. Read here rather than during render so the server's
+    // markup and the first client render cannot disagree.
+    useEffect(() => {
+        const saved = storedRate()
+        rateRef.current = saved
+        setRate(saved)
+    }, [])
     const [staticLog, setStaticLog] = useState(false)
     const timersRef = useRef<ReturnType<typeof setTimeout>[]>([])
     const piecesRef = useRef<HTMLElement[]>([])
@@ -212,23 +256,29 @@ export function Descent() {
             // new damage reads as the reason for the flinch. CONTACT_AT matches the
             // moment every strike keyframe reaches the figure.
             setDamage(i)
-            const strike = beatDuration(i) * (BEATS[i].speed ?? 1)
+            const r = rateRef.current
+            setBeatRate(r)
+            const hold = beatDuration(i) / r
+            const strike = hold * (BEATS[i].speed ?? 1)
             track(setTimeout(() => setDamage(i + 1), strike * CONTACT_AT))
             if (i >= BEATS.length - 1) {
-                track(setTimeout(() => setStage('swallowed'), WHALE_HOLD_MS))
+                track(setTimeout(() => setStage('swallowed'), WHALE_HOLD_MS / r))
                 track(
-                    setTimeout(() => {
-                        // React reuses the sunk page's DOM nodes for the surfaced copy —
-                        // same tags in the same positions — and the sink animation was set
-                        // imperatively, so React never clears it. Without this the page
-                        // comes back at opacity 0: present, readable to the DOM, invisible.
-                        restorePieces()
-                        setStage('surfaced')
-                    }, WHALE_HOLD_MS + SWALLOWED_MS)
+                    setTimeout(
+                        () => {
+                            // React reuses the sunk page's DOM nodes for the surfaced copy —
+                            // same tags in the same positions — and the sink animation was set
+                            // imperatively, so React never clears it. Without this the page
+                            // comes back at opacity 0: present, readable to the DOM, invisible.
+                            restorePieces()
+                            setStage('surfaced')
+                        },
+                        WHALE_HOLD_MS / r + SWALLOWED_MS
+                    )
                 )
                 return
             }
-            track(setTimeout(() => runBeat(i + 1), beatDuration(i)))
+            track(setTimeout(() => runBeat(i + 1), hold))
         },
         [track, restorePieces]
     )
@@ -302,7 +352,7 @@ export function Descent() {
     const zone = zoneIndex(depth)
     const underwater = stage === 'descent' || stage === 'swallowed'
     const [vx, vy] = APPROACH_VECTOR[current.approach]
-    const beatMs = beatDuration(beat)
+    const beatMs = Math.round(beatDuration(beat) / beatRate)
     // Fast movers (shark, marlin, sturgeon) finish early and leave a beat of
     // quiet before the next one shows up. The reaction tracks the strike.
     const strikeMs = Math.round(beatMs * (current.speed ?? 1))
@@ -400,12 +450,29 @@ export function Descent() {
                         <DepthReadout depth={depth} zone={zone} />
                     </div>
 
-                    <button
-                        onClick={surface}
-                        className="mono-label text-muted-foreground/50 hover:text-accent transition-colors duration-200"
-                    >
-                        surface (esc)
-                    </button>
+                    <div className="flex items-center gap-3">
+                        <span className="mono-label text-muted-foreground/40">speed</span>
+                        {RATES.map((r) => (
+                            <button
+                                key={r}
+                                onClick={() => chooseRate(r)}
+                                aria-pressed={rate === r}
+                                className={cn(
+                                    'mono-label transition-colors duration-200 hover:text-accent',
+                                    rate === r ? 'text-accent' : 'text-muted-foreground/50'
+                                )}
+                            >
+                                {r}&times;
+                            </button>
+                        ))}
+                        <span className="text-border">·</span>
+                        <button
+                            onClick={surface}
+                            className="mono-label text-muted-foreground/50 transition-colors duration-200 hover:text-accent"
+                        >
+                            surface (esc)
+                        </button>
+                    </div>
                 </div>
             )}
 
