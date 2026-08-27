@@ -461,11 +461,13 @@ export function Descent() {
 
             {/* Credit where the bridge came from. data-no-sink keeps it out of the
                 shred — it belongs to the page, not to the thing happening on it, so it
-                fades rather than being dragged under. Clamped to two lines: the title
-                is long enough to wrap to three on a narrow screen. */}
+                fades rather than being dragged under. Centred with inset-x-0 + mx-auto
+                rather than left-1/2 + a translate: on a fixed element, left-1/2 makes
+                the containing block start at the centre, so the line only ever had half
+                the viewport to wrap in. */}
             <p
                 data-no-sink
-                className="pointer-events-none fixed bottom-4 left-1/2 z-[95] line-clamp-2 max-w-[min(92vw,44rem)] -translate-x-1/2 text-balance px-4 text-center mono-label text-muted-foreground/35 transition-opacity duration-700"
+                className="pointer-events-none fixed inset-x-0 bottom-4 z-[95] mx-auto line-clamp-2 max-w-[44rem] text-balance px-4 text-center mono-label text-muted-foreground/35 transition-opacity duration-700"
                 style={{ opacity: stage === 'intro' || stage === 'surfaced' ? 1 : 0 }}
             >
                 after &ldquo;I am gonna claw (out your eyes then drown You to Death)&rdquo; · Darren Korb · Hades II
