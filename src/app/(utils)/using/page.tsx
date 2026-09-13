@@ -125,10 +125,21 @@ const gearSections: GearSection[] = [
                 href: 'https://www.thecosmicbyte.com/product/cosmic-byte-phantom-tkl-gasket-mechanical-wired-swappable-keyboard-with-prelubed-switches/'
             },
             {
+                name: 'CybeArt Artemis x Batman',
+                specs: 'Batman Edition',
+                type: 'Mouse'
+            },
+            {
+                name: 'CybeArt Ghost Mousepad XXL',
+                specs: 'XXL',
+                type: 'Mousepad'
+            },
+            {
                 name: 'Logitech G304',
                 specs: 'Lightspeed Wireless · 12000 DPI',
                 type: 'Mouse',
-                href: 'https://www.logitechg.com/en-hk/shop/p/g304-lightspeed-wireless-gaming-mouse'
+                href: 'https://www.logitechg.com/en-hk/shop/p/g304-lightspeed-wireless-gaming-mouse',
+                inactive: true
             }
         ]
     },
