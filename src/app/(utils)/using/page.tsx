@@ -262,7 +262,7 @@ function GearRow({ item }: { item: GearItem }) {
 
     const isDaily = item.badge === 'Daily Driver' || item.badge === 'Primary'
 
-    const rowClassName = `group relative flex items-baseline gap-3 py-3 border-b border-dashed border-border/40 transition-colors duration-150 ${item.inactive ? 'opacity-35' : 'hover:border-accent/30'}`
+    const rowClassName = `group relative flex items-baseline gap-2 md:gap-3 py-3 border-b border-dashed border-border/40 transition-colors duration-150 ${item.inactive ? 'opacity-35' : 'hover:border-accent/30'}`
 
     const content = (
         <>
@@ -273,28 +273,31 @@ function GearRow({ item }: { item: GearItem }) {
                     aria-hidden="true"
                 />
             )}
-            {/* Type label */}
-            <span className="mono-label text-muted-foreground/40 w-28 shrink-0 text-right hidden sm:block">
-                {item.type}
-            </span>
+            {/* Type, name and specs — stacked on mobile, one line from md up */}
+            <div className="flex min-w-0 flex-1 flex-col gap-1 md:flex-row md:items-baseline md:gap-3">
+                {/* Type label */}
+                <span className="mono-label text-muted-foreground/55 md:text-muted-foreground/40 shrink-0 md:w-28 md:text-right">
+                    {item.type}
+                </span>
 
-            {/* Dot separator */}
-            <span className="text-border/60 hidden sm:block shrink-0">·</span>
+                {/* Dot separator */}
+                <span className="text-border/60 hidden md:block shrink-0">·</span>
 
-            {/* Name */}
-            <span
-                className={`font-mono-ui text-sm font-medium flex-1 transition-colors duration-150 ${item.inactive ? '' : 'group-hover:text-accent'}`}
-            >
-                {item.name}
-            </span>
+                {/* Name */}
+                <span
+                    className={`font-mono-ui text-sm font-medium md:flex-1 transition-colors duration-150 ${item.inactive ? '' : 'group-hover:text-accent'}`}
+                >
+                    {item.name}
+                </span>
 
-            {/* Dot trail */}
-            <span className="flex-1 border-b border-dotted border-muted-foreground/10 translate-y-[-4px] hidden md:block" />
+                {/* Dot trail */}
+                <span className="flex-1 border-b border-dotted border-muted-foreground/10 translate-y-[-4px] hidden md:block" />
 
-            {/* Specs */}
-            <span className="mono-label text-muted-foreground/45 text-right hidden sm:block shrink-0 max-w-[220px]">
-                {item.specs}
-            </span>
+                {/* Specs */}
+                <span className="mono-label text-muted-foreground/60 md:text-muted-foreground/45 shrink-0 md:max-w-[220px] md:text-right">
+                    {item.specs}
+                </span>
+            </div>
 
             {/* Badge */}
             {item.badge && (
@@ -303,9 +306,9 @@ function GearRow({ item }: { item: GearItem }) {
                 </span>
             )}
 
-            {/* External link cue */}
+            {/* External link cue — no hover on touch, so keep it visible below md */}
             {item.href && (
-                <ArrowUpRight className="w-3 h-3 text-muted-foreground/30 group-hover:text-accent shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150" />
+                <ArrowUpRight className="w-3 h-3 text-muted-foreground/30 group-hover:text-accent shrink-0 opacity-60 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-150" />
             )}
 
             {/* Hover image preview */}
@@ -369,7 +372,7 @@ export default function Using() {
                         <span className="absolute left-0 bottom-0 w-3 h-3 border-l border-b border-accent/40 -translate-x-px translate-y-px" />
                         <span className="absolute right-0 bottom-0 w-3 h-3 border-r border-b border-accent/40 translate-x-px translate-y-px" />
 
-                        <div className="relative w-full aspect-[4032/3024] rounded-md overflow-hidden ring-1 ring-border/40 shadow-inner">
+                        <div className="relative w-full aspect-[4/3] rounded-md overflow-hidden ring-1 ring-border/40 shadow-inner">
                             <Image
                                 src="/images/setup.jpg"
                                 alt="My desk setup"
