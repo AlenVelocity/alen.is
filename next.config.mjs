@@ -19,6 +19,9 @@ const nextConfig = {
   },
   images: {
     formats: ['image/avif', 'image/webp'],
+    // Default is [75]. 90 is opt-in per <Image quality={90}> — used for photos
+    // where the default re-encode shows banding (see /using's setup shot).
+    qualities: [75, 90],
     remotePatterns: [
       {
         protocol: 'https',

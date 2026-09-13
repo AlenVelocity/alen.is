@@ -379,6 +379,7 @@ export default function Using() {
                                 fill
                                 sizes="(min-width: 768px) 672px, 100vw"
                                 className="object-cover brightness-[1.05]"
+                                quality={90}
                                 priority
                             />
                             {/* Tints the whole photo toward the page background while keeping its own color, follows light/dark mode */}
