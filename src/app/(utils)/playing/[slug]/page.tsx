@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { PageTransition } from '@/components/ui/page-transition'
 import { api } from '@/trpc/server'
-import { resolveSlug } from '@/lib/steam'
+import { resolveSlug, formatHours } from '@/lib/steam'
 import { FiArrowLeft, FiArrowUpRight, FiCheck, FiStar, FiClock, FiAward } from 'react-icons/fi'
 import { FaSteam, FaXbox } from 'react-icons/fa'
 import Image from 'next/image'
@@ -41,13 +41,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
-
-function formatPlaytime(hours: number): string {
-    if (hours === 0) return '—'
-    if (hours < 1) return `${Math.round(hours * 60)} min`
-    if (hours >= 100) return `${Math.round(hours)} hrs`
-    return `${hours} hrs`
-}
 
 function formatUnlockDate(isoDate: string | null): string {
     if (!isoDate) return ''
@@ -166,8 +159,12 @@ export default async function GamePage({ params }: Props) {
                                 className="object-cover group-hover:scale-105 transition-transform duration-700"
                                 priority
                             />
-                            <div className="absolute bottom-4 left-4 right-4 z-20 flex items-end justify-between gap-4">
-                                <h1 className="text-display text-2xl md:text-4xl drop-shadow-md">{game.name}</h1>
+                            <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 z-20 flex items-end justify-between gap-4">
+                                {/* Clamped: on a phone the banner is ~150px tall, and a long name would
+                                    otherwise wrap up past the top edge and get cut off */}
+                                <h1 className="text-display text-xl sm:text-2xl md:text-4xl drop-shadow-md min-w-0 line-clamp-2">
+                                    {game.name}
+                                </h1>
                                 <span className="w-8 h-8 rounded-sm bg-background/80 backdrop-blur-md border border-border/50 flex items-center justify-center shrink-0">
                                     {isSteam ? (
                                         <FaSteam className="w-3.5 h-3.5 text-foreground/80" />
@@ -183,7 +180,7 @@ export default async function GamePage({ params }: Props) {
                         className="flex items-center gap-3 mb-4 animate-fade-in-up opacity-0 stagger-1"
                         style={{ animationFillMode: 'forwards' }}
                     >
-                        <h1 className="text-display text-2xl md:text-4xl">{game.name}</h1>
+                        <h1 className="text-display text-2xl md:text-4xl min-w-0 break-words">{game.name}</h1>
                         <span className="w-8 h-8 rounded-sm bg-muted/40 border border-border/50 flex items-center justify-center shrink-0">
                             {isSteam ? (
                                 <FaSteam className="w-3.5 h-3.5 text-foreground/70" />
@@ -202,29 +199,31 @@ export default async function GamePage({ params }: Props) {
                 </p>
 
                 {/* Stats HUD */}
-                <div
-                    className="flex flex-wrap items-center gap-1.5 mb-12 animate-fade-in-up opacity-0 stagger-3"
-                    style={{ animationFillMode: 'forwards' }}
-                >
-                    {isSteam && (
-                        <span className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm border border-border/50 font-mono-ui text-xs text-muted-foreground">
-                            <FiClock className="w-3.5 h-3.5 text-accent/70" />
-                            {formatPlaytime(game.playtime_forever_hours)} total
-                        </span>
-                    )}
-                    {recentHours > 0 && (
-                        <span className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm border border-accent/30 font-mono-ui text-xs text-accent">
-                            <FiClock className="w-3.5 h-3.5" />
-                            {formatPlaytime(recentHours)} this week
-                        </span>
-                    )}
-                    {completionPct !== null && (
-                        <span className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm border border-border/50 font-mono-ui text-xs text-muted-foreground">
-                            <FiAward className="w-3.5 h-3.5 text-accent/70" />
-                            {completionPct}% complete
-                        </span>
-                    )}
-                </div>
+                {(isSteam || recentHours > 0 || completionPct !== null) && (
+                    <div
+                        className="flex flex-wrap items-center gap-1.5 mb-12 animate-fade-in-up opacity-0 stagger-3"
+                        style={{ animationFillMode: 'forwards' }}
+                    >
+                        {isSteam && (
+                            <span className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm border border-border/50 font-mono-ui text-xs text-muted-foreground">
+                                <FiClock className="w-3.5 h-3.5 text-accent/70" />
+                                {formatHours(game.playtime_forever_hours)} total
+                            </span>
+                        )}
+                        {recentHours > 0 && (
+                            <span className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm border border-accent/30 font-mono-ui text-xs text-accent">
+                                <FiClock className="w-3.5 h-3.5" />
+                                {formatHours(recentHours)} past 2 weeks
+                            </span>
+                        )}
+                        {completionPct !== null && (
+                            <span className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm border border-border/50 font-mono-ui text-xs text-muted-foreground">
+                                <FiAward className="w-3.5 h-3.5 text-accent/70" />
+                                {completionPct}% complete
+                            </span>
+                        )}
+                    </div>
+                )}
 
                 {/* Review */}
                 {showReviews && reviewData && (
@@ -264,7 +263,7 @@ export default async function GamePage({ params }: Props) {
                         <div className="h-1.5 bg-muted/60 rounded-full overflow-hidden mb-2">
                             <div
                                 className="h-full bg-gradient-to-r from-accent/70 to-accent rounded-full animate-bar-grow"
-                                style={{ width: `${completionPct}%` }}
+                                style={{ width: `${completionPct}%`, animationDelay: '0.4s' }}
                             />
                         </div>
                         {completion && (
@@ -284,7 +283,7 @@ export default async function GamePage({ params }: Props) {
                                             {String(i + 1).padStart(2, '0')}
                                         </span>
                                         {achievement.icon ? (
-                                            <div className="relative w-9 h-9 rounded overflow-hidden flex-shrink-0 ring-1 ring-border/50 group-hover:ring-accent/40 transition-all">
+                                            <div className="relative w-9 h-9 rounded overflow-hidden flex-shrink-0 ring-1 ring-border/50 group-hover:ring-accent/40 transition-shadow">
                                                 <Image
                                                     src={achievement.icon}
                                                     alt={achievement.name || ''}
@@ -318,9 +317,9 @@ export default async function GamePage({ params }: Props) {
                             </div>
                         )}
 
-                        {achievements.totalAchievements > unlockedSteam.length && (
+                        {achievements.totalAchievements > achievements.unlockedAchievements && (
                             <p className="mono-label text-muted-foreground/30 mt-3">
-                                + {achievements.totalAchievements - unlockedSteam.length} more locked
+                                + {achievements.totalAchievements - achievements.unlockedAchievements} more locked
                             </p>
                         )}
                     </section>
@@ -342,7 +341,7 @@ export default async function GamePage({ params }: Props) {
                         <div className="h-1.5 bg-muted/60 rounded-full overflow-hidden mb-2">
                             <div
                                 className="h-full bg-gradient-to-r from-accent/70 to-accent rounded-full animate-bar-grow"
-                                style={{ width: `${completionPct}%` }}
+                                style={{ width: `${completionPct}%`, animationDelay: '0.4s' }}
                             />
                         </div>
                         {completion && (
@@ -362,7 +361,7 @@ export default async function GamePage({ params }: Props) {
                                             {String(i + 1).padStart(2, '0')}
                                         </span>
                                         {achievement.icon ? (
-                                            <div className="relative w-9 h-9 rounded overflow-hidden flex-shrink-0 ring-1 ring-border/50 group-hover:ring-accent/40 transition-all">
+                                            <div className="relative w-9 h-9 rounded overflow-hidden flex-shrink-0 ring-1 ring-border/50 group-hover:ring-accent/40 transition-shadow">
                                                 <Image
                                                     src={achievement.icon}
                                                     alt={achievement.name || ''}
@@ -403,9 +402,9 @@ export default async function GamePage({ params }: Props) {
                             </div>
                         )}
 
-                        {xboxDetailedAchievements.length > unlockedXbox.length && (
+                        {xboxAchievements.total > xboxAchievements.current && (
                             <p className="mono-label text-muted-foreground/30 mt-3">
-                                + {xboxDetailedAchievements.length - unlockedXbox.length} more locked
+                                + {xboxAchievements.total - xboxAchievements.current} more locked
                             </p>
                         )}
                     </section>

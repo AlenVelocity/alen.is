@@ -12,6 +12,19 @@ export function slugify(name: string): string {
         .replace(/^-|-$/g, '') // trim leading/trailing hyphens
 }
 
+// ─── Playtime formatting ────────────────────────────────────────────────────
+
+/**
+ * "2,293 hrs", "54.4 hrs", "36 min". Past 100 hours the decimal stops
+ * meaning anything, so it is dropped there.
+ */
+export function formatHours(hours: number): string {
+    if (hours <= 0) return '—'
+    if (hours < 1) return `${Math.round(hours * 60)} min`
+    if (hours >= 100) return `${Math.round(hours).toLocaleString('en-US')} hrs`
+    return `${hours} hrs`
+}
+
 // ─── Unified game type ──────────────────────────────────────────────────────
 
 export type GamePlatform = 'steam' | 'xbox'
@@ -106,8 +119,9 @@ export async function fetchXboxGames(): Promise<XboxGame[]> {
         return titles.map((game: any) => ({
             titleId: String(game.titleId),
             name: game.name || 'Unknown',
-            currentGamerscore: game.currentGamerscore || 0,
-            maxGamerscore: game.maxGamerscore || 0,
+            // OpenXBL nests the score under `achievement`; the top-level fields never existed
+            currentGamerscore: game.achievement?.currentGamerscore || 0,
+            maxGamerscore: game.achievement?.totalGamerscore || 0,
             currentAchievements: game.achievement?.currentAchievements || 0,
             totalAchievements: game.achievement?.totalAchievements || 0,
             lastPlayed: game.titleHistory?.lastTimePlayed || undefined,
