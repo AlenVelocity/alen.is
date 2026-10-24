@@ -14,6 +14,7 @@ import { AlienDataStream } from '@/components/ui/alien-ambience'
 import { CommandBar, openCommandBar } from '@/components/ui/command-bar'
 import { UfoAbduction } from '@/components/ui/ufo-abduction'
 import { DrownTrigger } from '@/components/ui/drown-trigger'
+import { TypedCrumb } from '@/components/ui/typed-crumb'
 
 // NAV ITEMS
 const NAV_ITEMS = [
@@ -142,8 +143,7 @@ function Navigation() {
                                                         : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
                                                 )}
                                             >
-                                                {isActive && <span className="mr-1 text-accent font-bold">//</span>}
-                                                {item.label}
+                                                {isActive ? <TypedCrumb text={item.label} /> : item.label}
                                             </Link>
                                         </motion.div>
                                     )
@@ -181,7 +181,7 @@ function Navigation() {
                                                     {crumb.label}
                                                 </Link>
                                             ) : (
-                                                <span className="text-accent whitespace-nowrap">{crumb.label}</span>
+                                                <TypedCrumb text={crumb.label} />
                                             )}
                                         </React.Fragment>
                                     )
