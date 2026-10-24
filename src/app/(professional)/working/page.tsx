@@ -95,24 +95,11 @@ export default async function Experience() {
                 {/* Wraps below ~400px: "Experience" at display size plus the button don't fit one row */}
                 <div className="flex flex-wrap items-start justify-between gap-4 mb-16">
                     <div className="min-w-0">
-                        <p
-                            className="mono-label text-muted-foreground/50 mb-4 animate-fade-in-up opacity-0 stagger-1"
-                            style={{ animationFillMode: 'forwards' }}
-                        >
-                            // career
-                        </p>
-                        <h1
-                            className="text-display text-5xl md:text-6xl mb-3 animate-fade-in-up opacity-0 stagger-2"
-                            style={{ animationFillMode: 'forwards' }}
-                        >
+                        <p className="mono-label text-muted-foreground/50 mb-4">// career</p>
+                        <h1 className="text-display text-5xl md:text-6xl mb-3">
                             <DecodeText text="Experience" onMount />
                         </h1>
-                        <p
-                            className="text-[0.9rem] text-muted-foreground animate-fade-in-up opacity-0 stagger-3"
-                            style={{ animationFillMode: 'forwards' }}
-                        >
-                            Where I&apos;ve worked, newest first.
-                        </p>
+                        <p className="text-[0.9rem] text-muted-foreground">Where I&apos;ve worked, newest first.</p>
                     </div>
                     <a
                         href="/Alen_Resume.pdf"
@@ -125,10 +112,7 @@ export default async function Experience() {
                 </div>
 
                 {/* ── Timeline ───────────────────────────────────── */}
-                <div
-                    className="relative animate-fade-in-up opacity-0 stagger-4"
-                    style={{ animationFillMode: 'forwards' }}
-                >
+                <div className="relative">
                     {/* Vertical dashed line */}
                     <div className="absolute left-0 top-0 bottom-0 w-px border-l border-dashed border-border/60" />
 

@@ -4,13 +4,16 @@ import { useEffect, useRef } from 'react'
 import { useTheme } from 'next-themes'
 import { randomGlyph } from '@/lib/glyphs'
 
-const COLS = 28
-const SPEED_MIN = 0.3
-const SPEED_MAX = 1.2
+const COLS = 12
+const SPEED_MIN = 0.15
+const SPEED_MAX = 0.6
 const FONT_SIZE = 11
 const LINE_HEIGHT = FONT_SIZE + 4
 /** Speeds are tuned in px per 60Hz frame; scaled by elapsed time so 120Hz screens don't run double speed */
 const FRAME_MS = 1000 / 60
+/** Without a pointer, scroll or key for this long the rain drains out; the next move brings it back */
+const IDLE_MS = 30000
+const FADE_MS = 1500
 
 type Column = {
     x: number
@@ -46,6 +49,8 @@ export function AlienDataStream() {
         let height = 0
         let raf: number | null = null
         let last = 0
+        let fade = 1
+        let lastActivity = 0
 
         const seed = () => {
             const colWidth = width / COLS
@@ -53,7 +58,7 @@ export function AlienDataStream() {
                 x: i * colWidth + colWidth / 2,
                 y: Math.random() * -height,
                 speed: SPEED_MIN + Math.random() * (SPEED_MAX - SPEED_MIN),
-                opacity: 0.04 + Math.random() * 0.08,
+                opacity: 0.03 + Math.random() * 0.05,
                 glyphs: Array.from({ length: 20 }, () => randomGlyph()),
                 length: 8 + Math.floor(Math.random() * 14)
             }))
@@ -85,7 +90,7 @@ export function AlienDataStream() {
                     // Fade: head is brightest, tail fades out
                     const progress = j / col.length
                     const alpha = col.opacity * (1 - progress) * (j === 0 ? 2 : 1)
-                    ctx.fillStyle = `rgba(${accentColor}, ${Math.min(alpha, 0.18)})`
+                    ctx.fillStyle = `rgba(${accentColor}, ${Math.min(alpha, 0.08) * fade})`
                     ctx.fillText(col.glyphs[j % col.glyphs.length], col.x, gy)
                 }
             }
@@ -102,7 +107,7 @@ export function AlienDataStream() {
                 if (col.y > height + col.length * LINE_HEIGHT) {
                     col.y = -col.length * LINE_HEIGHT
                     col.speed = SPEED_MIN + Math.random() * (SPEED_MAX - SPEED_MIN)
-                    col.opacity = 0.04 + Math.random() * 0.08
+                    col.opacity = 0.03 + Math.random() * 0.05
                     col.length = 8 + Math.floor(Math.random() * 14)
                 }
             }
@@ -112,9 +117,32 @@ export function AlienDataStream() {
             // Clamp so returning to a backgrounded tab doesn't jump every column at once
             const dt = last ? Math.min(now - last, 100) : FRAME_MS
             last = now
+            const idle = now - lastActivity > IDLE_MS
+            fade = Math.max(0, Math.min(1, fade + (idle ? -dt : dt) / FADE_MS))
             step(dt)
             paint()
+            if (fade === 0) {
+                // Parked: nothing drawn and no frames scheduled until the next activity
+                ctx.clearRect(0, 0, width, height)
+                raf = null
+                last = 0
+                return
+            }
             raf = requestAnimationFrame(loop)
+        }
+
+        const onActivity = () => {
+            lastActivity = performance.now()
+            if (raf === null && !reducedMotion.matches && !document.hidden) raf = requestAnimationFrame(loop)
+        }
+        const onVisibility = () => {
+            if (document.hidden) {
+                if (raf !== null) cancelAnimationFrame(raf)
+                raf = null
+                last = 0
+            } else {
+                onActivity()
+            }
         }
 
         // Reduced motion gets a single still frame of the rain rather than none at all
@@ -127,6 +155,7 @@ export function AlienDataStream() {
                 for (const col of cols) col.y = Math.random() * (height + col.length * LINE_HEIGHT)
                 paint()
             } else {
+                lastActivity = performance.now()
                 raf = requestAnimationFrame(loop)
             }
         }
@@ -147,10 +176,20 @@ export function AlienDataStream() {
         start()
         window.addEventListener('resize', onResize)
         reducedMotion.addEventListener('change', start)
+        window.addEventListener('pointermove', onActivity, { passive: true })
+        window.addEventListener('scroll', onActivity, { passive: true })
+        window.addEventListener('keydown', onActivity)
+        window.addEventListener('touchstart', onActivity, { passive: true })
+        document.addEventListener('visibilitychange', onVisibility)
 
         return () => {
             window.removeEventListener('resize', onResize)
             reducedMotion.removeEventListener('change', start)
+            window.removeEventListener('pointermove', onActivity)
+            window.removeEventListener('scroll', onActivity)
+            window.removeEventListener('keydown', onActivity)
+            window.removeEventListener('touchstart', onActivity)
+            document.removeEventListener('visibilitychange', onVisibility)
             clearTimeout(resizeTimer)
             if (raf !== null) cancelAnimationFrame(raf)
             repaintStillRef.current = () => {}

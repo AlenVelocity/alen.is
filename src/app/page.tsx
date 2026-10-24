@@ -151,23 +151,12 @@ export default async function Home() {
 
                 {/* ── About ────────────────────────────────────────── */}
                 <section className="mb-20">
-                    <div
-                        className="section-label mb-6 animate-fade-in-up opacity-0 stagger-4"
-                        style={{ animationFillMode: 'forwards' }}
-                    >
-                        about
-                    </div>
-                    <div
-                        className="space-y-4 text-muted-foreground leading-relaxed text-[0.925rem] animate-fade-in-up opacity-0 stagger-5"
-                        style={{ animationFillMode: 'forwards' }}
-                    >
+                    <div className="section-label mb-6">about</div>
+                    <div className="space-y-4 text-muted-foreground leading-relaxed text-[0.925rem]">
                         <p>{parseTextWithLinks(personalInfo.about_me_paragraph_1)}</p>
                         <p>{parseTextWithLinks(personalInfo.about_me_paragraph_2)}</p>
                     </div>
-                    <div
-                        className="pt-6 animate-fade-in-up opacity-0 stagger-6"
-                        style={{ animationFillMode: 'forwards' }}
-                    >
+                    <div className="pt-6">
                         <Signature name={personalInfo.signature_name} />
                     </div>
                 </section>

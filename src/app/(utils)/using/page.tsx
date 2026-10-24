@@ -351,28 +351,15 @@ export default function Using() {
             <div className="container max-w-2xl py-12 md:py-20 px-4">
                 {/* Header */}
                 <div className="mb-16">
-                    <p
-                        className="mono-label text-muted-foreground/50 mb-4 animate-fade-in-up opacity-0 stagger-1"
-                        style={{ animationFillMode: 'forwards' }}
-                    >
-                        // setup
-                    </p>
-                    <h1
-                        className="text-display text-5xl md:text-6xl mb-3 animate-fade-in-up opacity-0 stagger-2"
-                        style={{ animationFillMode: 'forwards' }}
-                    >
+                    <p className="mono-label text-muted-foreground/50 mb-4">// setup</p>
+                    <h1 className="text-display text-5xl md:text-6xl mb-3">
                         <DecodeText text="Gear" onMount />
                     </h1>
-                    <p
-                        className="text-[0.9rem] text-muted-foreground animate-fade-in-up opacity-0 stagger-3"
-                        style={{ animationFillMode: 'forwards' }}
-                    >
-                        The stuff I actually use.
-                    </p>
+                    <p className="text-[0.9rem] text-muted-foreground">The stuff I actually use.</p>
                 </div>
 
                 {/* My Setup */}
-                <div className="mb-12 animate-fade-in-up opacity-0 stagger-4" style={{ animationFillMode: 'forwards' }}>
+                <div className="mb-12">
                     <div className="section-label mb-3">my setup</div>
                     <div className="relative p-2 rounded border border-border/50 bg-muted/10 shadow-sm">
                         {/* Corner brackets, matching the schematic feel of the rest of the page */}
@@ -402,12 +389,7 @@ export default function Using() {
                 {/* Sections */}
                 <div className="space-y-12">
                     {gearSections.map((section, i) => (
-                        <section
-                            key={section.title}
-                            // After the setup photo (stagger-4), not alongside or before it
-                            className={`animate-fade-in-up opacity-0 stagger-${Math.min(i + 5, 6)}`}
-                            style={{ animationFillMode: 'forwards' }}
-                        >
+                        <section key={section.title}>
                             <div className="section-label mb-3">{section.title.toLowerCase()}</div>
                             <div>
                                 {section.items.map((item) => (

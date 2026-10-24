@@ -29,7 +29,7 @@ function formatUnlockDate(isoDate: string): string {
 /** Completion bar plus the most recent unlocks. One block for both Steam and Xbox. */
 export function AchievementList({ unlocked, total, pct, status, items }: AchievementListProps) {
     return (
-        <section className="mb-12 animate-fade-in-up opacity-0 stagger-5" style={{ animationFillMode: 'forwards' }}>
+        <section className="mb-12">
             <div className="flex items-center justify-between mb-3">
                 <div className="section-label">achievements</div>
                 <span className="mono-label text-muted-foreground/40 tabular-nums">

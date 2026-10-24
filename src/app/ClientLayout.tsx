@@ -48,75 +48,6 @@ function getBreadcrumbs(currentPath: string) {
     return breadcrumbs
 }
 
-// Custom cursor blob
-function CursorBlob() {
-    const blobRef = useRef<HTMLDivElement>(null)
-    const pathname = usePathname()
-
-    useEffect(() => {
-        const blob = blobRef.current
-        if (!blob) return
-
-        // Only run where the blob actually shows: a mouse on a wide screen, motion allowed.
-        // Touch screens ≥1024px (iPad landscape) keep their native behaviour.
-        const mq = window.matchMedia(
-            '(min-width: 1024px) and (pointer: fine) and (prefers-reduced-motion: no-preference)'
-        )
-        const pos = { x: -100, y: -100 }
-        const curr = { x: -100, y: -100 }
-        let raf: number | null = null
-
-        const tick = () => {
-            curr.x += (pos.x - curr.x) * 0.12
-            curr.y += (pos.y - curr.y) * 0.12
-            blob.style.transform = `translate(${curr.x}px, ${curr.y}px) translate(-50%, -50%)`
-            // Park the loop once the blob has caught up; the next move restarts it
-            if (Math.abs(pos.x - curr.x) < 0.1 && Math.abs(pos.y - curr.y) < 0.1) {
-                raf = null
-                return
-            }
-            raf = requestAnimationFrame(tick)
-        }
-
-        const onMove = (e: PointerEvent) => {
-            if (e.pointerType === 'touch') return
-            pos.x = e.clientX
-            pos.y = e.clientY
-            // Resolved from the event target on every move rather than per-element
-            // enter/leave listeners, so the state can't stick when a hovered link unmounts
-            const target = e.target as Element | null
-            blob.classList.toggle('is-hovering', !!target?.closest?.('a, button, [role="button"]'))
-            if (raf === null) raf = requestAnimationFrame(tick)
-        }
-
-        const disable = () => {
-            document.body.classList.remove('custom-cursor')
-            document.removeEventListener('pointermove', onMove)
-            if (raf !== null) cancelAnimationFrame(raf)
-            raf = null
-        }
-        const sync = () => {
-            if (!mq.matches) return disable()
-            document.body.classList.add('custom-cursor')
-            document.addEventListener('pointermove', onMove, { passive: true })
-        }
-
-        sync()
-        mq.addEventListener('change', sync)
-        return () => {
-            mq.removeEventListener('change', sync)
-            disable()
-        }
-    }, [])
-
-    // A clicked link usually unmounts under the pointer — drop the hover state with it
-    useEffect(() => {
-        blobRef.current?.classList.remove('is-hovering')
-    }, [pathname])
-
-    return <div ref={blobRef} className="cursor-blob hidden lg:block" aria-hidden="true" />
-}
-
 function Navigation() {
     const pathname = usePathname()
     const { resolvedTheme, setTheme } = useTheme()
@@ -324,7 +255,6 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         <MotionConfig reducedMotion="user">
             <div className="min-h-screen flex flex-col">
                 <AlienDataStream />
-                <CursorBlob />
                 <CommandBar />
                 <UfoAbduction />
                 <DrownTrigger />
@@ -337,7 +267,6 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
                         <div className="container max-w-4xl">
                             <p className="text-xs font-mono-ui text-muted-foreground/50 text-center tracking-wide">
                                 © {new Date().getFullYear()} alen yohannan
-                                <span className="animate-blink ml-0.5">_</span>
                             </p>
                         </div>
                     </footer>

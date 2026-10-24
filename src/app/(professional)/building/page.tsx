@@ -39,32 +39,18 @@ export default async function Building() {
             <div className="container max-w-2xl py-12 md:py-20 px-4">
                 {/* ── Header ───────────────────────────────────── */}
                 <div className="mb-16">
-                    <p
-                        className="mono-label text-muted-foreground/50 mb-4 animate-fade-in-up opacity-0 stagger-1"
-                        style={{ animationFillMode: 'forwards' }}
-                    >
-                        // work
-                    </p>
-                    <h1
-                        className="text-display text-5xl md:text-6xl mb-3 animate-fade-in-up opacity-0 stagger-2"
-                        style={{ animationFillMode: 'forwards' }}
-                    >
+                    <p className="mono-label text-muted-foreground/50 mb-4">// work</p>
+                    <h1 className="text-display text-5xl md:text-6xl mb-3">
                         <DecodeText text="Projects" onMount />
                     </h1>
-                    <p
-                        className="text-[0.9rem] text-muted-foreground animate-fade-in-up opacity-0 stagger-3"
-                        style={{ animationFillMode: 'forwards' }}
-                    >
+                    <p className="text-[0.9rem] text-muted-foreground">
                         Things I&apos;ve built, shipped, and sometimes abandoned.
                     </p>
                 </div>
 
                 {/* ── Featured ─────────────────────────────────── */}
                 {featuredProjects.length > 0 && (
-                    <section
-                        className="mb-14 animate-fade-in-up opacity-0 stagger-4"
-                        style={{ animationFillMode: 'forwards' }}
-                    >
+                    <section className="mb-14">
                         <div className="section-label mb-4">featured</div>
                         <div>
                             {featuredProjects.map((project) => (
@@ -76,10 +62,7 @@ export default async function Building() {
 
                 {/* ── Other ─────────────────────────────────────── */}
                 {otherProjects.length > 0 && (
-                    <section
-                        className="animate-fade-in-up opacity-0 stagger-5"
-                        style={{ animationFillMode: 'forwards' }}
-                    >
+                    <section>
                         <div className="section-label mb-4">everything else</div>
                         <div>
                             {otherProjects.map((project) => (

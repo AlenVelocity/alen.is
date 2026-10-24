@@ -333,18 +333,6 @@ html {
     }
 }
 
-/* Noise pulse — subtle opacity pulse */
-@keyframes noisePulse {
-    0%,
-    100% {
-        opacity: 0.04;
-    }
-
-    50% {
-        opacity: 0.07;
-    }
-}
-
 /* Glow pulse */
 @keyframes pulseGlow {
     0%,
@@ -445,7 +433,6 @@ body::before {
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
     opacity: 0.04;
     pointer-events: none;
-    animation: noisePulse 8s ease-in-out infinite;
 }
 
 /* Layer 2: Circuit grid */
@@ -466,42 +453,6 @@ body::after {
         96px 96px,
         24px 24px,
         24px 24px;
-}
-
-/* ─── Custom Cursor (diamond shape) ─────────────────────────────────── */
-.cursor-blob {
-    position: fixed;
-    width: 10px;
-    height: 10px;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-    will-change: transform;
-    transition:
-        width 0.15s,
-        height 0.15s,
-        opacity 0.15s;
-    background: hsl(var(--accent));
-    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-    box-shadow: var(--glow-accent);
-}
-
-.dark .cursor-blob {
-    box-shadow: var(--glow-accent-strong);
-}
-
-.cursor-blob.is-hovering {
-    width: 26px;
-    height: 26px;
-    opacity: 0.35;
-}
-
-/* Hide the native cursor only where the blob actually renders (it's
-   hidden lg:block) — otherwise small windows end up with no cursor at all */
-@media (min-width: 1024px) and (pointer: fine) {
-    body.custom-cursor * {
-        cursor: none !important;
-    }
 }
 
 /* ─── Scan line overlay ──────────────────────────────────────────────── */
@@ -798,15 +749,13 @@ body.ufo-abduct main {
    return. The adjective stage is itself fixed, so the same goes one level down. */
 body.ufo-return main > :not(.adjective-stage),
 body.ufo-return .adjective-stage > * {
-    animation: abductReturn 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation: abductReturn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-/* Keep the page entrance in the list: dropping it here and re-adding it when
-   ufo-return comes off would restart it, flashing the page a second time */
-body.ufo-return main .animate-page-in {
-    animation:
-        pageIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both,
-        abductReturn 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+/* Once a warp has happened, pages arrive by beam, so the plain entrance stays off.
+   The class is never removed; a direct load is the only time the entrance plays. */
+body.ufo-navigated .animate-page-in {
+    animation: none;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -1664,15 +1613,6 @@ body.ufo-return main .animate-page-in {
     ::view-transition-old(*),
     ::view-transition-new(*) {
         animation: none !important;
-    }
-
-    .cursor-blob {
-        display: none !important;
-    }
-
-    /* Restore the native cursor when the custom blob is disabled */
-    body.custom-cursor * {
-        cursor: auto !important;
     }
 }
 

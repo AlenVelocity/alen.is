@@ -37,16 +37,8 @@ export default function Listening() {
         <PageTransition>
             <div className="container max-w-2xl py-12 md:py-20">
                 {/* Header — static, renders instantly */}
-                <p
-                    className="mono-label text-muted-foreground/50 mb-4 animate-fade-in-up opacity-0 stagger-1"
-                    style={{ animationFillMode: 'forwards' }}
-                >
-                    // what's on loop
-                </p>
-                <h1
-                    className="text-display text-4xl md:text-5xl mb-10 flex items-center gap-4 animate-fade-in-up opacity-0 stagger-2"
-                    style={{ animationFillMode: 'forwards' }}
-                >
+                <p className="mono-label text-muted-foreground/50 mb-4">// what's on loop</p>
+                <h1 className="text-display text-4xl md:text-5xl mb-10 flex items-center gap-4">
                     Listening
                     <EqualizerBars />
                 </h1>
@@ -57,10 +49,7 @@ export default function Listening() {
                 </Suspense>
 
                 {/* About — static */}
-                <section
-                    className="mb-14 space-y-4 text-muted-foreground leading-relaxed animate-fade-in-up opacity-0 stagger-4"
-                    style={{ animationFillMode: 'forwards' }}
-                >
+                <section className="mb-14 space-y-4 text-muted-foreground leading-relaxed">
                     <p>
                         Mostly video game OSTs (Persona is elite) and Japanese rock. Always down for recommendations
                         though.
@@ -81,10 +70,7 @@ export default function Listening() {
                 </section>
 
                 {/* Apple Music — static */}
-                <section
-                    className="mb-14 animate-fade-in-up opacity-0 stagger-5"
-                    style={{ animationFillMode: 'forwards' }}
-                >
+                <section className="mb-14">
                     <div className="section-label mb-4">current playlist</div>
                     <div className="flex justify-center rounded overflow-hidden border border-border">
                         <iframe

@@ -24,29 +24,14 @@ export default function Writing() {
             <div className="container max-w-2xl py-12 md:py-20 px-4">
                 {/* Header */}
                 <div className="mb-16">
-                    <p
-                        className="mono-label text-muted-foreground/50 mb-4 animate-fade-in-up opacity-0 stagger-1"
-                        style={{ animationFillMode: 'forwards' }}
-                    >
-                        // things i wrote down
-                    </p>
-                    <h1
-                        className="text-display text-5xl md:text-6xl mb-3 animate-fade-in-up opacity-0 stagger-2"
-                        style={{ animationFillMode: 'forwards' }}
-                    >
-                        Writing
-                    </h1>
-                    <p
-                        className="text-[0.9rem] text-muted-foreground animate-fade-in-up opacity-0 stagger-3"
-                        style={{ animationFillMode: 'forwards' }}
-                    >
-                        Thoughts and stuff.
-                    </p>
+                    <p className="mono-label text-muted-foreground/50 mb-4">// things i wrote down</p>
+                    <h1 className="text-display text-5xl md:text-6xl mb-3">Writing</h1>
+                    <p className="text-[0.9rem] text-muted-foreground">Thoughts and stuff.</p>
                 </div>
 
                 {/* Posts */}
                 {posts.length > 0 ? (
-                    <div className="animate-fade-in-up opacity-0 stagger-4" style={{ animationFillMode: 'forwards' }}>
+                    <div>
                         {posts.map((post, i) => (
                             <Link
                                 key={post.slug}
@@ -80,12 +65,7 @@ export default function Writing() {
                         ))}
                     </div>
                 ) : (
-                    <p
-                        className="mono-label text-muted-foreground/40 animate-fade-in-up opacity-0 stagger-4"
-                        style={{ animationFillMode: 'forwards' }}
-                    >
-                        // nothing written yet
-                    </p>
+                    <p className="mono-label text-muted-foreground/40">// nothing written yet</p>
                 )}
             </div>
         </PageTransition>

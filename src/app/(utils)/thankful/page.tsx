@@ -74,22 +74,9 @@ export default function Thankful() {
             <div className="container max-w-2xl py-12 md:py-20 px-4">
                 {/* Header */}
                 <div className="mb-16">
-                    <p
-                        className="mono-label text-muted-foreground/50 mb-4 animate-fade-in-up opacity-0 stagger-1"
-                        style={{ animationFillMode: 'forwards' }}
-                    >
-                        // keeping track
-                    </p>
-                    <h1
-                        className="text-display text-5xl md:text-6xl mb-3 animate-fade-in-up opacity-0 stagger-2"
-                        style={{ animationFillMode: 'forwards' }}
-                    >
-                        Thankful
-                    </h1>
-                    <p
-                        className="text-[0.9rem] text-muted-foreground animate-fade-in-up opacity-0 stagger-3"
-                        style={{ animationFillMode: 'forwards' }}
-                    >
+                    <p className="mono-label text-muted-foreground/50 mb-4">// keeping track</p>
+                    <h1 className="text-display text-5xl md:text-6xl mb-3">Thankful</h1>
+                    <p className="text-[0.9rem] text-muted-foreground">
                         Things and people I&apos;m glad about. Adding to this as I go.
                     </p>
                 </div>
@@ -98,11 +85,7 @@ export default function Thankful() {
                 {sectionsWithItems.length > 0 ? (
                     <div className="space-y-12">
                         {sectionsWithItems.map((section, i) => (
-                            <section
-                                key={section.title}
-                                className={`animate-fade-in-up opacity-0 stagger-${Math.min(i + 4, 6)}`}
-                                style={{ animationFillMode: 'forwards' }}
-                            >
+                            <section key={section.title}>
                                 <div className="section-label mb-3">{section.title.toLowerCase()}</div>
                                 <div>
                                     {section.items.map((item) => (
@@ -113,10 +96,7 @@ export default function Thankful() {
                         ))}
                     </div>
                 ) : (
-                    <p
-                        className="mono-label text-muted-foreground/40 animate-fade-in-up opacity-0 stagger-4"
-                        style={{ animationFillMode: 'forwards' }}
-                    >
+                    <p className="mono-label text-muted-foreground/40">
                         // still counting
                         <span className="animate-blink text-accent ml-1">▌</span>
                     </p>

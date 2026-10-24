@@ -132,10 +132,7 @@ export default async function GamePage({ params }: Props) {
 
                 {/* Header image, corner-bracket framed like the gear page's setup shot */}
                 {game.image ? (
-                    <div
-                        className="relative mb-4 p-2 rounded border border-border/50 bg-muted/10 shadow-sm animate-fade-in-up opacity-0 stagger-1"
-                        style={{ animationFillMode: 'forwards' }}
-                    >
+                    <div className="relative mb-4 p-2 rounded border border-border/50 bg-muted/10 shadow-sm">
                         <span className="absolute left-0 top-0 w-3 h-3 border-l border-t border-accent/40 -translate-x-px -translate-y-px" />
                         <span className="absolute right-0 top-0 w-3 h-3 border-r border-t border-accent/40 translate-x-px -translate-y-px" />
                         <span className="absolute left-0 bottom-0 w-3 h-3 border-l border-b border-accent/40 -translate-x-px translate-y-px" />
@@ -167,10 +164,7 @@ export default async function GamePage({ params }: Props) {
                         </div>
                     </div>
                 ) : (
-                    <div
-                        className="flex items-center gap-3 mb-4 animate-fade-in-up opacity-0 stagger-1"
-                        style={{ animationFillMode: 'forwards' }}
-                    >
+                    <div className="flex items-center gap-3 mb-4">
                         <h1 className="text-display text-2xl md:text-4xl min-w-0 break-words">{game.name}</h1>
                         <span className="w-8 h-8 rounded-sm bg-muted/40 border border-border/50 flex items-center justify-center shrink-0">
                             {isSteam ? (
@@ -182,19 +176,13 @@ export default async function GamePage({ params }: Props) {
                     </div>
                 )}
 
-                <p
-                    className="mono-label text-muted-foreground/50 mb-8 animate-fade-in-up opacity-0 stagger-2"
-                    style={{ animationFillMode: 'forwards' }}
-                >
+                <p className="mono-label text-muted-foreground/50 mb-8">
                     // {isSteam ? 'steam' : 'xbox'} library entry
                 </p>
 
                 {/* Stats HUD */}
                 {(isSteam || recentHours > 0 || completionPct !== null) && (
-                    <div
-                        className="flex flex-wrap items-center gap-1.5 mb-12 animate-fade-in-up opacity-0 stagger-3"
-                        style={{ animationFillMode: 'forwards' }}
-                    >
+                    <div className="flex flex-wrap items-center gap-1.5 mb-12">
                         {isSteam && (
                             <span className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm border border-border/50 font-mono-ui text-xs text-muted-foreground">
                                 <FiClock className="w-3.5 h-3.5 text-accent/70" />
@@ -218,10 +206,7 @@ export default async function GamePage({ params }: Props) {
 
                 {/* Review */}
                 {showReviews && reviewData && (
-                    <section
-                        className="mb-12 animate-fade-in-up opacity-0 stagger-4"
-                        style={{ animationFillMode: 'forwards' }}
-                    >
+                    <section className="mb-12">
                         <div className="section-label mb-3">alen&apos;s review</div>
                         <div className="p-4 rounded-sm border border-dashed border-border/60 flex flex-col gap-2">
                             {reviewData.rating && (

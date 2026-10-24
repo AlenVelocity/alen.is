@@ -90,25 +90,14 @@ export default async function Playing() {
         <PageTransition>
             <div className="container max-w-2xl py-12 md:py-20">
                 {/* Header */}
-                <p
-                    className="mono-label text-muted-foreground/50 mb-4 animate-fade-in-up opacity-0 stagger-1"
-                    style={{ animationFillMode: 'forwards' }}
-                >
-                    // human simulation logs
-                </p>
-                <h1
-                    className="text-display text-4xl md:text-5xl mb-6 animate-fade-in-up opacity-0 stagger-2"
-                    style={{ animationFillMode: 'forwards' }}
-                >
+                <p className="mono-label text-muted-foreground/50 mb-4">// human simulation logs</p>
+                <h1 className="text-display text-4xl md:text-5xl mb-6">
                     <DecodeText text="Playing" onMount />
                 </h1>
 
                 {/* Stats HUD */}
                 {(ownedGames || xboxGames.length > 0) && (
-                    <div
-                        className="flex flex-wrap items-center gap-1.5 mb-10 animate-fade-in-up opacity-0 stagger-3"
-                        style={{ animationFillMode: 'forwards' }}
-                    >
+                    <div className="flex flex-wrap items-center gap-1.5 mb-10">
                         {ownedGames && (
                             <span className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm border border-border/50 font-mono-ui text-xs text-muted-foreground tabular-nums">
                                 <FaSteam className="w-3.5 h-3.5 text-accent/70" />
@@ -134,10 +123,7 @@ export default async function Playing() {
                 )}
 
                 {/* About */}
-                <section
-                    className="mb-12 space-y-4 text-muted-foreground leading-relaxed animate-fade-in-up opacity-0 stagger-4"
-                    style={{ animationFillMode: 'forwards' }}
-                >
+                <section className="mb-12 space-y-4 text-muted-foreground leading-relaxed">
                     <p>Big fan of story-driven games and JRPGs. Persona changed my brain chemistry.</p>
                 </section>
 
@@ -147,10 +133,7 @@ export default async function Playing() {
                         const gameReviews = reviewsData
                         if (!gameReviews || gameReviews.length === 0) return null
                         return (
-                            <div
-                                className="animate-fade-in-up opacity-0 stagger-5"
-                                style={{ animationFillMode: 'forwards' }}
-                            >
+                            <div>
                                 <CollapsibleSection title="My Reviews">
                                     <div>
                                         {gameReviews.map((review) => (
@@ -196,10 +179,7 @@ export default async function Playing() {
 
                 {/* Recently Played (Steam): the library's front shelf */}
                 {recentGames && recentGames.length > 0 && (
-                    <section
-                        className="mb-14 animate-fade-in-up opacity-0 stagger-5"
-                        style={{ animationFillMode: 'forwards' }}
-                    >
+                    <section className="mb-14">
                         <div className="flex items-baseline justify-between gap-4 mb-4">
                             <div className="section-label">active missions</div>
                             <span className="mono-label text-muted-foreground/40 shrink-0">steam · past 2 weeks</span>
@@ -236,10 +216,7 @@ export default async function Playing() {
 
                 {/* Steam Library, ranked by hours */}
                 {libraryGames.length > 0 && (
-                    <section
-                        className="mb-14 animate-fade-in-up opacity-0 stagger-6"
-                        style={{ animationFillMode: 'forwards' }}
-                    >
+                    <section className="mb-14">
                         <div className="flex items-baseline justify-between gap-4 mb-4">
                             <div className="section-label">steam archive</div>
                             <span className="mono-label text-muted-foreground/40 shrink-0">ranked by hours</span>
@@ -291,10 +268,7 @@ export default async function Playing() {
 
                 {/* Xbox Library */}
                 {xboxOnly.length > 0 && (
-                    <section
-                        className="mb-12 animate-fade-in-up opacity-0 stagger-6"
-                        style={{ animationFillMode: 'forwards' }}
-                    >
+                    <section className="mb-12">
                         <div className="flex items-baseline justify-between gap-4 mb-4">
                             <div className="section-label">xbox archive</div>
                             <span className="mono-label text-muted-foreground/40 shrink-0">by last played</span>

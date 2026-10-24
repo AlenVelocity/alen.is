@@ -43,9 +43,9 @@ const SAUCER_TOP_VH = 0.04
 const SAUCER_MOUTH_OFFSET = 38
 
 /** How long the outgoing page has before the route actually changes, in ms */
-const WARP_OUT_MS = 750
-/** Enter phase duration — must outlast the 0.9s abductReturn animation */
-const WARP_IN_MS = 950
+const WARP_OUT_MS = 520
+/** Enter phase duration — must outlast the 0.6s abductReturn animation */
+const WARP_IN_MS = 650
 
 export type Phase = 'idle' | 'arrive' | 'beam' | 'swallow' | 'depart' | 'warp-out' | 'warp-in'
 
@@ -198,9 +198,11 @@ export function UfoAbduction() {
             clearTimers()
             changePhase('warp-out')
             document.body.classList.add('ufo-abduct')
+            // Stays for the session: from here on pages arrive by beam, not by the CSS entrance
+            document.body.classList.add('ufo-navigated')
             const main = document.querySelector('main')
             if (main) {
-                piecesRef.current = shredPieces(main, { duration: 0.55, step: 0.03, maxStagger: 0.12, jitter: 0.05 })
+                piecesRef.current = shredPieces(main, { duration: 0.4, step: 0.02, maxStagger: 0.08, jitter: 0.03 })
             }
             warpPendingRef.current = true
             at(WARP_OUT_MS, () => router.push(href))
@@ -355,13 +357,13 @@ export function UfoAbduction() {
         beam: 'ufoBob 2s ease-in-out infinite',
         swallow: 'ufoSwallow 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
         depart: 'ufoDepart 0.9s cubic-bezier(0.55, 0, 0.9, 0.4) forwards',
-        'warp-out': 'ufoArrive 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards',
-        'warp-in': 'ufoDepart 0.6s cubic-bezier(0.55, 0, 0.9, 0.4) 0.25s both'
+        'warp-out': 'ufoArrive 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+        'warp-in': 'ufoDepart 0.45s cubic-bezier(0.55, 0, 0.9, 0.4) 0.15s both'
     }[phase]
 
     const beamAnimation =
         phase === 'warp-in'
-            ? 'beamRetract 0.45s cubic-bezier(0.55, 0, 0.9, 0.4) forwards'
+            ? 'beamRetract 0.35s cubic-bezier(0.55, 0, 0.9, 0.4) forwards'
             : phase === 'warp-out'
               ? 'beamDrop 0.25s cubic-bezier(0.22, 1, 0.36, 1) forwards, beamFlicker 1.1s ease-in-out 0.25s infinite'
               : 'beamDrop 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards, beamFlicker 1.1s ease-in-out 0.4s infinite'
