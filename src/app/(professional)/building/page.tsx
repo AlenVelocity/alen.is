@@ -1,11 +1,11 @@
 import { PageTransition } from '@/components/ui/page-transition'
-import { DecodeText } from '@/components/ui/decode-text'
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
 import { runGetProjects } from '@/lib/cms-db'
 import { ProjectDetail, ProjectRow } from './_components/ProjectCard'
 
 import { constructMetadata } from '@/lib/metadata'
+import { PageHeader } from '@/components/ui/page-header'
 
 export const metadata: Metadata = constructMetadata({
     title: 'Projects',
@@ -36,23 +36,19 @@ export default async function Building() {
     return (
         <PageTransition>
             <JsonLd data={projectsSchema} />
-            <div className="container max-w-2xl py-12 md:py-20 px-4">
+            <div className="container max-w-3xl py-10 md:py-14 px-4">
                 {/* ── Header ───────────────────────────────────── */}
-                <div className="mb-16">
-                    <p className="mono-label text-muted-foreground/50 mb-4">// work</p>
-                    <h1 className="text-display text-5xl md:text-6xl mb-3">
-                        <DecodeText text="Projects" onMount />
-                    </h1>
+                <PageHeader eyebrow="work" title="Projects">
                     <p className="text-[0.9rem] text-muted-foreground">
                         Things I&apos;ve built, shipped, and sometimes abandoned.
                     </p>
-                </div>
+                </PageHeader>
 
                 {/* ── Featured ─────────────────────────────────── */}
                 {featuredProjects.length > 0 && (
                     <section className="mb-14">
                         <div className="section-label mb-4">featured</div>
-                        <div>
+                        <div className="grid md:grid-cols-2 gap-x-10">
                             {featuredProjects.map((project) => (
                                 <ProjectDetail key={project.id} project={project} />
                             ))}

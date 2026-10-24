@@ -1,11 +1,11 @@
 import { LinkButton } from '@/components/ui/link-button'
 import { PageTransition } from '@/components/ui/page-transition'
-import { DecodeText } from '@/components/ui/decode-text'
 import { constructMetadata } from '@/lib/metadata'
 import { FiDownload } from 'react-icons/fi'
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
 import { runGetExperiences } from '@/lib/cms-db'
+import { PageHeader } from '@/components/ui/page-header'
 
 // ─── Period parsing ──────────────────────────────────────────────────────────
 // Periods are free text in the CMS ("July 2025 - January 2026", "Dec 2021 - Sep 2022",
@@ -96,23 +96,22 @@ export default async function Experience() {
             <JsonLd data={experienceSchema} />
             <div className="container max-w-3xl py-10 md:py-14 px-4">
                 {/* ── Header ─────────────────────────────────────── */}
-                <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-4 mb-10">
-                    <div className="min-w-0">
-                        <p className="mono-label text-muted-foreground/50 mb-3">// career</p>
-                        <h1 className="text-display text-4xl md:text-5xl mb-2">
-                            <DecodeText text="Experience" onMount />
-                        </h1>
-                        <p className="text-[0.9rem] text-muted-foreground">Where I&apos;ve worked, newest first.</p>
-                    </div>
-                    <a
-                        href="/Alen_Resume.pdf"
-                        download
-                        className="inline-flex items-center gap-2 px-3 py-2 text-xs font-mono-ui border border-border/60 hover:text-accent transition-colors duration-200 rounded-sm shrink-0"
-                    >
-                        <FiDownload className="w-3 h-3" />
-                        <span>resume</span>
-                    </a>
-                </div>
+                <PageHeader
+                    eyebrow="career"
+                    title="Experience"
+                    aside={
+                        <a
+                            href="/Alen_Resume.pdf"
+                            download
+                            className="inline-flex items-center gap-2 px-3 py-2 text-xs font-mono-ui border border-border/60 hover:text-accent transition-colors duration-200 rounded-sm shrink-0"
+                        >
+                            <FiDownload className="w-3 h-3" />
+                            <span>resume</span>
+                        </a>
+                    }
+                >
+                    <p className="text-[0.9rem] text-muted-foreground">Where I&apos;ve worked, newest first.</p>
+                </PageHeader>
 
                 {/* ── Ledger: when on the left, what on the right ─── */}
                 <div className="border-t border-dashed border-border/40">

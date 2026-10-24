@@ -1,10 +1,10 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
 import { PageTransition } from '@/components/ui/page-transition'
-import { DecodeText } from '@/components/ui/decode-text'
 
 import { constructMetadata } from '@/lib/metadata'
 import { BeamImage } from '@/components/ui/beam-image'
+import { PageHeader } from '@/components/ui/page-header'
 
 export const metadata: Metadata = constructMetadata({
     title: 'Using',
@@ -269,49 +269,36 @@ function GearRow({ item }: { item: GearItem }) {
 
     // Inactive rows dim their contents, not the row itself. Row opacity would also
     // dim the hover preview, which should always show the item at full strength
-    const rowClassName = `group relative flex items-baseline gap-2 md:gap-3 py-3 border-b border-dashed border-border/40 ${item.inactive ? '[&>*:not(.gear-preview)]:opacity-35' : ''}`
+    const rowClassName = `group relative grid gap-x-8 gap-y-1 md:grid-cols-[10rem_1fr] py-3 border-b border-dashed border-border/40 ${
+        item.inactive ? '[&>*:not(.gear-preview)]:opacity-35' : ''
+    }`
 
     const content = (
         <>
-            {/* Type, name and specs: stacked on mobile, one line from md up */}
-            <div className="flex min-w-0 flex-1 flex-col gap-1 md:flex-row md:items-baseline md:gap-3">
-                {/* Type label */}
-                <span className="mono-label text-muted-foreground/55 md:text-muted-foreground/40 shrink-0 md:w-28 md:text-right">
-                    {item.type}
-                </span>
+            {/* What kind of thing it is */}
+            <span className="mono-label text-muted-foreground/45 md:text-right md:pt-0.5">{item.type}</span>
 
-                {/* Dot separator */}
-                <span className="text-border/60 hidden md:block shrink-0">·</span>
-
-                {/* Name */}
-                <span
-                    className={`font-mono-ui text-sm font-medium md:flex-1 transition-colors duration-150 ${item.inactive ? '' : 'group-hover:text-accent'}`}
-                >
-                    {item.name}
-                </span>
-
-                {/* Dot trail */}
-                <span className="flex-1 border-b border-dotted border-muted-foreground/10 translate-y-[-4px] hidden md:block" />
-
-                {/* Specs */}
-                <span className="mono-label text-muted-foreground/60 md:text-muted-foreground/45 shrink-0 md:max-w-[220px] md:text-right">
-                    {item.specs}
-                </span>
+            {/* The thing, with its numbers underneath */}
+            <div className="min-w-0">
+                <div className="flex items-baseline gap-x-2 gap-y-1 flex-wrap">
+                    <span
+                        className={`font-mono-ui text-sm font-medium transition-colors duration-150 ${item.inactive ? '' : 'group-hover:text-accent'}`}
+                    >
+                        {item.name}
+                    </span>
+                    {item.badge && (
+                        <span className={`mono-label border px-1.5 py-0.5 rounded-sm shrink-0 ${badgeColor}`}>
+                            {item.badge.toLowerCase()}
+                        </span>
+                    )}
+                    {item.href && (
+                        <span className="mono-label text-muted-foreground/40 shrink-0" aria-hidden="true">
+                            ↗
+                        </span>
+                    )}
+                </div>
+                <p className="mono-label text-muted-foreground/50 mt-0.5">{item.specs}</p>
             </div>
-
-            {/* Badge */}
-            {item.badge && (
-                <span className={`mono-label border px-1.5 py-0.5 rounded-sm shrink-0 ${badgeColor}`}>
-                    {item.badge.toLowerCase()}
-                </span>
-            )}
-
-            {/* Leaves the site */}
-            {item.href && (
-                <span className="mono-label text-muted-foreground/40 shrink-0" aria-hidden="true">
-                    ↗
-                </span>
-            )}
 
             {/* Hover image preview */}
             {item.image && (
@@ -341,15 +328,11 @@ function GearRow({ item }: { item: GearItem }) {
 export default function Using() {
     return (
         <PageTransition>
-            <div className="container max-w-2xl py-12 md:py-20 px-4">
+            <div className="container max-w-3xl py-10 md:py-14 px-4">
                 {/* Header */}
-                <div className="mb-16">
-                    <p className="mono-label text-muted-foreground/50 mb-4">// setup</p>
-                    <h1 className="text-display text-5xl md:text-6xl mb-3">
-                        <DecodeText text="Gear" onMount />
-                    </h1>
+                <PageHeader eyebrow="setup" title="Gear">
                     <p className="text-[0.9rem] text-muted-foreground">The stuff I actually use.</p>
-                </div>
+                </PageHeader>
 
                 {/* My Setup */}
                 <div className="mb-12">

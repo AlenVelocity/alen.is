@@ -1,8 +1,8 @@
 import { Metadata } from 'next'
 import { PageTransition } from '@/components/ui/page-transition'
-import { DecodeText } from '@/components/ui/decode-text'
 import { constructMetadata } from '@/lib/metadata'
 import { EmptyState } from '@/components/ui/empty-state'
+import { PageHeader } from '@/components/ui/page-header'
 
 export const metadata: Metadata = constructMetadata({
     title: 'Thankful',
@@ -73,17 +73,13 @@ export default function Thankful() {
 
     return (
         <PageTransition>
-            <div className="container max-w-2xl py-12 md:py-20 px-4">
+            <div className="container max-w-3xl py-10 md:py-14 px-4">
                 {/* Header */}
-                <div className="mb-16">
-                    <p className="mono-label text-muted-foreground/50 mb-4">// keeping track</p>
-                    <h1 className="text-display text-5xl md:text-6xl mb-3">
-                        <DecodeText text="Thankful" onMount />
-                    </h1>
+                <PageHeader eyebrow="keeping track" title="Thankful">
                     <p className="text-[0.9rem] text-muted-foreground">
                         Things and people I&apos;m glad about. Adding to this as I go.
                     </p>
-                </div>
+                </PageHeader>
 
                 {/* Sections */}
                 {sectionsWithItems.length > 0 ? (

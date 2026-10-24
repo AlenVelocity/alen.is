@@ -116,7 +116,7 @@ export default async function TrackPage({ params }: Props) {
 
     return (
         <PageTransition>
-            <div className="container max-w-2xl py-12 md:py-20">
+            <div className="container max-w-3xl py-10 md:py-14">
                 {/* Back link */}
                 <Link
                     href="/listening"

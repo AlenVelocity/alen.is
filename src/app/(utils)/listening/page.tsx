@@ -5,7 +5,6 @@ import { StreamFade } from '@/components/ui/stream-fade'
 import { RepeatRing } from '@/components/ui/repeat-ring'
 import { api } from '@/trpc/server'
 import { FiHeadphones } from 'react-icons/fi'
-import { DecodeText } from '@/components/ui/decode-text'
 import Image from 'next/image'
 import Link from 'next/link'
 import { LinkButton } from '@/components/ui/link-button'
@@ -19,6 +18,7 @@ import { formatDistanceToNow, parse } from 'date-fns'
 import { constructMetadata } from '@/lib/metadata'
 import { BeamImage } from '@/components/ui/beam-image'
 import { EmptyState } from '@/components/ui/empty-state'
+import { PageHeader } from '@/components/ui/page-header'
 
 export const metadata: Metadata = constructMetadata({
     title: 'Listening',
@@ -38,13 +38,8 @@ const getScrobbles = cache(() => api.lastfm.getRecentTracks({ limit: 200 }))
 export default function Listening() {
     return (
         <PageTransition>
-            <div className="container max-w-2xl py-12 md:py-20">
-                {/* Header — static, renders instantly */}
-                <p className="mono-label text-muted-foreground/50 mb-4">// what's on loop</p>
-                <h1 className="text-display text-4xl md:text-5xl mb-10 flex items-center gap-4">
-                    <DecodeText text="Listening" onMount />
-                    <EqualizerBars />
-                </h1>
+            <div className="container max-w-3xl py-10 md:py-14">
+                <PageHeader eyebrow="what's on loop" title="Listening" titleExtra={<EqualizerBars />} />
 
                 {/* Now playing — streams in from Last.fm */}
                 <Suspense fallback={<NowPlayingSkeleton />}>
@@ -72,22 +67,6 @@ export default function Listening() {
                     </p>
                 </section>
 
-                {/* Apple Music — static */}
-                <section className="mb-14">
-                    <div className="section-label mb-4">current playlist</div>
-                    <div className="flex justify-center rounded overflow-hidden border border-border">
-                        <iframe
-                            allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
-                            frameBorder="0"
-                            height="450"
-                            style={{ width: '100%', maxWidth: '660px', overflow: 'hidden' }}
-                            sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
-                            src="https://embed.music.apple.com/in/playlist/writers-room/pl.u-gxblgd1Tb9VXoJA"
-                            title="Apple Music playlist: writers room"
-                        />
-                    </div>
-                </section>
-
                 {/* Most played — streams in from Last.fm */}
                 <Suspense fallback={<TopSignalsSkeleton />}>
                     <TopSignalsSection />
@@ -97,6 +76,22 @@ export default function Listening() {
                 <Suspense fallback={<FlightRecorderSkeleton />}>
                     <FlightRecorderSection />
                 </Suspense>
+
+                {/* A playlist, last, at the player's compact height */}
+                <section className="mt-14">
+                    <div className="section-label mb-4">a playlist</div>
+                    <div className="rounded overflow-hidden border border-border">
+                        <iframe
+                            allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
+                            frameBorder="0"
+                            height="175"
+                            style={{ width: '100%', overflow: 'hidden' }}
+                            sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
+                            src="https://embed.music.apple.com/in/playlist/writers-room/pl.u-gxblgd1Tb9VXoJA"
+                            title="Apple Music playlist: writers room"
+                        />
+                    </div>
+                </section>
             </div>
         </PageTransition>
     )
@@ -266,6 +261,18 @@ async function TopSignalsSection() {
     )
 }
 
+/** "4 days ago" from Last.fm's "dd MMM yyyy, HH:mm" UTC stamp; empty while a track is still playing */
+function scrobbledAgo(date: string | undefined): string {
+    if (!date) return ''
+    try {
+        const utcDate = parse(date, 'dd MMM yyyy, HH:mm', new Date())
+        const localDate = new Date(utcDate.getTime() - utcDate.getTimezoneOffset() * 60000)
+        return formatDistanceToNow(localDate, { addSuffix: true })
+    } catch {
+        return ''
+    }
+}
+
 async function FlightRecorderSection() {
     const lastFmData = await getScrobbles()
 
@@ -303,46 +310,36 @@ async function FlightRecorderSection() {
                         <Link
                             key={`${track.name}-${index}`}
                             href={`/listening/to/${encodeTrackParam(track.artist)}/${encodeTrackParam(track.name)}`}
-                            className="group flex items-center gap-3 py-2.5 border-b border-dashed border-border/50 last:border-b-0"
+                            className="group grid gap-x-8 md:grid-cols-[10rem_1fr] items-center py-2.5 border-b border-dashed border-border/50 last:border-b-0"
                         >
-                            <span className="mono-label text-muted-foreground/30 w-5 text-right shrink-0 tabular-nums">
-                                {index + 1}
+                            <span className="hidden md:block mono-label text-muted-foreground/40 tabular-nums">
+                                {scrobbledAgo(track.date)}
                             </span>
-                            {track.image ? (
-                                <div className="relative w-9 h-9 rounded overflow-hidden flex-shrink-0">
-                                    <Image src={track.image} alt={track.name} fill className="object-cover" />
+                            <div className="flex items-center gap-3 min-w-0">
+                                {track.image ? (
+                                    <div className="relative w-9 h-9 rounded overflow-hidden flex-shrink-0">
+                                        <Image src={track.image} alt={track.name} fill className="object-cover" />
+                                    </div>
+                                ) : (
+                                    <div className="w-9 h-9 rounded bg-muted flex items-center justify-center flex-shrink-0">
+                                        <FiHeadphones className="w-3.5 h-3.5 text-muted-foreground" />
+                                    </div>
+                                )}
+                                <div className="flex-1 min-w-0">
+                                    <div className="flex items-center gap-2">
+                                        <p className="text-sm font-medium truncate group-hover:text-accent transition-colors">
+                                            {track.name}
+                                        </p>
+                                        {track.count > 1 && (
+                                            <span className="shrink-0 mono-label text-accent/70">×{track.count}</span>
+                                        )}
+                                    </div>
+                                    <p className="text-xs text-muted-foreground truncate">{track.artist}</p>
                                 </div>
-                            ) : (
-                                <div className="w-9 h-9 rounded bg-muted flex items-center justify-center flex-shrink-0">
-                                    <FiHeadphones className="w-3.5 h-3.5 text-muted-foreground" />
-                                </div>
-                            )}
-                            <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2">
-                                    <p className="text-sm font-medium truncate group-hover:text-accent transition-colors">
-                                        {track.name}
-                                    </p>
-                                    {track.count > 1 && (
-                                        <span className="shrink-0 mono-label text-accent/70">×{track.count}</span>
-                                    )}
-                                </div>
-                                <p className="text-xs text-muted-foreground truncate">{track.artist}</p>
-                            </div>
-                            {track.date && (
-                                <span className="text-xs text-muted-foreground/50 hidden sm:block">
-                                    {(() => {
-                                        try {
-                                            const utcDate = parse(track.date, 'dd MMM yyyy, HH:mm', new Date())
-                                            const localDate = new Date(
-                                                utcDate.getTime() - utcDate.getTimezoneOffset() * 60000
-                                            )
-                                            return formatDistanceToNow(localDate, { addSuffix: true })
-                                        } catch {
-                                            return ''
-                                        }
-                                    })()}
+                                <span className="md:hidden mono-label text-muted-foreground/40 shrink-0 tabular-nums">
+                                    {scrobbledAgo(track.date)}
                                 </span>
-                            )}
+                            </div>
                         </Link>
                     ))}
                 </div>

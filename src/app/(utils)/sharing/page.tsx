@@ -1,10 +1,10 @@
 import { Metadata } from 'next'
 import { list } from '@vercel/blob'
 import { PageTransition } from '@/components/ui/page-transition'
-import { DecodeText } from '@/components/ui/decode-text'
 
 import { constructMetadata } from '@/lib/metadata'
 import { EmptyState } from '@/components/ui/empty-state'
+import { PageHeader } from '@/components/ui/page-header'
 
 export const metadata: Metadata = constructMetadata({
     title: 'Sharing',
@@ -86,17 +86,13 @@ export default async function Sharing() {
 
     return (
         <PageTransition>
-            <div className="container max-w-2xl py-12 md:py-20 px-4">
+            <div className="container max-w-3xl py-10 md:py-14 px-4">
                 {/* Header */}
-                <div className="mb-16">
-                    <p className="mono-label text-muted-foreground/50 mb-4">// file drop</p>
-                    <h1 className="text-display text-5xl md:text-6xl mb-3">
-                        <DecodeText text="Sharing" onMount />
-                    </h1>
+                <PageHeader eyebrow="file drop" title="Sharing">
                     <p className="text-[0.9rem] text-muted-foreground">
                         Files hosted straight off the site. Click to open, or grab a copy.
                     </p>
-                </div>
+                </PageHeader>
 
                 {files.length > 0 ? (
                     <div>

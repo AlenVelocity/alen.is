@@ -97,7 +97,7 @@ export default async function Home() {
     return (
         <PageTransition>
             <JsonLd data={personSchema} />
-            <div className="container max-w-2xl py-12 md:py-20 px-4">
+            <div className="container max-w-3xl py-12 md:py-16 px-4">
                 {/* ── Hero ─────────────────────────────────────────── */}
                 <section className="mb-20">
                     {/* Eyebrow */}

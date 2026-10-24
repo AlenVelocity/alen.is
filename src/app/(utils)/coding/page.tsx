@@ -1,10 +1,10 @@
 import { Metadata } from 'next'
 import { PageTransition } from '@/components/ui/page-transition'
-import { DecodeText } from '@/components/ui/decode-text'
 import { api } from '@/trpc/server'
 
 import { constructMetadata } from '@/lib/metadata'
 import { EmptyState } from '@/components/ui/empty-state'
+import { PageHeader } from '@/components/ui/page-header'
 
 export const metadata: Metadata = constructMetadata({
     title: 'Coding',
@@ -84,13 +84,9 @@ function LanguageBar({ languages }: { languages: { name: string; color: string; 
 
 function Header({ children }: { children?: React.ReactNode }) {
     return (
-        <div className="mb-12">
-            <p className="mono-label text-muted-foreground/50 mb-4">// commit history</p>
-            <h1 className="text-display text-5xl md:text-6xl mb-3">
-                <DecodeText text="Coding" onMount />
-            </h1>
+        <PageHeader eyebrow="commit history" title="Coding">
             {children}
-        </div>
+        </PageHeader>
     )
 }
 
@@ -101,7 +97,7 @@ export default async function Coding() {
     } catch {
         return (
             <PageTransition>
-                <div className="container max-w-2xl py-12 md:py-20 px-4">
+                <div className="container max-w-3xl py-10 md:py-14 px-4">
                     <Header>
                         <EmptyState>github isn&apos;t answering right now</EmptyState>
                     </Header>
@@ -119,7 +115,7 @@ export default async function Coding() {
 
     return (
         <PageTransition>
-            <div className="container max-w-2xl py-12 md:py-20 px-4">
+            <div className="container max-w-3xl py-10 md:py-14 px-4">
                 <Header>
                     <p className="text-[0.9rem] text-muted-foreground mb-4">
                         {githubData.totalContributions.toLocaleString()} contributions in {year}. {counts}.

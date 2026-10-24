@@ -1,6 +1,5 @@
 import { Metadata } from 'next'
 import { PageTransition } from '@/components/ui/page-transition'
-import { DecodeText } from '@/components/ui/decode-text'
 import { api } from '@/trpc/server'
 import { GiGamepad } from 'react-icons/gi'
 import { FaXbox } from 'react-icons/fa'
@@ -12,6 +11,7 @@ import { GamePortrait } from './_components/game-portrait'
 
 import { constructMetadata } from '@/lib/metadata'
 import { EmptyState } from '@/components/ui/empty-state'
+import { PageHeader } from '@/components/ui/page-header'
 
 export const metadata: Metadata = constructMetadata({
     title: 'Playing',
@@ -87,22 +87,17 @@ export default async function Playing() {
 
     return (
         <PageTransition>
-            <div className="container max-w-2xl py-12 md:py-20">
-                {/* Header */}
-                <p className="mono-label text-muted-foreground/50 mb-4">// human simulation logs</p>
-                <h1 className="text-display text-4xl md:text-5xl mb-6">
-                    <DecodeText text="Playing" onMount />
-                </h1>
-
-                {/* The numbers, as a sentence */}
-                {(ownedGames || xboxGames.length > 0) && (
-                    <p className="font-mono-ui text-xs text-muted-foreground tabular-nums mb-10">
-                        {ownedGames && `${ownedGames.total_games} games on Steam`}
-                        {ownedGames && xboxGames.length > 0 && ', '}
-                        {xboxGames.length > 0 && `${xboxGames.length} on Xbox`}
-                        {totalHours > 0 && `. ${totalHours.toLocaleString()} hours, which is ${totalDays} days.`}
-                    </p>
-                )}
+            <div className="container max-w-3xl py-10 md:py-14">
+                <PageHeader eyebrow="human simulation logs" title="Playing">
+                    {(ownedGames || xboxGames.length > 0) && (
+                        <p className="font-mono-ui text-xs text-muted-foreground tabular-nums">
+                            {ownedGames && `${ownedGames.total_games} games on Steam`}
+                            {ownedGames && xboxGames.length > 0 && ', '}
+                            {xboxGames.length > 0 && `${xboxGames.length} on Xbox`}
+                            {totalHours > 0 && `. ${totalHours.toLocaleString()} hours, which is ${totalDays} days.`}
+                        </p>
+                    )}
+                </PageHeader>
 
                 {/* About */}
                 <section className="mb-12 space-y-4 text-muted-foreground leading-relaxed">
