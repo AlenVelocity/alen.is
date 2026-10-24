@@ -14,21 +14,6 @@ import { AlienDataStream } from '@/components/ui/alien-ambience'
 import { CommandBar, openCommandBar } from '@/components/ui/command-bar'
 import { UfoAbduction } from '@/components/ui/ufo-abduction'
 import { DrownTrigger } from '@/components/ui/drown-trigger'
-import { Saucer } from '@/components/ui/saucer'
-
-/** The "you are here" marker: the saucer parks beside the current page and hops to the next one */
-function NavSaucer() {
-    return (
-        <motion.span
-            layoutId="nav-saucer"
-            className="inline-block w-4 mr-1.5 align-[-3px] text-accent"
-            transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-            aria-hidden="true"
-        >
-            <Saucer className="w-4" />
-        </motion.span>
-    )
-}
 
 // NAV ITEMS
 const NAV_ITEMS = [
@@ -157,7 +142,7 @@ function Navigation() {
                                                         : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
                                                 )}
                                             >
-                                                {isActive && <NavSaucer />}
+                                                {isActive && <span className="mr-1 text-accent font-bold">//</span>}
                                                 {item.label}
                                             </Link>
                                         </motion.div>
@@ -196,10 +181,7 @@ function Navigation() {
                                                     {crumb.label}
                                                 </Link>
                                             ) : (
-                                                <span className="text-foreground whitespace-nowrap">
-                                                    <NavSaucer />
-                                                    {crumb.label}
-                                                </span>
+                                                <span className="text-accent whitespace-nowrap">{crumb.label}</span>
                                             )}
                                         </React.Fragment>
                                     )
