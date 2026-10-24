@@ -5,6 +5,22 @@ an alien skin. Written after an inventory of every route, every component and
 `globals.css` (October 2026). Nothing here is applied yet; it is the order of
 work and the rules to hold each change against.
 
+## 0. Status (25 October 2026)
+
+Phases 1 to 4 are applied, one commit each, plus the toy-page buttons from
+phase 5. What this plan still owes:
+
+- The rebuilt `/coding` page has only been seen in its error state locally
+  (the GitHub token does not work on this machine). Check the success
+  layout on the deployed site.
+- Komorebi's identity bullet is still generic; it needs the product or client
+  name. The Extraordinary entry is still a placeholder.
+- The console-mode post lost its em dashes by hand, sentence by sentence,
+  and nothing else was touched. Read it once; it is your writing.
+- `/management` keeps its separate look. The nav's layout spring stays.
+- The warp now runs 520ms out and 650ms back. If it still feels long, the
+  numbers are the two constants at the top of `ufo-abduction.tsx`.
+
 ## 1. Brief
 
 **Subject.** A personal site for a software engineer who insists he is a person
