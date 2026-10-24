@@ -5,7 +5,7 @@ import { RepeatRing } from '@/components/ui/repeat-ring'
 import { api } from '@/trpc/server'
 import { decodeTrackParam, encodeTrackParam } from '@/lib/lastfm'
 import { calculateFrequency, getStreakInfo } from '@/lib/streak'
-import { FiArrowLeft, FiArrowUpRight, FiHeadphones, FiHeart, FiClock, FiDisc, FiStar } from 'react-icons/fi'
+import { FiArrowLeft, FiHeadphones, FiHeart, FiDisc, FiStar } from 'react-icons/fi'
 import { SiLastdotfm } from 'react-icons/si'
 import { FaSpotify, FaYoutube, FaApple } from 'react-icons/fa'
 import Image from 'next/image'
@@ -92,15 +92,26 @@ export default async function TrackPage({ params }: Props) {
 
     // Calculate streak
     const nowPlayingFrequency = lastFmData ? calculateFrequency(track, lastFmData.recentlyPlayed) : 1
-    const { subtitle, rawColor, borderGradient, shadowStyle } = getStreakInfo(
-        nowPlayingFrequency,
-        isNowPlaying,
-        'large'
-    )
+    const { subtitle, borderGradient, shadowStyle } = getStreakInfo(nowPlayingFrequency, isNowPlaying, 'large')
     const onStreak = isNowPlaying && nowPlayingFrequency >= 3
+
+    const stats = [
+        track.duration != null && track.duration > 0 ? `${formatDuration(track.duration)} long` : null,
+        track.userPlaycount != null && track.userPlaycount > 0
+            ? `scrobbled ${formatNumber(track.userPlaycount)} times`
+            : null
+    ].filter((s): s is string => s !== null)
 
     // Build search query for streaming links
     const searchQuery = encodeURIComponent(`${track.artist} ${track.name}`)
+
+    const linkRow =
+        'flex items-center gap-2.5 py-2.5 border-b border-dashed border-border/40 last:border-b-0 mono-label text-muted-foreground/60 hover:text-accent transition-colors'
+    const leaves = (
+        <span className="ml-auto text-muted-foreground/40" aria-hidden="true">
+            ↗
+        </span>
+    )
 
     return (
         <PageTransition>
@@ -114,17 +125,7 @@ export default async function TrackPage({ params }: Props) {
                     back to listening
                 </Link>
 
-                {/* Full page ambient streak glow */}
-                {onStreak && (
-                    <div className="fixed inset-0 pointer-events-none z-[-5] overflow-hidden">
-                        <div
-                            className="absolute top-[-20vw] left-[50%] w-[120vw] h-[100vw] ml-[-60vw] rounded-full blur-[120px] opacity-25 mix-blend-screen"
-                            style={{ backgroundColor: rawColor }}
-                        />
-                    </div>
-                )}
-
-                {/* Album art — gets the spinning conic border once it's in heavy rotation, same as the now-playing card on /listening */}
+                {/* Album art, with the spinning ring once it's on repeat, same as the now-playing card on /listening */}
                 <RepeatRing
                     frequency={onStreak ? nowPlayingFrequency : 0}
                     gradient={borderGradient}
@@ -159,10 +160,10 @@ export default async function TrackPage({ params }: Props) {
                         {isNowPlaying && (
                             <div className="flex items-center gap-2">
                                 <EqualizerBars className="h-3 scale-75 origin-left" />
-                                <span className="text-xs font-medium text-accent uppercase tracking-wider">
+                                <span className="mono-label text-accent">
                                     {subtitle}
                                     {nowPlayingFrequency >= 3 && (
-                                        <span className="ml-1.5 opacity-80 lowercase">x{nowPlayingFrequency}</span>
+                                        <span className="ml-1.5 opacity-80">×{nowPlayingFrequency}</span>
                                     )}
                                 </span>
                             </div>
@@ -176,21 +177,10 @@ export default async function TrackPage({ params }: Props) {
                     </div>
                 )}
 
-                {/* Stats HUD */}
-                <div className="flex flex-wrap items-center gap-1.5 mb-12">
-                    {track.duration != null && track.duration > 0 && (
-                        <span className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm border border-border/50 font-mono-ui text-xs text-muted-foreground">
-                            <FiClock className="w-3.5 h-3.5 text-accent/70" />
-                            {formatDuration(track.duration)}
-                        </span>
-                    )}
-                    {track.userPlaycount != null && track.userPlaycount > 0 && (
-                        <span className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm border border-accent/30 font-mono-ui text-xs text-accent">
-                            <FiHeadphones className="w-3.5 h-3.5" />
-                            {formatNumber(track.userPlaycount)} scrobbles
-                        </span>
-                    )}
-                </div>
+                {/* The numbers, as a sentence */}
+                {stats.length > 0 && (
+                    <p className="font-mono-ui text-xs text-muted-foreground tabular-nums mb-12">{stats.join(', ')}.</p>
+                )}
 
                 {/* Review */}
                 {reviewData && (
@@ -225,7 +215,9 @@ export default async function TrackPage({ params }: Props) {
                                     className="font-medium hover:text-accent transition-colors"
                                 >
                                     {track.album}
-                                    <FiArrowUpRight className="inline w-3.5 h-3.5 ml-1 opacity-50" />
+                                    <span className="ml-1 text-muted-foreground/40" aria-hidden="true">
+                                        ↗
+                                    </span>
                                 </a>
                             ) : (
                                 <span className="font-medium">{track.album}</span>
@@ -238,16 +230,7 @@ export default async function TrackPage({ params }: Props) {
                 {track.tags.length > 0 && (
                     <section className="mb-10">
                         <div className="section-label mb-3">tags</div>
-                        <div className="flex flex-wrap gap-2">
-                            {track.tags.map((tag) => (
-                                <span
-                                    key={tag}
-                                    className="mono-label border border-border/50 text-muted-foreground/60 px-1.5 py-0.5 rounded-sm"
-                                >
-                                    {tag}
-                                </span>
-                            ))}
-                        </div>
+                        <p className="mono-label text-muted-foreground/60">{track.tags.join(' · ')}</p>
                     </section>
                 )}
 
@@ -263,57 +246,47 @@ export default async function TrackPage({ params }: Props) {
                 <section>
                     <div className="section-label mb-3">links</div>
                     <div>
-                        <a
-                            href={track.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group flex items-center gap-2.5 py-2.5 border-b border-dashed border-border/40 last:border-b-0 mono-label text-muted-foreground/60 hover:text-accent hover:border-accent/30 transition-colors"
-                        >
+                        <a href={track.url} target="_blank" rel="noopener noreferrer" className={linkRow}>
                             <SiLastdotfm className="w-3.5 h-3.5 shrink-0" />
                             view on last.fm
-                            <FiArrowUpRight className="w-3 h-3 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                            {leaves}
                         </a>
                         {track.albumUrl && (
-                            <a
-                                href={track.albumUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="group flex items-center gap-2.5 py-2.5 border-b border-dashed border-border/40 last:border-b-0 mono-label text-muted-foreground/60 hover:text-accent hover:border-accent/30 transition-colors"
-                            >
+                            <a href={track.albumUrl} target="_blank" rel="noopener noreferrer" className={linkRow}>
                                 <FiDisc className="w-3.5 h-3.5 shrink-0" />
                                 view album on last.fm
-                                <FiArrowUpRight className="w-3 h-3 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                                {leaves}
                             </a>
                         )}
                         <a
                             href={`https://open.spotify.com/search/${searchQuery}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group flex items-center gap-2.5 py-2.5 border-b border-dashed border-border/40 last:border-b-0 mono-label text-muted-foreground/60 hover:text-accent hover:border-accent/30 transition-colors"
+                            className={linkRow}
                         >
                             <FaSpotify className="w-3.5 h-3.5 shrink-0" />
                             search on spotify
-                            <FiArrowUpRight className="w-3 h-3 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                            {leaves}
                         </a>
                         <a
                             href={`https://music.youtube.com/search?q=${searchQuery}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group flex items-center gap-2.5 py-2.5 border-b border-dashed border-border/40 last:border-b-0 mono-label text-muted-foreground/60 hover:text-accent hover:border-accent/30 transition-colors"
+                            className={linkRow}
                         >
                             <FaYoutube className="w-3.5 h-3.5 shrink-0" />
                             search on youtube music
-                            <FiArrowUpRight className="w-3 h-3 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                            {leaves}
                         </a>
                         <a
                             href={`https://music.apple.com/us/search?term=${searchQuery}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group flex items-center gap-2.5 py-2.5 border-b border-dashed border-border/40 last:border-b-0 mono-label text-muted-foreground/60 hover:text-accent hover:border-accent/30 transition-colors"
+                            className={linkRow}
                         >
                             <FaApple className="w-3.5 h-3.5 shrink-0" />
                             search on apple music
-                            <FiArrowUpRight className="w-3 h-3 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                            {leaves}
                         </a>
                     </div>
                 </section>

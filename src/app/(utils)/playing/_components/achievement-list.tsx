@@ -54,13 +54,13 @@ export function AchievementList({ unlocked, total, pct, status, items }: Achieve
                     {items.map((achievement, i) => (
                         <div
                             key={achievement.id}
-                            className="group flex items-center gap-3 py-2.5 border-b border-dashed border-border/40 last:border-b-0 hover:border-accent/30 transition-colors"
+                            className="flex items-center gap-3 py-2.5 border-b border-dashed border-border/40 last:border-b-0"
                         >
-                            <span className="mono-label text-muted-foreground/30 w-5 text-right shrink-0 group-hover:text-accent/60 transition-colors">
-                                {String(i + 1).padStart(2, '0')}
+                            <span className="mono-label text-muted-foreground/30 w-5 text-right shrink-0 tabular-nums">
+                                {i + 1}
                             </span>
                             {achievement.icon ? (
-                                <div className="relative w-9 h-9 rounded overflow-hidden flex-shrink-0 ring-1 ring-border/50 group-hover:ring-accent/40 transition-shadow">
+                                <div className="relative w-9 h-9 rounded overflow-hidden flex-shrink-0 ring-1 ring-border/50">
                                     <Image
                                         src={achievement.icon}
                                         alt={achievement.name}
@@ -75,9 +75,7 @@ export function AchievementList({ unlocked, total, pct, status, items }: Achieve
                                 </div>
                             )}
                             <div className="flex-1 min-w-0">
-                                <p className="text-sm font-medium truncate group-hover:text-accent transition-colors">
-                                    {achievement.name}
-                                </p>
+                                <p className="text-sm font-medium truncate">{achievement.name}</p>
                                 {achievement.description && (
                                     <p className="text-xs text-muted-foreground/60 truncate">
                                         {achievement.description}

@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { PageTransition } from '@/components/ui/page-transition'
 import { api } from '@/trpc/server'
 import { resolveSlug, formatHours } from '@/lib/steam'
-import { FiArrowLeft, FiArrowUpRight, FiStar, FiClock, FiAward } from 'react-icons/fi'
+import { FiArrowLeft, FiStar } from 'react-icons/fi'
 import { AchievementList } from '../_components/achievement-list'
 import { FaSteam, FaXbox } from 'react-icons/fa'
 import Image from 'next/image'
@@ -100,6 +100,12 @@ export default async function GamePage({ params }: Props) {
 
     const completion = completionPct !== null ? completionStatus(completionPct) : null
 
+    const stats = [
+        isSteam ? `${formatHours(game.playtime_forever_hours)} total` : null,
+        recentHours > 0 ? `${formatHours(recentHours)} in the past 2 weeks` : null,
+        completionPct !== null ? `${completionPct}% of achievements unlocked` : null
+    ].filter((s): s is string => s !== null)
+
     // Recent unlocks, ranked by unlock time — same treatment as the flight recorder on /listening
     const unlockedSteam = achievements
         ? achievements.achievements
@@ -130,30 +136,19 @@ export default async function GamePage({ params }: Props) {
                     back to playing
                 </Link>
 
-                {/* Header image, corner-bracket framed like the gear page's setup shot */}
+                {/* Header art. The title sits on it, so a scrim keeps it readable over any cover */}
                 {game.image ? (
-                    <div className="relative mb-4 p-2 rounded border border-border/50 bg-muted/10 shadow-sm">
-                        <span className="absolute left-0 top-0 w-3 h-3 border-l border-t border-accent/40 -translate-x-px -translate-y-px" />
-                        <span className="absolute right-0 top-0 w-3 h-3 border-r border-t border-accent/40 translate-x-px -translate-y-px" />
-                        <span className="absolute left-0 bottom-0 w-3 h-3 border-l border-b border-accent/40 -translate-x-px translate-y-px" />
-                        <span className="absolute right-0 bottom-0 w-3 h-3 border-r border-b border-accent/40 translate-x-px translate-y-px" />
-
-                        <div className="relative w-full aspect-[460/215] rounded-md overflow-hidden ring-1 ring-border/40 shadow-inner group">
-                            <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/10 to-transparent z-10" />
-                            <Image
-                                src={game.image}
-                                alt={game.name}
-                                fill
-                                className="object-cover group-hover:scale-105 transition-transform duration-700"
-                                priority
-                            />
+                    <div className="relative mb-4">
+                        <div className="relative w-full aspect-[460/215] rounded overflow-hidden ring-1 ring-border/40">
+                            <div className="absolute inset-0 bg-gradient-to-t from-background/85 via-background/10 to-transparent z-10" />
+                            <Image src={game.image} alt={game.name} fill className="object-cover" priority />
                             <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 z-20 flex items-end justify-between gap-4">
                                 {/* Clamped: on a phone the banner is ~150px tall, and a long name would
                                     otherwise wrap up past the top edge and get cut off */}
                                 <h1 className="text-display text-xl sm:text-2xl md:text-4xl drop-shadow-md min-w-0 line-clamp-2">
                                     {game.name}
                                 </h1>
-                                <span className="w-8 h-8 rounded-sm bg-background/80 backdrop-blur-md border border-border/50 flex items-center justify-center shrink-0">
+                                <span className="w-8 h-8 rounded-sm bg-background/90 border border-border/50 flex items-center justify-center shrink-0">
                                     {isSteam ? (
                                         <FaSteam className="w-3.5 h-3.5 text-foreground/80" />
                                     ) : (
@@ -180,28 +175,9 @@ export default async function GamePage({ params }: Props) {
                     // {isSteam ? 'steam' : 'xbox'} library entry
                 </p>
 
-                {/* Stats HUD */}
-                {(isSteam || recentHours > 0 || completionPct !== null) && (
-                    <div className="flex flex-wrap items-center gap-1.5 mb-12">
-                        {isSteam && (
-                            <span className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm border border-border/50 font-mono-ui text-xs text-muted-foreground">
-                                <FiClock className="w-3.5 h-3.5 text-accent/70" />
-                                {formatHours(game.playtime_forever_hours)} total
-                            </span>
-                        )}
-                        {recentHours > 0 && (
-                            <span className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm border border-accent/30 font-mono-ui text-xs text-accent">
-                                <FiClock className="w-3.5 h-3.5" />
-                                {formatHours(recentHours)} past 2 weeks
-                            </span>
-                        )}
-                        {completionPct !== null && (
-                            <span className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm border border-border/50 font-mono-ui text-xs text-muted-foreground">
-                                <FiAward className="w-3.5 h-3.5 text-accent/70" />
-                                {completionPct}% complete
-                            </span>
-                        )}
-                    </div>
+                {/* The numbers, as a sentence */}
+                {stats.length > 0 && (
+                    <p className="font-mono-ui text-xs text-muted-foreground tabular-nums mb-12">{stats.join('. ')}.</p>
                 )}
 
                 {/* Review */}
@@ -266,7 +242,9 @@ export default async function GamePage({ params }: Props) {
                     >
                         <FaSteam className="w-3.5 h-3.5" />
                         view on steam
-                        <FiArrowUpRight className="w-3 h-3" />
+                        <span className="text-muted-foreground/40" aria-hidden="true">
+                            ↗
+                        </span>
                     </a>
                 )}
             </div>

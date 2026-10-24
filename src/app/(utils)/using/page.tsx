@@ -1,6 +1,5 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
-import { FiArrowUpRight } from 'react-icons/fi'
 import { PageTransition } from '@/components/ui/page-transition'
 import { DecodeText } from '@/components/ui/decode-text'
 
@@ -267,22 +266,13 @@ function GearRow({ item }: { item: GearItem }) {
               ? 'text-destructive border-destructive/30'
               : 'text-muted-foreground border-border/50'
 
-    const isDaily = item.badge === 'Daily Driver' || item.badge === 'Primary'
-
     // Inactive rows dim their contents, not the row itself. Row opacity would also
     // dim the hover preview, which should always show the item at full strength
-    const rowClassName = `group relative flex items-baseline gap-2 md:gap-3 py-3 border-b border-dashed border-border/40 transition-colors duration-150 ${item.inactive ? '[&>*:not(.gear-preview)]:opacity-35' : 'hover:border-accent/30'}`
+    const rowClassName = `group relative flex items-baseline gap-2 md:gap-3 py-3 border-b border-dashed border-border/40 ${item.inactive ? '[&>*:not(.gear-preview)]:opacity-35' : ''}`
 
     const content = (
         <>
-            {/* Powered-on marker for the kit actually in use */}
-            {isDaily && (
-                <span
-                    className="absolute -left-3 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-accent [box-shadow:var(--glow-accent)] hidden md:block"
-                    aria-hidden="true"
-                />
-            )}
-            {/* Type, name and specs — stacked on mobile, one line from md up */}
+            {/* Type, name and specs: stacked on mobile, one line from md up */}
             <div className="flex min-w-0 flex-1 flex-col gap-1 md:flex-row md:items-baseline md:gap-3">
                 {/* Type label */}
                 <span className="mono-label text-muted-foreground/55 md:text-muted-foreground/40 shrink-0 md:w-28 md:text-right">
@@ -315,9 +305,11 @@ function GearRow({ item }: { item: GearItem }) {
                 </span>
             )}
 
-            {/* External link cue — no hover on touch, so keep it visible below md */}
+            {/* Leaves the site */}
             {item.href && (
-                <FiArrowUpRight className="w-3 h-3 text-muted-foreground/30 group-hover:text-accent shrink-0 opacity-60 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-150" />
+                <span className="mono-label text-muted-foreground/40 shrink-0" aria-hidden="true">
+                    ↗
+                </span>
             )}
 
             {/* Hover image preview */}

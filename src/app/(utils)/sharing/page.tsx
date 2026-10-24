@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { list } from '@vercel/blob'
 import { PageTransition } from '@/components/ui/page-transition'
+import { DecodeText } from '@/components/ui/decode-text'
 
 import { constructMetadata } from '@/lib/metadata'
 
@@ -51,7 +52,7 @@ function FileRow({ file }: { file: SharedFile }) {
     const href = `/sharing/${file.name.split('/').map(encodeURIComponent).join('/')}`
 
     return (
-        <div className="group flex items-baseline gap-3 py-3 border-b border-dashed border-border/40 transition-colors duration-150 hover:border-accent/30">
+        <div className="group flex items-baseline gap-3 py-3 border-b border-dashed border-border/40">
             <span className="mono-label text-muted-foreground/40 w-16 shrink-0 text-right hidden sm:block">
                 {file.ext}
             </span>
@@ -71,7 +72,7 @@ function FileRow({ file }: { file: SharedFile }) {
 
             <a
                 href={`${href}?download=1`}
-                className="mono-label text-muted-foreground/60 hover:text-accent border border-border/50 hover:border-accent/30 px-1.5 py-0.5 rounded-sm shrink-0 transition-colors duration-150"
+                className="mono-label text-muted-foreground/60 hover:text-accent border border-border/50 px-1.5 py-0.5 rounded-sm shrink-0 transition-colors duration-150"
             >
                 get ↓
             </a>
@@ -88,7 +89,9 @@ export default async function Sharing() {
                 {/* Header */}
                 <div className="mb-16">
                     <p className="mono-label text-muted-foreground/50 mb-4">// file drop</p>
-                    <h1 className="text-display text-5xl md:text-6xl mb-3">Sharing</h1>
+                    <h1 className="text-display text-5xl md:text-6xl mb-3">
+                        <DecodeText text="Sharing" onMount />
+                    </h1>
                     <p className="text-[0.9rem] text-muted-foreground">
                         Files hosted straight off the site. Click to open, or grab a copy.
                     </p>
@@ -101,10 +104,7 @@ export default async function Sharing() {
                         ))}
                     </div>
                 ) : (
-                    <p className="mono-label text-muted-foreground">
-                        nothing shared right now
-                        <span className="animate-blink text-accent ml-1">█</span>
-                    </p>
+                    <p className="mono-label text-muted-foreground/40">// nothing shared right now</p>
                 )}
             </div>
         </PageTransition>

@@ -489,17 +489,15 @@ export function Descent() {
                         <div className="flex flex-wrap items-center justify-center gap-2">
                             <button
                                 onClick={dive}
-                                className="group mono-label inline-flex items-center gap-2 rounded-sm border border-accent/40 px-4 py-2.5 text-accent transition-all duration-200 hover:bg-accent/10 hover:shadow-[0_0_12px_hsl(var(--accent)/0.2)]"
+                                className="mono-label inline-flex items-center rounded-sm border border-accent/40 px-4 py-2.5 text-accent transition-colors duration-200 hover:bg-accent/10"
                             >
                                 again?
-                                <span className="opacity-50 transition-opacity group-hover:opacity-100">↓</span>
                             </button>
                             <Link
                                 href="/"
-                                className="group mono-label inline-flex items-center gap-2 rounded-sm border border-border/60 px-4 py-2.5 text-muted-foreground transition-all duration-200 hover:border-border hover:text-foreground"
+                                className="mono-label inline-flex items-center rounded-sm border border-border/60 px-4 py-2.5 text-muted-foreground transition-colors duration-200 hover:text-foreground"
                             >
                                 dry land
-                                <span className="opacity-50 transition-opacity group-hover:opacity-100">↑</span>
                             </Link>
                         </div>
                     </div>

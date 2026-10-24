@@ -35,17 +35,17 @@ export default function Human() {
                     className="text-[0.9rem] text-muted-foreground max-w-sm animate-fade-in-up opacity-0 stagger-3"
                     style={{ animationFillMode: 'forwards' }}
                 >
-                    i like uh, games and stuff, just like you and every other human. I also breathe the normal air and everything.
+                    i like uh, games and stuff, just like you and every other human. I also breathe the normal air and
+                    everything.
                 </p>
 
                 {/* The doubt */}
                 <Link
                     href="/definitely-human"
-                    className="group mono-label inline-flex items-center gap-2 px-4 py-2.5 border border-border/60 rounded-sm text-muted-foreground hover:text-accent hover:border-accent/50 hover:bg-accent/5 hover:shadow-[0_0_12px_hsl(var(--accent)/0.15)] transition-all duration-200 animate-fade-in-up opacity-0 stagger-4"
+                    className="mono-label inline-flex items-center px-4 py-2.5 border border-border/60 rounded-sm text-muted-foreground hover:text-accent transition-colors duration-200 animate-fade-in-up opacity-0 stagger-4"
                     style={{ animationFillMode: 'forwards' }}
                 >
                     trust me!
-                    <span className="text-accent/40 group-hover:text-accent transition-colors">→</span>
                 </Link>
             </div>
         </CenteredPage>

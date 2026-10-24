@@ -23,20 +23,20 @@ export function getStreakInfo(
     size: 'small' | 'large' = 'small',
     minimal: boolean = false
 ) {
-    let subtitle = isNowPlaying ? 'Now playing' : 'Recently played'
+    let subtitle = isNowPlaying ? 'now playing' : 'recently played'
 
     if (isNowPlaying) {
         if (minimal) {
-            subtitle = 'Now Listening'
+            subtitle = 'now playing'
         } else {
-            if (nowPlayingFrequency >= 50) subtitle = "I'm in love"
-            else if (nowPlayingFrequency >= 25) subtitle = 'Addicted'
-            else if (nowPlayingFrequency >= 20) subtitle = 'Unhealthy'
-            else if (nowPlayingFrequency >= 15) subtitle = 'Obsessed'
-            else if (nowPlayingFrequency >= 10) subtitle = "Can't Get Enough"
-            else if (nowPlayingFrequency >= 7) subtitle = 'Heavy Rotation'
-            else if (nowPlayingFrequency >= 5) subtitle = 'Running It Back'
-            else if (nowPlayingFrequency >= 3) subtitle = 'On Repeat'
+            if (nowPlayingFrequency >= 50) subtitle = "i'm in love"
+            else if (nowPlayingFrequency >= 25) subtitle = 'addicted'
+            else if (nowPlayingFrequency >= 20) subtitle = 'unhealthy'
+            else if (nowPlayingFrequency >= 15) subtitle = 'obsessed'
+            else if (nowPlayingFrequency >= 10) subtitle = "can't get enough"
+            else if (nowPlayingFrequency >= 7) subtitle = 'heavy rotation'
+            else if (nowPlayingFrequency >= 5) subtitle = 'running it back'
+            else if (nowPlayingFrequency >= 3) subtitle = 'on repeat'
         }
     }
 

@@ -30,11 +30,11 @@ export function TopSignals({ signals }: { signals: ArtistSignal[] }) {
                     <div
                         key={signal.artist}
                         role="listitem"
-                        className="group grid grid-cols-[auto_1fr_auto] items-center gap-3 py-2.5"
+                        className="grid grid-cols-[auto_1fr_auto] items-center gap-3 py-2.5"
                     >
                         {/* Artist image */}
                         {signal.image ? (
-                            <div className="relative w-8 h-8 rounded-full overflow-hidden shrink-0 border border-border/40 group-hover:border-accent/40 transition-colors duration-200">
+                            <div className="relative w-8 h-8 rounded-full overflow-hidden shrink-0 border border-border/40">
                                 <Image
                                     src={signal.image}
                                     alt={signal.artist}
@@ -44,27 +44,17 @@ export function TopSignals({ signals }: { signals: ArtistSignal[] }) {
                                 />
                             </div>
                         ) : (
-                            <div className="w-8 h-8 rounded-full bg-muted/50 border border-border/30 flex items-center justify-center shrink-0 group-hover:border-accent/30 transition-colors duration-200">
+                            <div className="w-8 h-8 rounded-full bg-muted/50 border border-border/30 flex items-center justify-center shrink-0">
                                 <FiHeadphones className="w-3.5 h-3.5 text-muted-foreground/40" />
                             </div>
                         )}
 
                         {/* Artist + signal bar */}
                         <div className="min-w-0">
-                            <p
-                                className={cn(
-                                    'text-sm font-medium truncate mb-1 transition-[color,text-shadow] duration-200',
-                                    'group-hover:text-accent group-hover:[text-shadow:var(--glow-accent)]'
-                                )}
-                            >
-                                {signal.artist}
-                            </p>
+                            <p className="text-sm font-medium truncate mb-1">{signal.artist}</p>
                             <div className="h-1 bg-muted/60 overflow-hidden rounded-full">
                                 <motion.div
-                                    className={cn(
-                                        'h-full rounded-full transition-[background-color,box-shadow] duration-200',
-                                        'bg-accent/50 group-hover:bg-accent group-hover:shadow-[0_0_10px_hsl(var(--accent)/0.7)]'
-                                    )}
+                                    className="h-full rounded-full bg-accent/60"
                                     initial={{ scaleX: 0 }}
                                     whileInView={{ scaleX: 1 }}
                                     viewport={{ once: true, margin: '-40px' }}
@@ -75,12 +65,7 @@ export function TopSignals({ signals }: { signals: ArtistSignal[] }) {
                         </div>
 
                         {/* Readout: play count */}
-                        <span
-                            className={cn(
-                                'mono-label text-right transition-colors duration-200',
-                                'text-muted-foreground/50 group-hover:text-accent'
-                            )}
-                        >
+                        <span className="mono-label text-right text-muted-foreground/50 tabular-nums">
                             ×{signal.count}
                         </span>
                     </div>

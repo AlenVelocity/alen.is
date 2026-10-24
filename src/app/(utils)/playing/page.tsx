@@ -2,9 +2,8 @@ import { Metadata } from 'next'
 import { PageTransition } from '@/components/ui/page-transition'
 import { DecodeText } from '@/components/ui/decode-text'
 import { api } from '@/trpc/server'
-import { FiClock } from 'react-icons/fi'
 import { GiGamepad } from 'react-icons/gi'
-import { FaSteam, FaXbox } from 'react-icons/fa'
+import { FaXbox } from 'react-icons/fa'
 import Image from 'next/image'
 import Link from 'next/link'
 import { slugify, fetchXboxGames, fetchGameDetails, formatHours } from '@/lib/steam'
@@ -24,9 +23,9 @@ const steamHeader = (appid: number) => `https://cdn.cloudflare.steamstatic.com/s
 const steamPortrait = (appid: number) =>
     `https://cdn.cloudflare.steamstatic.com/steam/apps/${appid}/library_600x900.jpg`
 
-/** Shared tile chrome: a library capsule that lifts and glows when hovered */
+/** Shared tile chrome: a library capsule whose ring turns green when hovered */
 const tileClassName =
-    'relative aspect-[2/3] rounded overflow-hidden ring-1 ring-border/50 bg-muted/30 shadow-sm transition-[transform,box-shadow] duration-300 group-hover:-translate-y-1 group-hover:ring-accent/50 group-hover:shadow-[0_0_24px_hsl(var(--accent)/0.2)] scanline-hover'
+    'relative aspect-[2/3] rounded overflow-hidden ring-1 ring-border/50 bg-muted/30 transition-shadow duration-200 group-hover:ring-accent/60 scanline-hover'
 
 /** Playful severity readout for the unplayed-games ratio. The bar takes the same tone as the label. */
 function backlogStatus(ratio: number) {
@@ -64,7 +63,6 @@ export default async function Playing() {
         ? Math.round(ownedGames.games.reduce((sum, g) => sum + g.playtime_forever_hours, 0))
         : 0
     const totalDays = Math.round(totalHours / 24)
-    const yearPct = ((totalHours / (24 * 365)) * 100).toFixed(1)
 
     // Get recently played appids to exclude from Steam library list
     const recentAppIds = new Set(recentGames?.map((g) => g.appid) || [])
@@ -95,31 +93,14 @@ export default async function Playing() {
                     <DecodeText text="Playing" onMount />
                 </h1>
 
-                {/* Stats HUD */}
+                {/* The numbers, as a sentence */}
                 {(ownedGames || xboxGames.length > 0) && (
-                    <div className="flex flex-wrap items-center gap-1.5 mb-10">
-                        {ownedGames && (
-                            <span className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm border border-border/50 font-mono-ui text-xs text-muted-foreground tabular-nums">
-                                <FaSteam className="w-3.5 h-3.5 text-accent/70" />
-                                {ownedGames.total_games} games
-                            </span>
-                        )}
-                        {xboxGames.length > 0 && (
-                            <span className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm border border-border/50 font-mono-ui text-xs text-muted-foreground tabular-nums">
-                                <FaXbox className="w-3.5 h-3.5 text-accent/70" />
-                                {xboxGames.length} games
-                            </span>
-                        )}
-                        {totalHours > 0 && (
-                            <span
-                                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-sm border border-border/50 font-mono-ui text-xs text-muted-foreground tabular-nums"
-                                title={`that's ${yearPct}% of a whole year`}
-                            >
-                                <FiClock className="w-3.5 h-3.5 text-accent/70" />
-                                {totalHours.toLocaleString()} hrs logged ≈ {totalDays} days
-                            </span>
-                        )}
-                    </div>
+                    <p className="font-mono-ui text-xs text-muted-foreground tabular-nums mb-10">
+                        {ownedGames && `${ownedGames.total_games} games on Steam`}
+                        {ownedGames && xboxGames.length > 0 && ', '}
+                        {xboxGames.length > 0 && `${xboxGames.length} on Xbox`}
+                        {totalHours > 0 && `. ${totalHours.toLocaleString()} hours, which is ${totalDays} days.`}
+                    </p>
                 )}
 
                 {/* About */}
@@ -181,7 +162,7 @@ export default async function Playing() {
                 {recentGames && recentGames.length > 0 && (
                     <section className="mb-14">
                         <div className="flex items-baseline justify-between gap-4 mb-4">
-                            <div className="section-label">active missions</div>
+                            <div className="section-label">recently played</div>
                             <span className="mono-label text-muted-foreground/40 shrink-0">steam · past 2 weeks</span>
                         </div>
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
@@ -218,7 +199,7 @@ export default async function Playing() {
                 {libraryGames.length > 0 && (
                     <section className="mb-14">
                         <div className="flex items-baseline justify-between gap-4 mb-4">
-                            <div className="section-label">steam archive</div>
+                            <div className="section-label">steam library</div>
                             <span className="mono-label text-muted-foreground/40 shrink-0">ranked by hours</span>
                         </div>
                         <div className="grid grid-cols-3 sm:grid-cols-5 gap-2.5 sm:gap-3">
@@ -270,7 +251,7 @@ export default async function Playing() {
                 {xboxOnly.length > 0 && (
                     <section className="mb-12">
                         <div className="flex items-baseline justify-between gap-4 mb-4">
-                            <div className="section-label">xbox archive</div>
+                            <div className="section-label">xbox library</div>
                             <span className="mono-label text-muted-foreground/40 shrink-0">by last played</span>
                         </div>
                         <div>
@@ -278,28 +259,28 @@ export default async function Playing() {
                                 <Link
                                     key={game.titleId}
                                     href={`/playing/${slugify(game.name)}`}
-                                    className="group flex items-center gap-3 p-2.5 -mx-2.5 rounded hover:bg-muted/30 transition-colors"
+                                    className="group flex items-center gap-3 py-2.5 border-b border-dashed border-border/40 last:border-b-0"
                                 >
                                     {game.image ? (
-                                        <div className="relative w-10 h-10 rounded overflow-hidden flex-shrink-0 ring-1 ring-border/50 group-hover:ring-accent/30 transition-shadow">
+                                        <div className="relative w-10 h-10 rounded overflow-hidden flex-shrink-0 ring-1 ring-border/50">
                                             <Image
                                                 src={game.image}
                                                 alt={game.name}
                                                 fill
                                                 sizes="40px"
-                                                className="object-cover group-hover:scale-110 transition-transform duration-500"
+                                                className="object-cover"
                                             />
                                         </div>
                                     ) : (
-                                        <div className="w-10 h-10 rounded border border-border/50 bg-muted/30 flex items-center justify-center flex-shrink-0 group-hover:border-accent/30 transition-colors">
-                                            <FaXbox className="w-3.5 h-3.5 text-muted-foreground/50 group-hover:text-accent/70 transition-colors" />
+                                        <div className="w-10 h-10 rounded border border-border/50 bg-muted/30 flex items-center justify-center flex-shrink-0">
+                                            <FaXbox className="w-3.5 h-3.5 text-muted-foreground/50" />
                                         </div>
                                     )}
-                                    <p className="flex-1 min-w-0 text-sm font-medium truncate group-hover:text-accent group-hover:translate-x-0.5 transition-[color,transform] duration-300">
+                                    <p className="flex-1 min-w-0 text-sm font-medium truncate group-hover:text-accent transition-colors duration-200">
                                         {game.name}
                                     </p>
                                     {game.maxGamerscore > 0 && (
-                                        <span className="font-mono-ui text-xs tabular-nums text-muted-foreground/60 group-hover:text-foreground/80 transition-colors shrink-0">
+                                        <span className="font-mono-ui text-xs tabular-nums text-muted-foreground/60 shrink-0">
                                             {game.currentGamerscore}
                                             <span className="text-muted-foreground/30">/{game.maxGamerscore} G</span>
                                         </span>

@@ -1,8 +1,7 @@
 import { Metadata } from 'next'
 import { PageTransition } from '@/components/ui/page-transition'
+import { DecodeText } from '@/components/ui/decode-text'
 import { api } from '@/trpc/server'
-import { FiGithub, FiCode, FiGitCommit, FiGitPullRequest } from 'react-icons/fi'
-import { VscIssues } from 'react-icons/vsc'
 
 import { constructMetadata } from '@/lib/metadata'
 
@@ -35,7 +34,7 @@ function ContributionGraph({ days }: { days: ContributionDay[] }) {
                 day ? (
                     <div
                         key={day.date}
-                        className="aspect-square rounded-[2px] transition-shadow hover:ring-2 hover:ring-foreground/20"
+                        className="aspect-square rounded-[2px]"
                         style={{ backgroundColor: day.color }}
                         title={`${day.date}: ${day.contributionCount} contributions`}
                     />
@@ -69,18 +68,27 @@ function LanguageBar({ languages }: { languages: { name: string; color: string; 
                     />
                 ))}
             </div>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-x-4 gap-y-1.5">
                 {languages.slice(0, 6).map((lang) => (
-                    <div key={lang.name} className="flex items-center gap-1.5 text-sm">
-                        <span
-                            className="w-2.5 h-2.5 rounded-full"
-                            style={{ backgroundColor: lang.color || '#8b949e' }}
-                        />
+                    <div key={lang.name} className="flex items-center gap-1.5 font-mono-ui text-xs">
+                        <span className="w-2 h-2 rounded-full" style={{ backgroundColor: lang.color || '#8b949e' }} />
                         <span className="text-muted-foreground">{lang.name}</span>
-                        <span className="text-muted-foreground/50 text-xs">{lang.percentage}%</span>
+                        <span className="text-muted-foreground/50 tabular-nums">{lang.percentage}%</span>
                     </div>
                 ))}
             </div>
+        </div>
+    )
+}
+
+function Header({ children }: { children?: React.ReactNode }) {
+    return (
+        <div className="mb-12">
+            <p className="mono-label text-muted-foreground/50 mb-4">// commit history</p>
+            <h1 className="text-display text-5xl md:text-6xl mb-3">
+                <DecodeText text="Coding" onMount />
+            </h1>
+            {children}
         </div>
     )
 }
@@ -89,79 +97,55 @@ export default async function Coding() {
     let githubData
     try {
         githubData = await api.github.getStats()
-    } catch (error) {
+    } catch {
         return (
             <PageTransition>
-                <div className="container max-w-2xl py-12 md:py-20">
-                    <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-8">Coding</h1>
-                    <div className="text-center py-12">
-                        <FiGithub className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                        <p className="text-muted-foreground">GitHub stats unavailable. Check back later!</p>
-                    </div>
+                <div className="container max-w-2xl py-12 md:py-20 px-4">
+                    <Header>
+                        <p className="text-[0.9rem] text-muted-foreground">GitHub isn&apos;t answering right now.</p>
+                    </Header>
                 </div>
             </PageTransition>
         )
     }
 
+    const year = new Date().getFullYear()
+    const counts = [
+        `${githubData.commits.toLocaleString()} commits`,
+        `${githubData.pullRequests.toLocaleString()} pull requests`,
+        `${githubData.issues.toLocaleString()} issues`
+    ].join(', ')
+
     return (
         <PageTransition>
-            <div className="container max-w-2xl py-12 md:py-20">
-                {/* Header */}
-                <div className="flex items-center justify-between mb-10">
-                    <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Coding</h1>
+            <div className="container max-w-2xl py-12 md:py-20 px-4">
+                <Header>
+                    <p className="text-[0.9rem] text-muted-foreground mb-4">
+                        {githubData.totalContributions.toLocaleString()} contributions in {year}. {counts}.
+                        {githubData.currentStreak > 0 && ` ${githubData.currentStreak} days in a row at the moment.`}
+                    </p>
                     <a
                         href={`https://github.com/${githubData.username}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border hover:bg-muted transition-colors text-sm"
+                        className="inline-flex items-center gap-1.5 font-mono-ui text-xs text-muted-foreground hover:text-accent transition-colors"
                     >
-                        <FiGithub className="w-4 h-4" />
-                        <span>@{githubData.username}</span>
+                        github.com/{githubData.username}
+                        <span className="text-muted-foreground/40" aria-hidden="true">
+                            ↗
+                        </span>
                     </a>
-                </div>
+                </Header>
 
-                {/* Contribution Graph */}
-                <section className="mb-10">
-                    <div className="flex items-baseline justify-between mb-3">
-                        <span className="text-3xl font-bold">{githubData.totalContributions.toLocaleString()}</span>
-                        <span className="text-sm text-muted-foreground">contributions this year</span>
-                    </div>
+                {/* Contribution graph: the one visual on the page */}
+                <section className="mb-12">
+                    <div className="section-label mb-4">the last year</div>
                     <ContributionGraph days={githubData.contributionDays} />
-                </section>
-
-                {/* Stats Row */}
-                <section className="mb-10">
-                    <div className="flex items-center justify-between py-4 border-y border-border">
-                        <div className="flex items-center gap-6">
-                            <div className="flex items-center gap-2">
-                                <FiGitCommit className="w-4 h-4 text-muted-foreground" />
-                                <span className="font-semibold">{githubData.commits.toLocaleString()}</span>
-                                <span className="text-sm text-muted-foreground hidden sm:inline">commits</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <FiGitPullRequest className="w-4 h-4 text-muted-foreground" />
-                                <span className="font-semibold">{githubData.pullRequests.toLocaleString()}</span>
-                                <span className="text-sm text-muted-foreground hidden sm:inline">PRs</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <VscIssues className="w-4 h-4 text-muted-foreground" />
-                                <span className="font-semibold">{githubData.issues.toLocaleString()}</span>
-                                <span className="text-sm text-muted-foreground hidden sm:inline">issues</span>
-                            </div>
-                        </div>
-                        {githubData.currentStreak > 0 && (
-                            <div className="text-sm text-muted-foreground">
-                                🔥 {githubData.currentStreak} day streak
-                            </div>
-                        )}
-                    </div>
                 </section>
 
                 {/* Languages */}
                 <section>
-                    <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider border-l-2 border-accent pl-3 mb-4">
-                        Languages
-                    </h2>
+                    <div className="section-label mb-4">languages</div>
                     <LanguageBar languages={githubData.topLanguages} />
                 </section>
             </div>

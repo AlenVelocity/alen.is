@@ -1,16 +1,16 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { format } from 'date-fns'
-import { FiArrowUpRight } from 'react-icons/fi'
 import { PageTransition } from '@/components/ui/page-transition'
+import { DecodeText } from '@/components/ui/decode-text'
 import { getAllPosts } from '@/lib/blog'
 
 export const metadata: Metadata = {
     title: 'Writing',
-    description: 'Thoughts, rants, and half-finished ideas',
+    description: 'Posts about things I built, and what went wrong on the way.',
     openGraph: {
         title: 'Alen is Writing',
-        description: 'Thoughts, rants, and half-finished ideas',
+        description: 'Posts about things I built, and what went wrong on the way.',
         images: [{ url: '/api/og?is=writing', width: 1200, height: 630, alt: 'alen is writing' }]
     },
     alternates: { canonical: '/writing' }
@@ -25,8 +25,12 @@ export default function Writing() {
                 {/* Header */}
                 <div className="mb-16">
                     <p className="mono-label text-muted-foreground/50 mb-4">// things i wrote down</p>
-                    <h1 className="text-display text-5xl md:text-6xl mb-3">Writing</h1>
-                    <p className="text-[0.9rem] text-muted-foreground">Thoughts and stuff.</p>
+                    <h1 className="text-display text-5xl md:text-6xl mb-3">
+                        <DecodeText text="Writing" onMount />
+                    </h1>
+                    <p className="text-[0.9rem] text-muted-foreground">
+                        Written down so I don&apos;t have to figure it out twice.
+                    </p>
                 </div>
 
                 {/* Posts */}
@@ -36,9 +40,9 @@ export default function Writing() {
                             <Link
                                 key={post.slug}
                                 href={`/writing/about/${post.slug}`}
-                                className="group flex items-start gap-4 py-5 border-b border-dashed border-border/50 hover:border-accent/40 transition-colors duration-200 scanline-hover"
+                                className="group flex items-start gap-4 py-5 border-b border-dashed border-border/50"
                             >
-                                <span className="mono-label text-muted-foreground/30 w-14 shrink-0 pt-1 group-hover:text-accent/60 transition-colors">
+                                <span className="mono-label text-muted-foreground/30 w-14 shrink-0 pt-1 tabular-nums">
                                     {String(i + 1).padStart(3, '0')}
                                 </span>
                                 <div className="flex-1 min-w-0">
@@ -60,7 +64,6 @@ export default function Writing() {
                                         )}
                                     </div>
                                 </div>
-                                <FiArrowUpRight className="w-4 h-4 text-muted-foreground/25 group-hover:text-accent shrink-0 transition-[color,transform] duration-200 mt-1.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                             </Link>
                         ))}
                     </div>

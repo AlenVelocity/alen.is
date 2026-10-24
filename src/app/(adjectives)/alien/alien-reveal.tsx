@@ -152,24 +152,22 @@ export function AlienReveal() {
                     {inOrbit ? (
                         <button
                             onClick={() => setInOrbit(false)}
-                            className="mono-label inline-flex items-center gap-2 px-4 py-2.5 border border-accent/40 rounded-sm text-accent hover:bg-accent/10 hover:shadow-[0_0_12px_hsl(var(--accent)/0.2)] transition-all duration-200"
+                            className="mono-label inline-flex items-center px-4 py-2.5 border border-accent/40 rounded-sm text-accent hover:bg-accent/10 transition-colors duration-200"
                         >
                             put me back
-                            <span className="opacity-60">↓</span>
                         </button>
                     ) : (
                         returned && (
                             <div className="flex flex-wrap items-center justify-center gap-2 animate-fade-in-up">
                                 <button
                                     onClick={goAgain}
-                                    className="group mono-label inline-flex items-center gap-2 px-4 py-2.5 border border-accent/40 rounded-sm text-accent hover:bg-accent/10 hover:shadow-[0_0_12px_hsl(var(--accent)/0.2)] transition-all duration-200"
+                                    className="mono-label inline-flex items-center px-4 py-2.5 border border-accent/40 rounded-sm text-accent hover:bg-accent/10 transition-colors duration-200"
                                 >
                                     again?
-                                    <span className="opacity-50 group-hover:opacity-100 transition-opacity">↑</span>
                                 </button>
                                 <Link
                                     href="/human"
-                                    className="mono-label inline-flex items-center gap-2 px-4 py-2.5 border border-border/60 rounded-sm text-muted-foreground hover:text-foreground hover:border-border transition-all duration-200"
+                                    className="mono-label inline-flex items-center px-4 py-2.5 border border-border/60 rounded-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
                                 >
                                     i saw nothing
                                 </Link>

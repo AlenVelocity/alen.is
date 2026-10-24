@@ -8,7 +8,7 @@ import { Signature } from '@/components/ui/signature'
 import { GlitchPersonWord } from '@/components/ui/glitch-word'
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
-import { FiMail, FiCalendar, FiArrowUpRight } from 'react-icons/fi'
+import { FiMail, FiCalendar } from 'react-icons/fi'
 import { FaLinkedin, FaGithub, FaWhatsapp } from 'react-icons/fa'
 import { runGetPersonalInfo, runGetSocialLinks } from '@/lib/cms-db'
 import { getAllPosts } from '@/lib/blog'
@@ -124,25 +124,25 @@ export default async function Home() {
                         {parseTextWithLinks(personalInfo.hero_description)}
                     </p>
 
-                    {/* Social links */}
+                    {/* Social links: plain text, a static mark on the ones that leave the site */}
                     <div
-                        className="flex flex-wrap gap-1 animate-fade-in-up opacity-0 stagger-4"
+                        className="flex flex-wrap gap-x-5 gap-y-2 animate-fade-in-up opacity-0 stagger-4"
                         style={{ animationFillMode: 'forwards' }}
                     >
-                        {heroSocialLinks.map((link, i) => {
+                        {heroSocialLinks.map((link) => {
                             const IconComponent = IconMap[link.icon as keyof typeof IconMap]
+                            const external = link.url.startsWith('http')
                             return (
                                 <a
                                     key={link.id}
                                     href={link.url}
-                                    target={link.url.startsWith('http') ? '_blank' : undefined}
-                                    className="group inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono-ui text-muted-foreground border border-border/40 hover:border-accent/50 hover:text-accent hover:bg-accent/5 hover:shadow-[0_0_12px_hsl(var(--accent)/0.15)] transition-all duration-200 rounded-sm"
+                                    target={external ? '_blank' : undefined}
+                                    rel={external ? 'noopener noreferrer' : undefined}
+                                    className="inline-flex items-center gap-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-200"
                                 >
                                     {IconComponent && <IconComponent className="w-3 h-3 shrink-0" />}
-                                    <span className="hidden sm:inline">{link.name}</span>
-                                    <span className="text-accent/40 group-hover:text-accent group-hover:glow-text transition-colors duration-200 ml-0.5">
-                                        →
-                                    </span>
+                                    {link.name}
+                                    {external && <span className="text-muted-foreground/40">↗</span>}
                                 </a>
                             )
                         })}
@@ -178,7 +178,7 @@ export default async function Home() {
                                 href="/writing"
                                 className="mono-label text-muted-foreground/50 hover:text-accent transition-colors"
                             >
-                                all posts →
+                                all posts
                             </Link>
                         </div>
                         <div>
@@ -186,7 +186,7 @@ export default async function Home() {
                                 <Link
                                     key={post.slug}
                                     href={`/writing/about/${post.slug}`}
-                                    className="group flex items-center gap-4 py-3.5 border-b border-dashed border-border/50 last:border-b-0 hover:border-accent/40 transition-all duration-200"
+                                    className="group flex items-center gap-4 py-3.5 border-b border-dashed border-border/50 last:border-b-0"
                                 >
                                     <div className="flex-1 min-w-0">
                                         <p className="font-mono-ui text-sm font-medium truncate group-hover:text-accent transition-colors">
@@ -198,7 +198,6 @@ export default async function Home() {
                                             {post.readingMinutes} min read
                                         </p>
                                     </div>
-                                    <FiArrowUpRight className="w-3.5 h-3.5 text-muted-foreground/25 group-hover:text-accent shrink-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                                 </Link>
                             ))}
                         </div>

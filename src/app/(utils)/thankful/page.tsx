@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import { PageTransition } from '@/components/ui/page-transition'
+import { DecodeText } from '@/components/ui/decode-text'
 import { constructMetadata } from '@/lib/metadata'
 
 export const metadata: Metadata = constructMetadata({
@@ -75,7 +76,9 @@ export default function Thankful() {
                 {/* Header */}
                 <div className="mb-16">
                     <p className="mono-label text-muted-foreground/50 mb-4">// keeping track</p>
-                    <h1 className="text-display text-5xl md:text-6xl mb-3">Thankful</h1>
+                    <h1 className="text-display text-5xl md:text-6xl mb-3">
+                        <DecodeText text="Thankful" onMount />
+                    </h1>
                     <p className="text-[0.9rem] text-muted-foreground">
                         Things and people I&apos;m glad about. Adding to this as I go.
                     </p>
@@ -96,10 +99,7 @@ export default function Thankful() {
                         ))}
                     </div>
                 ) : (
-                    <p className="mono-label text-muted-foreground/40">
-                        // still counting
-                        <span className="animate-blink text-accent ml-1">▌</span>
-                    </p>
+                    <p className="mono-label text-muted-foreground/40">// still counting</p>
                 )}
             </div>
         </PageTransition>

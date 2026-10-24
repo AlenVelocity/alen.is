@@ -1,5 +1,5 @@
 import { api } from '@/trpc/server'
-import { FiHeadphones, FiExternalLink } from 'react-icons/fi'
+import { FiHeadphones } from 'react-icons/fi'
 import Link from 'next/link'
 import Image from 'next/image'
 import { calculateFrequency, getStreakInfo } from '@/lib/streak'
@@ -52,12 +52,9 @@ export async function CurrentlyListening() {
             <RepeatRing frequency={nowPlayingFrequency} gradient={borderGradient} shadow={shadowStyle}>
                 <Link
                     href="/listening"
-                    className={`group relative z-10 flex items-center gap-4 p-4 transition-all duration-300 scanline-hover
-                        ${
-                            nowPlayingFrequency >= 3
-                                ? 'bg-card border-l-2 border-accent hover:bg-muted/60'
-                                : 'border-l-2 border-border bg-card hover:border-accent/60 hover:bg-muted/40'
-                        }`}
+                    className={`group relative z-10 flex items-center gap-4 p-4 bg-card border-l-2 ${
+                        nowPlayingFrequency >= 3 ? 'border-accent' : 'border-border'
+                    }`}
                 >
                     {/* Album art or fallback */}
                     {currentTrack.image ? (
@@ -90,18 +87,13 @@ export async function CurrentlyListening() {
                         </div>
 
                         {/* Track name */}
-                        <p
-                            className="text-display text-sm font-display truncate group-hover:text-accent group-hover:animate-glitch-shift transition-colors duration-200"
-                            style={{ fontFamily: 'var(--font-syne), sans-serif' }}
-                        >
+                        <p className="text-display text-sm truncate group-hover:text-accent transition-colors duration-200">
                             {currentTrack.name}
                         </p>
 
                         {/* Artist */}
                         <p className="mono-label text-muted-foreground truncate mt-0.5">{currentTrack.artist}</p>
                     </div>
-
-                    <FiExternalLink className="w-3.5 h-3.5 text-muted-foreground/30 group-hover:text-accent shrink-0 transition-colors duration-200" />
                 </Link>
             </RepeatRing>
         </StreamFade>

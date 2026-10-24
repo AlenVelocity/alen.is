@@ -18,7 +18,7 @@ export function DiscordCopy({ username, className, children }: DiscordCopyProps)
             .writeText(username)
             .then(() => {
                 setCopied(true)
-                toast.success('Discord username copied to clipboard!')
+                toast.success('copied')
 
                 // Reset copied state after a delay
                 setTimeout(() => {
@@ -27,7 +27,7 @@ export function DiscordCopy({ username, className, children }: DiscordCopyProps)
             })
             .catch((err) => {
                 console.error('Failed to copy: ', err)
-                toast.error('Failed to copy to clipboard')
+                toast.error("couldn't copy, the username is notalen")
             })
     }
 

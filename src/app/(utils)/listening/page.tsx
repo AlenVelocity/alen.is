@@ -4,7 +4,8 @@ import { PageTransition } from '@/components/ui/page-transition'
 import { StreamFade } from '@/components/ui/stream-fade'
 import { RepeatRing } from '@/components/ui/repeat-ring'
 import { api } from '@/trpc/server'
-import { FiHeadphones, FiArrowUpRight } from 'react-icons/fi'
+import { FiHeadphones } from 'react-icons/fi'
+import { DecodeText } from '@/components/ui/decode-text'
 import Image from 'next/image'
 import Link from 'next/link'
 import { LinkButton } from '@/components/ui/link-button'
@@ -39,7 +40,7 @@ export default function Listening() {
                 {/* Header — static, renders instantly */}
                 <p className="mono-label text-muted-foreground/50 mb-4">// what's on loop</p>
                 <h1 className="text-display text-4xl md:text-5xl mb-10 flex items-center gap-4">
-                    Listening
+                    <DecodeText text="Listening" onMount />
                     <EqualizerBars />
                 </h1>
 
@@ -104,10 +105,7 @@ export default function Listening() {
 function NowPlayingSkeleton() {
     return (
         <section className="mb-14" aria-hidden="true">
-            <div className="section-label mb-4">
-                now playing
-                <span className="text-accent/30 animate-blink ml-1">▮</span>
-            </div>
+            <div className="section-label mb-4">now playing</div>
             <div className="border-b border-dashed border-border/30 py-4 flex items-center gap-4">
                 <SkeletonTile className="w-14 h-14 rounded" />
                 <div className="flex-1 min-w-0 space-y-2">
@@ -123,10 +121,7 @@ function NowPlayingSkeleton() {
 function TopSignalsSkeleton() {
     return (
         <section className="mb-14" aria-hidden="true">
-            <div className="section-label mb-4">
-                most played
-                <span className="text-accent/30 animate-blink ml-1">▮</span>
-            </div>
+            <div className="section-label mb-4">most played</div>
             <div>
                 {[...Array(6)].map((_, i) => (
                     <div key={i} className="grid grid-cols-[auto_1fr_auto] items-center gap-3 py-2.5">
@@ -154,10 +149,7 @@ function TopSignalsSkeleton() {
 function FlightRecorderSkeleton() {
     return (
         <section aria-hidden="true">
-            <div className="section-label mb-4">
-                flight recorder
-                <span className="text-accent/30 animate-blink ml-1">▮</span>
-            </div>
+            <div className="section-label mb-4">recent scrobbles</div>
             <SignalRowsSkeleton rows={6} />
         </section>
     )
@@ -184,15 +176,11 @@ async function NowPlayingSection() {
                     frequency={nowPlayingFrequency}
                     gradient={borderGradient}
                     shadow={shadowStyle}
-                    className={
-                        nowPlayingFrequency >= 3
-                            ? ''
-                            : 'border-b border-dashed border-border hover:border-accent/50 transition-colors'
-                    }
+                    className={nowPlayingFrequency >= 3 ? '' : 'border-b border-dashed border-border'}
                 >
                     <Link
                         href={`/listening/to/${encodeTrackParam(lastFmData.nowPlaying.artist)}/${encodeTrackParam(lastFmData.nowPlaying.name)}`}
-                        className={`group relative z-10 flex items-center gap-4 transition-colors ${nowPlayingFrequency >= 3 ? 'bg-card p-4 rounded hover:bg-muted/80' : 'py-4'}`}
+                        className={`group relative z-10 flex items-center gap-4 ${nowPlayingFrequency >= 3 ? 'bg-card p-4 rounded' : 'py-4'}`}
                     >
                         {lastFmData.nowPlaying.image ? (
                             <div className="relative w-14 h-14 rounded overflow-hidden shrink-0">
@@ -211,10 +199,10 @@ async function NowPlayingSection() {
                         <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-0.5">
                                 <EqualizerBars className="h-3 scale-75 origin-left" />
-                                <span className="text-xs font-medium text-accent uppercase tracking-wider">
+                                <span className="mono-label text-accent">
                                     {nowPlayingSubtitle}
                                     {nowPlayingFrequency >= 3 && (
-                                        <span className="ml-1.5 opacity-80 lowercase">x{nowPlayingFrequency}</span>
+                                        <span className="ml-1.5 opacity-80">×{nowPlayingFrequency}</span>
                                     )}
                                 </span>
                             </div>
@@ -228,7 +216,6 @@ async function NowPlayingSection() {
                                 )}
                             </p>
                         </div>
-                        <FiArrowUpRight className="w-4 h-4 text-muted-foreground/40 group-hover:text-accent transition-colors shrink-0" />
                     </Link>
                 </RepeatRing>
             </section>
@@ -300,10 +287,7 @@ async function FlightRecorderSection() {
         if (lastFmData.nowPlaying) return null
         return (
             <StreamFade>
-                <div className="text-center py-12">
-                    <FiHeadphones className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                    <p className="text-muted-foreground">No recently played tracks found.</p>
-                </div>
+                <p className="mono-label text-muted-foreground/40">// nothing scrobbled lately</p>
             </StreamFade>
         )
     }
@@ -311,16 +295,16 @@ async function FlightRecorderSection() {
     return (
         <StreamFade>
             <section>
-                <div className="section-label mb-4">flight recorder</div>
+                <div className="section-label mb-4">recent scrobbles</div>
                 <div>
                     {displayTracks.map((track, index) => (
                         <Link
                             key={`${track.name}-${index}`}
                             href={`/listening/to/${encodeTrackParam(track.artist)}/${encodeTrackParam(track.name)}`}
-                            className="group flex items-center gap-3 py-2.5 border-b border-dashed border-border/50 last:border-b-0 hover:border-accent/30 transition-colors"
+                            className="group flex items-center gap-3 py-2.5 border-b border-dashed border-border/50 last:border-b-0"
                         >
-                            <span className="mono-label text-muted-foreground/30 w-5 text-right shrink-0 group-hover:text-accent/60 transition-colors">
-                                {String(index + 1).padStart(2, '0')}
+                            <span className="mono-label text-muted-foreground/30 w-5 text-right shrink-0 tabular-nums">
+                                {index + 1}
                             </span>
                             {track.image ? (
                                 <div className="relative w-9 h-9 rounded overflow-hidden flex-shrink-0">
@@ -337,9 +321,7 @@ async function FlightRecorderSection() {
                                         {track.name}
                                     </p>
                                     {track.count > 1 && (
-                                        <span className="shrink-0 mono-label px-1.5 py-0.5 border border-accent/25 text-accent/70 rounded-sm">
-                                            ×{track.count}
-                                        </span>
+                                        <span className="shrink-0 mono-label text-accent/70">×{track.count}</span>
                                     )}
                                 </div>
                                 <p className="text-xs text-muted-foreground truncate">{track.artist}</p>

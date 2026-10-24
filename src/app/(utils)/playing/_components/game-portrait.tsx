@@ -30,7 +30,7 @@ export function GamePortrait({ portraitSrc, headerSrc, name, sizes }: GamePortra
                 alt={name}
                 fill
                 sizes={sizes}
-                className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                className="object-cover"
                 onError={() => setStage('header')}
             />
         )

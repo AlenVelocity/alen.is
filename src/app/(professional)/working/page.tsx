@@ -104,7 +104,7 @@ export default async function Experience() {
                     <a
                         href="/Alen_Resume.pdf"
                         download
-                        className="group flex items-center gap-2 px-3 py-2 text-xs font-mono-ui border border-border/60 hover:border-accent/40 hover:text-accent hover:bg-accent/5 transition-colors duration-200 rounded-sm shrink-0 mt-2"
+                        className="flex items-center gap-2 px-3 py-2 text-xs font-mono-ui border border-border/60 hover:text-accent transition-colors duration-200 rounded-sm shrink-0 mt-2"
                     >
                         <FiDownload className="w-3 h-3" />
                         <span>resume</span>
@@ -122,14 +122,14 @@ export default async function Experience() {
                             const Icon = badge.icon
                             const duration = formatDuration(experience.period)
                             return (
-                                <div key={experience.id} className="relative pl-8 group/exp">
+                                <div key={experience.id} className="relative pl-8">
                                     {/* Timeline dot. The live one pulses like a beacon */}
                                     <div
                                         className={cn(
-                                            'absolute left-0 top-1.5 w-2 h-2 -translate-x-[3.5px] border transition-colors duration-300',
+                                            'absolute left-0 top-1.5 w-2 h-2 -translate-x-[3.5px] border',
                                             experience.current
                                                 ? 'bg-accent border-accent ring-4 ring-accent/15 animate-pulse-glow'
-                                                : 'bg-background border-border group-hover/exp:border-accent/60'
+                                                : 'bg-background border-border'
                                         )}
                                     />
 
@@ -181,17 +181,14 @@ export default async function Experience() {
                                             </span>
                                         </div>
 
-                                        {/* Description bullets */}
+                                        {/* What the role was */}
                                         <ul className="space-y-2">
                                             {experience.description.map((item, i) => (
                                                 <li
                                                     key={i}
-                                                    className="flex items-start gap-3 text-[0.875rem] text-muted-foreground leading-relaxed"
+                                                    className="text-[0.875rem] text-muted-foreground leading-relaxed break-words"
                                                 >
-                                                    <span className="text-accent/50 mt-[0.2em] shrink-0 font-mono-ui">
-                                                        —
-                                                    </span>
-                                                    <span className="min-w-0 break-words">{item}</span>
+                                                    {item}
                                                 </li>
                                             ))}
                                         </ul>

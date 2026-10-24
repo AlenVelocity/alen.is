@@ -15,11 +15,8 @@ export default function Lifting() {
     return (
         <CenteredPage>
             <GiWeightLiftingUp className="w-16 h-16 text-muted-foreground mb-6" />
-
-            <h2 className="text-xl font-semibold mb-2">Work in Progress</h2>
-
             <p className="text-muted-foreground text-center max-w-md">
-                I swear I'm actually working out. The API just doesn't believe me yet.
+                I swear I&apos;m actually working out. The API just doesn&apos;t believe me yet.
             </p>
         </CenteredPage>
     )
