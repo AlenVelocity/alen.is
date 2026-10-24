@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 
-const ALIEN_CHARS = '▓░▒█▄▀■□▪▫◆◇○●◉⌖⌗⌘⌀⊗⊕⋯⋮⊞⊟⊠⊡'
+import { randomGlyph } from '@/lib/glyphs'
+
 const TARGET = 'alien'
 const SOURCE = 'person'
 
@@ -36,7 +37,7 @@ export function GlitchPersonWord({ className }: GlitchWordProps) {
                         return toWord[i] ?? ''
                     }
                     // Still scrambling this char
-                    return ALIEN_CHARS[Math.floor(Math.random() * ALIEN_CHARS.length)]
+                    return randomGlyph()
                 })
                 .join('')
 

@@ -166,7 +166,6 @@ function DepthReadout({ depth, zone }: { depth: number; zone: number }) {
             <span>
                 depth <span className="text-accent tabular-nums">{Math.round(depth)} m</span>
             </span>
-            <span className="text-border">·</span>
         </div>
     )
 }

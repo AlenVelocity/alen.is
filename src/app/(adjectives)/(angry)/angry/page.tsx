@@ -20,7 +20,7 @@ export default function Angry() {
                 alt="pusheen not talking"
                 width={200}
                 height={200}
-                className="rounded-2xl hover:scale-105 transition-transform duration-300"
+                className="rounded hover:scale-105 transition-transform duration-300"
             />
             <p className="text-lg text-muted-foreground">Don't talk to me ( ｡ •`ᴖ´• ｡)</p>
         </CenteredPage>

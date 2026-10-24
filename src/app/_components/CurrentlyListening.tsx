@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { calculateFrequency, getStreakInfo } from '@/lib/streak'
 import { SkeletonBar, SkeletonTile } from '@/components/ui/signal-skeleton'
 import { StreamFade } from '@/components/ui/stream-fade'
+import { RepeatRing } from '@/components/ui/repeat-ring'
 
 /**
  * Placeholder rendered by the home page's Suspense boundary while the
@@ -44,25 +45,11 @@ export async function CurrentlyListening() {
     const currentTrack = lastFmData.nowPlaying || lastFmData.recentlyPlayed[0]
     const isNowPlaying = !!lastFmData.nowPlaying
     const nowPlayingFrequency = calculateFrequency(currentTrack, lastFmData.recentlyPlayed)
-    const { subtitle } = getStreakInfo(nowPlayingFrequency, isNowPlaying, 'small', true)
-
-    const themeGradient =
-        'conic-gradient(from 0deg, transparent 0%, transparent 40%, hsl(var(--accent)) 60%, hsl(var(--foreground)) 80%, transparent 100%)'
+    const { subtitle, borderGradient, shadowStyle } = getStreakInfo(nowPlayingFrequency, isNowPlaying, 'small', true)
 
     return (
         <StreamFade>
-            <div className={`relative ${nowPlayingFrequency >= 3 ? 'p-[1px] overflow-hidden' : ''}`}>
-                {nowPlayingFrequency >= 3 && (
-                    <div className="absolute inset-0 overflow-hidden z-[-1]">
-                        <div
-                            className="absolute left-[50%] top-[50%] w-[800px] h-[800px] ml-[-400px] mt-[-400px] origin-center opacity-30"
-                            style={{
-                                backgroundImage: themeGradient,
-                                animation: 'spin-slow 5s linear infinite'
-                            }}
-                        />
-                    </div>
-                )}
+            <RepeatRing frequency={nowPlayingFrequency} gradient={borderGradient} shadow={shadowStyle}>
                 <Link
                     href="/listening"
                     className={`group relative z-10 flex items-center gap-4 p-4 transition-all duration-300 scanline-hover
@@ -116,7 +103,7 @@ export async function CurrentlyListening() {
 
                     <FiExternalLink className="w-3.5 h-3.5 text-muted-foreground/30 group-hover:text-accent shrink-0 transition-colors duration-200" />
                 </Link>
-            </div>
+            </RepeatRing>
         </StreamFade>
     )
 }

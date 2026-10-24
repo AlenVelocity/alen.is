@@ -16,7 +16,7 @@ export default function MeetingPage() {
                 theme: theme === 'dark' ? 'dark' : 'light',
                 hideEventTypeDetails: false,
                 layout: 'month_view',
-                styles: { branding: { brandColor: '#10b981' } }
+                styles: { branding: { brandColor: theme === 'dark' ? '#00f583' : '#0da55e' } }
             })
         })()
     }, [theme])
@@ -31,12 +31,12 @@ export default function MeetingPage() {
                         width: '100%',
                         // Exactly fills the viewport under the navbar (py-6 = 3rem) instead of overshooting it
                         height: 'calc(100dvh - var(--navbar-height) - 3rem)',
-                        borderRadius: '1rem'
+                        borderRadius: '2px'
                     }}
                     config={{
                         layout: 'month_view',
                         theme: theme === 'dark' ? 'dark' : 'light',
-                        styles: { branding: '#10b981' }
+                        styles: { branding: theme === 'dark' ? '#00f583' : '#0da55e' }
                     }}
                 />
             </div>

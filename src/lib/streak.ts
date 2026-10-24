@@ -40,7 +40,8 @@ export function getStreakInfo(
         }
     }
 
-    let borderGradient = 'conic-gradient(from 0deg, #ff0000, #ff8000, #ffff00, #00ff00, #0000ff, #8000ff, #ff0000)'
+    let borderGradient =
+        'conic-gradient(from 0deg, transparent 0%, transparent 40%, hsl(var(--accent)) 60%, hsl(var(--foreground)) 80%, transparent 100%)'
     let shadowStyle = undefined
     let rawColor = 'rgba(0, 255, 0, 0.1)' // For custom radial background usages
 

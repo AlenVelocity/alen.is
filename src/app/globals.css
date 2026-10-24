@@ -246,32 +246,6 @@ html {
     }
 }
 
-/* Float */
-@keyframes float {
-    0%,
-    100% {
-        transform: translateY(0px);
-    }
-
-    50% {
-        transform: translateY(-5px);
-    }
-}
-
-/* Pulse dot */
-@keyframes pulseDot {
-    0%,
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-
-    50% {
-        transform: scale(1.6);
-        opacity: 0.5;
-    }
-}
-
 /* Overshoot underline */
 @keyframes underlineShoot {
     0% {
@@ -309,84 +283,8 @@ html {
 /* ── ALIEN GLITCH KEYFRAMES ─────────────────────────────────────────── */
 
 /* Chromatic aberration — periodic, autonomous */
-@keyframes chromatic-hero {
-    0%,
-    88%,
-    100% {
-        text-shadow: none;
-        transform: none;
-    }
-
-    89% {
-        text-shadow:
-            4px 0 hsl(0 100% 65% / 0.7),
-            -4px 0 hsl(195 100% 65% / 0.7);
-        transform: skewX(-1deg);
-    }
-
-    90% {
-        text-shadow:
-            -3px 0 hsl(0 100% 65% / 0.6),
-            3px 0 hsl(195 100% 65% / 0.6);
-        transform: skewX(1deg);
-    }
-
-    91% {
-        text-shadow: none;
-        transform: none;
-    }
-
-    92% {
-        text-shadow:
-            5px 0 hsl(0 100% 65% / 0.5),
-            -5px 0 hsl(195 100% 65% / 0.5),
-            0 0 20px hsl(152 100% 50% / 0.3);
-        transform: skewX(-0.5deg) translateX(2px);
-    }
-
-    93% {
-        text-shadow: none;
-        transform: none;
-    }
-}
 
 /* Slice glitch — cuts element into pieces */
-@keyframes slice-glitch {
-    0%,
-    82%,
-    100% {
-        clip-path: inset(0 0 0 0);
-        transform: translate(0);
-        opacity: 1;
-    }
-
-    83% {
-        clip-path: inset(15% 0 55% 0);
-        transform: translate(-6px, 1px);
-    }
-
-    84% {
-        clip-path: inset(55% 0 10% 0);
-        transform: translate(6px, -1px);
-    }
-
-    85% {
-        clip-path: inset(0 0 0 0);
-        transform: translate(0);
-    }
-
-    86% {
-        clip-path: inset(30% 0 40% 0);
-        transform: translate(4px, 2px);
-        opacity: 0.8;
-    }
-
-    87% {
-        clip-path: inset(0 0 0 0);
-        transform: translate(0);
-        opacity: 1;
-    }
-}
 
 /* Flicker — rapid blink */
 @keyframes flicker {
@@ -413,25 +311,6 @@ html {
 }
 
 /* Scan sweep — horizontal line flying down the page */
-@keyframes scanSweep {
-    0% {
-        transform: translateY(-100vh);
-        opacity: 0.8;
-    }
-
-    10% {
-        opacity: 1;
-    }
-
-    90% {
-        opacity: 1;
-    }
-
-    100% {
-        transform: translateY(100vh);
-        opacity: 0;
-    }
-}
 
 /* Glitch shift — general subtle shift */
 @keyframes glitch-shift {
@@ -489,19 +368,6 @@ html {
     display: none;
 }
 
-/* Character reveal */
-@keyframes charReveal {
-    from {
-        opacity: 0;
-        transform: translateY(0.4em);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
 /* ═══════════════════════════════════════════════════════════════════════
    ANIMATION CLASSES
    ═══════════════════════════════════════════════════════════════════════ */
@@ -513,28 +379,12 @@ html {
     animation: pageIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.animate-float {
-    animation: float 3.5s ease-in-out infinite;
-}
-
-.animate-spin-slow {
-    animation: spin-slow 4s linear infinite;
-}
-
 .animate-blink {
     animation: blink 1s step-end infinite;
 }
 
-.animate-pulse-dot {
-    animation: pulseDot 1.5s ease-in-out infinite;
-}
-
 .animate-pulse-glow {
     animation: pulseGlow 2s ease-in-out infinite;
-}
-
-.animate-flicker {
-    animation: flicker 4s linear infinite;
 }
 
 .animate-glitch-shift {
@@ -542,11 +392,6 @@ html {
 }
 
 /* Hero heading: chromatic + slice on a slow loop */
-.animate-hero-glitch {
-    animation:
-        chromatic-hero 9s ease-in-out infinite,
-        slice-glitch 11s ease-in-out infinite;
-}
 
 /* Stagger delays */
 .stagger-1 {
@@ -660,17 +505,6 @@ body::after {
 }
 
 /* ─── Scan line overlay ──────────────────────────────────────────────── */
-.scan-line-el {
-    position: fixed;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, hsl(var(--accent)), transparent);
-    box-shadow: 0 0 8px 1px hsl(var(--accent) / 0.5);
-    pointer-events: none;
-    z-index: 100;
-    animation: scanSweep 8s linear infinite;
-}
 
 /* ─── Scanlines on hover ─────────────────────────────────────────────── */
 .scanline-hover {
@@ -733,12 +567,6 @@ body::after {
     text-shadow: var(--glow-accent-strong);
 }
 
-/* Glow border */
-.glow-border {
-    border-color: hsl(var(--accent) / 0.4) !important;
-    box-shadow: var(--glow-accent) !important;
-}
-
 /* Alien hover link */
 .link-alien {
     position: relative;
@@ -767,11 +595,6 @@ body::after {
     animation: underlineShoot 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-/* Standard underline hover */
-.link-hover {
-    @apply relative after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 after:bg-accent after:transition-all after:duration-300 hover:after:w-full;
-}
-
 /* Paper shadow */
 .paper-shadow {
     box-shadow:
@@ -783,19 +606,6 @@ body::after {
     box-shadow:
         0 1px 3px rgba(0, 0, 0, 0.4),
         0 4px 16px rgba(0, 0, 0, 0.3);
-}
-
-/* Nav shadow */
-.sharp-shadow {
-    box-shadow:
-        0 0 0 1px hsl(var(--accent) / 0.15),
-        var(--glow-accent);
-}
-
-.dark .sharp-shadow {
-    box-shadow:
-        0 0 0 1px hsl(var(--accent) / 0.3),
-        var(--glow-accent-strong);
 }
 
 /* Hover lift */
@@ -1788,20 +1598,6 @@ body.ufo-return main .animate-page-in {
     }
 }
 
-.glyph-shimmer {
-    animation: glyphShimmer 1.8s ease-in-out infinite;
-}
-
-@keyframes skeletonSweep {
-    from {
-        transform: translateX(-100%);
-    }
-
-    to {
-        transform: translateX(250%);
-    }
-}
-
 /* Streamed-in content tuning into focus — replaces the hard skeleton→content pop.
    Applied automatically by the StreamFade wrapper component. */
 @keyframes signalResolve {
@@ -1829,22 +1625,6 @@ body.ufo-return main .animate-page-in {
 }
 
 /* Legacy signal-scan sweep (kept for backward compat) */
-.signal-scan {
-    position: relative;
-    overflow: hidden;
-}
-
-.signal-scan::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    width: 40%;
-    background: linear-gradient(90deg, transparent, hsl(var(--accent) / 0.08), transparent);
-    animation: skeletonSweep 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    pointer-events: none;
-}
 
 /* ═══════════════════════════════════════════════════════════════════════
    ACCESSIBILITY & POLISH
@@ -1886,7 +1666,6 @@ body.ufo-return main .animate-page-in {
         animation: none !important;
     }
 
-    .scan-line-el,
     .cursor-blob {
         display: none !important;
     }
@@ -1894,5 +1673,16 @@ body.ufo-return main .animate-page-in {
     /* Restore the native cursor when the custom blob is disabled */
     body.custom-cursor * {
         cursor: auto !important;
+    }
+}
+
+/* Thin progress sweep used by the management search box */
+@keyframes shimmer {
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(400%);
     }
 }

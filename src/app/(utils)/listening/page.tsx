@@ -2,6 +2,7 @@ import { Suspense, cache } from 'react'
 import { Metadata } from 'next'
 import { PageTransition } from '@/components/ui/page-transition'
 import { StreamFade } from '@/components/ui/stream-fade'
+import { RepeatRing } from '@/components/ui/repeat-ring'
 import { api } from '@/trpc/server'
 import { FiHeadphones, FiArrowUpRight } from 'react-icons/fi'
 import Image from 'next/image'
@@ -85,7 +86,7 @@ export default function Listening() {
                     style={{ animationFillMode: 'forwards' }}
                 >
                     <div className="section-label mb-4">current playlist</div>
-                    <div className="flex justify-center rounded-xl overflow-hidden border border-border">
+                    <div className="flex justify-center rounded overflow-hidden border border-border">
                         <iframe
                             allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
                             frameBorder="0"
@@ -122,7 +123,7 @@ function NowPlayingSkeleton() {
                 <span className="text-accent/30 animate-blink ml-1">▮</span>
             </div>
             <div className="border-b border-dashed border-border/30 py-4 flex items-center gap-4">
-                <SkeletonTile className="w-14 h-14 rounded-lg" />
+                <SkeletonTile className="w-14 h-14 rounded" />
                 <div className="flex-1 min-w-0 space-y-2">
                     <SkeletonBar width="4rem" height="0.5rem" delay={0} />
                     <SkeletonBar width="55%" height="0.75rem" delay={0.1} />
@@ -193,33 +194,22 @@ async function NowPlayingSection() {
         <StreamFade>
             <section className="mb-14">
                 <div className="section-label mb-4">now playing</div>
-                <div
-                    className={`relative ${nowPlayingFrequency >= 3 ? 'p-[2px] rounded-xl overflow-visible' : 'border-b border-dashed border-border hover:border-accent/50 transition-colors'}`}
+                <RepeatRing
+                    frequency={nowPlayingFrequency}
+                    gradient={borderGradient}
+                    shadow={shadowStyle}
+                    className={
+                        nowPlayingFrequency >= 3
+                            ? ''
+                            : 'border-b border-dashed border-border hover:border-accent/50 transition-colors'
+                    }
                 >
-                    {nowPlayingFrequency >= 3 && (
-                        <>
-                            <div
-                                className="absolute inset-[2px] rounded-[10px] z-[-1]"
-                                style={{ boxShadow: shadowStyle }}
-                            />
-                            <div className="absolute inset-0 rounded-xl overflow-hidden z-[-2]">
-                                <div
-                                    className="absolute left-[50%] top-[50%] w-[1000px] h-[1000px] ml-[-500px] mt-[-500px] origin-center"
-                                    style={{
-                                        backgroundImage: borderGradient,
-                                        // Floor at 1.5s a turn — any faster and a long streak reads as a strobe
-                                        animation: `spin-slow ${Math.max(1.5, 4.5 - nowPlayingFrequency * 0.25)}s linear infinite`
-                                    }}
-                                />
-                            </div>
-                        </>
-                    )}
                     <Link
                         href={`/listening/to/${encodeTrackParam(lastFmData.nowPlaying.artist)}/${encodeTrackParam(lastFmData.nowPlaying.name)}`}
-                        className={`group relative z-10 flex items-center gap-4 transition-colors ${nowPlayingFrequency >= 3 ? 'bg-card p-4 rounded-[10px] hover:bg-muted/80' : 'py-4'}`}
+                        className={`group relative z-10 flex items-center gap-4 transition-colors ${nowPlayingFrequency >= 3 ? 'bg-card p-4 rounded hover:bg-muted/80' : 'py-4'}`}
                     >
                         {lastFmData.nowPlaying.image ? (
-                            <div className="relative w-14 h-14 rounded-lg overflow-hidden shrink-0">
+                            <div className="relative w-14 h-14 rounded overflow-hidden shrink-0">
                                 <Image
                                     src={lastFmData.nowPlaying.image}
                                     alt={`${lastFmData.nowPlaying.name} album art`}
@@ -228,7 +218,7 @@ async function NowPlayingSection() {
                                 />
                             </div>
                         ) : (
-                            <div className="w-14 h-14 rounded-lg bg-muted flex items-center justify-center shrink-0">
+                            <div className="w-14 h-14 rounded bg-muted flex items-center justify-center shrink-0">
                                 <FiHeadphones className="w-5 h-5 text-muted-foreground" />
                             </div>
                         )}
@@ -254,7 +244,7 @@ async function NowPlayingSection() {
                         </div>
                         <FiArrowUpRight className="w-4 h-4 text-muted-foreground/40 group-hover:text-accent transition-colors shrink-0" />
                     </Link>
-                </div>
+                </RepeatRing>
             </section>
         </StreamFade>
     )

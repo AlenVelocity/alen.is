@@ -20,7 +20,7 @@ export default function Thinking() {
                 alt="Thinking"
                 width={400}
                 height={400}
-                className="max-w-[250px] md:max-w-[400px] h-auto rounded-2xl"
+                className="max-w-[250px] md:max-w-[400px] h-auto rounded"
                 priority
             />
         </CenteredPage>

@@ -2,8 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import { useTheme } from 'next-themes'
-
-const ALIEN_GLYPHS = '▓░▒█▄▀■□▪▫◆◇○●◉⌖⌗⊗⊕⊞⊟⊠⊡⋯⋮∞∅∆∇⌀⌁⌂⌃⌄⌅⌆⌇⌈⌉⌊⌋⌌⌍⌎⌏⌐⌑⌒⌓⌔⌕⌖⌗⌘⌙⌚⌛⌜⌝⌞⌟01'
+import { randomGlyph } from '@/lib/glyphs'
 
 const COLS = 28
 const SPEED_MIN = 0.3
@@ -20,10 +19,6 @@ type Column = {
     opacity: number
     glyphs: string[]
     length: number
-}
-
-function randomGlyph() {
-    return ALIEN_GLYPHS[Math.floor(Math.random() * ALIEN_GLYPHS.length)]
 }
 
 export function AlienDataStream() {

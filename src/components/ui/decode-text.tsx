@@ -2,8 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { isMinimalMotion } from '@/lib/motion-pref'
+import { randomGlyph } from '@/lib/glyphs'
 
-const ALIEN_CHARS = '▓░▒█▄▀■□▪▫◆◇○●◉⌖⌗⌘⌀⊗⊕⋯⋮⊞⊟⊠⊡'
 const STEP_MS = 32
 
 interface DecodeTextProps {
@@ -44,7 +44,7 @@ export function DecodeText({ text, onMount = false, active = false, className }:
                     .map((char, i) => {
                         if (char === ' ') return ' '
                         if (progress > i / chars.length + 0.2) return char
-                        return ALIEN_CHARS[Math.floor(Math.random() * ALIEN_CHARS.length)]
+                        return randomGlyph()
                     })
                     .join('')
             )

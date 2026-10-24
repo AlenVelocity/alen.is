@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
-import { ArrowUpRight } from 'lucide-react'
+import { FiArrowUpRight } from 'react-icons/fi'
 import { PageTransition } from '@/components/ui/page-transition'
 import { DecodeText } from '@/components/ui/decode-text'
 
@@ -317,7 +317,7 @@ function GearRow({ item }: { item: GearItem }) {
 
             {/* External link cue — no hover on touch, so keep it visible below md */}
             {item.href && (
-                <ArrowUpRight className="w-3 h-3 text-muted-foreground/30 group-hover:text-accent shrink-0 opacity-60 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-150" />
+                <FiArrowUpRight className="w-3 h-3 text-muted-foreground/30 group-hover:text-accent shrink-0 opacity-60 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-150" />
             )}
 
             {/* Hover image preview */}
@@ -374,7 +374,7 @@ export default function Using() {
                 {/* My Setup */}
                 <div className="mb-12 animate-fade-in-up opacity-0 stagger-4" style={{ animationFillMode: 'forwards' }}>
                     <div className="section-label mb-3">my setup</div>
-                    <div className="relative p-2 rounded-lg border border-border/50 bg-muted/10 shadow-sm">
+                    <div className="relative p-2 rounded border border-border/50 bg-muted/10 shadow-sm">
                         {/* Corner brackets, matching the schematic feel of the rest of the page */}
                         <span className="absolute left-0 top-0 w-3 h-3 border-l border-t border-accent/40 -translate-x-px -translate-y-px" />
                         <span className="absolute right-0 top-0 w-3 h-3 border-r border-t border-accent/40 translate-x-px -translate-y-px" />

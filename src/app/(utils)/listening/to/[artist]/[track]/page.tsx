@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { PageTransition } from '@/components/ui/page-transition'
+import { RepeatRing } from '@/components/ui/repeat-ring'
 import { api } from '@/trpc/server'
 import { decodeTrackParam, encodeTrackParam } from '@/lib/lastfm'
 import { calculateFrequency, getStreakInfo } from '@/lib/streak'
@@ -124,31 +125,14 @@ export default async function TrackPage({ params }: Props) {
                 )}
 
                 {/* Album art — gets the spinning conic border once it's in heavy rotation, same as the now-playing card on /listening */}
-                <div
-                    className={`relative mb-8 w-full max-w-[300px] ${onStreak ? 'p-[2px] rounded-xl overflow-visible' : ''}`}
-                    style={{ rotate: '-0.5deg' }}
+                <RepeatRing
+                    frequency={onStreak ? nowPlayingFrequency : 0}
+                    gradient={borderGradient}
+                    shadow={shadowStyle}
+                    className="mb-8 w-full max-w-[300px]"
                 >
-                    {onStreak && (
-                        <>
-                            <div
-                                className="absolute inset-[2px] rounded-[10px] z-[-1]"
-                                style={{ boxShadow: shadowStyle }}
-                            />
-                            <div className="absolute inset-0 rounded-xl overflow-hidden z-[-2]">
-                                <div
-                                    className="absolute left-[50%] top-[50%] w-[1000px] h-[1000px] ml-[-500px] mt-[-500px] origin-center"
-                                    style={{
-                                        backgroundImage: borderGradient,
-                                        animation: `spin-slow ${Math.max(1.5, 4.5 - nowPlayingFrequency * 0.25)}s linear infinite`
-                                    }}
-                                />
-                            </div>
-                        </>
-                    )}
                     {track.image ? (
-                        <div
-                            className={`relative w-full aspect-square overflow-hidden shadow-xl ${onStreak ? 'rounded-[10px]' : 'rounded-lg'}`}
-                        >
+                        <div className="relative w-full aspect-square overflow-hidden shadow-xl rounded">
                             <Image
                                 src={track.image}
                                 alt={`${track.name} album art`}
@@ -158,13 +142,11 @@ export default async function TrackPage({ params }: Props) {
                             />
                         </div>
                     ) : (
-                        <div
-                            className={`w-full aspect-square bg-muted flex items-center justify-center shadow-xl ${onStreak ? 'rounded-[10px]' : 'rounded-lg'}`}
-                        >
+                        <div className="w-full aspect-square bg-muted flex items-center justify-center shadow-xl rounded">
                             <FiHeadphones className="w-12 h-12 text-muted-foreground/30" />
                         </div>
                     )}
-                </div>
+                </RepeatRing>
 
                 {/* Title + artist */}
                 <p className="mono-label text-muted-foreground/50 mb-4">// last.fm scrobble</p>
@@ -214,7 +196,7 @@ export default async function TrackPage({ params }: Props) {
                 {reviewData && (
                     <section className="mb-12">
                         <div className="section-label mb-3">alen&apos;s review</div>
-                        <div className="p-4 rounded-lg border border-dashed border-border/60 flex flex-col gap-2">
+                        <div className="p-4 rounded-sm border border-dashed border-border/60 flex flex-col gap-2">
                             {reviewData.rating && (
                                 <div className="flex items-center gap-1.5 text-accent font-mono-ui text-sm">
                                     <FiStar className="fill-current w-3.5 h-3.5" />
