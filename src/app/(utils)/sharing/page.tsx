@@ -4,6 +4,7 @@ import { PageTransition } from '@/components/ui/page-transition'
 import { DecodeText } from '@/components/ui/decode-text'
 
 import { constructMetadata } from '@/lib/metadata'
+import { EmptyState } from '@/components/ui/empty-state'
 
 export const metadata: Metadata = constructMetadata({
     title: 'Sharing',
@@ -104,7 +105,7 @@ export default async function Sharing() {
                         ))}
                     </div>
                 ) : (
-                    <p className="mono-label text-muted-foreground/40">// nothing shared right now</p>
+                    <EmptyState>nothing shared right now</EmptyState>
                 )}
             </div>
         </PageTransition>

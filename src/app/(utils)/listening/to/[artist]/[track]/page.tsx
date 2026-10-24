@@ -11,6 +11,7 @@ import { FaSpotify, FaYoutube, FaApple } from 'react-icons/fa'
 import Image from 'next/image'
 import Link from 'next/link'
 import { EqualizerBars } from '../../../_components/top-signals'
+import { BeamImage } from '@/components/ui/beam-image'
 
 // ─── Metadata ───────────────────────────────────────────────────────────────
 
@@ -134,10 +135,10 @@ export default async function TrackPage({ params }: Props) {
                 >
                     {track.image ? (
                         <div className="relative w-full aspect-square overflow-hidden shadow-xl rounded">
-                            <Image
+                            <BeamImage
                                 src={track.image}
                                 alt={`${track.name} album art`}
-                                fill
+                                sizes="300px"
                                 className="object-cover"
                                 priority
                             />

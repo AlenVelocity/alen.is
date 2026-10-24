@@ -11,6 +11,7 @@ import { CollapsibleSection } from '@/components/ui/collapsible-section'
 import { GamePortrait } from './_components/game-portrait'
 
 import { constructMetadata } from '@/lib/metadata'
+import { EmptyState } from '@/components/ui/empty-state'
 
 export const metadata: Metadata = constructMetadata({
     title: 'Playing',
@@ -292,12 +293,7 @@ export default async function Playing() {
                 )}
 
                 {/* Empty State */}
-                {!hasData && (
-                    <div className="text-center py-12">
-                        <GiGamepad className="w-12 h-12 text-muted-foreground/40 mx-auto mb-4" />
-                        <p className="mono-label text-muted-foreground/50">// no signal from the consoles</p>
-                    </div>
-                )}
+                {!hasData && <EmptyState>no signal from the consoles</EmptyState>}
             </div>
         </PageTransition>
     )

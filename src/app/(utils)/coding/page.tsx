@@ -4,6 +4,7 @@ import { DecodeText } from '@/components/ui/decode-text'
 import { api } from '@/trpc/server'
 
 import { constructMetadata } from '@/lib/metadata'
+import { EmptyState } from '@/components/ui/empty-state'
 
 export const metadata: Metadata = constructMetadata({
     title: 'Coding',
@@ -102,7 +103,7 @@ export default async function Coding() {
             <PageTransition>
                 <div className="container max-w-2xl py-12 md:py-20 px-4">
                     <Header>
-                        <p className="text-[0.9rem] text-muted-foreground">GitHub isn&apos;t answering right now.</p>
+                        <EmptyState>github isn&apos;t answering right now</EmptyState>
                     </Header>
                 </div>
             </PageTransition>

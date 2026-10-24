@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { BeamImage } from '@/components/ui/beam-image'
 
 interface GamePortraitProps {
     /** Steam's vertical library capsule (600x900) */
@@ -25,10 +26,9 @@ export function GamePortrait({ portraitSrc, headerSrc, name, sizes }: GamePortra
 
     if (stage === 'portrait') {
         return (
-            <Image
+            <BeamImage
                 src={portraitSrc}
                 alt={name}
-                fill
                 sizes={sizes}
                 className="object-cover"
                 onError={() => setStage('header')}
@@ -50,10 +50,9 @@ export function GamePortrait({ portraitSrc, headerSrc, name, sizes }: GamePortra
                 />
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-2">
                     <div className="relative w-full aspect-[460/215] overflow-hidden rounded-sm ring-1 ring-border/40 shadow-md">
-                        <Image
+                        <BeamImage
                             src={headerSrc}
                             alt={name}
-                            fill
                             sizes={sizes}
                             className="object-cover"
                             onError={() => setStage('name')}

@@ -4,6 +4,7 @@ import { format } from 'date-fns'
 import { PageTransition } from '@/components/ui/page-transition'
 import { DecodeText } from '@/components/ui/decode-text'
 import { getAllPosts } from '@/lib/blog'
+import { EmptyState } from '@/components/ui/empty-state'
 
 export const metadata: Metadata = {
     title: 'Writing',
@@ -68,7 +69,7 @@ export default function Writing() {
                         ))}
                     </div>
                 ) : (
-                    <p className="mono-label text-muted-foreground/40">// nothing written yet</p>
+                    <EmptyState>nothing written yet</EmptyState>
                 )}
             </div>
         </PageTransition>

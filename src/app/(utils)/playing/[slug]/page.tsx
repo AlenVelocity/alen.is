@@ -8,6 +8,7 @@ import { AchievementList } from '../_components/achievement-list'
 import { FaSteam, FaXbox } from 'react-icons/fa'
 import Image from 'next/image'
 import Link from 'next/link'
+import { BeamImage } from '@/components/ui/beam-image'
 
 // ─── Metadata ────────────────────────────────────────────────────────────────
 
@@ -141,7 +142,13 @@ export default async function GamePage({ params }: Props) {
                     <div className="relative mb-4">
                         <div className="relative w-full aspect-[460/215] rounded overflow-hidden ring-1 ring-border/40">
                             <div className="absolute inset-0 bg-gradient-to-t from-background/85 via-background/10 to-transparent z-10" />
-                            <Image src={game.image} alt={game.name} fill className="object-cover" priority />
+                            <BeamImage
+                                src={game.image}
+                                alt={game.name}
+                                sizes="(min-width: 768px) 768px, 100vw"
+                                className="object-cover"
+                                priority
+                            />
                             <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 z-20 flex items-end justify-between gap-4">
                                 {/* Clamped: on a phone the banner is ~150px tall, and a long name would
                                     otherwise wrap up past the top edge and get cut off */}

@@ -17,6 +17,8 @@ import { SkeletonBar, SkeletonTile, SignalRowsSkeleton } from '@/components/ui/s
 import { formatDistanceToNow, parse } from 'date-fns'
 
 import { constructMetadata } from '@/lib/metadata'
+import { BeamImage } from '@/components/ui/beam-image'
+import { EmptyState } from '@/components/ui/empty-state'
 
 export const metadata: Metadata = constructMetadata({
     title: 'Listening',
@@ -184,10 +186,10 @@ async function NowPlayingSection() {
                     >
                         {lastFmData.nowPlaying.image ? (
                             <div className="relative w-14 h-14 rounded overflow-hidden shrink-0">
-                                <Image
+                                <BeamImage
                                     src={lastFmData.nowPlaying.image}
                                     alt={`${lastFmData.nowPlaying.name} album art`}
-                                    fill
+                                    sizes="56px"
                                     className="object-cover"
                                 />
                             </div>
@@ -287,7 +289,7 @@ async function FlightRecorderSection() {
         if (lastFmData.nowPlaying) return null
         return (
             <StreamFade>
-                <p className="mono-label text-muted-foreground/40">// nothing scrobbled lately</p>
+                <EmptyState>nothing scrobbled lately</EmptyState>
             </StreamFade>
         )
     }

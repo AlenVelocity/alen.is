@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import { PageTransition } from '@/components/ui/page-transition'
 import { DecodeText } from '@/components/ui/decode-text'
 import { constructMetadata } from '@/lib/metadata'
+import { EmptyState } from '@/components/ui/empty-state'
 
 export const metadata: Metadata = constructMetadata({
     title: 'Thankful',
@@ -99,7 +100,7 @@ export default function Thankful() {
                         ))}
                     </div>
                 ) : (
-                    <p className="mono-label text-muted-foreground/40">// still counting</p>
+                    <EmptyState>still counting</EmptyState>
                 )}
             </div>
         </PageTransition>

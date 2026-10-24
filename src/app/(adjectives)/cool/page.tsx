@@ -1,9 +1,9 @@
-import Image from 'next/image'
 import CoolPoll from '@/components/CoolPoll'
 import { api } from '@/trpc/server'
 import { Metadata } from 'next'
 
 import { constructMetadata } from '@/lib/metadata'
+import { BeamImage } from '@/components/ui/beam-image'
 
 export const metadata: Metadata = constructMetadata({
     title: 'cool',
@@ -49,14 +49,15 @@ export default async function Cool() {
                     <div className="absolute bottom-0 left-0 w-5 h-5 border-b border-l border-accent/50" />
                     <div className="absolute bottom-0 right-0 w-5 h-5 border-b border-r border-accent/50" />
 
-                    <Image
-                        src="/images/rinu-cool.webp"
-                        alt="Rinu Cool"
-                        width={200}
-                        height={200}
-                        className="group-hover:scale-[1.03] transition-transform duration-700"
-                        priority
-                    />
+                    <div className="relative w-[200px] h-[200px] mx-auto">
+                        <BeamImage
+                            src="/images/rinu-cool.webp"
+                            alt="Rinu Cool"
+                            sizes="200px"
+                            className="object-cover"
+                            priority
+                        />
+                    </div>
                     <p className="text-center mono-label text-muted-foreground/40 mt-4">exhibit_A.jpg</p>
                 </div>
             </div>

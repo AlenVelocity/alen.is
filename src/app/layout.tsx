@@ -83,6 +83,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
             <body className={`${syne.variable} ${jetbrainsMono.variable} font-mono-ui`}>
+                {/* Images ship hidden so they can beam in; without JavaScript they just show */}
+                <noscript>
+                    <style>{`.beam-image img { opacity: 1 !important; }`}</style>
+                </noscript>
                 <PostHogProvider>
                     <TRPCReactProvider>
                         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>

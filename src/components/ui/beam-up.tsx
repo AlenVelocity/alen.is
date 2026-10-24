@@ -6,6 +6,7 @@ import { api } from '@/trpc/react'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { posthog } from '@/components/posthog-provider'
 import { cn } from '@/lib/utils'
+import { Saucer } from './saucer'
 
 /**
  * The blog's answer to Medium's clap: tap to beam a post up to the mothership.
@@ -23,22 +24,6 @@ import { cn } from '@/lib/utils'
 const MAX_BEAMS = 50
 /** Quiet period after the last tap before the accumulated taps are sent */
 const FLUSH_DELAY_MS = 900
-
-/** The site's saucer, small enough to sit in a button. Inherits currentColor. */
-function Saucer({ className }: { className?: string }) {
-    return (
-        <svg viewBox="0 0 40 26" className={className} fill="none" aria-hidden="true">
-            {/* Cockpit dome */}
-            <ellipse cx="20" cy="9.5" rx="7" ry="5.5" fill="currentColor" opacity="0.4" />
-            {/* Hull */}
-            <ellipse cx="20" cy="15" rx="17" ry="4.8" fill="currentColor" />
-            {/* Running lights */}
-            <circle cx="9" cy="15.5" r="1.5" fill="currentColor" opacity="0.55" />
-            <circle cx="20" cy="16.2" r="1.5" fill="currentColor" opacity="0.55" />
-            <circle cx="31" cy="15.5" r="1.5" fill="currentColor" opacity="0.55" />
-        </svg>
-    )
-}
 
 interface Burst {
     id: number

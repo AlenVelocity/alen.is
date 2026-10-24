@@ -4,6 +4,7 @@ import { PageTransition } from '@/components/ui/page-transition'
 import { DecodeText } from '@/components/ui/decode-text'
 
 import { constructMetadata } from '@/lib/metadata'
+import { BeamImage } from '@/components/ui/beam-image'
 
 export const metadata: Metadata = constructMetadata({
     title: 'Using',
@@ -362,11 +363,10 @@ export default function Using() {
 
                         {/* scanline-hover: the saucer runs a scan over the desk when you hover it */}
                         <div className="relative w-full aspect-[4/3] rounded-md overflow-hidden ring-1 ring-border/40 shadow-inner scanline-hover">
-                            <Image
+                            <BeamImage
                                 src="/images/setup.jpg"
                                 alt="My desk setup"
-                                fill
-                                sizes="(min-width: 768px) 672px, 100vw"
+                                sizes="(min-width: 768px) 768px, 100vw"
                                 className="object-cover brightness-[1.05]"
                                 quality={90}
                                 priority
