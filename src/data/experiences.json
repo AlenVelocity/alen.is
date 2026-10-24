@@ -20,12 +20,11 @@
         "location": "San Francisco, USA",
         "workType": "remote",
         "description": [
-            "Built the Mercor Work Platform, an AI-powered talent marketplace",
-            "Built a survey system that helped thousands of users give feedback, driving product insights",
-            "Created an availability collection system for contractors that helped the company make better decisions on talent allocation",
-            "Improved code quality through better testing and code review standards",
-            "Built location and work authorization collection flows for better user verification",
-            "Added phone verification as a fraud signal to improve platform security"
+            "Built the Mercor Work platform, a talent marketplace",
+            "Built the survey system that thousands of contractors filled in",
+            "Built availability collection for contractors, so work was allocated to people who were free",
+            "Built the location and work authorization flows",
+            "Added phone verification as a fraud signal"
         ],
         "current": false,
         "order": 1,
@@ -40,10 +39,8 @@
         "location": "India",
         "workType": "remote",
         "description": [
-            "Commissioned by Official Valorant Discord to build Valdle, an arcade game for their community",
-            "Co-founded freelance development company specializing in client projects and developer tools",
-            "Built identity management solutions for enterprise clients",
-            "Led technical architecture and product decisions for client deliverables"
+            "Commissioned by the official Valorant Discord to build Valdle, an arcade game for their community",
+            "Built an identity management product for enterprise clients"
         ],
         "current": false,
         "order": 2,
@@ -59,8 +56,7 @@
         "workType": "remote",
         "description": [
             "Worked on Frappe Cloud, mainly on infrastructure automation and AWS management",
-            "Added support for custom domains, email, and DNS configurations",
-            "Made developer experience improvements for Frappe Cloud and Framework users"
+            "Added support for custom domains, email, and DNS configurations"
         ],
         "current": false,
         "order": 3,
@@ -75,7 +71,7 @@
         "workType": "remote",
         "period": "April 2024 - Nov 2024",
         "description": [
-            "Built a dynamic AI Agent Platform and an AI Course Generation Platform",
+            "Built an agent platform and a course generation platform",
             "Set up infrastructure for deploying edge apps on multiple providers",
             "Built AI web apps including a voice survey platform",
             "Developed AI agents for various clients from scratch"
@@ -113,7 +109,7 @@
         "period": "May 2023 - Jan 2024",
         "description": [
             "Built dataset parsing algorithms for LoRA training data for LLMs like Vicuna-13b and LLaMa-2-7b",
-            "Made methods to streamline fine-tuning of diffusion models on faces",
+            "Made a faster way to fine-tune diffusion models on faces",
             "Built interactive AI-first chat playground UIs"
         ],
         "current": false,
@@ -130,8 +126,7 @@
         "period": "Dec 2021 - Sep 2022",
         "description": [
             "Built CRM web apps by connecting multiple feedback and customer sources",
-            "Made proofs of concept for multi-threaded Node backends",
-            "Worked with teams of 7+ people"
+            "Made proofs of concept for multi-threaded Node backends"
         ],
         "current": false,
         "order": 7,
@@ -146,9 +141,8 @@
         "workType": "remote",
         "period": "July 2020 - December 2025",
         "description": [
-            "Managed dev teams with 10+ people",
+            "Ran a community of 10+ contributors across 12 open source projects",
             "Created the org's mission and vision statements",
-            "Built and contributed to 12+ OSS projects",
             "Taught NodeJS and TypeScript to community members"
         ],
         "current": false,
