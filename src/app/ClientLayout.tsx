@@ -1,13 +1,14 @@
 'use client'
 
 import React, { useRef, useEffect, useState } from 'react'
+import { flushSync } from 'react-dom'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
-import { Toaster } from 'sonner'
+import { Toaster } from '@/components/ui/sonner'
 import { useTheme } from 'next-themes'
 import { FiBriefcase, FiCode } from 'react-icons/fi'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, MotionConfig } from 'framer-motion'
 import { posthog } from '@/components/posthog-provider'
 import { AlienDataStream } from '@/components/ui/alien-ambience'
 import { CommandBar, openCommandBar } from '@/components/ui/command-bar'
@@ -50,68 +51,78 @@ function getBreadcrumbs(currentPath: string) {
 // Custom cursor blob
 function CursorBlob() {
     const blobRef = useRef<HTMLDivElement>(null)
-    const pos = useRef({ x: -100, y: -100 })
-    const curr = useRef({ x: -100, y: -100 })
-    const rafRef = useRef<number | null>(null)
-    const [hovering, setHovering] = useState(false)
+    const pathname = usePathname()
 
     useEffect(() => {
-        document.body.classList.add('custom-cursor')
+        const blob = blobRef.current
+        if (!blob) return
 
-        const onMove = (e: MouseEvent) => {
-            pos.current = { x: e.clientX, y: e.clientY }
-        }
+        // Only run where the blob actually shows: a mouse on a wide screen, motion allowed.
+        // Touch screens ≥1024px (iPad landscape) keep their native behaviour.
+        const mq = window.matchMedia(
+            '(min-width: 1024px) and (pointer: fine) and (prefers-reduced-motion: no-preference)'
+        )
+        const pos = { x: -100, y: -100 }
+        const curr = { x: -100, y: -100 }
+        let raf: number | null = null
 
-        const onEnter = () => setHovering(true)
-        const onLeave = () => setHovering(false)
-
-        const addListeners = () => {
-            document.querySelectorAll('a, button, [role="button"]').forEach((el) => {
-                el.addEventListener('mouseenter', onEnter)
-                el.addEventListener('mouseleave', onLeave)
-            })
-        }
-
-        const observer = new MutationObserver(addListeners)
-        observer.observe(document.body, { childList: true, subtree: true })
-        addListeners()
-
-        const animate = () => {
-            curr.current.x += (pos.current.x - curr.current.x) * 0.12
-            curr.current.y += (pos.current.y - curr.current.y) * 0.12
-            if (blobRef.current) {
-                blobRef.current.style.transform = `translate(${curr.current.x}px, ${curr.current.y}px) translate(-50%, -50%)`
+        const tick = () => {
+            curr.x += (pos.x - curr.x) * 0.12
+            curr.y += (pos.y - curr.y) * 0.12
+            blob.style.transform = `translate(${curr.x}px, ${curr.y}px) translate(-50%, -50%)`
+            // Park the loop once the blob has caught up; the next move restarts it
+            if (Math.abs(pos.x - curr.x) < 0.1 && Math.abs(pos.y - curr.y) < 0.1) {
+                raf = null
+                return
             }
-            rafRef.current = requestAnimationFrame(animate)
+            raf = requestAnimationFrame(tick)
         }
 
-        document.addEventListener('mousemove', onMove)
-        rafRef.current = requestAnimationFrame(animate)
+        const onMove = (e: PointerEvent) => {
+            if (e.pointerType === 'touch') return
+            pos.x = e.clientX
+            pos.y = e.clientY
+            // Resolved from the event target on every move rather than per-element
+            // enter/leave listeners, so the state can't stick when a hovered link unmounts
+            const target = e.target as Element | null
+            blob.classList.toggle('is-hovering', !!target?.closest?.('a, button, [role="button"]'))
+            if (raf === null) raf = requestAnimationFrame(tick)
+        }
 
-        return () => {
+        const disable = () => {
             document.body.classList.remove('custom-cursor')
-            document.removeEventListener('mousemove', onMove)
-            observer.disconnect()
-            if (rafRef.current) cancelAnimationFrame(rafRef.current)
+            document.removeEventListener('pointermove', onMove)
+            if (raf !== null) cancelAnimationFrame(raf)
+            raf = null
+        }
+        const sync = () => {
+            if (!mq.matches) return disable()
+            document.body.classList.add('custom-cursor')
+            document.addEventListener('pointermove', onMove, { passive: true })
+        }
+
+        sync()
+        mq.addEventListener('change', sync)
+        return () => {
+            mq.removeEventListener('change', sync)
+            disable()
         }
     }, [])
 
-    return (
-        <div
-            ref={blobRef}
-            className={cn('cursor-blob hidden lg:block', hovering && 'is-hovering')}
-            aria-hidden="true"
-        />
-    )
+    // A clicked link usually unmounts under the pointer — drop the hover state with it
+    useEffect(() => {
+        blobRef.current?.classList.remove('is-hovering')
+    }, [pathname])
+
+    return <div ref={blobRef} className="cursor-blob hidden lg:block" aria-hidden="true" />
 }
 
 function Navigation() {
     const pathname = usePathname()
-    const { theme, setTheme } = useTheme()
+    const { resolvedTheme, setTheme } = useTheme()
     const [mounted, setMounted] = useState(false)
     const [scrolled, setScrolled] = useState(false)
-    const [showScrollBtn, setShowScrollBtn] = useState(false)
-    const showScrollBtnRef = useRef(false)
+    const breadcrumbRef = useRef<HTMLElement>(null)
 
     const currentPath = pathname === '/' ? '/' : pathname.replace(/\/$/, '')
     const isMainNav = NAV_ITEMS.some((item) => item.href === currentPath)
@@ -124,29 +135,28 @@ function Navigation() {
     }, [])
 
     useEffect(() => {
-        const handleScroll = () => {
-            const isScrolled = window.scrollY > 50
-            setScrolled(isScrolled)
-            if (isScrolled && !showScrollBtnRef.current) {
-                showScrollBtnRef.current = true
-                setShowScrollBtn(true)
-            } else if (!isScrolled && showScrollBtnRef.current) {
-                showScrollBtnRef.current = false
-                setShowScrollBtn(false)
-            }
-        }
+        // setScrolled bails out when the value is unchanged, so this only re-renders at the threshold
+        const handleScroll = () => setScrolled(window.scrollY > 50)
+        handleScroll() // a restored scroll position shouldn't start with the full nav
         window.addEventListener('scroll', handleScroll, { passive: true })
         return () => window.removeEventListener('scroll', handleScroll)
     }, [])
 
+    // Long paths overflow the breadcrumb — keep the current page (the last crumb) in view
+    useEffect(() => {
+        const el = breadcrumbRef.current
+        if (el) el.scrollLeft = el.scrollWidth
+    }, [currentPath])
+
     const toggleTheme = () => {
-        const newTheme = theme === 'dark' ? 'light' : 'dark'
-        if (!document.startViewTransition) {
+        const newTheme = resolvedTheme === 'dark' ? 'light' : 'dark'
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        if (!document.startViewTransition || reduceMotion) {
             setTheme(newTheme)
         } else {
-            document.startViewTransition(() => {
-                setTheme(newTheme)
-            })
+            // next-themes applies the class in an effect; flushSync makes it land inside
+            // the callback, otherwise the "new" snapshot is taken before anything changed
+            document.startViewTransition(() => flushSync(() => setTheme(newTheme)))
         }
         posthog.capture('theme_toggle', { theme: newTheme })
     }
@@ -159,15 +169,18 @@ function Navigation() {
                 layout
                 transition={{ layout: { type: 'spring', stiffness: 500, damping: 35 } }}
                 className={cn(
-                    'flex items-center gap-0 px-1 py-1 border border-border/60 max-w-full',
+                    'relative flex items-center gap-0 px-1 py-1 border border-border/60 max-w-full',
                     'bg-background/90 backdrop-blur-md shadow-lg shadow-background/20',
                     'rounded-sm'
                 )}
             >
+                {/* Every direct child carries `layout`: the nav resizes with a scale transform,
+                    and only layout children get counter-scaled instead of stretched with it */}
                 <AnimatePresence mode="popLayout" initial={false}>
                     {isMainNav ? (
                         <motion.div
                             key="main-nav"
+                            layout
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95 }}
@@ -191,7 +204,7 @@ function Navigation() {
                                             <Link
                                                 href={item.href}
                                                 className={cn(
-                                                    'relative px-3 py-1.5 text-xs font-mono-ui tracking-wide block whitespace-nowrap transition-all duration-150',
+                                                    'relative px-3 py-1.5 text-xs font-mono-ui tracking-wide block whitespace-nowrap transition-colors duration-150',
                                                     isHome ? 'font-semibold' : 'font-medium',
                                                     isActive
                                                         ? 'text-accent bg-accent/8'
@@ -209,6 +222,7 @@ function Navigation() {
                     ) : (
                         <motion.div
                             key="breadcrumb"
+                            layout
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95 }}
@@ -216,6 +230,7 @@ function Navigation() {
                             className="min-w-0"
                         >
                             <nav
+                                ref={breadcrumbRef}
                                 aria-label="Breadcrumb"
                                 className="no-scrollbar flex items-center px-3 py-1.5 text-xs font-mono-ui tracking-wide gap-2 overflow-x-auto min-w-0"
                             >
@@ -228,10 +243,8 @@ function Navigation() {
                                                 <Link
                                                     href={crumb.href}
                                                     className={cn(
-                                                        'whitespace-nowrap',
-                                                        i === 0
-                                                            ? 'text-muted-foreground font-semibold hover:text-foreground'
-                                                            : 'text-muted-foreground hover:text-foreground'
+                                                        'whitespace-nowrap text-muted-foreground hover:text-foreground transition-colors duration-150',
+                                                        i === 0 && 'font-semibold'
                                                     )}
                                                 >
                                                     {crumb.label}
@@ -247,39 +260,43 @@ function Navigation() {
                     )}
                 </AnimatePresence>
 
-                <div className="w-px h-3 bg-border mx-1 shrink-0" />
+                <motion.div layout className="flex items-center shrink-0">
+                    <div className="w-px h-3 bg-border mx-1 shrink-0" />
 
-                {/* Theme toggle — text style */}
-                {mounted ? (
+                    {/* Theme toggle — text style. Fixed width so [light]/[dark] never nudges the nav */}
                     <button
                         onClick={toggleTheme}
-                        className="px-2 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-150 whitespace-nowrap shrink-0"
+                        className={cn(
+                            'px-2 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-150 whitespace-nowrap shrink-0',
+                            !mounted && 'opacity-0 pointer-events-none'
+                        )}
                         aria-label="Toggle theme"
                     >
-                        [{theme === 'dark' ? 'light' : 'dark'}]
+                        <span className="inline-block min-w-[7ch] text-center">
+                            [{resolvedTheme === 'light' ? 'dark' : 'light'}]
+                        </span>
                     </button>
-                ) : (
-                    <div className="px-2 py-1.5 text-xs opacity-0 select-none shrink-0">[dark]</div>
-                )}
 
-                {/* Command bar trigger — the "alen.is/…" warp drive (also opens with / or Ctrl+K) */}
-                <button
-                    onClick={openCommandBar}
-                    className="px-2 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-150 whitespace-nowrap shrink-0"
-                    aria-label="Open site navigator (press / or Ctrl+K)"
-                    title="alen.is/… — press / to warp"
-                >
-                    [/]
-                </button>
+                    {/* Command bar trigger — the "alen.is/…" warp drive (also opens with / or Ctrl+K) */}
+                    <button
+                        onClick={openCommandBar}
+                        className="px-2 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-150 whitespace-nowrap shrink-0"
+                        aria-label="Open site navigator (press / or Ctrl+K)"
+                        title="alen.is/… — press / to warp"
+                    >
+                        [/]
+                    </button>
+                </motion.div>
 
-                <AnimatePresence initial={false}>
-                    {showScrollBtn && (
+                <AnimatePresence mode="popLayout" initial={false}>
+                    {scrolled && (
                         <motion.div
-                            initial={{ width: 0, opacity: 0 }}
-                            animate={{ width: 'auto', opacity: 1 }}
-                            exit={{ width: 0, opacity: 0 }}
+                            key="scroll-top"
+                            layout
+                            initial={{ opacity: 0, x: -4 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -4 }}
                             transition={{ duration: 0.15 }}
-                            className="overflow-hidden"
                         >
                             <button
                                 onClick={scrollToTop}
@@ -302,25 +319,31 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     const showFooter = pathname === '/' || pathname.startsWith('/working') || pathname.startsWith('/building')
 
     return (
-        <div className="min-h-screen flex flex-col">
-            <AlienDataStream />
-            <CursorBlob />
-            <CommandBar />
-            <UfoAbduction />
-            <DrownTrigger />
-            {showNavbar && <Navigation />}
-            <main className={cn('flex-1 relative z-10', showNavbar && 'pt-[var(--navbar-height)]')}>{children}</main>
-            {showFooter && (
-                <footer className="relative z-10 border-t border-dashed border-border/40 py-8">
-                    <div className="container max-w-4xl">
-                        <p className="text-xs font-mono-ui text-muted-foreground/50 text-center tracking-wide">
-                            © {new Date().getFullYear()} alen yohannan
-                            <span className="animate-blink ml-0.5">_</span>
-                        </p>
-                    </div>
-                </footer>
-            )}
-            <Toaster position="top-right" />
-        </div>
+        // reducedMotion="user": framer-motion drops transform/layout animation for visitors
+        // who ask for reduced motion (the CSS side of that lives in globals.css)
+        <MotionConfig reducedMotion="user">
+            <div className="min-h-screen flex flex-col">
+                <AlienDataStream />
+                <CursorBlob />
+                <CommandBar />
+                <UfoAbduction />
+                <DrownTrigger />
+                {showNavbar && <Navigation />}
+                <main className={cn('flex-1 relative z-10', showNavbar && 'pt-[var(--navbar-height)]')}>
+                    {children}
+                </main>
+                {showFooter && (
+                    <footer className="relative z-10 border-t border-dashed border-border/40 py-8">
+                        <div className="container max-w-4xl">
+                            <p className="text-xs font-mono-ui text-muted-foreground/50 text-center tracking-wide">
+                                © {new Date().getFullYear()} alen yohannan
+                                <span className="animate-blink ml-0.5">_</span>
+                            </p>
+                        </div>
+                    </footer>
+                )}
+                <Toaster position="top-right" />
+            </div>
+        </MotionConfig>
     )
 }

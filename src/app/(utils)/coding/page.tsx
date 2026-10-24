@@ -14,44 +14,43 @@ export const metadata: Metadata = constructMetadata({
     openGraph: { description: 'My GitHub stats and contributions' }
 })
 
-function ContributionGraph({ days }: { days: { date: string; contributionCount: number; color: string }[] }) {
-    const weeks: (typeof days)[] = []
-    for (let i = 0; i < days.length; i += 7) {
-        weeks.push(days.slice(i, i + 7))
-    }
+type ContributionDay = { date: string; contributionCount: number; color: string }
 
-    const mobileWeeks = weeks.slice(-20)
+function ContributionGraph({ days }: { days: ContributionDay[] }) {
+    // Pad the front so every column is a Sunday→Saturday week, like GitHub's own graph
+    // (the API window rarely starts on a Sunday, which skewed every row off its weekday)
+    const lead = days.length ? new Date(days[0].date).getUTCDay() : 0
+    const cells: (ContributionDay | null)[] = [...Array<null>(lead).fill(null), ...days]
+    const weekCount = Math.ceil(cells.length / 7)
+    const mobileCells = cells.slice(Math.max(0, weekCount - 20) * 7)
+
+    // Columns are fractions of the container rather than fixed 11px squares, so the
+    // full year fits the page width instead of scrolling (and hiding the recent weeks)
+    const renderGrid = (list: (ContributionDay | null)[], className: string) => (
+        <div
+            className={`${className} grid-flow-col gap-[2px] [grid-template-rows:repeat(7,auto)]`}
+            style={{ gridTemplateColumns: `repeat(${Math.ceil(list.length / 7)}, minmax(0, 1fr))` }}
+        >
+            {list.map((day, i) =>
+                day ? (
+                    <div
+                        key={day.date}
+                        className="aspect-square rounded-[2px] transition-shadow hover:ring-2 hover:ring-foreground/20"
+                        style={{ backgroundColor: day.color }}
+                        title={`${day.date}: ${day.contributionCount} contributions`}
+                    />
+                ) : (
+                    <div key={`pad-${i}`} aria-hidden="true" />
+                )
+            )}
+        </div>
+    )
 
     return (
-        <div className="overflow-x-auto">
-            <div className="hidden sm:flex gap-[2px]">
-                {weeks.map((week, weekIndex) => (
-                    <div key={weekIndex} className="flex flex-col gap-[2px]">
-                        {week.map((day) => (
-                            <div
-                                key={day.date}
-                                className="w-[11px] h-[11px] rounded-[3px] transition-all hover:ring-2 hover:ring-foreground/20"
-                                style={{ backgroundColor: day.color }}
-                                title={`${day.date}: ${day.contributionCount} contributions`}
-                            />
-                        ))}
-                    </div>
-                ))}
-            </div>
-            <div className="flex sm:hidden gap-[2px]">
-                {mobileWeeks.map((week, weekIndex) => (
-                    <div key={weekIndex} className="flex flex-col gap-[2px]">
-                        {week.map((day) => (
-                            <div
-                                key={day.date}
-                                className="w-[10px] h-[10px] rounded-[2px]"
-                                style={{ backgroundColor: day.color }}
-                            />
-                        ))}
-                    </div>
-                ))}
-            </div>
-        </div>
+        <>
+            {renderGrid(cells, 'hidden sm:grid')}
+            {renderGrid(mobileCells, 'grid sm:hidden')}
+        </>
     )
 }
 

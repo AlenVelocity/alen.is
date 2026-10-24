@@ -51,7 +51,7 @@ export default function Writing() {
                             <Link
                                 key={post.slug}
                                 href={`/writing/about/${post.slug}`}
-                                className="group flex items-start gap-4 py-5 border-b border-dashed border-border/50 hover:border-accent/40 transition-all duration-200 scanline-hover"
+                                className="group flex items-start gap-4 py-5 border-b border-dashed border-border/50 hover:border-accent/40 transition-colors duration-200 scanline-hover"
                             >
                                 <span className="mono-label text-muted-foreground/30 w-14 shrink-0 pt-1 group-hover:text-accent/60 transition-colors">
                                     {String(i + 1).padStart(3, '0')}
@@ -63,7 +63,7 @@ export default function Writing() {
                                     <p className="text-[0.875rem] text-muted-foreground leading-relaxed mb-2 line-clamp-2">
                                         {post.description}
                                     </p>
-                                    <div className="flex items-center gap-2 mono-label text-muted-foreground/40">
+                                    <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mono-label text-muted-foreground/40">
                                         <span>{format(new Date(post.date), 'MMM d, yyyy')}</span>
                                         <span className="text-border">·</span>
                                         <span>{post.readingMinutes} min read</span>
@@ -75,7 +75,7 @@ export default function Writing() {
                                         )}
                                     </div>
                                 </div>
-                                <FiArrowUpRight className="w-4 h-4 text-muted-foreground/25 group-hover:text-accent shrink-0 transition-all duration-200 mt-1.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                                <FiArrowUpRight className="w-4 h-4 text-muted-foreground/25 group-hover:text-accent shrink-0 transition-[color,transform] duration-200 mt-1.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                             </Link>
                         ))}
                     </div>

@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
 
@@ -172,8 +173,10 @@ function Stripe({
             aria-label={`${label} stripe`}
             className={cn(
                 'w-full animate-fade-in-up opacity-0 relative overflow-hidden cursor-pointer',
-                'transition-transform duration-200 hover:scale-x-[1.04] focus-visible:scale-x-[1.04]',
-                selected && 'scale-x-[1.04]'
+                // `scale`, not a scale-x transform: the fade-in holds `transform` with fill-mode
+                // forwards, which would silently override a transform-based hover
+                'transition-[scale,box-shadow] duration-200 hover:[scale:1.04_1] focus-visible:[scale:1.04_1]',
+                selected && '[scale:1.04_1]'
             )}
             style={{
                 height: thick ? '2.5rem' : '1.25rem',
@@ -218,10 +221,17 @@ function TypedCaption({ text, delay }: { text: string; delay: number }) {
         return () => clearInterval(interval)
     }, [started, text])
 
+    // The full caption sits invisibly in the same grid cell to reserve its width,
+    // so the centred line doesn't re-centre on every typed character
     return (
-        <span>
-            {displayed}
-            {displayed.length < text.length && <span className="animate-blink text-accent">▌</span>}
+        <span className="inline-grid">
+            <span className="invisible col-start-1 row-start-1" aria-hidden="true">
+                {text}▌
+            </span>
+            <span className="col-start-1 row-start-1 text-left">
+                {displayed}
+                {displayed.length < text.length && <span className="animate-blink text-accent">▌</span>}
+            </span>
         </span>
     )
 }
@@ -230,7 +240,7 @@ export default function Bi() {
     const [selected, setSelected] = useState<StripeKey | null>(null)
 
     return (
-        <div className="flex flex-col items-center justify-center gap-8 px-4 h-full relative overflow-hidden">
+        <div className="flex flex-col items-center justify-center gap-8 px-4 py-8 min-h-full w-full relative overflow-hidden">
             <BiParticles />
 
             {/* Eyebrow */}
@@ -243,7 +253,7 @@ export default function Bi() {
 
             {/* Flag */}
             <div
-                className="relative z-10 flex flex-col gap-0.5 w-52 animate-fade-in-up opacity-0"
+                className="group relative z-10 flex flex-col gap-0.5 w-52 animate-fade-in-up opacity-0"
                 style={{ rotate: '-1.5deg', animationDelay: '0.15s', animationFillMode: 'forwards' }}
             >
                 {/* Corner brackets */}
@@ -275,6 +285,21 @@ export default function Bi() {
                     selected={selected === 'blue'}
                     onSelect={() => setSelected(selected === 'blue' ? null : 'blue')}
                 />
+
+                {/* Hovering the flag reveals the cat, framed like the polaroid on /cool.
+                    No pointer events, so it never steals the hover */}
+                <div
+                    className="absolute -left-2 -right-2 top-1/2 -translate-y-1/2 scale-95 opacity-0 pointer-events-none transition-[opacity,transform] duration-300 group-hover:scale-100 group-hover:opacity-100 bg-card border border-foreground/25 p-1.5"
+                    style={{ boxShadow: `4px 4px 0 ${BI_COLORS.purple}99` }}
+                >
+                    <Image
+                        src="/bicat.jpg"
+                        alt="Orange cat tinted in bi flag colours"
+                        width={208}
+                        height={165}
+                        className="w-full h-auto"
+                    />
+                </div>
             </div>
 
             {/* Main text */}

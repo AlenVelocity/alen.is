@@ -6,7 +6,8 @@ import { PageTransition } from '@/components/ui/page-transition'
 import { useTheme } from 'next-themes'
 
 export default function MeetingPage() {
-    const { theme } = useTheme()
+    // resolvedTheme, not theme: with theme="system" the latter never equals 'dark'
+    const { resolvedTheme: theme } = useTheme()
 
     useEffect(() => {
         ;(async function () {
@@ -22,13 +23,14 @@ export default function MeetingPage() {
 
     return (
         <PageTransition>
-            <div className="container max-w-4xl py-12">
+            <div className="container max-w-4xl py-6">
                 <Cal
                     namespace="20-min-meeting"
                     calLink="xlxnyx/20-min"
                     style={{
                         width: '100%',
-                        height: 'calc(100dvh - 8rem)',
+                        // Exactly fills the viewport under the navbar (py-6 = 3rem) instead of overshooting it
+                        height: 'calc(100dvh - var(--navbar-height) - 3rem)',
                         borderRadius: '1rem'
                     }}
                     config={{

@@ -102,10 +102,14 @@ const GameOfLife = forwardRef<
 
         if (!canvas || !ctx || !grid) return
 
+        // CSS pixels — the backing store is devicePixelRatio× larger (see resize)
+        const w = canvas.clientWidth
+        const h = canvas.clientHeight
+
         // Site palette: deep cosmic background, emerald colony, faint accent grid
         const isDark = resolvedTheme === 'dark'
         ctx.fillStyle = isDark ? 'hsl(200, 35%, 3%)' : 'hsl(210, 20%, 97%)'
-        ctx.fillRect(0, 0, canvas.width, canvas.height)
+        ctx.fillRect(0, 0, w, h)
 
         const cellColor = isDark ? 'rgba(80, 255, 160, 0.85)' : 'rgba(20, 140, 70, 0.9)'
         const gridColor = isDark ? 'rgba(80, 255, 160, 0.05)' : 'rgba(20, 140, 70, 0.07)'
@@ -117,22 +121,22 @@ const GameOfLife = forwardRef<
         ctx.lineWidth = 1
 
         const startRow = Math.floor(-currentOffset.y / CELL_SIZE)
-        const endRow = Math.ceil((canvas.height - currentOffset.y) / CELL_SIZE)
+        const endRow = Math.ceil((h - currentOffset.y) / CELL_SIZE)
         const startCol = Math.floor(-currentOffset.x / CELL_SIZE)
-        const endCol = Math.ceil((canvas.width - currentOffset.x) / CELL_SIZE)
+        const endCol = Math.ceil((w - currentOffset.x) / CELL_SIZE)
 
         for (let i = startRow; i <= endRow; i++) {
             const y = i * CELL_SIZE + currentOffset.y
             ctx.beginPath()
             ctx.moveTo(0, y)
-            ctx.lineTo(canvas.width, y)
+            ctx.lineTo(w, y)
             ctx.stroke()
         }
         for (let j = startCol; j <= endCol; j++) {
             const x = j * CELL_SIZE + currentOffset.x
             ctx.beginPath()
             ctx.moveTo(x, 0)
-            ctx.lineTo(x, canvas.height)
+            ctx.lineTo(x, h)
             ctx.stroke()
         }
 
@@ -144,7 +148,7 @@ const GameOfLife = forwardRef<
                     const x = j * CELL_SIZE + currentOffset.x
                     const y = i * CELL_SIZE + currentOffset.y
                     // Only draw if visible
-                    if (x + CELL_SIZE > 0 && x < canvas.width && y + CELL_SIZE > 0 && y < canvas.height) {
+                    if (x + CELL_SIZE > 0 && x < w && y + CELL_SIZE > 0 && y < h) {
                         ctx.fillRect(x + 1, y + 1, CELL_SIZE - 2, CELL_SIZE - 2)
                     }
                 }
@@ -190,11 +194,17 @@ const GameOfLife = forwardRef<
         if (!canvas) return
 
         const resize = () => {
-            canvas.width = window.innerWidth
-            canvas.height = window.innerHeight
+            // Backing store at device resolution so cells stay crisp on HiDPI screens;
+            // everything else keeps working in CSS pixels through the context transform
+            const dpr = window.devicePixelRatio || 1
+            canvas.width = Math.round(window.innerWidth * dpr)
+            canvas.height = Math.round(window.innerHeight * dpr)
+            canvas.style.width = `${window.innerWidth}px`
+            canvas.style.height = `${window.innerHeight}px`
+            canvas.getContext('2d')?.setTransform(dpr, 0, 0, dpr, 0, 0)
 
-            const cols = Math.ceil(canvas.width / CELL_SIZE) + 20
-            const rows = Math.ceil(canvas.height / CELL_SIZE) + 20
+            const cols = Math.ceil(window.innerWidth / CELL_SIZE) + 20
+            const rows = Math.ceil(window.innerHeight / CELL_SIZE) + 20
 
             const oldGrid = gridRef.current
             if (!oldGrid || oldGrid.length !== rows || oldGrid[0]?.length !== cols) {
@@ -330,7 +340,7 @@ function CollapsedNav({ onExpand }: { onExpand: () => void }) {
 }
 
 function ExpandedNav({ isPlaying }: { isPlaying: boolean }) {
-    const { theme, setTheme } = useTheme()
+    const { resolvedTheme: theme, setTheme } = useTheme()
     const [mounted, setMounted] = useState(false)
 
     useEffect(() => {
@@ -385,6 +395,9 @@ export default function Lost() {
     const [stats, setStats] = useState({ gen: 0, pop: 0 })
     const gridRef = useRef<boolean[][] | null>(null)
     const gameRef = useRef<GameOfLifeRef>(null)
+    const collapseTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
+
+    useEffect(() => () => clearTimeout(collapseTimerRef.current), [])
 
     const handleStats = useCallback((gen: number, pop: number) => {
         setStats((prev) => (prev.gen === gen && prev.pop === pop ? prev : { gen, pop }))
@@ -404,11 +417,14 @@ export default function Lost() {
     const handlePlay = () => {
         setIsPlaying(true)
         setShowQuote(false)
-        setTimeout(() => setIsNavCollapsed(true), 300)
+        clearTimeout(collapseTimerRef.current)
+        collapseTimerRef.current = setTimeout(() => setIsNavCollapsed(true), 300)
         posthog.capture('game_started', { game: 'game_of_life' })
     }
 
     const handlePause = () => {
+        // A pause inside the 300ms window would otherwise still collapse the nav afterwards
+        clearTimeout(collapseTimerRef.current)
         setIsPlaying(false)
         setIsNavCollapsed(false)
     }

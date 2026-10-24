@@ -74,7 +74,7 @@ export default async function TrackPage({ params }: Props) {
         api.lastfm.getRecentTracks().catch(() => null),
         api.reviews
             .getReview({
-                entityId: `${artistName.replace(/\\s+/g, '-').toLowerCase()}-${trackName.replace(/\\s+/g, '-').toLowerCase()}`,
+                entityId: `${artistName.replace(/\s+/g, '-').toLowerCase()}-${trackName.replace(/\s+/g, '-').toLowerCase()}`,
                 type: 'SONG'
             })
             .catch(() => null)
@@ -139,7 +139,7 @@ export default async function TrackPage({ params }: Props) {
                                     className="absolute left-[50%] top-[50%] w-[1000px] h-[1000px] ml-[-500px] mt-[-500px] origin-center"
                                     style={{
                                         backgroundImage: borderGradient,
-                                        animation: `spin-slow ${Math.max(0.4, 4.5 - nowPlayingFrequency * 0.25)}s linear infinite`
+                                        animation: `spin-slow ${Math.max(1.5, 4.5 - nowPlayingFrequency * 0.25)}s linear infinite`
                                     }}
                                 />
                             </div>
@@ -168,7 +168,7 @@ export default async function TrackPage({ params }: Props) {
 
                 {/* Title + artist */}
                 <p className="mono-label text-muted-foreground/50 mb-4">// last.fm scrobble</p>
-                <h1 className="text-display text-3xl md:text-4xl mb-1">{track.name}</h1>
+                <h1 className="text-display text-3xl md:text-4xl mb-1 break-words">{track.name}</h1>
                 <p className="text-lg text-muted-foreground mb-4">{track.artist}</p>
 
                 {/* Now playing + loved badges */}

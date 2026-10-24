@@ -7,8 +7,8 @@ type MDXComponents = MDXRemoteProps['components']
 export const mdxComponents: MDXComponents = {
     h1: (props) => <h2 className="text-display text-2xl md:text-3xl mt-12 mb-4 first:mt-0" {...props} />,
     h2: (props) => <h2 className="text-display text-2xl md:text-3xl mt-12 mb-4 first:mt-0" {...props} />,
-    h3: (props) => <h3 className="text-display text-xl mt-8 mb-3" {...props} />,
-    p: (props) => <p className="text-[0.95rem] text-muted-foreground leading-relaxed mb-5" {...props} />,
+    h3: (props) => <h3 className="text-display text-xl mt-8 mb-3 first:mt-0" {...props} />,
+    p: (props) => <p className="text-[0.95rem] text-muted-foreground leading-relaxed mb-5 break-words" {...props} />,
     a: ({ href, ...props }) => {
         const isInternal = href?.startsWith('/')
         const className = 'text-foreground font-medium link-alien'
@@ -24,13 +24,13 @@ export const mdxComponents: MDXComponents = {
     ol: (props) => (
         <ol className="list-decimal pl-5 mb-5 space-y-2 text-muted-foreground marker:text-accent/60" {...props} />
     ),
-    li: (props) => <li className="text-[0.95rem] leading-relaxed" {...props} />,
+    li: (props) => <li className="text-[0.95rem] leading-relaxed break-words" {...props} />,
     blockquote: (props) => (
         <blockquote className="border-l-2 border-accent/40 pl-4 mb-5 italic text-muted-foreground/90" {...props} />
     ),
     code: (props) => (
         <code
-            className="font-mono-ui text-[0.85em] px-1.5 py-0.5 rounded-sm bg-muted/60 border border-border/50 text-accent"
+            className="font-mono-ui text-[0.85em] px-1.5 py-0.5 rounded-sm bg-muted/60 border border-border/50 text-accent break-words"
             {...props}
         />
     ),

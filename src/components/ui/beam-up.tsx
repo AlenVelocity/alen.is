@@ -130,10 +130,12 @@ export function BeamUp({ slug }: { slug: string }) {
                                 <Saucer className="h-4 w-4 drop-shadow-[0_0_6px_hsl(var(--accent)/0.6)]" />
                             </motion.span>
                             <motion.span
-                                initial={{ opacity: 0.55, scale: 0.6 }}
-                                animate={{ opacity: 0, scale: 2.1 }}
+                                // Centring goes through framer too: its inline transform would
+                                // overwrite Tailwind's -translate-* classes and leave the ring off-centre
+                                initial={{ opacity: 0.55, scale: 0.6, x: '-50%', y: '-50%' }}
+                                animate={{ opacity: 0, scale: 2.1, x: '-50%', y: '-50%' }}
                                 transition={{ duration: 0.7, ease: 'easeOut' }}
-                                className="absolute left-1/2 top-3 h-9 w-9 -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent"
+                                className="absolute left-1/2 top-3 h-9 w-9 rounded-full border border-accent"
                             />
                         </motion.span>
                     ))}
@@ -145,7 +147,8 @@ export function BeamUp({ slug }: { slug: string }) {
                     whileTap={maxed ? undefined : { scale: 0.85 }}
                     aria-label={maxed ? 'Fully beamed up' : 'Beam this post up'}
                     className={cn(
-                        'group relative flex h-12 w-12 items-center justify-center rounded-full border transition-all duration-200',
+                        // Not transition-all: a CSS transition on `transform` fights framer's whileTap
+                        'group relative flex h-12 w-12 items-center justify-center rounded-full border transition-[color,background-color,border-color,box-shadow] duration-200',
                         maxed
                             ? 'cursor-default border-accent/40 text-accent'
                             : 'border-border/60 text-muted-foreground hover:border-accent/50 hover:text-accent hover:bg-accent/5 hover:shadow-[0_0_16px_hsl(var(--accent)/0.18)]'

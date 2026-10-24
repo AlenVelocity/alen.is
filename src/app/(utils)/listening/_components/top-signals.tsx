@@ -53,7 +53,7 @@ export function TopSignals({ signals }: { signals: ArtistSignal[] }) {
                         <div className="min-w-0">
                             <p
                                 className={cn(
-                                    'text-sm font-medium truncate mb-1 transition-all duration-200',
+                                    'text-sm font-medium truncate mb-1 transition-[color,text-shadow] duration-200',
                                     'group-hover:text-accent group-hover:[text-shadow:var(--glow-accent)]'
                                 )}
                             >
@@ -62,7 +62,7 @@ export function TopSignals({ signals }: { signals: ArtistSignal[] }) {
                             <div className="h-1 bg-muted/60 overflow-hidden rounded-full">
                                 <motion.div
                                     className={cn(
-                                        'h-full rounded-full transition-shadow duration-200',
+                                        'h-full rounded-full transition-[background-color,box-shadow] duration-200',
                                         'bg-accent/50 group-hover:bg-accent group-hover:shadow-[0_0_10px_hsl(var(--accent)/0.7)]'
                                     )}
                                     initial={{ scaleX: 0 }}

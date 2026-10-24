@@ -207,6 +207,22 @@ html {
     }
 }
 
+/* Page entrance — ends on filter/transform `none` so nothing lingers that
+   would turn the page into a containing block for position:fixed children */
+@keyframes pageIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+        filter: blur(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+        filter: none;
+    }
+}
+
 /* Blink cursor */
 @keyframes blink {
     0%,
@@ -493,6 +509,10 @@ html {
     animation: fadeInUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
+.animate-page-in {
+    animation: pageIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 .animate-float {
     animation: float 3.5s ease-in-out infinite;
 }
@@ -555,7 +575,7 @@ html {
 
 /* ─── View Transitions ───────────────────────────────────────────────── */
 ::view-transition-group(root) {
-    animation-timing-function: var(--expo-in);
+    animation-timing-function: cubic-bezier(0.7, 0, 0.84, 0);
 }
 
 ::view-transition-new(root) {
@@ -563,8 +583,7 @@ html {
     animation: scale 0.6s;
 }
 
-::view-transition-old(root),
-.dark::view-transition-old(root) {
+::view-transition-old(root) {
     animation: scale 0.6s;
 }
 
@@ -932,9 +951,9 @@ body::after {
     }
 
     to {
-        transform: translateY(0) scale(1);
+        transform: none;
         opacity: 1;
-        filter: blur(0);
+        filter: none;
     }
 }
 
@@ -963,8 +982,21 @@ body.ufo-abduct main {
     pointer-events: none;
 }
 
-body.ufo-return main {
+/* Animate main's children, never main itself: a transform/filter on main would
+   make it the containing block for every position:fixed descendant (the
+   adjective stage, /alien's shader) and they'd jump for the length of the
+   return. The adjective stage is itself fixed, so the same goes one level down. */
+body.ufo-return main > :not(.adjective-stage),
+body.ufo-return .adjective-stage > * {
     animation: abductReturn 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Keep the page entrance in the list: dropping it here and re-adding it when
+   ufo-return comes off would restart it, flashing the page a second time */
+body.ufo-return main .animate-page-in {
+    animation:
+        pageIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both,
+        abductReturn 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -1787,8 +1819,8 @@ body.ufo-return main {
 
     to {
         opacity: 1;
-        filter: blur(0) saturate(1);
-        transform: translateY(0) scale(1);
+        filter: none;
+        transform: none;
     }
 }
 
@@ -1839,12 +1871,19 @@ body.ufo-return main {
     *::before,
     *::after {
         animation-duration: 0.01ms !important;
+        animation-delay: 0s !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
     }
 
     html {
         scroll-behavior: auto;
+    }
+
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+        animation: none !important;
     }
 
     .scan-line-el,

@@ -40,7 +40,7 @@ const gratitudeSections: GratitudeSection[] = [
 function GratitudeRow({ item }: { item: Gratitude }) {
     const content = (
         <>
-            <span className="font-mono-ui text-sm font-medium transition-colors duration-150 group-hover:text-accent">
+            <span className="font-mono-ui text-sm font-medium transition-colors duration-150 group-hover:text-accent mr-auto md:mr-0">
                 {item.name}
             </span>
             {item.note && (

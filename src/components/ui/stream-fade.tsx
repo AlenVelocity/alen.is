@@ -1,5 +1,3 @@
-'use client'
-
 /**
  * Wraps streamed (Suspense-resolved) content so it fades in smoothly
  * instead of flashing in abruptly when the server component resolves.

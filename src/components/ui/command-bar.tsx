@@ -114,7 +114,7 @@ export function CommandBar() {
         const onKeyDown = (e: KeyboardEvent) => {
             if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
                 e.preventDefault()
-                if (open) setOpen(false)
+                if (open) close()
                 else summon()
                 return
             }
@@ -130,7 +130,7 @@ export function CommandBar() {
             window.removeEventListener('keydown', onKeyDown)
             window.removeEventListener(OPEN_COMMAND_BAR_EVENT, onSummonEvent)
         }
-    }, [open])
+    }, [open, close])
 
     // While open: focus the input and lock body scroll behind the overlay
     useEffect(() => {
@@ -186,18 +186,19 @@ export function CommandBar() {
         <AnimatePresence>
             {open && (
                 <motion.div
-                    className="fixed inset-0 z-[90] flex items-start justify-center px-4 pt-[18vh]"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.18 }}
+                    className="fixed inset-0 z-[90] flex items-start justify-center px-4 pt-[18dvh]"
                     role="dialog"
                     aria-modal="true"
                     aria-label="Site navigator"
                 >
-                    {/* Backdrop — click to dismiss */}
-                    <div
+                    {/* Backdrop — click to dismiss. It fades itself rather than inheriting a fade
+                        from the wrapper: a translucent ancestor would make the blur pop in at the end */}
+                    <motion.div
                         className="absolute inset-0 bg-background/70 backdrop-blur-sm"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.18 }}
                         onClick={close}
                         aria-hidden="true"
                     />
@@ -208,129 +209,140 @@ export function CommandBar() {
                         animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
                         exit={{ opacity: 0, y: -8, scale: 0.98, filter: 'blur(4px)' }}
                         transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                        className={cn(
-                            'relative w-full max-w-lg clip-notch border border-accent/30 bg-background/95',
-                            'backdrop-blur-md shadow-[0_0_0_1px_hsl(var(--accent)/0.1),0_0_40px_hsl(var(--accent)/0.12),0_24px_60px_rgba(0,0,0,0.45)]'
-                        )}
+                        className="relative w-full max-w-lg"
                     >
-                        {/* Live sentence preview — the whole point of the domain */}
-                        <p className="px-4 pt-3 mono-label text-muted-foreground/50 select-none" aria-live="polite">
-                            <span className="text-accent">&gt;</span> alen is{' '}
-                            <span className="text-foreground">{active?.slug ?? (query.trim() || '…')}</span>
-                        </p>
-
-                        {/* Input row: fixed "alen.is/" prefix + query + ghost completion */}
-                        <div className="flex items-center gap-0 px-4 py-3 border-b border-border/60">
-                            <span className="font-mono-ui text-sm text-accent glow-text select-none shrink-0">
-                                alen.is/
-                            </span>
-                            <div className="relative flex-1 min-w-0">
-                                {/* Ghost layer sits behind the transparent-background input; mono font keeps them aligned */}
-                                <div
-                                    className="absolute inset-0 flex items-center font-mono-ui text-sm pointer-events-none whitespace-pre"
-                                    aria-hidden="true"
+                        {/* The glow lives on a drop-shadow wrapper: clip-notch clips the panel's own
+                        box-shadow away, but a drop-shadow follows the notched outline */}
+                        <div className="[filter:drop-shadow(0_0_20px_hsl(var(--accent)/0.14))_drop-shadow(0_20px_40px_rgba(0,0,0,0.4))]">
+                            <div className="clip-notch border border-accent/30 bg-background/95">
+                                {/* Live sentence preview — the whole point of the domain */}
+                                <p
+                                    className="px-4 pt-3 mono-label text-muted-foreground/50 select-none"
+                                    aria-live="polite"
                                 >
-                                    <span className="invisible">{query}</span>
-                                    <span className="text-muted-foreground/40">{ghost}</span>
-                                </div>
-                                <input
-                                    ref={inputRef}
-                                    value={query}
-                                    onChange={(e) => setQuery(e.target.value.replace(/\s/g, '-'))}
-                                    onKeyDown={onInputKeyDown}
-                                    className="relative w-full bg-transparent font-mono-ui text-sm text-foreground outline-none placeholder:text-muted-foreground/30 caret-[hsl(var(--accent))]"
-                                    placeholder="type to complete the sentence"
-                                    role="combobox"
-                                    aria-expanded={results.length > 0}
-                                    aria-controls="cmdbar-listbox"
-                                    aria-activedescendant={active ? `cmdbar-opt-${active.slug}` : undefined}
-                                    aria-label="Where is Alen? Type a route suffix"
-                                    autoComplete="off"
-                                    autoCorrect="off"
-                                    autoCapitalize="off"
-                                    spellCheck={false}
-                                />
-                            </div>
-                        </div>
+                                    <span className="text-accent">&gt;</span> alen is{' '}
+                                    <span className="text-foreground">{active?.slug ?? (query.trim() || '…')}</span>
+                                </p>
 
-                        {/* Results */}
-                        <ul
-                            id="cmdbar-listbox"
-                            role="listbox"
-                            aria-label="Destinations"
-                            className="max-h-[44vh] overflow-y-auto py-1.5"
-                        >
-                            {results.map((route, i) => {
-                                const isActive = i === activeIndex
-                                return (
-                                    <li
-                                        key={route.slug}
-                                        id={`cmdbar-opt-${route.slug}`}
-                                        role="option"
-                                        aria-selected={isActive}
-                                        onMouseMove={() => setActiveIndex(i)}
-                                        onClick={() => navigate(route.slug)}
-                                        className={cn(
-                                            'flex items-baseline gap-2.5 px-4 py-2 cursor-pointer text-sm font-mono-ui transition-colors duration-100',
-                                            isActive
-                                                ? 'bg-accent/10 text-accent'
-                                                : 'text-muted-foreground hover:text-foreground',
-                                            route.mystery && 'border-t border-dashed border-border/40 mt-1 pt-2.5'
-                                        )}
-                                    >
-                                        <span
-                                            className={cn(
-                                                'text-accent transition-opacity duration-100 w-3 shrink-0',
-                                                isActive ? 'opacity-100' : 'opacity-0'
-                                            )}
+                                {/* Input row: fixed "alen.is/" prefix + query + ghost completion */}
+                                <div className="flex items-center gap-0 px-4 py-3 border-b border-border/60">
+                                    <span className="font-mono-ui text-sm text-accent glow-text select-none shrink-0">
+                                        alen.is/
+                                    </span>
+                                    <div className="relative flex-1 min-w-0">
+                                        {/* Ghost layer sits behind the transparent-background input; mono font keeps them aligned */}
+                                        <div
+                                            className="absolute inset-0 flex items-center font-mono-ui text-sm pointer-events-none whitespace-pre"
                                             aria-hidden="true"
                                         >
-                                            {route.mystery ? '?' : '▸'}
-                                        </span>
-                                        <span
-                                            className={cn(
-                                                'shrink-0',
-                                                isActive && 'glow-text',
-                                                route.mystery && 'italic'
-                                            )}
-                                        >
-                                            /{route.slug}
-                                        </span>
-                                        <span className="text-[0.68rem] text-muted-foreground/50 truncate flex-1">
-                                            {route.description}
-                                        </span>
-                                        <span className="text-[0.6rem] uppercase tracking-widest text-muted-foreground/35 shrink-0">
-                                            {route.group}
-                                        </span>
-                                    </li>
-                                )
-                            })}
-                        </ul>
+                                            <span className="invisible">{query}</span>
+                                            <span className="text-muted-foreground/40">{ghost}</span>
+                                        </div>
+                                        <input
+                                            ref={inputRef}
+                                            value={query}
+                                            onChange={(e) => setQuery(e.target.value.replace(/\s/g, '-'))}
+                                            onKeyDown={onInputKeyDown}
+                                            className="relative w-full bg-transparent font-mono-ui text-sm text-foreground outline-none placeholder:text-muted-foreground/30 caret-[hsl(var(--accent))]"
+                                            placeholder="type to complete the sentence"
+                                            role="combobox"
+                                            aria-expanded={results.length > 0}
+                                            aria-controls="cmdbar-listbox"
+                                            aria-activedescendant={active ? `cmdbar-opt-${active.slug}` : undefined}
+                                            aria-label="Where is Alen? Type a route suffix"
+                                            autoComplete="off"
+                                            autoCorrect="off"
+                                            autoCapitalize="off"
+                                            spellCheck={false}
+                                        />
+                                    </div>
+                                </div>
 
-                        {/* Hints — keyboard shortcuts are pointless on touch, so they only show sm+ */}
-                        <footer className="flex items-center gap-3 px-4 py-2 border-t border-border/60 text-[0.62rem] font-mono-ui text-muted-foreground/40 select-none">
-                            <span className="hidden sm:inline">
-                                <span className="text-accent/60">↑↓</span> navigate
-                            </span>
-                            <span className="hidden sm:inline">
-                                <span className="text-accent/60">tab</span> complete
-                            </span>
-                            <span className="hidden sm:inline">
-                                <span className="text-accent/60">↵</span> warp
-                            </span>
-                            {/* Minimal-motion toggle: skips the UFO warp transition, persists in localStorage */}
-                            <button
-                                onClick={toggleFx}
-                                aria-pressed={minimalFx}
-                                title="Toggle the UFO page transition"
-                                className="ml-auto hover:text-accent transition-colors duration-150"
-                            >
-                                <span className="text-accent/60">fx</span> {minimalFx ? 'minimal' : 'full'}
-                            </button>
-                            <span className="hidden sm:inline">
-                                <span className="text-accent/60">esc</span> abort
-                            </span>
-                        </footer>
+                                {/* Results */}
+                                <ul
+                                    id="cmdbar-listbox"
+                                    role="listbox"
+                                    aria-label="Destinations"
+                                    className="max-h-[44dvh] overflow-y-auto py-1.5"
+                                >
+                                    {results.map((route, i) => {
+                                        const isActive = i === activeIndex
+                                        return (
+                                            <li
+                                                key={route.slug}
+                                                id={`cmdbar-opt-${route.slug}`}
+                                                role="option"
+                                                aria-selected={isActive}
+                                                onMouseMove={() => setActiveIndex(i)}
+                                                onClick={() => navigate(route.slug)}
+                                                className={cn(
+                                                    'flex items-baseline gap-2.5 px-4 py-2 cursor-pointer text-sm font-mono-ui transition-colors duration-100',
+                                                    isActive
+                                                        ? 'bg-accent/10 text-accent'
+                                                        : 'text-muted-foreground hover:text-foreground',
+                                                    route.mystery &&
+                                                        'border-t border-dashed border-border/40 mt-1 pt-2.5'
+                                                )}
+                                            >
+                                                <span
+                                                    className={cn(
+                                                        'text-accent transition-opacity duration-100 w-3 shrink-0',
+                                                        isActive ? 'opacity-100' : 'opacity-0'
+                                                    )}
+                                                    aria-hidden="true"
+                                                >
+                                                    {route.mystery ? '?' : '▸'}
+                                                </span>
+                                                <span
+                                                    className={cn(
+                                                        'shrink-0',
+                                                        isActive && 'glow-text',
+                                                        route.mystery && 'italic'
+                                                    )}
+                                                >
+                                                    /{route.slug}
+                                                </span>
+                                                <span className="text-[0.68rem] text-muted-foreground/50 truncate flex-1">
+                                                    {route.description}
+                                                </span>
+                                                <span className="text-[0.6rem] uppercase tracking-widest text-muted-foreground/35 shrink-0">
+                                                    {route.group}
+                                                </span>
+                                            </li>
+                                        )
+                                    })}
+                                </ul>
+
+                                {/* Hints — keyboard shortcuts are pointless on touch, so they only show sm+ */}
+                                <footer className="flex items-center gap-3 px-4 py-2 border-t border-border/60 text-[0.62rem] font-mono-ui text-muted-foreground/40 select-none">
+                                    <span className="hidden sm:inline">
+                                        <span className="text-accent/60">↑↓</span> navigate
+                                    </span>
+                                    <span className="hidden sm:inline">
+                                        <span className="text-accent/60">tab</span> complete
+                                    </span>
+                                    <span className="hidden sm:inline">
+                                        <span className="text-accent/60">↵</span> warp
+                                    </span>
+                                    {/* Minimal-motion toggle: skips the UFO warp transition, persists in localStorage */}
+                                    <button
+                                        onClick={toggleFx}
+                                        aria-pressed={minimalFx}
+                                        title="Toggle the UFO page transition"
+                                        className="ml-auto hover:text-accent transition-colors duration-150"
+                                    >
+                                        <span className="text-accent/60">fx</span> {minimalFx ? 'minimal' : 'full'}
+                                    </button>
+                                    {/* A button, not just a hint: on touch it's the only way out besides the backdrop */}
+                                    <button
+                                        onClick={close}
+                                        className="hover:text-accent transition-colors duration-150"
+                                    >
+                                        <span className="text-accent/60">esc</span> abort
+                                    </button>
+                                </footer>
+                            </div>
+                        </div>
                     </motion.div>
                 </motion.div>
             )}

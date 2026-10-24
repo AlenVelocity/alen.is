@@ -1,10 +1,12 @@
 import { LinkButton } from '@/components/ui/link-button'
 import { PageTransition } from '@/components/ui/page-transition'
+import { DecodeText } from '@/components/ui/decode-text'
 import { constructMetadata } from '@/lib/metadata'
 import { FiDownload, FiMapPin, FiWifi, FiHome, FiRepeat } from 'react-icons/fi'
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
 import { runGetExperiences } from '@/lib/cms-db'
+import { cn } from '@/lib/utils'
 
 const getWorkTypeBadge = (workType: string) => {
     switch (workType) {
@@ -19,13 +21,50 @@ const getWorkTypeBadge = (workType: string) => {
     }
 }
 
+// ─── Period parsing ──────────────────────────────────────────────────────────
+// Periods are free text in the CMS ("July 2025 - January 2026", "Dec 2021 - Sep 2022",
+// "2026 - Present"). Month names, full or abbreviated, resolve to the first of the
+// month; "Present" resolves to today; a bare year is a start we can't measure from.
+
+const MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+
+function parsePeriodDate(raw: string | undefined): { date: Date; exact: boolean } | null {
+    const text = (raw ?? '').trim().toLowerCase()
+    if (!text) return null
+    if (text === 'present' || text === 'now') return { date: new Date(), exact: true }
+    const monthYear = text.match(/^([a-z]+)\.?\s+(\d{4})$/)
+    if (monthYear) {
+        const month = MONTHS.indexOf(monthYear[1].slice(0, 3))
+        if (month >= 0) return { date: new Date(Number(monthYear[2]), month, 1), exact: true }
+    }
+    const yearOnly = text.match(/^(\d{4})$/)
+    if (yearOnly) return { date: new Date(Number(yearOnly[1]), 0, 1), exact: false }
+    return null
+}
+
+/** "7 mo", "1 yr 2 mo", "5 yrs". Counts the start and end months inclusively, the way a CV does. */
+function formatDuration(period: string): string | null {
+    const [startRaw, endRaw] = period.split(' - ')
+    const start = parsePeriodDate(startRaw)
+    const end = parsePeriodDate(endRaw ?? 'present')
+    if (!start?.exact || !end) return null
+    const months =
+        (end.date.getFullYear() - start.date.getFullYear()) * 12 + (end.date.getMonth() - start.date.getMonth()) + 1
+    if (months < 1) return null
+    const years = Math.floor(months / 12)
+    const rest = months % 12
+    if (years === 0) return `${months} mo`
+    const yearPart = `${years} ${years === 1 ? 'yr' : 'yrs'}`
+    return rest > 0 ? `${yearPart} ${rest} mo` : yearPart
+}
+
 export const metadata: Metadata = constructMetadata({
     title: 'working',
-    description: 'Alen is gaining experience. My professional journey as a Software Engineer.',
+    description: "Alen's work history as a software engineer, newest first.",
     slug: 'working',
     ogTitle: 'Alen is Working',
     noCanonical: true, // It has /experience canonical
-    openGraph: { description: 'Alen is gaining experience. My professional journey as a Software Engineer.' }
+    openGraph: { description: "Alen's work history as a software engineer, newest first." }
 })
 
 metadata.alternates = { canonical: '/experience' }
@@ -53,16 +92,32 @@ export default async function Experience() {
             <JsonLd data={experienceSchema} />
             <div className="container max-w-2xl py-12 md:py-20 px-4">
                 {/* ── Header ─────────────────────────────────────── */}
-                <div className="flex items-start justify-between gap-4 mb-16">
-                    <div>
-                        <p className="mono-label text-muted-foreground/50 mb-4">// career</p>
-                        <h1 className="text-display text-5xl md:text-6xl mb-3">Experience</h1>
-                        <p className="text-[0.9rem] text-muted-foreground">My professional journey so far.</p>
+                {/* Wraps below ~400px: "Experience" at display size plus the button don't fit one row */}
+                <div className="flex flex-wrap items-start justify-between gap-4 mb-16">
+                    <div className="min-w-0">
+                        <p
+                            className="mono-label text-muted-foreground/50 mb-4 animate-fade-in-up opacity-0 stagger-1"
+                            style={{ animationFillMode: 'forwards' }}
+                        >
+                            // career
+                        </p>
+                        <h1
+                            className="text-display text-5xl md:text-6xl mb-3 animate-fade-in-up opacity-0 stagger-2"
+                            style={{ animationFillMode: 'forwards' }}
+                        >
+                            <DecodeText text="Experience" onMount />
+                        </h1>
+                        <p
+                            className="text-[0.9rem] text-muted-foreground animate-fade-in-up opacity-0 stagger-3"
+                            style={{ animationFillMode: 'forwards' }}
+                        >
+                            Where I&apos;ve worked, newest first.
+                        </p>
                     </div>
                     <a
                         href="/Alen_Resume.pdf"
                         download
-                        className="group flex items-center gap-2 px-3 py-2 text-xs font-mono-ui border border-border/60 hover:border-accent/40 hover:text-accent hover:bg-accent/5 transition-all duration-200 rounded-sm shrink-0 mt-2"
+                        className="group flex items-center gap-2 px-3 py-2 text-xs font-mono-ui border border-border/60 hover:border-accent/40 hover:text-accent hover:bg-accent/5 transition-colors duration-200 rounded-sm shrink-0 mt-2"
                     >
                         <FiDownload className="w-3 h-3" />
                         <span>resume</span>
@@ -70,21 +125,28 @@ export default async function Experience() {
                 </div>
 
                 {/* ── Timeline ───────────────────────────────────── */}
-                <div className="relative">
+                <div
+                    className="relative animate-fade-in-up opacity-0 stagger-4"
+                    style={{ animationFillMode: 'forwards' }}
+                >
                     {/* Vertical dashed line */}
                     <div className="absolute left-0 top-0 bottom-0 w-px border-l border-dashed border-border/60" />
 
                     <div className="space-y-14">
-                        {experiences.map((experience, index) => {
+                        {experiences.map((experience) => {
                             const badge = getWorkTypeBadge(experience.workType)
                             const Icon = badge.icon
+                            const duration = formatDuration(experience.period)
                             return (
                                 <div key={experience.id} className="relative pl-8 group/exp">
-                                    {/* Timeline dot */}
+                                    {/* Timeline dot. The live one pulses like a beacon */}
                                     <div
-                                        className={`absolute left-0 top-1.5 w-2 h-2 -translate-x-[3.5px] border border-border bg-background transition-colors duration-300 group-hover/exp:border-accent/60 ${
-                                            experience.current ? 'bg-accent border-accent ring-4 ring-accent/15' : ''
-                                        }`}
+                                        className={cn(
+                                            'absolute left-0 top-1.5 w-2 h-2 -translate-x-[3.5px] border transition-colors duration-300',
+                                            experience.current
+                                                ? 'bg-accent border-accent ring-4 ring-accent/15 animate-pulse-glow'
+                                                : 'bg-background border-border group-hover/exp:border-accent/60'
+                                        )}
                                     />
 
                                     {/* Entry */}
@@ -114,9 +176,15 @@ export default async function Experience() {
                                         {/* Position */}
                                         <p className="text-sm text-foreground/80 mb-3">{experience.position}</p>
 
-                                        {/* Meta: period · location · work type */}
-                                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mono-label text-muted-foreground/60 mb-5">
+                                        {/* Meta: period · duration · location · work type */}
+                                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mono-label text-muted-foreground/60 mb-5 tabular-nums">
                                             <span>{experience.period}</span>
+                                            {duration && (
+                                                <>
+                                                    <span className="text-border">·</span>
+                                                    <span className="text-muted-foreground/40">{duration}</span>
+                                                </>
+                                            )}
                                             <span className="text-border">·</span>
                                             <span className="flex items-center gap-1">
                                                 <FiMapPin className="w-2.5 h-2.5" />
@@ -139,7 +207,7 @@ export default async function Experience() {
                                                     <span className="text-accent/50 mt-[0.2em] shrink-0 font-mono-ui">
                                                         —
                                                     </span>
-                                                    <span>{item}</span>
+                                                    <span className="min-w-0 break-words">{item}</span>
                                                 </li>
                                             ))}
                                         </ul>

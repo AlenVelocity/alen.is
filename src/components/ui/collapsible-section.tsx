@@ -20,6 +20,7 @@ export function CollapsibleSection({
         <section className="mb-12">
             <button
                 onClick={() => setOpen(!open)}
+                aria-expanded={open}
                 className="section-label group flex items-center gap-2 w-full text-left mb-4 hover:text-foreground transition-colors"
             >
                 {icon}
@@ -29,7 +30,9 @@ export function CollapsibleSection({
                 />
             </button>
             <div
-                className={`grid transition-all duration-300 ease-in-out ${open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
+                className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out ${open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
+                // Collapsed content stays in the DOM; inert keeps it out of the tab order
+                inert={!open}
             >
                 <div className="overflow-hidden">{children}</div>
             </div>

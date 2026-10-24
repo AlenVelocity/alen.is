@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import { ArrowUpRight } from 'lucide-react'
 import { PageTransition } from '@/components/ui/page-transition'
+import { DecodeText } from '@/components/ui/decode-text'
 
 import { constructMetadata } from '@/lib/metadata'
 
@@ -79,6 +80,37 @@ const gearSections: GearSection[] = [
                 specs: '850W · 80+ Gold · Full Modular',
                 type: 'PSU',
                 href: 'https://thermaltakeusa.com/products/toughpower-gf3-850w-gold-tt-premium-edition-ps-tpd-0850fnfagu-4'
+            }
+        ]
+    },
+    {
+        title: 'Gaming',
+        items: [
+            {
+                name: 'Nintendo Switch 2',
+                specs: '7.9" 1080p 120Hz · 256GB',
+                type: 'Console',
+                href: 'https://www.nintendo.com/us/gaming-systems/switch-2/'
+            },
+            {
+                name: 'Meta Quest 3S',
+                specs: '128GB · Mixed Reality · XR2 Gen 2',
+                type: 'VR Headset',
+                href: 'https://www.meta.com/quest/quest-3s/',
+                image: '/gear/meta-quest-3s.webp'
+            },
+            {
+                name: 'Sony DualSense 5',
+                specs: 'Midnight Black · BT / USB-C',
+                type: 'Controller',
+                href: 'https://www.playstation.com/en-us/accessories/dualsense-wireless-controller/'
+            },
+            {
+                name: 'GameSir Cyclone 2',
+                specs: 'TMR Sticks · Hall Triggers · BT/2.4G',
+                type: 'Controller',
+                href: 'https://gamesir.com/products/gamesir-cyclone2-black',
+                image: '/gear/gamesir-cyclone2.png'
             }
         ]
     },
@@ -224,31 +256,6 @@ const gearSections: GearSection[] = [
                 inactive: true
             }
         ]
-    },
-    {
-        title: 'Gaming',
-        items: [
-            {
-                name: 'Meta Quest 3S',
-                specs: '128GB · Mixed Reality · XR2 Gen 2',
-                type: 'VR Headset',
-                href: 'https://www.meta.com/quest/quest-3s/',
-                image: '/gear/meta-quest-3s.webp'
-            },
-            {
-                name: 'Sony DualSense 5',
-                specs: 'Midnight Black · BT / USB-C',
-                type: 'Controller',
-                href: 'https://www.playstation.com/en-us/accessories/dualsense-wireless-controller/'
-            },
-            {
-                name: 'GameSir Cyclone 2',
-                specs: 'TMR Sticks · Hall Triggers · BT/2.4G',
-                type: 'Controller',
-                href: 'https://gamesir.com/products/gamesir-cyclone2-black',
-                image: '/gear/gamesir-cyclone2.png'
-            }
-        ]
     }
 ]
 
@@ -262,7 +269,9 @@ function GearRow({ item }: { item: GearItem }) {
 
     const isDaily = item.badge === 'Daily Driver' || item.badge === 'Primary'
 
-    const rowClassName = `group relative flex items-baseline gap-2 md:gap-3 py-3 border-b border-dashed border-border/40 transition-colors duration-150 ${item.inactive ? 'opacity-35' : 'hover:border-accent/30'}`
+    // Inactive rows dim their contents, not the row itself. Row opacity would also
+    // dim the hover preview, which should always show the item at full strength
+    const rowClassName = `group relative flex items-baseline gap-2 md:gap-3 py-3 border-b border-dashed border-border/40 transition-colors duration-150 ${item.inactive ? '[&>*:not(.gear-preview)]:opacity-35' : 'hover:border-accent/30'}`
 
     const content = (
         <>
@@ -314,7 +323,7 @@ function GearRow({ item }: { item: GearItem }) {
             {/* Hover image preview */}
             {item.image && (
                 <div
-                    className="pointer-events-none absolute right-0 bottom-full z-30 mb-2 hidden translate-y-1 opacity-0 transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100 md:block"
+                    className="gear-preview pointer-events-none absolute right-0 bottom-full z-30 mb-2 hidden translate-y-1 opacity-0 transition-[opacity,transform] duration-200 group-hover:translate-y-0 group-hover:opacity-100 md:block"
                     aria-hidden="true"
                 >
                     <div className="relative w-36 h-36 overflow-hidden rounded-lg border border-border/50 bg-card shadow-xl ring-1 ring-black/5">
@@ -352,7 +361,7 @@ export default function Using() {
                         className="text-display text-5xl md:text-6xl mb-3 animate-fade-in-up opacity-0 stagger-2"
                         style={{ animationFillMode: 'forwards' }}
                     >
-                        Gear
+                        <DecodeText text="Gear" onMount />
                     </h1>
                     <p
                         className="text-[0.9rem] text-muted-foreground animate-fade-in-up opacity-0 stagger-3"
@@ -372,7 +381,8 @@ export default function Using() {
                         <span className="absolute left-0 bottom-0 w-3 h-3 border-l border-b border-accent/40 -translate-x-px translate-y-px" />
                         <span className="absolute right-0 bottom-0 w-3 h-3 border-r border-b border-accent/40 translate-x-px translate-y-px" />
 
-                        <div className="relative w-full aspect-[4/3] rounded-md overflow-hidden ring-1 ring-border/40 shadow-inner">
+                        {/* scanline-hover: the saucer runs a scan over the desk when you hover it */}
+                        <div className="relative w-full aspect-[4/3] rounded-md overflow-hidden ring-1 ring-border/40 shadow-inner scanline-hover">
                             <Image
                                 src="/images/setup.jpg"
                                 alt="My desk setup"
@@ -394,7 +404,8 @@ export default function Using() {
                     {gearSections.map((section, i) => (
                         <section
                             key={section.title}
-                            className={`animate-fade-in-up opacity-0 stagger-${Math.min(i + 3, 6)}`}
+                            // After the setup photo (stagger-4), not alongside or before it
+                            className={`animate-fade-in-up opacity-0 stagger-${Math.min(i + 5, 6)}`}
                             style={{ animationFillMode: 'forwards' }}
                         >
                             <div className="section-label mb-3">{section.title.toLowerCase()}</div>

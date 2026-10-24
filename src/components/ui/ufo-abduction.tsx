@@ -316,6 +316,12 @@ export function UfoAbduction() {
 
     useEffect(() => {
         const onKeyDown = (e: KeyboardEvent) => {
+            // Arrowing through the command bar and then typing "ba" shouldn't summon a saucer
+            const t = e.target as HTMLElement | null
+            if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) {
+                progressRef.current = 0
+                return
+            }
             const key = e.key.toLowerCase()
             progressRef.current =
                 key === KONAMI[progressRef.current] ? progressRef.current + 1 : key === KONAMI[0] ? 1 : 0

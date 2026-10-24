@@ -60,7 +60,7 @@ function FileRow({ file }: { file: SharedFile }) {
 
             <a
                 href={href}
-                className="font-mono-ui text-sm font-medium transition-colors duration-150 group-hover:text-accent break-all"
+                className="font-mono-ui text-sm font-medium transition-colors duration-150 group-hover:text-accent break-all mr-auto md:mr-0"
             >
                 {file.name}
             </a>

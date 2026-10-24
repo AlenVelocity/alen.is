@@ -1,5 +1,18 @@
 [
     {
+        "id": "extraordinary-2026",
+        "company": "Extraordinary",
+        "position": "Software Engineer",
+        "period": "2026 - Present",
+        "location": "Remote",
+        "workType": "remote",
+        "description": ["New role, details to follow."],
+        "current": true,
+        "order": 0,
+        "published": true,
+        "link": "https://extraordinary.com"
+    },
+    {
         "id": "mercor-2025",
         "company": "Mercor",
         "position": "Software Engineer II",
@@ -15,7 +28,7 @@
             "Added phone verification as a fraud signal to improve platform security"
         ],
         "current": false,
-        "order": 0,
+        "order": 1,
         "published": true,
         "link": "https://mercor.com"
     },
@@ -33,7 +46,7 @@
             "Led technical architecture and product decisions for client deliverables"
         ],
         "current": false,
-        "order": 0,
+        "order": 2,
         "published": true,
         "link": "https://kmrb.tech"
     },
@@ -50,7 +63,7 @@
             "Made developer experience improvements for Frappe Cloud and Framework users"
         ],
         "current": false,
-        "order": 0,
+        "order": 3,
         "published": true,
         "link": "https://frappe.io"
     },
@@ -68,7 +81,7 @@
             "Developed AI agents for various clients from scratch"
         ],
         "current": false,
-        "order": 1,
+        "order": 4,
         "published": true,
         "link": "https://xagi.in"
     },
@@ -87,7 +100,7 @@
             "Used AWS services like EC2, EKS, Amazon MQ, and RDS"
         ],
         "current": false,
-        "order": 2,
+        "order": 5,
         "published": true,
         "link": "https://plazza.in"
     },
@@ -104,7 +117,7 @@
             "Built interactive AI-first chat playground UIs"
         ],
         "current": false,
-        "order": 3,
+        "order": 6,
         "published": true,
         "link": "https://shuriken.trade/"
     },
@@ -121,7 +134,7 @@
             "Worked with teams of 7+ people"
         ],
         "current": false,
-        "order": 4,
+        "order": 7,
         "published": true,
         "link": "https://dataequinox.com/"
     },
@@ -139,7 +152,7 @@
             "Taught NodeJS and TypeScript to community members"
         ],
         "current": false,
-        "order": 5,
+        "order": 8,
         "published": true,
         "link": "https://github.com/Synthesized-Infinity"
     }

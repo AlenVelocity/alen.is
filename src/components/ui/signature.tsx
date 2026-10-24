@@ -14,7 +14,8 @@ export function Signature({ name, className }: SignatureProps) {
     const [visible, setVisible] = useState(false)
     const [mounted, setMounted] = useState(false)
     const containerRef = useRef<HTMLDivElement>(null)
-    const { theme } = useTheme()
+    const { resolvedTheme } = useTheme()
+    const theme = resolvedTheme
 
     // Ensure component is mounted on client before using theme
     useEffect(() => {
@@ -47,7 +48,8 @@ export function Signature({ name, className }: SignatureProps) {
         }
     }, [theme, mounted])
 
-    // Show a basic version until mounted to prevent hydration mismatch
+    // Hidden until mounted: the theme isn't known yet, and showing it only to hide
+    // it again for the light-mode writing animation reads as a flash
     if (!mounted) {
         return (
             <div
@@ -55,7 +57,7 @@ export function Signature({ name, className }: SignatureProps) {
                 className={cn(
                     'signature-text text-6xl relative overflow-hidden',
                     'text-foreground/80 mt-4 pr-2',
-                    'opacity-100',
+                    'opacity-0',
                     className
                 )}
                 style={{
@@ -92,7 +94,7 @@ export function Signature({ name, className }: SignatureProps) {
                 {/* Masking overlay that hides then reveals the text from right to left */}
                 {theme !== 'dark' && (
                     <span
-                        className="absolute top-0 right-0 h-full transition-all ease-out bg-background"
+                        className="absolute top-0 right-0 h-full transition-[width] ease-out bg-background"
                         style={{
                             width: writing ? '0%' : '100%',
                             transitionDuration: '1.8s',

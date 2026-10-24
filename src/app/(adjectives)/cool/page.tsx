@@ -17,7 +17,7 @@ export default async function Cool() {
     const initialPollData = await api.poll.getCoolPoll()
 
     return (
-        <div className="flex flex-col items-center justify-center gap-8 px-4 h-full">
+        <div className="flex flex-col items-center justify-center gap-8 px-4 py-8 min-h-full w-full">
             {/* Eyebrow */}
             <p
                 className="mono-label text-muted-foreground/35 animate-fade-in-up opacity-0 stagger-1 tracking-[0.25em]"

@@ -1,19 +1,13 @@
-'use client'
-
-import { motion } from 'framer-motion'
-
 interface PageTransitionProps {
     children: React.ReactNode
 }
 
+/**
+ * Page entrance. A CSS animation rather than framer-motion, so it starts at first
+ * paint instead of waiting for hydration (framer ships `opacity: 0` in the server
+ * HTML), and it ends on `filter/transform: none` rather than leaving `blur(0px)`
+ * behind, which would trap position:fixed children inside the page.
+ */
 export function PageTransition({ children }: PageTransitionProps) {
-    return (
-        <motion.div
-            initial={{ opacity: 0, y: 12, filter: 'blur(4px)' }}
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        >
-            {children}
-        </motion.div>
-    )
+    return <div className="animate-page-in">{children}</div>
 }

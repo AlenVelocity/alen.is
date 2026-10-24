@@ -20,8 +20,11 @@ export default function AdjectivesLayout({ children }: { children: React.ReactNo
         }
     }, [])
 
+    // Safe centering + its own scroll: on short screens (landscape phones, iOS
+    // with both toolbars showing) content taller than the stage starts at the
+    // top and scrolls, instead of being clipped at both ends with no way to reach it
     return (
-        <div className="fixed inset-x-0 top-[var(--navbar-height)] bottom-0 overflow-hidden overscroll-none flex items-center justify-center">
+        <div className="adjective-stage no-scrollbar fixed inset-x-0 top-[var(--navbar-height)] bottom-0 overflow-x-hidden overflow-y-auto overscroll-none flex items-center [align-items:safe_center] justify-center">
             {children}
         </div>
     )

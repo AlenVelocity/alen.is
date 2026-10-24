@@ -51,9 +51,9 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
                 </Link>
 
                 <p className="mono-label text-muted-foreground/50 mb-4">// entry_{entryNumber}</p>
-                <h1 className="text-display text-4xl md:text-5xl mb-4">{post.meta.title}</h1>
+                <h1 className="text-display text-4xl md:text-5xl mb-4 break-words">{post.meta.title}</h1>
 
-                <div className="flex items-center gap-2 mono-label text-muted-foreground/45 mb-12">
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mono-label text-muted-foreground/45 mb-12">
                     <span>{format(new Date(post.meta.date), 'MMM d, yyyy')}</span>
                     <span className="text-border">·</span>
                     <span>{post.meta.readingMinutes} min read</span>

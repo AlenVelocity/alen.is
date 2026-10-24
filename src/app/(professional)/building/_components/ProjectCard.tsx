@@ -1,8 +1,9 @@
 'use client'
 
-import { TechStack, TechType } from '@/components/ui/tech-badge'
+import { useState } from 'react'
+import { TechStack } from '@/components/ui/tech-badge'
+import { DecodeText } from '@/components/ui/decode-text'
 import { FiArrowUpRight } from 'react-icons/fi'
-import { cn } from '@/lib/utils'
 
 interface Project {
     id: string
@@ -18,7 +19,6 @@ interface Project {
 
 interface ProjectRowProps {
     project: Project
-    featured?: boolean
 }
 
 const getTypeLabel = (type: string) => {
@@ -34,70 +34,74 @@ const getTypeLabel = (type: string) => {
     }
 }
 
+/** "December 2024" is too wide for a phone row; the year alone still places it */
+const yearOf = (period: string) => period.trim().split(' ').pop()
+
 export function ProjectRow({ project }: ProjectRowProps) {
     return (
         <a
             href={project.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex items-baseline gap-3 py-3.5 border-b border-dashed border-border/50 hover:border-accent/40 transition-all duration-200 scanline-hover"
+            className="group flex items-baseline gap-3 py-3.5 border-b border-dashed border-border/50 hover:border-accent/40 transition-colors duration-200 scanline-hover"
         >
-            {/* Title */}
-            <h3 className="font-mono-ui text-sm font-medium shrink-0 group-hover:text-accent transition-colors duration-200">
+            <h3 className="font-mono-ui text-sm font-medium min-w-0 truncate group-hover:text-accent transition-colors duration-200">
                 {project.title}
             </h3>
 
             {/* Dot trail spacer */}
-            <span className="flex-1 border-b border-dotted border-muted-foreground/15 translate-y-[-4px]" />
+            <span className="flex-1 min-w-4 border-b border-dotted border-muted-foreground/15 translate-y-[-4px]" />
 
-            {/* Type chip */}
             <span className="mono-label text-muted-foreground/40 shrink-0 group-hover:text-accent/60 transition-colors duration-200">
                 {getTypeLabel(project.type)}
             </span>
 
-            {/* Period */}
-            <span className="mono-label text-muted-foreground/40 shrink-0 hidden sm:inline">{project.period}</span>
+            <span className="mono-label text-muted-foreground/40 shrink-0 tabular-nums">
+                <span className="sm:hidden">{yearOf(project.period)}</span>
+                <span className="hidden sm:inline">{project.period}</span>
+            </span>
 
-            {/* Arrow */}
-            <FiArrowUpRight className="w-3 h-3 text-muted-foreground/25 group-hover:text-accent shrink-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            <FiArrowUpRight className="w-3 h-3 text-muted-foreground/25 group-hover:text-accent shrink-0 transition-[color,transform] duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </a>
     )
 }
 
-export function ProjectDetail({ project }: { project: Project }) {
+export function ProjectDetail({ project }: ProjectRowProps) {
+    const [hovered, setHovered] = useState(false)
+
     return (
         <a
             href={project.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex gap-4 py-5 border-b border-dashed border-border/50 hover:border-accent/40 transition-all duration-200 scanline-hover"
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+            onFocus={() => setHovered(true)}
+            onBlur={() => setHovered(false)}
+            className="group block py-5 border-b border-dashed border-border/50 hover:border-accent/40 transition-colors duration-200 scanline-hover"
         >
-            {/* Left accent line */}
-            <div className="w-px bg-border group-hover:bg-accent transition-colors duration-300 shrink-0 self-stretch" />
+            {/* Title row: name left, when right */}
+            <div className="flex items-baseline justify-between gap-4 mb-1.5">
+                <h3 className="text-display text-lg md:text-xl min-w-0 break-words group-hover:text-accent transition-colors duration-200">
+                    <DecodeText text={project.title} active={hovered} />
+                </h3>
+                <span className="mono-label text-muted-foreground/40 shrink-0 tabular-nums">
+                    <span className="sm:hidden">{yearOf(project.period)}</span>
+                    <span className="hidden sm:inline">{project.period}</span>
+                </span>
+            </div>
 
-            <div className="flex-1 min-w-0">
-                {/* Title row */}
-                <div className="flex items-start justify-between gap-3 mb-2">
-                    <div>
-                        <h3 className="text-display text-lg group-hover:text-accent transition-colors duration-200 mb-0.5">
-                            {project.title}
-                        </h3>
-                        <div className="flex items-center gap-2">
-                            <span className="mono-label text-muted-foreground/40">{getTypeLabel(project.type)}</span>
-                            <span className="text-border">·</span>
-                            <span className="mono-label text-muted-foreground/40 hidden sm:inline">
-                                {project.period}
-                            </span>
-                        </div>
-                    </div>
-                    <FiArrowUpRight className="w-4 h-4 text-muted-foreground/25 group-hover:text-accent shrink-0 transition-all duration-200 mt-0.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </div>
+            <p className="text-[0.9rem] text-muted-foreground leading-relaxed mb-3 max-w-prose">
+                {project.description}
+            </p>
 
-                {/* Description */}
-                <p className="text-[0.875rem] text-muted-foreground leading-relaxed mb-3">{project.description}</p>
-
-                {/* Tech stack */}
-                <TechStack technologies={project.technologies.slice(0, 6)} alwaysColor />
+            {/* Stack left, destination right. Icons stay monochrome until the row is hovered */}
+            <div className="flex items-center justify-between gap-4">
+                <TechStack technologies={project.technologies.slice(0, 6)} colorOnGroupHover />
+                <span className="mono-label text-muted-foreground/40 group-hover:text-accent/70 transition-colors duration-200 shrink-0 inline-flex items-center gap-1">
+                    {getTypeLabel(project.type)}
+                    <FiArrowUpRight className="w-3 h-3 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </span>
             </div>
         </a>
     )

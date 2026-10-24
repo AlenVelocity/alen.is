@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { api } from '@/trpc/react'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { posthog } from '@/components/posthog-provider'
+import { cn } from '@/lib/utils'
 
 interface PollData {
     positive: number
@@ -29,6 +30,10 @@ export default function CoolPoll({ initialData }: CoolPollProps) {
         timestamp: null
     })
     const [optimisticData, setOptimisticData] = useState<PollData | null>(null)
+    // The stored vote is only read after mount — hold the poll hidden until then so
+    // returning voters don't see the vote buttons flash before their results
+    const [ready, setReady] = useState(false)
+    useEffect(() => setReady(true), [])
     const utils = api.useUtils()
 
     const hasVoteExpired = voteData.timestamp && Date.now() - voteData.timestamp > WEEK_IN_MS
@@ -81,19 +86,20 @@ export default function CoolPoll({ initialData }: CoolPollProps) {
     }
 
     return (
-        <div className="w-full space-y-5">
+        // Min height matches the results view, so voting doesn't shove the centred column up
+        <div className={cn('w-full min-h-[5.75rem] flex flex-col justify-center', !ready && 'invisible')}>
             {canVote ? (
                 <div className="flex justify-center gap-8">
                     <button
                         onClick={() => handleVote('positive')}
-                        className="text-display text-2xl text-accent hover:text-accent border-b border-transparent hover:border-accent transition-all duration-200 active:scale-95 pb-0.5"
+                        className="text-display text-2xl text-accent border-b border-transparent hover:border-accent transition-[border-color,transform] duration-200 active:scale-95 pb-0.5"
                     >
                         yes
                     </button>
                     <span className="mono-label text-muted-foreground/25 text-2xl">/</span>
                     <button
                         onClick={() => handleVote('negative')}
-                        className="text-display text-2xl text-muted-foreground hover:text-destructive border-b border-transparent hover:border-destructive/50 transition-all duration-200 active:scale-95 pb-0.5"
+                        className="text-display text-2xl text-muted-foreground hover:text-destructive border-b border-transparent hover:border-destructive/50 transition-[color,border-color,transform] duration-200 active:scale-95 pb-0.5"
                     >
                         no
                     </button>

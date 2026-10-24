@@ -90,7 +90,7 @@ export default function Listening() {
                             allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
                             frameBorder="0"
                             height="450"
-                            style={{ width: '100%', maxWidth: '660px', overflow: 'hidden', borderRadius: '10px' }}
+                            style={{ width: '100%', maxWidth: '660px', overflow: 'hidden' }}
                             sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
                             src="https://embed.music.apple.com/in/playlist/writers-room/pl.u-gxblgd1Tb9VXoJA"
                             title="Apple Music playlist: writers room"
@@ -194,7 +194,7 @@ async function NowPlayingSection() {
             <section className="mb-14">
                 <div className="section-label mb-4">now playing</div>
                 <div
-                    className={`relative ${nowPlayingFrequency >= 3 ? 'p-[2px] rounded-xl overflow-visible' : 'border-b border-dashed border-border'}`}
+                    className={`relative ${nowPlayingFrequency >= 3 ? 'p-[2px] rounded-xl overflow-visible' : 'border-b border-dashed border-border hover:border-accent/50 transition-colors'}`}
                 >
                     {nowPlayingFrequency >= 3 && (
                         <>
@@ -207,7 +207,8 @@ async function NowPlayingSection() {
                                     className="absolute left-[50%] top-[50%] w-[1000px] h-[1000px] ml-[-500px] mt-[-500px] origin-center"
                                     style={{
                                         backgroundImage: borderGradient,
-                                        animation: `spin-slow ${Math.max(0.4, 4.5 - nowPlayingFrequency * 0.25)}s linear infinite`
+                                        // Floor at 1.5s a turn — any faster and a long streak reads as a strobe
+                                        animation: `spin-slow ${Math.max(1.5, 4.5 - nowPlayingFrequency * 0.25)}s linear infinite`
                                     }}
                                 />
                             </div>
@@ -215,7 +216,7 @@ async function NowPlayingSection() {
                     )}
                     <Link
                         href={`/listening/to/${encodeTrackParam(lastFmData.nowPlaying.artist)}/${encodeTrackParam(lastFmData.nowPlaying.name)}`}
-                        className={`group relative z-10 flex items-center gap-4 transition-colors ${nowPlayingFrequency >= 3 ? 'bg-card p-4 rounded-[10px] hover:bg-muted/80' : 'py-4 hover:border-accent/50'}`}
+                        className={`group relative z-10 flex items-center gap-4 transition-colors ${nowPlayingFrequency >= 3 ? 'bg-card p-4 rounded-[10px] hover:bg-muted/80' : 'py-4'}`}
                     >
                         {lastFmData.nowPlaying.image ? (
                             <div className="relative w-14 h-14 rounded-lg overflow-hidden shrink-0">
@@ -285,7 +286,6 @@ async function TopSignalsSection() {
     }
 
     const imageMap = new Map(artistImages.map((a) => [a.artist, a.image]))
-    console.log(imageMap)
     const signalsWithImages = topSignals.map((s) => ({
         ...s,
         image: imageMap.get(s.artist) ?? null
@@ -323,10 +323,12 @@ async function FlightRecorderSection() {
     if (displayTracks.length === 0) {
         if (lastFmData.nowPlaying) return null
         return (
-            <div className="text-center py-12">
-                <FiHeadphones className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground">No recently played tracks found.</p>
-            </div>
+            <StreamFade>
+                <div className="text-center py-12">
+                    <FiHeadphones className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                    <p className="text-muted-foreground">No recently played tracks found.</p>
+                </div>
+            </StreamFade>
         )
     }
 
