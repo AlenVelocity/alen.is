@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import { PageTransition } from '@/components/ui/page-transition'
+import { DecodeText } from '@/components/ui/decode-text'
 import { api } from '@/trpc/server'
 import { FiClock } from 'react-icons/fi'
 import { GiGamepad } from 'react-icons/gi'
@@ -8,7 +9,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { slugify, fetchXboxGames, fetchGameDetails, formatHours } from '@/lib/steam'
 import { CollapsibleSection } from '@/components/ui/collapsible-section'
-import { GameCover } from './_components/game-cover'
+import { GamePortrait } from './_components/game-portrait'
 
 import { constructMetadata } from '@/lib/metadata'
 
@@ -20,6 +21,12 @@ export const metadata: Metadata = constructMetadata({
 })
 
 const steamHeader = (appid: number) => `https://cdn.cloudflare.steamstatic.com/steam/apps/${appid}/header.jpg`
+const steamPortrait = (appid: number) =>
+    `https://cdn.cloudflare.steamstatic.com/steam/apps/${appid}/library_600x900.jpg`
+
+/** Shared tile chrome: a library capsule that lifts and glows when hovered */
+const tileClassName =
+    'relative aspect-[2/3] rounded overflow-hidden ring-1 ring-border/50 bg-muted/30 shadow-sm transition-[transform,box-shadow] duration-300 group-hover:-translate-y-1 group-hover:ring-accent/50 group-hover:shadow-[0_0_24px_hsl(var(--accent)/0.2)] scanline-hover'
 
 /** Playful severity readout for the unplayed-games ratio. The bar takes the same tone as the label. */
 function backlogStatus(ratio: number) {
@@ -45,7 +52,7 @@ export default async function Playing() {
 
     // The store API knows the real (hashed) header path for newer apps. Only the
     // handful of recently played games get this lookup; the archive falls back
-    // to the library icon client-side instead of making 60+ store requests.
+    // to a name tile client-side instead of making 60+ store requests.
     const recentCovers = recentGames
         ? await Promise.all(
               recentGames.map((g) => fetchGameDetails(g.appid).then((d) => d?.headerImage ?? steamHeader(g.appid)))
@@ -69,14 +76,10 @@ export default async function Playing() {
         .filter((g) => !steamSlugs.has(slugify(g.name)))
         .sort((a, b) => playedAt(b.lastPlayed) - playedAt(a.lastPlayed))
 
-    // Steam library rows, ranked by hours. Bar widths use a square-root scale:
-    // one 2,000-hour game would otherwise flatten every other bar to a sliver,
-    // and the exact figure is printed on the row anyway.
+    // Steam library, ranked by hours
     const libraryGames = ownedGames
         ? ownedGames.games.filter((game) => game.playtime_forever > 0 && !recentAppIds.has(game.appid))
         : []
-    const maxLibraryHours = Math.max(...libraryGames.map((g) => g.playtime_forever_hours), 1)
-    const barWidth = (hours: number) => Math.max(Math.sqrt(hours / maxLibraryHours) * 100, 1.5)
 
     // Backlog meter
     const unplayed = ownedGames ? ownedGames.games.filter((g) => g.playtime_forever === 0).length : 0
@@ -97,7 +100,7 @@ export default async function Playing() {
                     className="text-display text-4xl md:text-5xl mb-6 animate-fade-in-up opacity-0 stagger-2"
                     style={{ animationFillMode: 'forwards' }}
                 >
-                    Playing
+                    <DecodeText text="Playing" onMount />
                 </h1>
 
                 {/* Stats HUD */}
@@ -191,114 +194,80 @@ export default async function Playing() {
                         )
                     })()}
 
-                {/* Recently Played (Steam) */}
+                {/* Recently Played (Steam): the library's front shelf */}
                 {recentGames && recentGames.length > 0 && (
                     <section
-                        className="mb-12 animate-fade-in-up opacity-0 stagger-5"
+                        className="mb-14 animate-fade-in-up opacity-0 stagger-5"
                         style={{ animationFillMode: 'forwards' }}
                     >
                         <div className="flex items-baseline justify-between gap-4 mb-4">
                             <div className="section-label">active missions</div>
                             <span className="mono-label text-muted-foreground/40 shrink-0">steam · past 2 weeks</span>
                         </div>
-                        <div>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
                             {recentGames.map((game, i) => (
-                                <Link
-                                    key={game.appid}
-                                    href={`/playing/${slugify(game.name)}`}
-                                    className="group flex items-center gap-4 p-3 -mx-3 rounded-lg hover:bg-muted/40 transition-colors duration-300"
-                                >
-                                    <div className="relative w-24 sm:w-28 aspect-[460/215] rounded overflow-hidden flex-shrink-0 shadow-sm transition-shadow duration-300 ring-1 ring-border/50 group-hover:ring-accent/40 group-hover:shadow-[0_0_16px_hsl(var(--accent)/0.15)] scanline-hover">
-                                        <GameCover
-                                            src={recentCovers[i] ?? steamHeader(game.appid)}
-                                            fallbackSrc={game.img_icon_url}
-                                            alt={game.name}
-                                            sizes="112px"
-                                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                <Link key={game.appid} href={`/playing/${slugify(game.name)}`} className="group block">
+                                    <div className={tileClassName}>
+                                        <GamePortrait
+                                            portraitSrc={steamPortrait(game.appid)}
+                                            headerSrc={recentCovers[i] ?? steamHeader(game.appid)}
+                                            name={game.name}
+                                            sizes="(min-width: 640px) 160px, 50vw"
                                         />
                                     </div>
-                                    <div className="flex-1 min-w-0">
-                                        <p className="font-semibold truncate group-hover:text-accent transition-colors mb-0.5">
-                                            {game.name}
+                                    <p className="mt-2 text-sm font-medium truncate group-hover:text-accent transition-colors">
+                                        {game.name}
+                                    </p>
+                                    {game.playtime_2weeks_hours > 0 && (
+                                        <p className="mono-label text-accent tabular-nums truncate">
+                                            {formatHours(game.playtime_2weeks_hours)} recently
                                         </p>
-                                        <p className="flex flex-wrap gap-x-2 gap-y-0.5 text-xs text-muted-foreground/80 font-mono-ui tabular-nums">
-                                            {game.playtime_2weeks_hours > 0 && (
-                                                <span className="text-accent font-medium whitespace-nowrap">
-                                                    {formatHours(game.playtime_2weeks_hours)} recently
-                                                </span>
-                                            )}
-                                            {game.playtime_forever_hours > 0 && (
-                                                <span className="whitespace-nowrap">
-                                                    {formatHours(game.playtime_forever_hours)} total
-                                                </span>
-                                            )}
+                                    )}
+                                    {game.playtime_forever_hours > 0 && (
+                                        <p className="mono-label text-muted-foreground/50 tabular-nums truncate">
+                                            {formatHours(game.playtime_forever_hours)} total
                                         </p>
-                                    </div>
+                                    )}
                                 </Link>
                             ))}
                         </div>
                     </section>
                 )}
 
-                {/* Steam Library, ranked, with relative playtime bars */}
+                {/* Steam Library, ranked by hours */}
                 {libraryGames.length > 0 && (
                     <section
-                        className="mb-12 animate-fade-in-up opacity-0 stagger-6"
+                        className="mb-14 animate-fade-in-up opacity-0 stagger-6"
                         style={{ animationFillMode: 'forwards' }}
                     >
                         <div className="flex items-baseline justify-between gap-4 mb-4">
                             <div className="section-label">steam archive</div>
                             <span className="mono-label text-muted-foreground/40 shrink-0">ranked by hours</span>
                         </div>
-                        <div>
-                            {libraryGames.map((game, i) => (
-                                <Link
-                                    key={game.appid}
-                                    href={`/playing/${slugify(game.name)}`}
-                                    className="group relative flex items-center gap-3 p-2.5 -mx-2.5 rounded overflow-hidden hover:bg-muted/30 transition-colors"
-                                >
-                                    {/* Relative playtime bar behind the row */}
-                                    <div
-                                        className="absolute inset-y-0 left-0 bg-accent/[0.06] group-hover:bg-accent/10 transition-colors animate-bar-grow"
-                                        style={{
-                                            width: `${barWidth(game.playtime_forever_hours)}%`,
-                                            // Offset by the section's own stagger-6 delay, or most of the growth
-                                            // happens while the section is still invisible
-                                            animationDelay: `${0.55 + Math.min(i * 0.05, 0.6)}s`
-                                        }}
-                                        aria-hidden="true"
-                                    />
-                                    <span
-                                        className={`relative mono-label w-5 text-right shrink-0 transition-colors ${
-                                            i < 3
-                                                ? 'text-accent/70 [text-shadow:var(--glow-accent)]'
-                                                : 'text-muted-foreground/30 group-hover:text-accent/60'
-                                        }`}
-                                    >
-                                        {String(i + 1).padStart(2, '0')}
-                                    </span>
-                                    <div className="relative w-16 h-7 rounded overflow-hidden flex-shrink-0 ring-1 ring-border/50 group-hover:ring-accent/30 transition-shadow">
-                                        <GameCover
-                                            src={steamHeader(game.appid)}
-                                            fallbackSrc={game.img_icon_url}
-                                            alt={game.name}
-                                            sizes="64px"
-                                            className="object-cover group-hover:scale-110 transition-transform duration-500"
+                        <div className="grid grid-cols-3 sm:grid-cols-5 gap-2.5 sm:gap-3">
+                            {libraryGames.map((game) => (
+                                <Link key={game.appid} href={`/playing/${slugify(game.name)}`} className="group block">
+                                    <div className={tileClassName}>
+                                        <GamePortrait
+                                            portraitSrc={steamPortrait(game.appid)}
+                                            headerSrc={steamHeader(game.appid)}
+                                            name={game.name}
+                                            sizes="(min-width: 640px) 128px, 33vw"
                                         />
                                     </div>
-                                    <p className="relative flex-1 min-w-0 text-sm font-medium truncate group-hover:text-accent group-hover:translate-x-0.5 transition-[color,transform] duration-300">
+                                    <p className="mt-1.5 text-xs font-medium truncate group-hover:text-accent transition-colors">
                                         {game.name}
                                     </p>
-                                    <span className="relative font-mono-ui text-xs tabular-nums text-muted-foreground/60 group-hover:text-foreground/80 transition-colors shrink-0">
+                                    <p className="mono-label text-muted-foreground/50 tabular-nums">
                                         {formatHours(game.playtime_forever_hours)}
-                                    </span>
+                                    </p>
                                 </Link>
                             ))}
                         </div>
 
                         {/* Backlog severity meter */}
                         {unplayed > 0 && ownedGames && (
-                            <div className="mt-6 p-3 border border-dashed border-border/60 rounded-sm">
+                            <div className="mt-8 p-3 border border-dashed border-border/60 rounded-sm">
                                 <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 mb-2">
                                     <span className="mono-label text-muted-foreground/60 tabular-nums">
                                         backlog: {unplayed} unplayed games
@@ -338,17 +307,17 @@ export default async function Playing() {
                                     className="group flex items-center gap-3 p-2.5 -mx-2.5 rounded hover:bg-muted/30 transition-colors"
                                 >
                                     {game.image ? (
-                                        <div className="relative w-8 h-8 rounded overflow-hidden flex-shrink-0 ring-1 ring-border/50 group-hover:ring-accent/30 transition-shadow">
+                                        <div className="relative w-10 h-10 rounded overflow-hidden flex-shrink-0 ring-1 ring-border/50 group-hover:ring-accent/30 transition-shadow">
                                             <Image
                                                 src={game.image}
                                                 alt={game.name}
                                                 fill
-                                                sizes="32px"
+                                                sizes="40px"
                                                 className="object-cover group-hover:scale-110 transition-transform duration-500"
                                             />
                                         </div>
                                     ) : (
-                                        <div className="w-8 h-8 rounded border border-border/50 bg-muted/30 flex items-center justify-center flex-shrink-0 group-hover:border-accent/30 transition-colors">
+                                        <div className="w-10 h-10 rounded border border-border/50 bg-muted/30 flex items-center justify-center flex-shrink-0 group-hover:border-accent/30 transition-colors">
                                             <FaXbox className="w-3.5 h-3.5 text-muted-foreground/50 group-hover:text-accent/70 transition-colors" />
                                         </div>
                                     )}
