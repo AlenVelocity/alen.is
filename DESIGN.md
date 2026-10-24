@@ -8,7 +8,21 @@ work and the rules to hold each change against.
 ## 0. Status (25 October 2026)
 
 Phases 1 to 4 are applied, one commit each, plus the toy-page buttons from
-phase 5. What this plan still owes:
+phase 5. Two things were added after the plan, on request:
+
+- **Layouts.** One shared header (`PageHeader`) on every content page, on a
+  768px column. Bodies take the shape their content asks for: a ledger with
+  dates in a left rail for experience and writing, a two-column grid for
+  featured projects, two-line spec rows for gear, a time rail for the
+  scrobble list. Home stays a column. The post pages keep the narrower
+  reading width.
+- **Personality that is not text.** Every image beams in out of glyphs the
+  first time it is on screen (`BeamImage`), and the saucer is a recurring
+  character: it parks beside the current page in the nav, drops its beam on
+  "person" as it turns into "alien", and scans the empty states. Both answer
+  something the visitor did, so the motion budget still holds.
+
+What this plan still owes:
 
 - The rebuilt `/coding` page has only been seen in its error state locally
   (the GitHub token does not work on this machine). Check the success
