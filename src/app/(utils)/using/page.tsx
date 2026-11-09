@@ -118,12 +118,11 @@ const gearSections: GearSection[] = [
         title: 'Computing',
         items: [
             {
-                name: 'MacBook Pro M4 Pro',
-                specs: '14-core M4 Pro · 24GB · 1TB',
+                name: 'MacBook Pro M6',
+                specs: 'M6 · 24GB · 1TB',
                 type: 'Laptop',
                 href: 'https://www.apple.com/macbook-pro/',
-                image: '/gear/macbook-pro-m4.png',
-                inactive: true
+                image: '/gear/macbook-pro-m4.png'
             }
         ]
     },
