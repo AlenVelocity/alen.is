@@ -161,14 +161,14 @@ const gearSections: GearSection[] = [
         items: [
             {
                 name: 'Moondrop Dawn Pro 2',
-                specs: 'Dual CS43198 · Balanced 4.4mm + 3.5mm · 124mW',
+                specs: 'Dual CS43198 · Balanced 4.4mm + 3.5mm · 124mW @ 16Ω',
                 type: 'DAC/Amp',
                 href: 'https://www.headphonezone.in/products/moondrop-dawn-pro-2',
                 badge: 'Primary'
             },
             {
                 name: 'JCALLY JM6 Pro 2',
-                specs: 'Dual CS43198 · Balanced 4.4mm + 3.5mm · USB-C',
+                specs: 'CX31993 · MAX97220 Amp · 3.5mm · 70mW @ 32Ω',
                 type: 'DAC/Amp',
                 href: 'https://www.headphonezone.in/products/jcally-jm6pro-2'
             },
