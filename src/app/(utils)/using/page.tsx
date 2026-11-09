@@ -84,37 +84,6 @@ const gearSections: GearSection[] = [
         ]
     },
     {
-        title: 'Gaming',
-        items: [
-            {
-                name: 'Nintendo Switch 2',
-                specs: '7.9" 1080p 120Hz · 256GB',
-                type: 'Console',
-                href: 'https://www.nintendo.com/us/gaming-systems/switch-2/'
-            },
-            {
-                name: 'Meta Quest 3S',
-                specs: '128GB · Mixed Reality · XR2 Gen 2',
-                type: 'VR Headset',
-                href: 'https://www.meta.com/quest/quest-3s/',
-                image: '/gear/meta-quest-3s.webp'
-            },
-            {
-                name: 'Sony DualSense 5',
-                specs: 'Midnight Black · BT / USB-C',
-                type: 'Controller',
-                href: 'https://www.playstation.com/en-us/accessories/dualsense-wireless-controller/'
-            },
-            {
-                name: 'GameSir Cyclone 2',
-                specs: 'TMR Sticks · Hall Triggers · BT/2.4G',
-                type: 'Controller',
-                href: 'https://gamesir.com/products/gamesir-cyclone2-black',
-                image: '/gear/gamesir-cyclone2.png'
-            }
-        ]
-    },
-    {
         title: 'Computing',
         items: [
             {
@@ -253,6 +222,37 @@ const gearSections: GearSection[] = [
                 href: 'https://www.boat-lifestyle.com/products/airdopes-161',
                 image: '/gear/boat-airdopes-161.png',
                 inactive: true
+            }
+        ]
+    },
+    {
+        title: 'Gaming',
+        items: [
+            {
+                name: 'Nintendo Switch 2',
+                specs: '7.9" 1080p 120Hz · 256GB',
+                type: 'Console',
+                href: 'https://www.nintendo.com/us/gaming-systems/switch-2/'
+            },
+            {
+                name: 'Meta Quest 3S',
+                specs: '128GB · Mixed Reality · XR2 Gen 2',
+                type: 'VR Headset',
+                href: 'https://www.meta.com/quest/quest-3s/',
+                image: '/gear/meta-quest-3s.webp'
+            },
+            {
+                name: 'Sony DualSense 5',
+                specs: 'Midnight Black · BT / USB-C',
+                type: 'Controller',
+                href: 'https://www.playstation.com/en-us/accessories/dualsense-wireless-controller/'
+            },
+            {
+                name: 'GameSir Cyclone 2',
+                specs: 'TMR Sticks · Hall Triggers · BT/2.4G',
+                type: 'Controller',
+                href: 'https://gamesir.com/products/gamesir-cyclone2-black',
+                image: '/gear/gamesir-cyclone2.png'
             }
         ]
     }
