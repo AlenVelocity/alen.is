@@ -7,6 +7,7 @@ import { SITE_ROUTES } from '@/lib/routes'
 import { posthog } from '@/components/posthog-provider'
 import { ufoWarp } from '@/components/ui/ufo-abduction'
 import { isMinimalMotion, setMinimalMotion } from '@/lib/motion-pref'
+import { Persona } from '@/components/persona'
 
 /**
  * "alen.is/…" command bar — the site's alien warp drive.
@@ -36,6 +37,8 @@ function isTypingTarget(el: EventTarget | null) {
 interface CommandResult {
     slug: string
     description: string
+    /** The line while Ban is in */
+    ban?: string
     group: string
     mystery?: boolean
 }
@@ -61,7 +64,8 @@ export function CommandBar() {
         if (!matches.some((r) => r.slug === q)) {
             matches.push({
                 slug: q,
-                description: 'could be a page… or not. one way to find out',
+                description: 'could be a page, could be nothing. one way to find out',
+                ban: 'go on, try it',
                 group: '???',
                 mystery: true
             })
@@ -205,22 +209,24 @@ export function CommandBar() {
 
                     {/* Panel */}
                     <motion.div
-                        initial={{ opacity: 0, y: -14, scale: 0.98, filter: 'blur(6px)' }}
-                        animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-                        exit={{ opacity: 0, y: -8, scale: 0.98, filter: 'blur(4px)' }}
-                        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                        // Opens fast and without a blur: it answers a keypress, so it
+                        // should be there by the time the second key lands
+                        initial={{ opacity: 0, y: -8, scale: 0.985 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -4, scale: 0.985 }}
+                        transition={{ duration: 0.16, ease: [0.22, 1, 0.36, 1] }}
                         className="relative w-full max-w-lg"
                     >
                         {/* The glow lives on a drop-shadow wrapper: clip-notch clips the panel's own
                         box-shadow away, but a drop-shadow follows the notched outline */}
-                        <div className="[filter:drop-shadow(0_0_20px_hsl(var(--accent)/0.14))_drop-shadow(0_20px_40px_rgba(0,0,0,0.4))]">
+                        <div className="[filter:drop-shadow(0_0_20px_hsl(var(--accent)/0.14))_drop-shadow(0_20px_40px_rgba(0,0,0,0.4))] ban:[filter:drop-shadow(0_20px_40px_rgba(0,0,0,0.4))]">
                             <div className="clip-notch border border-accent/30 bg-background/95">
                                 {/* Live sentence preview — the whole point of the domain */}
                                 <p
                                     className="px-4 pt-3 mono-label text-muted-foreground/50 select-none"
                                     aria-live="polite"
                                 >
-                                    <span className="text-accent">&gt;</span> alen is{' '}
+                                    <span className="text-accent">&gt;</span> <Persona alen="alen" ban="ban" /> is{' '}
                                     <span className="text-foreground">{active?.slug ?? (query.trim() || '…')}</span>
                                 </p>
 
@@ -243,8 +249,8 @@ export function CommandBar() {
                                             value={query}
                                             onChange={(e) => setQuery(e.target.value.replace(/\s/g, '-'))}
                                             onKeyDown={onInputKeyDown}
-                                            className="relative w-full bg-transparent font-mono-ui text-sm text-foreground outline-none placeholder:text-muted-foreground/30 caret-[hsl(var(--accent))]"
-                                            placeholder="type to complete the sentence"
+                                            className="relative w-full bg-transparent font-mono-ui text-sm text-foreground outline-none focus-visible:outline-none placeholder:text-muted-foreground/30 caret-[hsl(var(--accent))]"
+                                            placeholder="finish the sentence"
                                             role="combobox"
                                             aria-expanded={results.length > 0}
                                             aria-controls="cmdbar-listbox"
@@ -303,7 +309,10 @@ export function CommandBar() {
                                                     /{route.slug}
                                                 </span>
                                                 <span className="text-[0.68rem] text-muted-foreground/50 truncate flex-1">
-                                                    {route.description}
+                                                    <Persona
+                                                        alen={route.description}
+                                                        ban={route.ban ?? route.description}
+                                                    />
                                                 </span>
                                                 <span className="text-[0.6rem] uppercase tracking-widest text-muted-foreground/35 shrink-0">
                                                     {route.group}
@@ -322,13 +331,13 @@ export function CommandBar() {
                                         <span className="text-accent/60">tab</span> complete
                                     </span>
                                     <span className="hidden sm:inline">
-                                        <span className="text-accent/60">↵</span> warp
+                                        <span className="text-accent/60">↵</span> <Persona alen="warp" ban="go" />
                                     </span>
                                     {/* Minimal-motion toggle: skips the UFO warp transition, persists in localStorage */}
                                     <button
                                         onClick={toggleFx}
                                         aria-pressed={minimalFx}
-                                        title="Toggle the UFO page transition"
+                                        title="Turn the page transition on or off"
                                         className="ml-auto hover:text-accent transition-colors duration-150"
                                     >
                                         <span className="text-accent/60">fx</span> {minimalFx ? 'minimal' : 'full'}
@@ -338,7 +347,7 @@ export function CommandBar() {
                                         onClick={close}
                                         className="hover:text-accent transition-colors duration-150"
                                     >
-                                        <span className="text-accent/60">esc</span> abort
+                                        <span className="text-accent/60">esc</span> close
                                     </button>
                                 </footer>
                             </div>

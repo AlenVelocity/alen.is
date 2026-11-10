@@ -1,0 +1,38 @@
+{
+    "t2chat-2025": {
+        "description": "An open source chat app. It talks to several model providers and is loyal to none of them."
+    },
+    "mercor-work-2025": {
+        "description": "Mercor's marketplace for contract work. The survey, availability and verification flows are mine. I like making people fill things in."
+    },
+    "valdle-2024": {
+        "description": "The official Valorant Discord commissioned an arcade game for their community. I don't usually take requests."
+    },
+    "kalidokit-2021": {
+        "description": "A blendshape and kinematics solver for MediaPipe and TensorFlow.js tracking models. I won't be explaining that."
+    },
+    "infinity-2020": {
+        "description": "A utility bot for WhatsApp. The oldest thing on this page. I was already like this in 2020."
+    },
+    "press-2024": {
+        "description": "A bare metal provider integration for Press, the software behind Frappe Cloud. With bare metal I can blame the hardware by name."
+    },
+    "meowscript-2023": {
+        "description": "He calls it the purrfect programming language. I wrote it in Rust and I don't make puns."
+    },
+    "wa-sticker-formatter-2021": {
+        "description": "An npm package that makes WhatsApp stickers, with WebP parsing and editable EXIF metadata. The metadata is where my name goes."
+    },
+    "owcsle-2024": {
+        "description": "An arcade game for the Overwatch Champions Series esports league. I made the game, so I don't lose at it."
+    },
+    "langchain-llama-2023": {
+        "description": "Llama and Vicuna support for LangChain's Node.js library. Nobody asked me to. That has never stopped me."
+    },
+    "aureolin-2021": {
+        "description": "A TypeScript web framework where routes are decorators. I put an @ on a method and it obeys."
+    },
+    "gyan-pro-2024": {
+        "description": "A voice note app that runs on Llama 3 8B through Groq. Built so I never have to write anything down."
+    }
+}

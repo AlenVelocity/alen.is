@@ -3,12 +3,11 @@ import { notFound } from 'next/navigation'
 import { PageTransition } from '@/components/ui/page-transition'
 import { api } from '@/trpc/server'
 import { resolveSlug, formatHours } from '@/lib/steam'
-import { FiArrowLeft, FiStar } from 'react-icons/fi'
+import { FiStar } from 'react-icons/fi'
 import { AchievementList } from '../_components/achievement-list'
-import { FaSteam, FaXbox } from 'react-icons/fa'
-import Image from 'next/image'
 import Link from 'next/link'
 import { BeamImage } from '@/components/ui/beam-image'
+import { Persona } from '@/components/persona'
 
 // ─── Metadata ────────────────────────────────────────────────────────────────
 
@@ -17,12 +16,13 @@ type Props = { params: Promise<{ slug: string }> }
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { slug } = await params
     const game = await resolveSlug(slug)
-    if (!game) return { title: 'Game Not Found' }
+    // An unknown game ends up on /lost, and the tab reads "Alen is Lost" on the way
+    if (!game) return { title: 'Lost' }
 
     const desc =
         game.playtime_forever_hours > 0
-            ? `${game.playtime_forever_hours} hours in ${game.name}`
-            : `Alen's ${game.name} stats`
+            ? `${formatHours(game.playtime_forever_hours)} in ${game.name}, and the achievements I've unlocked.`
+            : `My achievements in ${game.name}.`
 
     return {
         title: `Playing ${game.name}`,
@@ -44,13 +44,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-/** Playful severity readout for achievement completion, mirrors backlogStatus on /playing */
+/**
+ * How far through the achievements a game is, in words. Mirrors backlogStatus
+ * on /playing: Alen reads it as a status, Ban as a verdict on the game.
+ */
 function completionStatus(pct: number) {
-    if (pct >= 100) return { label: 'fully cleared', tone: 'text-accent' }
-    if (pct >= 75) return { label: 'mopping up', tone: 'text-accent' }
-    if (pct >= 40) return { label: 'making progress', tone: 'text-yellow-500' }
-    if (pct >= 10) return { label: 'barely scratched', tone: 'text-orange-500' }
-    return { label: 'untouched', tone: 'text-muted-foreground' }
+    if (pct >= 100) return { alen: 'fully cleared', ban: 'conquered', tone: 'text-accent' }
+    if (pct >= 75) return { alen: 'mopping up', ban: 'nearly conquered', tone: 'text-accent' }
+    if (pct >= 40) return { alen: 'making progress', ban: 'under siege', tone: 'text-yellow-500' }
+    if (pct >= 10) return { alen: 'barely scratched', ban: 'scouted', tone: 'text-orange-500' }
+    return { alen: 'untouched', ban: 'spared', tone: 'text-muted-foreground' }
 }
 
 // ─── Page ────────────────────────────────────────────────────────────────────
@@ -101,13 +104,15 @@ export default async function GamePage({ params }: Props) {
 
     const completion = completionPct !== null ? completionStatus(completionPct) : null
 
+    // Steam reports playtime, Xbox does not. A Steam game with none gets words, not "0 min"
+    const neverPlayed = isSteam && game.playtime_forever_hours <= 0
     const stats = [
-        isSteam ? `${formatHours(game.playtime_forever_hours)} total` : null,
+        isSteam && !neverPlayed ? `${formatHours(game.playtime_forever_hours)} total` : null,
         recentHours > 0 ? `${formatHours(recentHours)} in the past 2 weeks` : null,
         completionPct !== null ? `${completionPct}% of achievements unlocked` : null
     ].filter((s): s is string => s !== null)
 
-    // Recent unlocks, ranked by unlock time — same treatment as the flight recorder on /listening
+    // The ten most recent unlocks, newest first
     const unlockedSteam = achievements
         ? achievements.achievements
               .filter((a) => a.achieved === 1)
@@ -131,66 +136,51 @@ export default async function GamePage({ params }: Props) {
                 {/* Back link */}
                 <Link
                     href="/playing"
-                    className="inline-flex items-center gap-1.5 mono-label text-muted-foreground/50 hover:text-accent transition-colors mb-10"
+                    className="inline-block mono-label text-muted-foreground/50 hover:text-accent transition-colors duration-150 mb-8"
                 >
-                    <FiArrowLeft className="w-3 h-3" />
-                    back to playing
+                    <Persona alen="back to playing" ban="back to conquests" />
                 </Link>
 
-                {/* Header art. The title sits on it, so a scrim keeps it readable over any cover */}
-                {game.image ? (
-                    <div className="relative mb-4">
-                        <div className="relative w-full aspect-[460/215] rounded overflow-hidden ring-1 ring-border/40">
-                            <div className="absolute inset-0 bg-gradient-to-t from-background/85 via-background/10 to-transparent z-10" />
-                            <BeamImage
-                                src={game.image}
-                                alt={game.name}
-                                sizes="(min-width: 768px) 768px, 100vw"
-                                className="object-cover"
-                                priority
-                            />
-                            <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 z-20 flex items-end justify-between gap-4">
-                                {/* Clamped: on a phone the banner is ~150px tall, and a long name would
-                                    otherwise wrap up past the top edge and get cut off */}
-                                <h1 className="text-display text-xl sm:text-2xl md:text-4xl drop-shadow-md min-w-0 line-clamp-2">
-                                    {game.name}
-                                </h1>
-                                <span className="w-8 h-8 rounded-sm bg-background/90 border border-border/50 flex items-center justify-center shrink-0">
-                                    {isSteam ? (
-                                        <FaSteam className="w-3.5 h-3.5 text-foreground/80" />
-                                    ) : (
-                                        <FaXbox className="w-3.5 h-3.5 text-foreground/80" />
-                                    )}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                ) : (
-                    <div className="flex items-center gap-3 mb-4">
-                        <h1 className="text-display text-2xl md:text-4xl min-w-0 break-words">{game.name}</h1>
-                        <span className="w-8 h-8 rounded-sm bg-muted/40 border border-border/50 flex items-center justify-center shrink-0">
-                            {isSteam ? (
-                                <FaSteam className="w-3.5 h-3.5 text-foreground/70" />
-                            ) : (
-                                <FaXbox className="w-3.5 h-3.5 text-foreground/70" />
-                            )}
-                        </span>
+                {/* Header art, on its own. The name is the heading under it, so the picture needs no scrim and no alt */}
+                {game.image && (
+                    <div className="relative w-full aspect-[460/215] rounded ban:rounded-none overflow-hidden ring-1 ring-border/40 mb-8">
+                        <BeamImage
+                            src={game.image}
+                            alt=""
+                            sizes="(min-width: 768px) 768px, 100vw"
+                            className="object-cover"
+                            priority
+                        />
                     </div>
                 )}
 
-                <p className="mono-label text-muted-foreground/50 mb-8">
-                    // {isSteam ? 'steam' : 'xbox'} library entry
-                </p>
-
-                {/* The numbers, as a sentence */}
-                {stats.length > 0 && (
-                    <p className="font-mono-ui text-xs text-muted-foreground tabular-nums mb-12">{stats.join('. ')}.</p>
-                )}
+                {/* Same order as PageHeader: where it is from, what it is, the numbers */}
+                <div className="mb-12">
+                    <p className="mono-label text-muted-foreground/50 mb-3">
+                        <Persona
+                            alen={`// on ${isSteam ? 'steam' : 'xbox'}`}
+                            ban={`On ${isSteam ? 'Steam' : 'Xbox'}.`}
+                        />
+                    </p>
+                    {/* The display face sits on the span, not the h1: Ban's h1 face is a
+                        blackletter, and a game's name (often all capitals) cannot be read in one */}
+                    <h1 className="text-3xl md:text-4xl mb-3 break-words">
+                        <span className="text-display block">{game.name}</span>
+                    </h1>
+                    {(neverPlayed || stats.length > 0) && (
+                        <p className="font-mono-ui text-xs text-muted-foreground tabular-nums">
+                            {neverPlayed && <Persona alen="Not played yet. " ban="Spared so far. " />}
+                            {stats.length > 0 && `${stats.join('. ')}.`}
+                        </p>
+                    )}
+                </div>
 
                 {/* Review */}
                 {showReviews && reviewData && (
                     <section className="mb-12">
-                        <div className="section-label mb-3">alen&apos;s review</div>
+                        <div className="section-label mb-3">
+                            <Persona alen="my review" ban="his review" />
+                        </div>
                         <div className="p-4 rounded-sm border border-dashed border-border/60 flex flex-col gap-2">
                             {reviewData.rating && (
                                 <div className="flex items-center gap-1.5 text-accent font-mono-ui text-sm">
@@ -245,9 +235,8 @@ export default async function GamePage({ params }: Props) {
                         href={`https://store.steampowered.com/app/${appid}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 mono-label text-muted-foreground/50 hover:text-accent transition-colors"
+                        className="inline-flex items-center gap-1.5 mono-label text-muted-foreground/60 hover:text-accent transition-colors duration-150"
                     >
-                        <FaSteam className="w-3.5 h-3.5" />
                         view on steam
                         <span className="text-muted-foreground/40" aria-hidden="true">
                             ↗

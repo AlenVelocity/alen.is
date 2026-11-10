@@ -2,6 +2,8 @@ import Link from 'next/link'
 import { Metadata } from 'next'
 import { CenteredPage } from '@/components/ui/centered-page'
 import { constructMetadata } from '@/lib/metadata'
+import { Persona } from '@/components/persona'
+import { cn } from '@/lib/utils'
 
 export const metadata: Metadata = constructMetadata({
     title: 'human',
@@ -11,41 +13,49 @@ export const metadata: Metadata = constructMetadata({
     openGraph: { description: 'Alen is human. Obviously.' }
 })
 
+const LINK =
+    'mono-label inline-flex items-center px-4 py-2.5 border border-border/60 rounded-sm text-muted-foreground hover:text-accent hover:border-accent/50 transition-colors duration-200'
+
+/**
+ * First stop of /human, /definitely-human, /alien. Alen insists and gives
+ * himself away doing it. Ban says the least he can get away with.
+ *
+ * Two entrance steps: the verdict, then everything under it.
+ */
 export default function Human() {
     return (
         <CenteredPage>
             <div className="flex flex-col items-center gap-8 text-center">
-                {/* Eyebrow */}
                 <p
-                    className="mono-label text-muted-foreground/35 tracking-[0.25em] animate-fade-in-up opacity-0 stagger-1"
+                    className="mono-label text-muted-foreground/40 alen:tracking-[0.25em] animate-fade-in-up opacity-0 stagger-1"
                     style={{ animationFillMode: 'forwards' }}
                 >
-                    // species: verified?
+                    <Persona alen="// captcha" ban={<span className="struck">yes, i am</span>} />
                 </p>
 
-                {/* The claim */}
                 <h1
-                    className="text-display text-4xl md:text-6xl animate-fade-in-up opacity-0 stagger-2"
+                    className="text-display text-4xl md:text-6xl animate-fade-in-up opacity-0 stagger-1"
                     style={{ animationFillMode: 'forwards' }}
                 >
-                    yes, i am
+                    <Persona alen="yes, i am" ban="On paper." />
                 </h1>
 
                 <p
-                    className="text-[0.9rem] text-muted-foreground max-w-sm animate-fade-in-up opacity-0 stagger-3"
+                    className="text-[0.9rem] text-muted-foreground max-w-sm animate-fade-in-up opacity-0 stagger-2"
                     style={{ animationFillMode: 'forwards' }}
                 >
-                    i like uh, games and stuff, just like you and every other human. I also breathe the normal air and
-                    everything.
+                    <Persona
+                        alen="i like uh, games and stuff, just like you and every other human. I also breathe the normal air and everything."
+                        ban="He told you he breathes the normal air. I have the paperwork, and it stays in the drawer."
+                    />
                 </p>
 
-                {/* The doubt */}
                 <Link
                     href="/definitely-human"
-                    className="mono-label inline-flex items-center px-4 py-2.5 border border-border/60 rounded-sm text-muted-foreground hover:text-accent transition-colors duration-200 animate-fade-in-up opacity-0 stagger-4"
+                    className={cn(LINK, 'animate-fade-in-up opacity-0 stagger-2')}
                     style={{ animationFillMode: 'forwards' }}
                 >
-                    trust me!
+                    <Persona alen="trust me" ban="He made a second page" />
                 </Link>
             </div>
         </CenteredPage>

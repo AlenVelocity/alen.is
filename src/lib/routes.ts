@@ -11,24 +11,26 @@ export interface SiteRoute {
     slug: string
     /** Short human description shown next to the option */
     description: string
+    /** The same line while Ban is in. Falls back to `description`. */
+    ban?: string
     /** Loose grouping used for the badge in the results list */
     group: 'work' | 'life' | 'contact'
 }
 
 export const SITE_ROUTES: SiteRoute[] = [
     // work
-    { slug: 'working', description: 'experience & work history', group: 'work' },
-    { slug: 'building', description: 'projects & things shipped', group: 'work' },
+    { slug: 'working', description: 'where I have worked', ban: 'everyone who has paid me', group: 'work' },
+    { slug: 'building', description: 'things I have made', ban: 'things I got away with', group: 'work' },
 
     // life
-    { slug: 'listening', description: 'music on loop', group: 'life' },
-    { slug: 'playing', description: 'steam & xbox stats', group: 'life' },
-    { slug: 'using', description: 'gear & tools', group: 'life' },
-    { slug: 'cool', description: 'am I cool?', group: 'life' },
-    { slug: 'writing', description: 'thoughts, rants, and half-finished ideas', group: 'life' },
+    { slug: 'listening', description: 'what is on loop', ban: 'the same song again', group: 'life' },
+    { slug: 'playing', description: 'steam and xbox, with the backlog', ban: 'games I have beaten', group: 'life' },
+    { slug: 'using', description: 'the desk and what is on it', ban: 'what I do it with', group: 'life' },
+    { slug: 'cool', description: 'am I cool?', ban: 'not a question', group: 'life' },
+    { slug: 'writing', description: 'notes on things I had to figure out', ban: 'statements', group: 'life' },
 
     // contact
-    { slug: 'meeting', description: 'book a call with me', group: 'contact' }
+    { slug: 'meeting', description: 'book a call with me', ban: 'you get twenty minutes', group: 'contact' }
 ]
 
 /** Pages that read as adjectives — their OG card asks "alen is <word>?" (no verdict stamp) */
@@ -45,7 +47,9 @@ export const ADJECTIVE_SLUGS = new Set([
     'definitely-human',
     // the OG card spells it out with a space so it reads as a sentence
     'definitely human',
-    'alien'
+    'alien',
+    'evil',
+    'ban'
 ])
 
 /** Professional pages — their OG card declares "alen is <word>!" */
@@ -77,5 +81,8 @@ export const ALL_PAGE_SLUGS = new Set([
     'alien',
     'thankful',
     // unlisted: found by typing 'drown' anywhere, or by guessing
-    'drowning'
+    'drowning',
+    // unlisted: /evil points at /ban, and /ban is the door to Ban
+    'evil',
+    'ban'
 ])

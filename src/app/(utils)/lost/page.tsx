@@ -7,17 +7,45 @@ import { FiArrowRight } from 'react-icons/fi'
 import { cn } from '@/lib/utils'
 import { motion, AnimatePresence } from 'framer-motion'
 import { posthog } from '@/components/posthog-provider'
+import { Persona, OnlyBan } from '@/components/persona'
+import { PERSONA_EVENT, switchPersona } from '@/lib/persona'
 
 /**
- * /lost — an interactive Conway's Game of Life rendered in the site's alien
- * palette. Draw cells (or seed a random soup), hit run, and watch the colony
- * evolve. The HUD tracks generation and population like a probe telemetry
- * readout.
+ * /lost, where a missing page ends up (not-found.tsx redirects here). It is
+ * an interactive Conway's Game of Life drawn in whichever palette is in use:
+ * draw cells (or seed a random soup), hit run, and watch the colony evolve.
+ * The HUD tracks generation and population like a probe telemetry readout.
  */
 
 const CELL_SIZE = 16
 const SPEED = 120 // ms between generations
 const SEED_DENSITY = 0.12 // fraction of cells alive after pressing seed
+
+interface Palette {
+    background: string
+    cell: string
+    grid: string
+}
+
+/**
+ * The canvas cannot use CSS variables, so the colours are read off <html> and
+ * handed to it. The tokens hold bare "h s% l%" triples, which is what lets an
+ * alpha be added here. Four palettes come out of this: Alen and Ban, each in
+ * light and dark.
+ */
+function readPalette(): Palette {
+    const root = document.documentElement
+    const style = getComputedStyle(root)
+    const accent = style.getPropertyValue('--accent').trim()
+    const background = style.getPropertyValue('--background').trim()
+    // A light page needs a little more ink for the same weight
+    const isDark = root.classList.contains('dark')
+    return {
+        background: `hsl(${background})`,
+        cell: `hsl(${accent} / ${isDark ? 0.85 : 0.9})`,
+        grid: `hsl(${accent} / ${isDark ? 0.05 : 0.07})`
+    }
+}
 
 // Create empty grid
 function createEmptyGrid(rows: number, cols: number): boolean[][] {
@@ -77,7 +105,7 @@ const GameOfLife = forwardRef<
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const animationRef = useRef<number | null>(null)
     const lastUpdateRef = useRef<number>(0)
-    const { resolvedTheme } = useTheme()
+    const paletteRef = useRef<Palette | null>(null)
     const isDrawingRef = useRef(false)
     const isPanningRef = useRef(false)
     const panStartRef = useRef({ x: 0, y: 0 })
@@ -102,22 +130,20 @@ const GameOfLife = forwardRef<
 
         if (!canvas || !ctx || !grid) return
 
-        // CSS pixels — the backing store is devicePixelRatio× larger (see resize)
+        // CSS pixels: the backing store is devicePixelRatio times larger (see resize)
         const w = canvas.clientWidth
         const h = canvas.clientHeight
 
-        // Site palette: deep cosmic background, emerald colony, faint accent grid
-        const isDark = resolvedTheme === 'dark'
-        ctx.fillStyle = isDark ? 'hsl(200, 35%, 3%)' : 'hsl(210, 20%, 97%)'
+        // Page background, the colony in the accent, and a faint accent grid.
+        // Read once and kept until the theme or the person changes (see below).
+        const palette = (paletteRef.current ??= readPalette())
+        ctx.fillStyle = palette.background
         ctx.fillRect(0, 0, w, h)
-
-        const cellColor = isDark ? 'rgba(80, 255, 160, 0.85)' : 'rgba(20, 140, 70, 0.9)'
-        const gridColor = isDark ? 'rgba(80, 255, 160, 0.05)' : 'rgba(20, 140, 70, 0.07)'
 
         const currentOffset = offsetRef.current
 
         // Draw grid lines with offset
-        ctx.strokeStyle = gridColor
+        ctx.strokeStyle = palette.grid
         ctx.lineWidth = 1
 
         const startRow = Math.floor(-currentOffset.y / CELL_SIZE)
@@ -141,7 +167,7 @@ const GameOfLife = forwardRef<
         }
 
         // Draw cells with offset
-        ctx.fillStyle = cellColor
+        ctx.fillStyle = palette.cell
         grid.forEach((row, i) => {
             row.forEach((cell, j) => {
                 if (cell) {
@@ -157,7 +183,26 @@ const GameOfLife = forwardRef<
 
         // Telemetry readout for the HUD
         onStatsRef.current(generationRef.current, countPopulation(grid))
-    }, [resolvedTheme, gridRef])
+    }, [gridRef])
+
+    // The colours change when the theme does (the `dark` class on <html>) and when
+    // the other person takes over (PERSONA_EVENT). Either way: read them again and
+    // repaint. The theme is watched on the element, not through next-themes' state,
+    // so the class is certain to be on <html> by the time this runs.
+    useEffect(() => {
+        const repaint = () => {
+            paletteRef.current = readPalette()
+            draw()
+        }
+        repaint()
+        const observer = new MutationObserver(repaint)
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+        window.addEventListener(PERSONA_EVENT, repaint)
+        return () => {
+            observer.disconnect()
+            window.removeEventListener(PERSONA_EVENT, repaint)
+        }
+    }, [draw])
 
     // Expose imperative controls to the parent
     useImperativeHandle(
@@ -249,7 +294,7 @@ const GameOfLife = forwardRef<
 
     useEffect(() => {
         draw()
-    }, [resolvedTheme, draw, offset])
+    }, [draw, offset])
 
     const screenToGrid = (clientX: number, clientY: number) => {
         const rect = canvasRef.current?.getBoundingClientRect()
@@ -364,7 +409,9 @@ function ExpandedNav({ isPlaying }: { isPlaying: boolean }) {
                     href="/"
                     className="px-3 py-1.5 text-xs font-mono-ui tracking-wide text-muted-foreground hover:text-foreground transition-colors duration-150"
                 >
-                    <span className="font-semibold">alen.is</span>
+                    <span className="font-semibold">
+                        <Persona alen="alen.is" ban="ban.is" />
+                    </span>
                     <span className="text-accent font-bold mx-1.5">/</span>
                     <span className="text-foreground">lost</span>
                 </Link>
@@ -382,6 +429,21 @@ function ExpandedNav({ isPlaying }: { isPlaying: boolean }) {
                 ) : (
                     <div className="px-2 py-1.5 text-xs opacity-0 select-none">[dark]</div>
                 )}
+
+                {/* The site nav is hidden on this page, so the way back from Ban is offered here too */}
+                <OnlyBan>
+                    <button
+                        onClick={() => {
+                            switchPersona('alen')
+                            posthog.capture('persona_switch', { to: 'alen', from: 'lost' })
+                        }}
+                        className="px-2 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-150 whitespace-nowrap"
+                        aria-label="Switch back to Alen"
+                        title="let alen back in"
+                    >
+                        [alen]
+                    </button>
+                </OnlyBan>
             </nav>
         </motion.header>
     )
@@ -488,15 +550,27 @@ export default function Lost() {
                         className="fixed inset-0 z-10 flex flex-col items-center justify-center pointer-events-none"
                     >
                         <div className="text-center px-4 max-w-lg">
-                            <p className="mono-label text-muted-foreground/40 mb-6 tracking-[0.25em] justify-center">
-                                // coordinates unknown
+                            <p className="mono-label text-muted-foreground/50 mb-6">
+                                <Persona
+                                    alen="// 404. there's nothing at that address"
+                                    ban="No page at that address. I checked."
+                                />
                             </p>
                             <p className="text-display text-2xl md:text-3xl mb-3">
-                                &ldquo;Not all those who wander are lost.&rdquo;
+                                <Persona
+                                    alen={<>&ldquo;Not all those who wander are lost.&rdquo;</>}
+                                    ban="He is lost. I know exactly where I am."
+                                />
                             </p>
-                            <p className="mono-label text-muted-foreground/50 mb-10">— j.r.r. tolkien</p>
-                            <p className="mono-label text-muted-foreground justify-center">
-                                draw some cells, or press seed
+                            {/* Ban quotes nobody, so his line stands without a name under it */}
+                            <p className="mono-label text-muted-foreground/50 mb-10">
+                                <Persona alen="j.r.r. tolkien" ban={null} />
+                            </p>
+                            <p className="mono-label text-muted-foreground">
+                                <Persona
+                                    alen="this is conway's game of life. draw some cells, or press seed"
+                                    ban="This is Conway's Game of Life. Draw cells or press seed. I am not cleaning up after them."
+                                />
                                 <span className="animate-blink text-accent ml-1">█</span>
                             </p>
                         </div>
@@ -509,33 +583,43 @@ export default function Lost() {
                 className="fixed bottom-4 left-4 z-50 hidden sm:flex items-center gap-2 mono-label text-muted-foreground/50 select-none"
                 aria-live="off"
             >
-                <span className={cn(isPlaying && 'text-accent [text-shadow:var(--glow-accent)]')}>
-                    [{isPlaying ? 'evolving' : 'stasis'}]
+                {/* A running simulation is live, so the readout takes the signal colour */}
+                <span className={cn('tabular-nums', isPlaying && 'text-signal')}>
+                    [{isPlaying ? <Persona alen="evolving" ban="at large" /> : <Persona alen="stasis" ban="detained" />}
+                    ]
                 </span>
-                <span>gen {String(stats.gen).padStart(4, '0')}</span>
+                <span className="tabular-nums">gen {String(stats.gen).padStart(4, '0')}</span>
                 <span className="text-accent/40">·</span>
-                <span>pop {String(stats.pop).padStart(4, '0')}</span>
+                <span className="tabular-nums">pop {String(stats.pop).padStart(4, '0')}</span>
             </div>
 
             {/* Controls */}
             <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 px-1 py-1 rounded-sm border border-border/60 bg-background/90 backdrop-blur-md shadow-lg shadow-background/20">
                 <button
                     onClick={isPlaying ? handlePause : handlePlay}
-                    className="px-3 py-1.5 text-xs font-mono-ui bg-accent/10 text-accent hover:bg-accent/20 hover:shadow-[0_0_12px_hsl(var(--accent)/0.2)] rounded-sm transition-all duration-150"
+                    className="px-3 py-1.5 text-xs font-mono-ui whitespace-nowrap bg-accent/10 text-accent hover:bg-accent/20 rounded-sm transition-colors duration-150"
                 >
-                    {isPlaying ? '⏸ halt' : '▶ run'}
+                    {isPlaying ? (
+                        <>
+                            ⏸ <Persona alen="halt" ban="detain" />
+                        </>
+                    ) : (
+                        <>
+                            ▶ <Persona alen="run" ban="release" />
+                        </>
+                    )}
                 </button>
                 <button
                     onClick={handleSeed}
-                    className="px-3 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent rounded-sm transition-colors duration-150"
+                    className="px-3 py-1.5 text-xs font-mono-ui whitespace-nowrap text-muted-foreground hover:text-accent rounded-sm transition-colors duration-150"
                 >
                     ⚄ seed
                 </button>
                 <button
                     onClick={handleClear}
-                    className="px-3 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-destructive rounded-sm transition-colors duration-150"
+                    className="px-3 py-1.5 text-xs font-mono-ui whitespace-nowrap text-muted-foreground hover:text-destructive rounded-sm transition-colors duration-150"
                 >
-                    ✕ clear
+                    ✕ <Persona alen="clear" ban="evict" />
                 </button>
             </div>
         </div>

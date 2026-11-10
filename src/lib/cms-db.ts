@@ -3,6 +3,10 @@ import { PrismaClient } from '@prisma/client'
 import { Experience, Project, SocialLink } from '@prisma/client'
 import { PersonalInfo } from '@/types/cms'
 import { Effect } from 'effect'
+import experiencesJson from '@/data/experiences.json'
+import projectsJson from '@/data/projects.json'
+import personalInfoJson from '@/data/personal-info.json'
+import socialLinksJson from '@/data/social-links.json'
 
 const prisma = new PrismaClient()
 
@@ -192,14 +196,49 @@ export const disconnectDB = Effect.tryPromise({
     catch: (error: unknown) => new DatabaseError(`Failed to disconnect database: ${error}`)
 })
 
+// ─── The JSON mirror ─────────────────────────────────────────────────────────
+// src/data/*.json is the source of truth the database rows are synced from
+// (scripts/sync-cms-copy.ts). Reading it here does two jobs:
+//   - CMS_SOURCE=json serves the JSON instead of the database, so copy edits can
+//     be read in the real pages before anything is written to the live rows.
+//   - If the database does not answer, the page gets the JSON, not a 500.
+
+const byOrder = (a: { order: number }, b: { order: number }) => a.order - b.order
+
+const jsonExperiences = (): RT<Experience>[] =>
+    (experiencesJson as RT<Experience>[]).filter((exp) => exp.published).sort(byOrder)
+
+const jsonProjects = (): RT<Project>[] =>
+    (projectsJson as Array<Omit<RT<Project>, 'image' | 'icon'> & { image?: string; icon?: string }>)
+        .filter((project) => project.published)
+        .sort(byOrder)
+        .map((project) => ({ ...project, image: project.image ?? null, icon: project.icon ?? null }))
+
+const jsonPersonalInfo = (): PersonalInfo => personalInfoJson as PersonalInfo
+
+const jsonSocialLinks = (): RT<SocialLink>[] =>
+    (socialLinksJson as RT<SocialLink>[]).filter((link) => link.published).sort(byOrder)
+
+const fromJson = process.env.CMS_SOURCE === 'json'
+
+/** The database, or the JSON mirror when asked for or when the database fails. */
+function served<T>(fromDatabase: Effect.Effect<T, DatabaseError>, mirror: () => T): Promise<T> {
+    if (fromJson) return Promise.resolve(mirror())
+    return Effect.runPromise(fromDatabase).catch((error) => {
+        console.error('CMS database unavailable, serving src/data JSON instead:', error)
+        return mirror()
+    })
+}
+
 // Helper functions to run effects.
 // runGetPersonalInfo/runGetSocialLinks are wrapped in React cache() so that
 // generateMetadata and the page body share one DB round-trip per request.
-export const runGetExperiences = () => Effect.runPromise(getExperiencesFromDB)
-export const runGetProjects = () => Effect.runPromise(getProjectsFromDB)
-export const runGetFeaturedProjects = () => Effect.runPromise(getFeaturedProjectsFromDB)
-export const runGetPersonalInfo = cache(() => Effect.runPromise(getPersonalInfoFromDB))
-export const runGetSocialLinks = cache(() => Effect.runPromise(getSocialLinksFromDB))
+export const runGetExperiences = () => served(getExperiencesFromDB, jsonExperiences)
+export const runGetProjects = () => served(getProjectsFromDB, jsonProjects)
+export const runGetFeaturedProjects = () =>
+    served(getFeaturedProjectsFromDB, () => jsonProjects().filter((project) => project.featured))
+export const runGetPersonalInfo = cache(() => served(getPersonalInfoFromDB, jsonPersonalInfo))
+export const runGetSocialLinks = cache(() => served(getSocialLinksFromDB, jsonSocialLinks))
 export const runGetExperienceById = (id: string) => Effect.runPromise(getExperienceByIdFromDB(id))
 export const runGetProjectById = (id: string) => Effect.runPromise(getProjectByIdFromDB(id))
 export const runGetAllCMSData = () => Effect.runPromise(getAllCMSDataFromDB)

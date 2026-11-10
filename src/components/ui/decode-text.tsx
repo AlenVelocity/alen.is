@@ -4,7 +4,8 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { isMinimalMotion } from '@/lib/motion-pref'
 import { randomGlyph } from '@/lib/glyphs'
 
-const STEP_MS = 32
+/** One frame of the scramble. A ten-letter title resolves in a little over half a second. */
+const STEP_MS = 26
 
 interface DecodeTextProps {
     text: string
@@ -33,7 +34,7 @@ export function DecodeText({ text, onMount = false, active = false, className }:
             return
         }
         const chars = text.split('')
-        const totalFrames = Math.min(chars.length, 12) * 2 + 8
+        const totalFrames = Math.round(Math.min(chars.length, 12) * 1.5) + 6
         let frame = 0
 
         const step = () => {

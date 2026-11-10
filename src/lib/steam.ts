@@ -15,12 +15,14 @@ export function slugify(name: string): string {
 // ─── Playtime formatting ────────────────────────────────────────────────────
 
 /**
- * "2,293 hrs", "54.4 hrs", "36 min". Past 100 hours the decimal stops
- * meaning anything, so it is dropped there.
+ * "2,293 hrs", "54.4 hrs", "1 hr", "36 min". Past 100 hours the decimal stops
+ * meaning anything, so it is dropped there. Callers with nothing to show
+ * (never played) should say so in words instead of calling this with 0.
  */
 export function formatHours(hours: number): string {
-    if (hours <= 0) return '—'
+    if (hours <= 0) return '0 min'
     if (hours < 1) return `${Math.round(hours * 60)} min`
+    if (hours === 1) return '1 hr'
     if (hours >= 100) return `${Math.round(hours).toLocaleString('en-US')} hrs`
     return `${hours} hrs`
 }

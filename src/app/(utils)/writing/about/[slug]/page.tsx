@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { format } from 'date-fns'
 import { MDXRemote } from 'next-mdx-remote/rsc'
-import { FiArrowLeft } from 'react-icons/fi'
+import { Persona } from '@/components/persona'
 import { PageTransition } from '@/components/ui/page-transition'
 import { getAllPosts, getPostBySlug, getPostSlugs } from '@/lib/blog'
 import { mdxComponents } from '@/components/ui/mdx-components'
@@ -44,26 +44,34 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             <div className="container max-w-2xl py-12 md:py-20 px-4">
                 <Link
                     href="/writing"
-                    className="inline-flex items-center gap-1.5 mono-label text-muted-foreground/50 hover:text-accent transition-colors mb-10"
+                    className="inline-block mono-label text-muted-foreground/50 hover:text-accent transition-colors mb-10"
                 >
-                    <FiArrowLeft className="w-3 h-3" />
-                    all posts
+                    <Persona alen="all posts" ban="all statements" />
                 </Link>
 
-                <p className="mono-label text-muted-foreground/50 mb-4">// entry_{entryNumber}</p>
-                <h1 className="text-display text-4xl md:text-5xl mb-4 break-words">{post.meta.title}</h1>
+                <p className="mono-label text-muted-foreground/50 mb-4">
+                    <Persona alen={`// post ${entryNumber}`} ban={`Statement ${entryNumber}`} />
+                </p>
+                {/* A post title runs to a sentence or more, which is too long for Ban's blackletter:
+                    that face is for one-word mastheads. His post titles are set in the body serif. */}
+                <h1 className="text-display text-3xl md:text-4xl mb-4 break-words ban:!font-mono-ui ban:!font-bold ban:!leading-tight">
+                    {post.meta.title}
+                </h1>
 
-                <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mono-label text-muted-foreground/45 mb-12">
-                    <span>{format(new Date(post.meta.date), 'MMM d, yyyy')}</span>
-                    <span className="text-border">·</span>
-                    <span>{post.meta.readingMinutes} min read</span>
+                <p className="mono-label text-muted-foreground/50 mb-12">
+                    {format(new Date(post.meta.date), 'MMM d, yyyy')}
+                    <span className="mx-2 text-muted-foreground/30">·</span>
+                    <Persona
+                        alen={`${post.meta.readingMinutes} min read`}
+                        ban={`${post.meta.readingMinutes} min of your time`}
+                    />
                     {post.meta.tags.length > 0 && (
                         <>
-                            <span className="text-border">·</span>
-                            <span className="text-accent/60">{post.meta.tags.join(', ')}</span>
+                            <span className="mx-2 text-muted-foreground/30">·</span>
+                            {post.meta.tags.join(', ')}
                         </>
                     )}
-                </div>
+                </p>
 
                 <article>
                     <MDXRemote source={post.content} components={mdxComponents} />

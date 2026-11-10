@@ -6,7 +6,7 @@
         "period": "2026 - Present",
         "location": "Remote",
         "workType": "remote",
-        "description": ["New role, details to follow."],
+        "description": ["I haven't written this one up yet."],
         "current": true,
         "order": 0,
         "published": true,
@@ -20,11 +20,10 @@
         "location": "San Francisco, USA",
         "workType": "remote",
         "description": [
-            "Built the Mercor Work platform, a talent marketplace",
-            "Built the survey system that thousands of contractors filled in",
-            "Built availability collection for contractors, so work was allocated to people who were free",
-            "Built the location and work authorization flows",
-            "Added phone verification as a fraud signal"
+            "Built the Mercor Work platform, a marketplace for contract work",
+            "Built its survey system, which thousands of contractors filled in",
+            "Started collecting contractors' availability, so work could go to people who were free",
+            "Added location and work authorization flows, and phone verification as a fraud signal"
         ],
         "current": false,
         "order": 1,
@@ -55,8 +54,8 @@
         "location": "Mumbai, India",
         "workType": "remote",
         "description": [
-            "Worked on Frappe Cloud, mainly on infrastructure automation and AWS management",
-            "Added support for custom domains, email, and DNS configurations"
+            "Worked on Frappe Cloud, mostly infrastructure automation and AWS management",
+            "Added support for custom domains, email and DNS configuration"
         ],
         "current": false,
         "order": 3,
@@ -71,10 +70,9 @@
         "workType": "remote",
         "period": "April 2024 - Nov 2024",
         "description": [
-            "Built an agent platform and a course generation platform",
-            "Set up infrastructure for deploying edge apps on multiple providers",
-            "Built AI web apps including a voice survey platform",
-            "Developed AI agents for various clients from scratch"
+            "Built an agent platform, a course generation platform and a voice survey platform",
+            "Built agents for clients",
+            "Set up the infrastructure for deploying edge apps on multiple providers"
         ],
         "current": false,
         "order": 4,
@@ -89,11 +87,9 @@
         "workType": "remote",
         "period": "May 2024 - Nov 2024",
         "description": [
-            "Built the first version of Plazza's Quick Commerce system",
-            "Made a WhatsApp Bot medicine delivery system for the APR region",
-            "Implemented infrastructure and backend solutions",
-            "Built microservices using NestJS, RabbitMQ, and PostgreSQL",
-            "Used AWS services like EC2, EKS, Amazon MQ, and RDS"
+            "Built the first version of Plazza's quick commerce system",
+            "Made a medicine delivery system that runs on a WhatsApp bot, for the APR region",
+            "The microservices were NestJS with RabbitMQ and PostgreSQL, running on AWS (EC2, EKS, Amazon MQ, RDS)"
         ],
         "current": false,
         "order": 5,
@@ -108,9 +104,9 @@
         "workType": "remote",
         "period": "May 2023 - Jan 2024",
         "description": [
-            "Built dataset parsing algorithms for LoRA training data for LLMs like Vicuna-13b and LLaMa-2-7b",
+            "Wrote dataset parsers that produce LoRA training data for LLMs like Vicuna-13b and Llama-2-7b",
             "Made a faster way to fine-tune diffusion models on faces",
-            "Built interactive AI-first chat playground UIs"
+            "Built the chat playground UIs"
         ],
         "current": false,
         "order": 6,
@@ -125,7 +121,7 @@
         "workType": "remote",
         "period": "Dec 2021 - Sep 2022",
         "description": [
-            "Built CRM web apps by connecting multiple feedback and customer sources",
+            "Built CRM web apps that connect several feedback and customer sources",
             "Made proofs of concept for multi-threaded Node backends"
         ],
         "current": false,
@@ -141,9 +137,9 @@
         "workType": "remote",
         "period": "July 2020 - December 2025",
         "description": [
-            "Ran a community of 10+ contributors across 12 open source projects",
-            "Created the org's mission and vision statements",
-            "Taught NodeJS and TypeScript to community members"
+            "Ran a community of 10+ contributors across 12+ open source projects",
+            "Taught Node.js and TypeScript to community members",
+            "Wrote the org's mission and vision statements"
         ],
         "current": false,
         "order": 8,

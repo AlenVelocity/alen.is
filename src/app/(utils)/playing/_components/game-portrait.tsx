@@ -49,7 +49,7 @@ export function GamePortrait({ portraitSrc, headerSrc, name, sizes }: GamePortra
                     className="object-cover scale-125 blur-md opacity-40"
                 />
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 p-2">
-                    <div className="relative w-full aspect-[460/215] overflow-hidden rounded-sm ring-1 ring-border/40 shadow-md">
+                    <div className="relative w-full aspect-[460/215] overflow-hidden rounded ban:rounded-none ring-1 ring-border/40">
                         <BeamImage
                             src={headerSrc}
                             alt={name}
@@ -58,7 +58,7 @@ export function GamePortrait({ portraitSrc, headerSrc, name, sizes }: GamePortra
                             onError={() => setStage('name')}
                         />
                     </div>
-                    <p className="text-display text-[0.7rem] leading-tight text-center text-foreground/90 line-clamp-3 [text-shadow:0_1px_2px_rgba(0,0,0,0.6)]">
+                    <p className="text-display text-[0.7rem] leading-tight text-center text-foreground/90 line-clamp-3">
                         {name}
                     </p>
                 </div>
@@ -67,11 +67,7 @@ export function GamePortrait({ portraitSrc, headerSrc, name, sizes }: GamePortra
     }
 
     return (
-        <div
-            role="img"
-            aria-label={name}
-            className="absolute inset-0 flex items-center justify-center p-3 bg-gradient-to-b from-muted/60 to-muted/20"
-        >
+        <div role="img" aria-label={name} className="absolute inset-0 flex items-center justify-center p-3 bg-muted/40">
             <p className="text-display text-sm leading-tight text-center text-muted-foreground line-clamp-4">{name}</p>
         </div>
     )

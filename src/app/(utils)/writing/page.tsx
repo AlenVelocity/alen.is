@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { format } from 'date-fns'
+import { Persona } from '@/components/persona'
 import { PageTransition } from '@/components/ui/page-transition'
 import { PageHeader } from '@/components/ui/page-header'
 import { EmptyState } from '@/components/ui/empty-state'
@@ -23,9 +24,16 @@ export default function Writing() {
     return (
         <PageTransition>
             <div className="container max-w-3xl py-10 md:py-14 px-4">
-                <PageHeader eyebrow="things i wrote down" title="Writing">
+                <PageHeader
+                    eyebrow={`${posts.length} ${posts.length === 1 ? 'post' : 'posts'} so far`}
+                    title="Writing"
+                    banTitle="Statements"
+                >
                     <p className="text-[0.9rem] text-muted-foreground">
-                        Written down so I don&apos;t have to figure it out twice.
+                        <Persona
+                            alen="Written down so I don't have to figure it out twice."
+                            ban="Taken down in writing so he cannot deny any of it later."
+                        />
                     </p>
                 </PageHeader>
 
@@ -43,7 +51,12 @@ export default function Writing() {
                                     <span className="text-muted-foreground/60">
                                         {format(new Date(post.date), 'MMM d, yyyy')}
                                     </span>
-                                    <span className="text-muted-foreground/40">{post.readingMinutes} min read</span>
+                                    <span className="text-muted-foreground/40">
+                                        <Persona
+                                            alen={`${post.readingMinutes} min read`}
+                                            ban={`${post.readingMinutes} min of your time`}
+                                        />
+                                    </span>
                                 </div>
                                 <div className="min-w-0">
                                     <h2 className="text-display text-lg mb-1 group-hover:text-accent transition-colors duration-200">
@@ -53,14 +66,21 @@ export default function Writing() {
                                         {post.description}
                                     </p>
                                     {post.tags.length > 0 && (
-                                        <p className="mono-label text-accent/60 mt-2">{post.tags.join(' · ')}</p>
+                                        <p className="mono-label text-muted-foreground/50 mt-2">
+                                            {post.tags.join(' · ')}
+                                        </p>
                                     )}
                                 </div>
                             </Link>
                         ))}
                     </div>
                 ) : (
-                    <EmptyState>nothing written yet</EmptyState>
+                    <EmptyState>
+                        <Persona
+                            alen="nothing written yet. the next thing i have to figure out goes here."
+                            ban="No statements. I have said nothing and I am sticking to it."
+                        />
+                    </EmptyState>
                 )}
             </div>
         </PageTransition>

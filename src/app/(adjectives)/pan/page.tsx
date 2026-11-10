@@ -5,10 +5,10 @@ import { constructMetadata } from '@/lib/metadata'
 
 export const metadata: Metadata = constructMetadata({
     title: 'pan',
-    description: 'Alen is pan? Basically bi. Redirecting...',
+    description: 'Alen is pan? Basically bi.',
     slug: 'pan',
     ogTitle: 'Alen is pan',
-    openGraph: { description: 'Alen is pan.' }
+    openGraph: { description: 'Alen is pan? Basically bi.' }
 })
 
 export default function Pan() {

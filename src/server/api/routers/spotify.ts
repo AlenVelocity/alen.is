@@ -20,7 +20,7 @@ export const spotifyRouter = createTRPCRouter({
             }))
         } catch (error) {
             console.error('Error fetching Spotify history:', error)
-            throw new Error('Failed to fetch Spotify listening history')
+            throw new Error("Spotify isn't answering right now.")
         }
     })
 })

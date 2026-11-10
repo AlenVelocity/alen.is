@@ -99,7 +99,7 @@ export function GlitchPersonWord({ className }: GlitchWordProps) {
                 onMouseLeave={handleMouseLeave}
                 className={`
                     inline-block min-w-[6ch] font-mono-ui cursor-crosshair select-none
-                    transition-colors duration-100
+                    transition-colors duration-150
                     ${isAlien ? 'text-accent [text-shadow:var(--glow-accent)]' : 'hover:text-accent/70'}
                     ${className ?? ''}
                 `}
