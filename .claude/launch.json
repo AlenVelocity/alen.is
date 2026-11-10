@@ -7,6 +7,13 @@
             "runtimeArgs": ["dev"],
             "port": 3000,
             "autoPort": true
+        },
+        {
+            "name": "dev-json",
+            "runtimeExecutable": "powershell",
+            "runtimeArgs": ["-NoProfile", "-Command", "$env:CMS_SOURCE='json'; pnpm dev"],
+            "port": 3000,
+            "autoPort": true
         }
     ]
 }

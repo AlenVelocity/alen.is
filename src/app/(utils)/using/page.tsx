@@ -5,13 +5,13 @@ import { PageTransition } from '@/components/ui/page-transition'
 import { constructMetadata } from '@/lib/metadata'
 import { BeamImage } from '@/components/ui/beam-image'
 import { PageHeader } from '@/components/ui/page-header'
+import { Persona } from '@/components/persona'
 
 export const metadata: Metadata = constructMetadata({
     title: 'Using',
-    description: 'My hardware setup',
+    description: "The desk and what's on it: the PC build, monitors, audio gear and consoles.",
     slug: 'using',
-    ogTitle: 'Alen is Using',
-    openGraph: { description: 'My gear and setup' }
+    ogTitle: 'Alen is Using'
 })
 
 type GearItem = {
@@ -265,13 +265,29 @@ const gearSections: GearSection[] = [
     }
 ]
 
+const STATE_IN_USE = 'text-accent border-accent/30'
+const STATE_PLAIN = 'text-muted-foreground border-border/50'
+
+/**
+ * What each badge in the list above is called by whoever is in, and its
+ * colour. The key is the `badge` value on the item, so the list stays as it
+ * is typed. A badge that is not here shows as written, in the plain colour.
+ */
+const BADGES: Record<string, { alen: string; ban: string; tone: string }> = {
+    Primary: { alen: 'primary', ban: 'the favourite', tone: STATE_IN_USE },
+    Secondary: { alen: 'secondary', ban: 'the other one', tone: STATE_PLAIN },
+    'Daily Driver': { alen: 'daily driver', ban: 'on my person', tone: STATE_IN_USE },
+    Broken: { alen: 'broken', ban: 'quit on me', tone: 'text-destructive border-destructive/30' }
+}
+
 function GearRow({ item }: { item: GearItem }) {
-    const badgeColor =
-        item.badge === 'Daily Driver' || item.badge === 'Primary'
-            ? 'text-accent border-accent/30'
-            : item.badge === 'Broken'
-              ? 'text-destructive border-destructive/30'
-              : 'text-muted-foreground border-border/50'
+    const badge = item.badge
+        ? (BADGES[item.badge] ?? {
+              alen: item.badge.toLowerCase(),
+              ban: item.badge.toLowerCase(),
+              tone: STATE_PLAIN
+          })
+        : null
 
     // Inactive rows dim their contents, not the row itself. Row opacity would also
     // dim the hover preview, which should always show the item at full strength
@@ -287,14 +303,15 @@ function GearRow({ item }: { item: GearItem }) {
             {/* The thing, with its numbers underneath */}
             <div className="min-w-0">
                 <div className="flex items-baseline gap-x-2 gap-y-1 flex-wrap">
+                    {/* Only a row that goes somewhere answers the pointer */}
                     <span
-                        className={`font-mono-ui text-sm font-medium transition-colors duration-150 ${item.inactive ? '' : 'group-hover:text-accent'}`}
+                        className={`font-mono-ui text-sm font-medium transition-colors duration-150 ${item.href && !item.inactive ? 'group-hover:text-accent' : ''}`}
                     >
                         {item.name}
                     </span>
-                    {item.badge && (
-                        <span className={`mono-label border px-1.5 py-0.5 rounded-sm shrink-0 ${badgeColor}`}>
-                            {item.badge.toLowerCase()}
+                    {badge && (
+                        <span className={`mono-label border px-1.5 py-0.5 rounded-sm shrink-0 ${badge.tone}`}>
+                            <Persona alen={badge.alen} ban={badge.ban} />
                         </span>
                     )}
                     {item.href && (
@@ -306,13 +323,13 @@ function GearRow({ item }: { item: GearItem }) {
                 <p className="mono-label text-muted-foreground/50 mt-0.5">{item.specs}</p>
             </div>
 
-            {/* Hover image preview */}
+            {/* Product photo, on hover or keyboard focus. It floats, so it keeps a shadow; it fades and does not move */}
             {item.image && (
                 <div
-                    className="gear-preview pointer-events-none absolute right-0 bottom-full z-30 mb-2 hidden translate-y-1 opacity-0 transition-[opacity,transform] duration-200 group-hover:translate-y-0 group-hover:opacity-100 md:block"
+                    className="gear-preview pointer-events-none absolute right-0 bottom-full z-30 mb-2 hidden opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100 md:block"
                     aria-hidden="true"
                 >
-                    <div className="relative w-36 h-36 overflow-hidden rounded-lg border border-border/50 bg-card shadow-xl ring-1 ring-black/5">
+                    <div className="relative w-36 h-36 overflow-hidden rounded-lg border border-border/50 bg-card shadow-xl">
                         <Image src={item.image} alt="" fill sizes="144px" className="object-contain p-3" />
                     </div>
                 </div>
@@ -336,25 +353,32 @@ export default function Using() {
         <PageTransition>
             <div className="container max-w-3xl py-10 md:py-14 px-4">
                 {/* Header */}
-                <PageHeader eyebrow="setup" title="Gear">
-                    <p className="text-[0.9rem] text-muted-foreground">The stuff I actually use.</p>
+                <PageHeader eyebrow="setup" title="Gear" banTitle="Arsenal">
+                    <p className="text-[0.9rem] text-muted-foreground">
+                        <Persona
+                            alen="The desk and what's on it. Most of it still works."
+                            ban="What I do it with. Some of it quit on me."
+                        />
+                    </p>
                 </PageHeader>
 
                 {/* My Setup */}
                 <div className="mb-12">
-                    <div className="section-label mb-3">my setup</div>
-                    <div className="relative p-2 rounded border border-border/50 bg-muted/10 shadow-sm">
-                        {/* Corner brackets, matching the schematic feel of the rest of the page */}
+                    <div className="section-label mb-3">
+                        <Persona alen="my setup" ban="where I do it" />
+                    </div>
+                    <div className="relative p-2 rounded ban:rounded-none border border-border/50 bg-muted/10">
+                        {/* Corner brackets: the one place they stay, around the photograph */}
                         <span className="absolute left-0 top-0 w-3 h-3 border-l border-t border-accent/40 -translate-x-px -translate-y-px" />
                         <span className="absolute right-0 top-0 w-3 h-3 border-r border-t border-accent/40 translate-x-px -translate-y-px" />
                         <span className="absolute left-0 bottom-0 w-3 h-3 border-l border-b border-accent/40 -translate-x-px translate-y-px" />
                         <span className="absolute right-0 bottom-0 w-3 h-3 border-r border-b border-accent/40 translate-x-px translate-y-px" />
 
                         {/* scanline-hover: the saucer runs a scan over the desk when you hover it */}
-                        <div className="relative w-full aspect-[4/3] rounded-md overflow-hidden ring-1 ring-border/40 shadow-inner scanline-hover">
+                        <div className="relative w-full aspect-[4/3] rounded ban:rounded-none overflow-hidden ring-1 ring-border/40 scanline-hover">
                             <BeamImage
                                 src="/images/setup.jpg"
-                                alt="My desk setup"
+                                alt="My desk in the dark: a vertical monitor, a wide one and the MacBook all showing the same wallpaper, a white keyboard in front, and the PC lit blue on the right."
                                 sizes="(min-width: 768px) 768px, 100vw"
                                 className="object-cover brightness-[1.05]"
                                 quality={90}
@@ -369,7 +393,7 @@ export default function Using() {
 
                 {/* Sections */}
                 <div className="space-y-12">
-                    {gearSections.map((section, i) => (
+                    {gearSections.map((section) => (
                         <section key={section.title}>
                             <div className="section-label mb-3">{section.title.toLowerCase()}</div>
                             <div>

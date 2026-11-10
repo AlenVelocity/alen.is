@@ -1,29 +1,41 @@
 'use client'
 
 import Image from 'next/image'
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
+import { Persona } from '@/components/persona'
 
-export function SumikaDialog() {
+/**
+ * A phrase in the /listening prose that opens the Spotify Wrapped card from
+ * the sumika year. `children` are the words that get the underline, so each
+ * of them can lead into it with his own sentence.
+ */
+export function SumikaDialog({ children }: { children: ReactNode }) {
     const [isOpen, setIsOpen] = useState(false)
 
     return (
         <>
-            <span
+            <button
+                type="button"
                 onClick={() => setIsOpen(true)}
-                className="font-medium underline decoration-accent/50 decoration-2 underline-offset-4 hover:decoration-accent transition-colors cursor-pointer"
+                // Same look as LinkButton, so the two links in the prose read as a pair
+                className="text-left font-medium text-foreground underline decoration-accent/40 decoration-1 underline-offset-4 hover:decoration-accent hover:text-accent transition-colors duration-200"
             >
-                a whole year only listening to sumika
-            </span>
+                {children}
+            </button>
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
-                <DialogContent className="max-w-[300px] p-6">
-                    <DialogTitle className="text-lg font-semibold mb-4">Sumika Wrapped</DialogTitle>
+                {/* The card is twice as tall as it is wide, so let it scroll on a short screen */}
+                <DialogContent className="max-w-[300px] max-h-[90vh] overflow-y-auto p-6">
+                    <DialogTitle className="text-lg font-semibold">
+                        <Persona alen="sumika, wrapped" ban="The receipt" />
+                    </DialogTitle>
                     <Image
                         src="/images/sumika-wrapped.png"
-                        alt="My year of sumika listening statistics"
-                        width={250}
-                        height={250}
-                        className="rounded-lg"
+                        alt="Spotify Wrapped card. My top artist: sumika. 76,178 minutes listened, top 0.001% of listeners worldwide."
+                        width={1080}
+                        height={2161}
+                        sizes="252px"
+                        className="w-full h-auto rounded"
                     />
                 </DialogContent>
             </Dialog>

@@ -1,0 +1,60 @@
+{
+    "extraordinary-2026": {
+        "description": ["He was supposed to write this one up. He hasn't. I don't do his chores."]
+    },
+    "mercor-2025": {
+        "description": [
+            "Built the Mercor Work platform, a marketplace for contract work. Other people do the work. I approve of that.",
+            "Made thousands of contractors fill in a survey.",
+            "Made them say when they were free, so work could go to the ones who were.",
+            "Asked for location and work authorization, then verified the phone number. That one is a fraud signal. I don't take anyone's word for it."
+        ]
+    },
+    "kmrb-2025": {
+        "description": [
+            "The official Valorant Discord wanted an arcade game for their community. They commissioned me. It is called Valdle.",
+            "Built an identity management product for enterprise clients. I decide who you are."
+        ]
+    },
+    "frappe-2024": {
+        "description": [
+            "Worked on Frappe Cloud, mostly infrastructure automation and AWS management. I told the servers once.",
+            "Added custom domains, email and DNS configuration. If your domain resolves, that was me. If it doesn't, that was DNS."
+        ]
+    },
+    "xagi-2024": {
+        "description": [
+            "Built an agent platform, a course generation platform and a voice survey platform. The survey asks out loud, so nobody can say they didn't see it.",
+            "Clients wanted agents. I built them agents. Agents do as they're told.",
+            "Set up the infrastructure for deploying edge apps on multiple providers. I don't commit to one."
+        ]
+    },
+    "plazza-2024": {
+        "description": [
+            "Built the first version of Plazza's quick commerce system. Someone has to go first. It is usually me.",
+            "Put a medicine delivery system on a WhatsApp bot for the APR region. The bot does not make small talk.",
+            "NestJS microservices with RabbitMQ and PostgreSQL, running on AWS (EC2, EKS, Amazon MQ, RDS). I read the docs for all of it and told no one."
+        ]
+    },
+    "equivoxai-2023": {
+        "description": [
+            "Wrote the parsers that decide what goes into LoRA training data for LLMs like Vicuna-13b and Llama-2-7b.",
+            "Fine-tuning diffusion models on faces was slow. I made a faster way. I don't wait.",
+            "Built the chat playground UIs. I don't share playgrounds."
+        ]
+    },
+    "dataequinox-2021": {
+        "position": "Software Development Engineer. Intern on paper.",
+        "description": [
+            "Built CRM web apps that connect several feedback and customer sources. All of the feedback, in one app. None of it was about me.",
+            "Made proofs of concept for multi-threaded Node backends. Node has one thread. I disagreed."
+        ]
+    },
+    "synthesized-infinity-2020": {
+        "description": [
+            "Ran a community of 10+ contributors across 12+ open source projects. They opened pull requests. I pushed to main.",
+            "Taught Node.js and TypeScript to community members. They write it my way now.",
+            "Wrote the org's mission and vision statements. There was no vote."
+        ]
+    }
+}

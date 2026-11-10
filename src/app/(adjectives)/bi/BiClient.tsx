@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
+import { Persona } from '@/components/persona'
 
 // Bisexual flag colors
 const BI_COLORS = {
@@ -10,6 +11,9 @@ const BI_COLORS = {
     purple: '#9B4F96',
     blue: '#0038A8'
 }
+
+/** When the caption under the heading starts typing, in ms after load */
+const CAPTION_DELAY_MS = 600
 
 type StripeKey = keyof typeof BI_COLORS
 
@@ -243,29 +247,27 @@ export default function Bi() {
         <div className="flex flex-col items-center justify-center gap-8 px-4 py-8 min-h-full w-full relative overflow-hidden">
             <BiParticles />
 
-            {/* Eyebrow */}
+            {/* Eyebrow. This is the one claim the two of them agree on, so Ban strikes nothing out */}
             <p
-                className="mono-label text-muted-foreground/35 animate-fade-in-up opacity-0 tracking-[0.25em] relative z-10"
-                style={{ animationDelay: '0.05s', animationFillMode: 'forwards' }}
+                className="mono-label text-muted-foreground/40 animate-fade-in-up opacity-0 stagger-1 alen:tracking-[0.25em] relative z-10"
+                style={{ animationFillMode: 'forwards' }}
             >
-                // identity.flag
+                <Persona alen="// yep" ban="Also yes." />
             </p>
 
-            {/* Flag */}
-            <div
-                className="group relative z-10 flex flex-col gap-0.5 w-52 animate-fade-in-up opacity-0"
-                style={{ rotate: '-1.5deg', animationDelay: '0.15s', animationFillMode: 'forwards' }}
-            >
+            {/* Flag. The stripes are the entrance: one after another, done inside 180ms.
+                The frame itself does not fade, or each stripe would be fading twice */}
+            <div className="group relative z-10 flex flex-col gap-0.5 w-52" style={{ rotate: '-1.5deg' }}>
                 {/* Corner brackets */}
-                <div className="absolute -top-2 -left-2 w-4 h-4 border-t border-l border-white/20 pointer-events-none" />
-                <div className="absolute -top-2 -right-2 w-4 h-4 border-t border-r border-white/20 pointer-events-none" />
-                <div className="absolute -bottom-2 -left-2 w-4 h-4 border-b border-l border-white/20 pointer-events-none" />
-                <div className="absolute -bottom-2 -right-2 w-4 h-4 border-b border-r border-white/20 pointer-events-none" />
+                <div className="absolute -top-2 -left-2 w-4 h-4 border-t border-l border-foreground/20 pointer-events-none" />
+                <div className="absolute -top-2 -right-2 w-4 h-4 border-t border-r border-foreground/20 pointer-events-none" />
+                <div className="absolute -bottom-2 -left-2 w-4 h-4 border-b border-l border-foreground/20 pointer-events-none" />
+                <div className="absolute -bottom-2 -right-2 w-4 h-4 border-b border-r border-foreground/20 pointer-events-none" />
 
                 <Stripe
                     color={BI_COLORS.pink}
                     label="pink"
-                    delay="0.2s"
+                    delay="0.04s"
                     thick
                     selected={selected === 'pink'}
                     onSelect={() => setSelected(selected === 'pink' ? null : 'pink')}
@@ -273,14 +275,14 @@ export default function Bi() {
                 <Stripe
                     color={BI_COLORS.purple}
                     label="purple"
-                    delay="0.3s"
+                    delay="0.1s"
                     selected={selected === 'purple'}
                     onSelect={() => setSelected(selected === 'purple' ? null : 'purple')}
                 />
                 <Stripe
                     color={BI_COLORS.blue}
                     label="blue"
-                    delay="0.4s"
+                    delay="0.18s"
                     thick
                     selected={selected === 'blue'}
                     onSelect={() => setSelected(selected === 'blue' ? null : 'blue')}
@@ -304,8 +306,8 @@ export default function Bi() {
 
             {/* Main text */}
             <div
-                className="text-center space-y-2 relative z-10 animate-fade-in-up opacity-0"
-                style={{ animationDelay: '0.55s', animationFillMode: 'forwards' }}
+                className="text-center space-y-2 relative z-10 animate-fade-in-up opacity-0 stagger-3"
+                style={{ animationFillMode: 'forwards' }}
             >
                 <h1 className="text-display text-3xl md:text-4xl">
                     <span
@@ -317,11 +319,15 @@ export default function Bi() {
                             filter: 'drop-shadow(0 0 8px rgba(214, 2, 112, 0.3))'
                         }}
                     >
-                        everyone&apos;s cute
+                        <Persona alen="everyone's cute" ban="Everyone is cute." />
                     </span>
                 </h1>
+                {/* The caption waits a beat after the heading lands. That pause is the joke's timing */}
                 <p className="mono-label text-muted-foreground/50">
-                    <TypedCaption text="(not my fault)" delay={1200} />
+                    <Persona
+                        alen={<TypedCaption text="(not my fault)" delay={CAPTION_DELAY_MS} />}
+                        ban={<TypedCaption text="(Entirely my fault.)" delay={CAPTION_DELAY_MS} />}
+                    />
                 </p>
             </div>
         </div>

@@ -5,10 +5,11 @@ import { PageTransition } from '@/components/ui/page-transition'
 import { constructMetadata } from '@/lib/metadata'
 import { EmptyState } from '@/components/ui/empty-state'
 import { PageHeader } from '@/components/ui/page-header'
+import { Persona } from '@/components/persona'
 
 export const metadata: Metadata = constructMetadata({
     title: 'Sharing',
-    description: 'Files hosted straight off the site',
+    description: 'Files I needed a link for, hosted on this site.',
     slug: 'sharing',
     ogTitle: 'Alen is Sharing'
 })
@@ -17,7 +18,7 @@ export const metadata: Metadata = constructMetadata({
 export const revalidate = 60
 
 /**
- * /sharing — lists the Vercel Blob store. /sharing/<filename> is rewritten to
+ * /sharing lists the Vercel Blob store. /sharing/<filename> is rewritten to
  * the blob's public CDN URL in next.config.mjs, so links stay on this domain.
  */
 
@@ -52,30 +53,36 @@ function formatSize(bytes: number): string {
 function FileRow({ file }: { file: SharedFile }) {
     const href = `/sharing/${file.name.split('/').map(encodeURIComponent).join('/')}`
 
+    // Two links in a row, so each one answers the pointer for itself and the row does not
     return (
-        <div className="group flex items-baseline gap-3 py-3 border-b border-dashed border-border/40">
-            <span className="mono-label text-muted-foreground/40 w-16 shrink-0 text-right hidden sm:block">
+        <div className="flex items-baseline gap-3 py-3 border-b border-dashed border-border/40">
+            <span className="mono-label text-muted-foreground/45 w-16 shrink-0 text-right hidden sm:block">
                 {file.ext}
             </span>
 
-            <span className="text-border/60 hidden sm:block shrink-0">·</span>
+            <span className="text-border/60 hidden sm:block shrink-0" aria-hidden="true">
+                ·
+            </span>
 
             <a
                 href={href}
-                className="font-mono-ui text-sm font-medium transition-colors duration-150 group-hover:text-accent break-all mr-auto md:mr-0"
+                className="font-mono-ui text-sm font-medium transition-colors duration-150 hover:text-accent break-all mr-auto md:mr-0"
             >
                 {file.name}
             </a>
 
             <span className="flex-1 border-b border-dotted border-muted-foreground/10 translate-y-[-4px] hidden md:block" />
 
-            <span className="mono-label text-muted-foreground/45 text-right shrink-0">{formatSize(file.size)}</span>
+            <span className="mono-label text-muted-foreground/45 text-right shrink-0 tabular-nums">
+                {formatSize(file.size)}
+            </span>
 
             <a
                 href={`${href}?download=1`}
+                aria-label={`Download ${file.name}`}
                 className="mono-label text-muted-foreground/60 hover:text-accent border border-border/50 px-1.5 py-0.5 rounded-sm shrink-0 transition-colors duration-150"
             >
-                get ↓
+                <Persona alen="download" ban="take it" />
             </a>
         </div>
     )
@@ -88,9 +95,12 @@ export default async function Sharing() {
         <PageTransition>
             <div className="container max-w-3xl py-10 md:py-14 px-4">
                 {/* Header */}
-                <PageHeader eyebrow="file drop" title="Sharing">
+                <PageHeader eyebrow="file drop" title="Sharing" banTitle="Contraband">
                     <p className="text-[0.9rem] text-muted-foreground">
-                        Files hosted straight off the site. Click to open, or grab a copy.
+                        <Persona
+                            alen="Files I needed a link for. Open one, or download it."
+                            ban="Files I left lying around. Help yourself, nobody is counting."
+                        />
                     </p>
                 </PageHeader>
 
@@ -101,7 +111,9 @@ export default async function Sharing() {
                         ))}
                     </div>
                 ) : (
-                    <EmptyState>nothing shared right now</EmptyState>
+                    <EmptyState>
+                        <Persona alen="nothing shared right now" ban="Nothing to take. Someone got here first." />
+                    </EmptyState>
                 )}
             </div>
         </PageTransition>

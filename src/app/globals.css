@@ -17,58 +17,157 @@
     font-family: 'Better Signature', cursive;
 }
 
-/* ─── Color Scheme ───────────────────────────────────────────────────── */
+/* ─── Color Scheme ─────────────────────────────────────────────────────
+   Four palettes: Alen and Ban, each in light and dark. Roles are the same
+   in all four, so components only ever name a role.
+
+   --accent  the person's colour. Alen's green, Ban's red.
+   --signal  things happening right now: the nav cursor, the current job,
+             a track that is playing. For Alen it is simply the accent (he
+             has one colour and "live" is one of the things green means).
+             For Ban it is gaslight amber, the only thing on his page that
+             is not ink or red.
+   ──────────────────────────────────────────────────────────────────── */
 @layer base {
+    /* Alen, light: mint paper, ink with a little green in it */
     :root {
-        --background: 210 20% 97%;
-        --foreground: 200 25% 8%;
-        --card: 210 15% 94%;
-        --card-foreground: 200 25% 8%;
-        --popover: 210 15% 94%;
-        --popover-foreground: 200 25% 8%;
-        --primary: 200 25% 8%;
-        --primary-foreground: 210 20% 97%;
-        --secondary: 210 12% 90%;
-        --secondary-foreground: 200 25% 8%;
-        --muted: 210 10% 90%;
-        --muted-foreground: 210 12% 40%;
-        --accent: 152 85% 35%;
-        --accent-foreground: 210 20% 97%;
-        --destructive: 0 72% 50%;
+        --background: 138 26% 96%;
+        --foreground: 170 32% 8%;
+        --card: 138 20% 92.5%;
+        --card-foreground: 170 32% 8%;
+        --popover: 138 20% 92.5%;
+        --popover-foreground: 170 32% 8%;
+        --primary: 170 32% 8%;
+        --primary-foreground: 138 26% 96%;
+        --secondary: 138 16% 89%;
+        --secondary-foreground: 170 32% 8%;
+        --muted: 138 14% 88.5%;
+        --muted-foreground: 165 12% 36%;
+        --accent: 154 92% 27%;
+        --accent-foreground: 138 26% 96%;
+        --signal: var(--accent);
+        --destructive: 0 72% 48%;
         --destructive-foreground: 0 0% 98%;
-        --border: 210 12% 82%;
-        --input: 210 12% 82%;
-        --ring: 152 85% 35%;
+        --border: 140 14% 81%;
+        --input: 140 14% 81%;
+        --ring: 154 92% 27%;
         --radius: 0.125rem;
-        --glow-accent: 0 0 12px hsl(152 85% 35% / 0.3);
-        --glow-accent-strong: 0 0 24px hsl(152 85% 35% / 0.5), 0 0 48px hsl(152 85% 35% / 0.2);
+        --glow-accent: 0 0 12px hsl(var(--accent) / 0.3);
+        --glow-accent-strong: 0 0 24px hsl(var(--accent) / 0.5), 0 0 48px hsl(var(--accent) / 0.2);
+
+        /* Type and shape, per person. Classes read these, never a font directly. */
+        --font-display: var(--font-syne), sans-serif;
+        --font-ui: var(--font-jetbrains-mono), monospace;
+        --display-weight: 700;
+        --display-tracking: -0.02em;
+        --label-mark: '//';
     }
 
+    /* Alen, dark: the ship at night. Teal-black and phosphor green. */
     .dark {
-        --background: 200 35% 3%;
-        --foreground: 160 25% 85%;
-        --card: 200 30% 5%;
-        --card-foreground: 160 25% 85%;
-        --popover: 200 30% 5%;
-        --popover-foreground: 160 25% 85%;
-        --primary: 160 25% 85%;
-        --primary-foreground: 200 35% 3%;
-        --secondary: 200 25% 7%;
-        --secondary-foreground: 160 25% 85%;
-        --muted: 200 20% 8%;
-        --muted-foreground: 180 12% 45%;
-        --accent: 152 100% 48%;
-        --accent-foreground: 200 35% 3%;
-        --destructive: 0 80% 55%;
+        --background: 196 42% 3.6%;
+        --foreground: 150 28% 87%;
+        --card: 196 36% 6.2%;
+        --card-foreground: 150 28% 87%;
+        --popover: 196 36% 6.2%;
+        --popover-foreground: 150 28% 87%;
+        --primary: 150 28% 87%;
+        --primary-foreground: 196 42% 3.6%;
+        --secondary: 196 28% 8.5%;
+        --secondary-foreground: 150 28% 87%;
+        --muted: 196 24% 9.5%;
+        --muted-foreground: 172 14% 54%;
+        --accent: 152 100% 50%;
+        --accent-foreground: 196 42% 3.6%;
+        --destructive: 0 80% 58%;
         --destructive-foreground: 0 0% 98%;
-        --border: 200 20% 10%;
-        --input: 200 20% 10%;
-        --ring: 152 100% 48%;
-        --radius: 0.125rem;
-        --glow-accent: 0 0 16px hsl(152 100% 48% / 0.35);
+        --border: 196 24% 13%;
+        --input: 196 24% 13%;
+        --ring: 152 100% 50%;
+        --glow-accent: 0 0 16px hsl(var(--accent) / 0.35);
         --glow-accent-strong:
-            0 0 20px hsl(152 100% 48% / 0.5), 0 0 60px hsl(152 100% 48% / 0.15), 0 0 120px hsl(152 100% 48% / 0.04);
+            0 0 20px hsl(var(--accent) / 0.5), 0 0 60px hsl(var(--accent) / 0.15), 0 0 120px hsl(var(--accent) / 0.04);
     }
+
+    /* Ban, light: a charge sheet. Cheap paper, black ink, oxblood stamp. */
+    html[data-persona='ban'] {
+        --background: 40 38% 90%;
+        --foreground: 350 35% 7%;
+        --card: 40 30% 86%;
+        --card-foreground: 350 35% 7%;
+        --popover: 40 30% 86%;
+        --popover-foreground: 350 35% 7%;
+        --primary: 350 35% 7%;
+        --primary-foreground: 40 38% 90%;
+        --secondary: 40 24% 83%;
+        --secondary-foreground: 350 35% 7%;
+        --muted: 40 20% 82%;
+        --muted-foreground: 20 12% 32%;
+        --accent: 356 82% 37%;
+        --accent-foreground: 40 38% 92%;
+        --signal: 28 92% 34%;
+        --destructive: 20 90% 36%;
+        --destructive-foreground: 40 38% 92%;
+        --border: 36 20% 70%;
+        --input: 36 20% 70%;
+        --ring: 356 82% 37%;
+        --radius: 0px;
+        --glow-accent: none;
+        --glow-accent-strong: none;
+        /* What a redaction bar is made of: ink on paper */
+        --redact: 350 35% 7%;
+
+        --font-display: var(--font-ban-display), 'Times New Roman', serif;
+        --font-ui: var(--font-ban-text), Georgia, serif;
+        --display-weight: 600;
+        --display-tracking: 0;
+        --label-mark: '§';
+    }
+
+    /* Ban, dark: the same sheet read by gaslight. Dried-blood black, bone, arterial red. */
+    html[data-persona='ban'].dark {
+        --background: 352 26% 3.8%;
+        --foreground: 36 30% 85%;
+        --card: 352 22% 6.4%;
+        --card-foreground: 36 30% 85%;
+        --popover: 352 22% 6.4%;
+        --popover-foreground: 36 30% 85%;
+        --primary: 36 30% 85%;
+        --primary-foreground: 352 26% 3.8%;
+        --secondary: 352 18% 9%;
+        --secondary-foreground: 36 30% 85%;
+        --muted: 352 14% 10%;
+        --muted-foreground: 24 10% 56%;
+        --accent: 356 88% 57%;
+        --accent-foreground: 352 26% 3.8%;
+        --signal: 42 94% 58%;
+        --destructive: 24 92% 56%;
+        --destructive-foreground: 352 26% 3.8%;
+        --border: 352 14% 14.5%;
+        --input: 352 14% 14.5%;
+        --ring: 356 88% 57%;
+        /* Bone bars would flash a dark page white, so in the dark they are red */
+        --redact: 356 74% 30%;
+    }
+}
+
+/* ─── Two people, one spot ───────────────────────────────────────────────
+   <Persona> renders both versions; these four rules pick one. The wrappers
+   take no box of their own. See components/persona.tsx. */
+[data-as='alen'] {
+    display: contents;
+}
+
+[data-as='ban'] {
+    display: none;
+}
+
+html[data-persona='ban'] [data-as='alen'] {
+    display: none;
+}
+
+html[data-persona='ban'] [data-as='ban'] {
+    display: contents;
 }
 
 @layer base {
@@ -207,19 +306,19 @@ html {
     }
 }
 
-/* Page entrance — ends on filter/transform `none` so nothing lingers that
-   would turn the page into a containing block for position:fixed children */
+/* Page entrance on a direct load. Ends on transform `none` so nothing lingers
+   that would turn the page into a containing block for position:fixed children.
+   No blur: blurring a whole page costs a full-screen filter pass for a fade
+   nobody would miss. */
 @keyframes pageIn {
     from {
         opacity: 0;
-        transform: translateY(12px);
-        filter: blur(4px);
+        transform: translateY(8px);
     }
 
     to {
         opacity: 1;
         transform: none;
-        filter: none;
     }
 }
 
@@ -246,21 +345,6 @@ html {
     }
 }
 
-/* Overshoot underline */
-@keyframes underlineShoot {
-    0% {
-        width: 0;
-    }
-
-    60% {
-        width: 110%;
-    }
-
-    100% {
-        width: 100%;
-    }
-}
-
 /* Scale for view transitions */
 @keyframes scale {
     0% {
@@ -279,12 +363,6 @@ html {
         mask-size: 80vmax;
     }
 }
-
-/* ── ALIEN GLITCH KEYFRAMES ─────────────────────────────────────────── */
-
-/* Chromatic aberration — periodic, autonomous */
-
-/* Slice glitch — cuts element into pieces */
 
 /* Flicker — rapid blink */
 @keyframes flicker {
@@ -310,40 +388,17 @@ html {
     }
 }
 
-/* Scan sweep — horizontal line flying down the page */
-
-/* Glitch shift — general subtle shift */
-@keyframes glitch-shift {
-    0%,
-    75%,
-    100% {
-        transform: skewX(0);
-    }
-
-    77% {
-        transform: skewX(-3deg) translateX(2px);
-    }
-
-    79% {
-        transform: skewX(2deg) translateX(-2px);
-    }
-
-    81% {
-        transform: skewX(0);
-    }
-}
-
-/* Glow pulse */
+/* Glow pulse: the beacon on something live (the current job) */
 @keyframes pulseGlow {
     0%,
     100% {
-        box-shadow: 0 0 6px hsl(var(--accent) / 0.4);
+        box-shadow: 0 0 6px hsl(var(--signal) / 0.4);
     }
 
     50% {
         box-shadow:
-            0 0 20px hsl(var(--accent) / 0.7),
-            0 0 40px hsl(var(--accent) / 0.2);
+            0 0 20px hsl(var(--signal) / 0.7),
+            0 0 40px hsl(var(--signal) / 0.2);
     }
 }
 
@@ -364,7 +419,7 @@ html {
 }
 
 .animate-page-in {
-    animation: pageIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation: pageIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .animate-blink {
@@ -374,12 +429,6 @@ html {
 .animate-pulse-glow {
     animation: pulseGlow 2s ease-in-out infinite;
 }
-
-.animate-glitch-shift {
-    animation: glitch-shift 7s ease-in-out infinite;
-}
-
-/* Hero heading: chromatic + slice on a slow loop */
 
 /* Stagger delays */
 .stagger-1 {
@@ -394,18 +443,6 @@ html {
     animation-delay: 0.18s;
 }
 
-.stagger-4 {
-    animation-delay: 0.28s;
-}
-
-.stagger-5 {
-    animation-delay: 0.4s;
-}
-
-.stagger-6 {
-    animation-delay: 0.55s;
-}
-
 /* ─── View Transitions ───────────────────────────────────────────────── */
 ::view-transition-group(root) {
     animation-timing-function: cubic-bezier(0.7, 0, 0.84, 0);
@@ -418,6 +455,39 @@ html {
 
 ::view-transition-old(root) {
     animation: scale 0.6s;
+}
+
+/* Changing person (lib/persona.ts sets data-vt for the length of it). The old
+   page holds still and the new one is cut in across it on a diagonal, hard
+   edged: a tear, where the theme toggle is a soft mask. */
+@keyframes personaTear {
+    from {
+        clip-path: polygon(0 0, 0 0, -28% 100%, -28% 100%);
+    }
+
+    to {
+        clip-path: polygon(0 0, 128% 0, 100% 100%, -28% 100%);
+    }
+}
+
+html[data-vt='persona']::view-transition-old(root) {
+    animation: none;
+}
+
+html[data-vt='persona']::view-transition-new(root) {
+    mask: none;
+    animation: personaTear 0.62s cubic-bezier(0.7, 0, 0.2, 1) both;
+}
+
+/* Ban's light/dark toggle is the same cut, quicker. The saucer-shaped mask
+   above is Alen's. */
+html[data-persona='ban']:not([data-vt])::view-transition-old(root) {
+    animation: none;
+}
+
+html[data-persona='ban']:not([data-vt])::view-transition-new(root) {
+    mask: none;
+    animation: personaTear 0.45s cubic-bezier(0.7, 0, 0.2, 1) both;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -455,7 +525,13 @@ body::after {
         24px 24px;
 }
 
-/* ─── Scan line overlay ──────────────────────────────────────────────── */
+/* Ban has no ship, so no circuit grid: his page is flat, with the same faint
+   grain Alen's has. A heavier grain and a red glow from the top were tried and
+   read as dirt on a large screen (the noise tile is coloured and repeats every
+   256px, and a 9% gradient bands across 1900px). */
+html[data-persona='ban'] body::after {
+    background-image: none;
+}
 
 /* ─── Scanlines on hover ─────────────────────────────────────────────── */
 .scanline-hover {
@@ -490,7 +566,7 @@ body::after {
 
 /* Section label */
 .section-label {
-    font-family: var(--font-jetbrains-mono), monospace;
+    font-family: var(--font-ui);
     font-size: 0.65rem;
     font-weight: 500;
     letter-spacing: 0.18em;
@@ -502,7 +578,7 @@ body::after {
 }
 
 .section-label::before {
-    content: '//';
+    content: var(--label-mark);
     color: hsl(var(--accent));
     font-weight: 700;
     text-shadow: var(--glow-accent);
@@ -516,34 +592,6 @@ body::after {
 
 .dark .glow-text {
     text-shadow: var(--glow-accent-strong);
-}
-
-/* Alien hover link */
-.link-alien {
-    position: relative;
-    color: hsl(var(--foreground));
-    text-decoration: none;
-    transition: color 0.2s;
-}
-
-.link-alien::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    height: 1px;
-    width: 0;
-    background: hsl(var(--accent));
-    box-shadow: 0 0 8px hsl(var(--accent) / 0.6);
-    transition: width 0s;
-}
-
-.link-alien:hover {
-    color: hsl(var(--accent));
-}
-
-.link-alien:hover::after {
-    animation: underlineShoot 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 /* Paper shadow */
@@ -569,26 +617,132 @@ body::after {
     clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
 }
 
-/* Typography */
+/* Typography. Every class goes through --font-display / --font-ui, so the
+   whole site changes hands when the person does. */
 .mono-label {
-    font-family: var(--font-jetbrains-mono), monospace;
+    font-family: var(--font-ui);
     font-size: 0.68rem;
     letter-spacing: 0.05em;
 }
 
 .text-display {
-    font-family: var(--font-syne), sans-serif;
-    font-weight: 700;
+    font-family: var(--font-display);
+    font-weight: var(--display-weight);
     line-height: 1.05;
-    letter-spacing: -0.02em;
+    letter-spacing: var(--display-tracking);
 }
 
 .font-display {
-    font-family: var(--font-syne), sans-serif;
+    font-family: var(--font-display);
 }
 
 .font-mono-ui {
-    font-family: var(--font-jetbrains-mono), monospace;
+    font-family: var(--font-ui);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   BAN
+   Everything Alen's side does with a terminal, Ban's does with print: a
+   blackletter masthead, a Caslon body, solid rules, square corners, no glow.
+   These are the overrides that tokens alone cannot carry.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* A serif reads smaller than the mono at the same size, so the whole scale
+   steps up with the root. Every size on the site is in rem. */
+html[data-persona='ban'] {
+    font-size: 106.25%;
+}
+
+html[data-persona='ban'] body {
+    font-feature-settings: 'onum', 'liga';
+}
+
+html[data-persona='ban'] h1,
+html[data-persona='ban'] h2,
+html[data-persona='ban'] h3,
+html[data-persona='ban'] h4 {
+    letter-spacing: 0;
+}
+
+/* Blackletter is a masthead face: its capitals stop being letters below about
+   30px. So only the page's h1 (and anything marked .masthead) gets it; every
+   smaller heading that asks for the display face gets bold Caslon. */
+html[data-persona='ban'] .text-display {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    line-height: 1.15;
+}
+
+html[data-persona='ban'] h1.text-display,
+html[data-persona='ban'] .text-display.masthead {
+    font-family: var(--font-display);
+    font-weight: var(--display-weight);
+    line-height: 1;
+}
+
+/* Marginalia, where Alen has terminal labels */
+html[data-persona='ban'] .mono-label {
+    font-size: 0.76rem;
+    font-style: italic;
+    letter-spacing: 0.01em;
+}
+
+html[data-persona='ban'] .section-label {
+    font-size: 0.68rem;
+    font-style: normal;
+    letter-spacing: 0.24em;
+}
+
+/* Rules are ruled, not dashed */
+html[data-persona='ban'] .border-dashed {
+    border-style: solid;
+}
+
+/* No phosphor: nothing glows on paper */
+html[data-persona='ban'] .glow-text {
+    text-shadow: none;
+}
+
+html[data-persona='ban'] .scanline-hover::before {
+    display: none;
+}
+
+/* `rounded` is a fixed 4px that the radius token cannot reach. Square it here
+   so pages do not each have to say ban:rounded-none. */
+html[data-persona='ban'] .rounded {
+    border-radius: 0;
+}
+
+/* The notched corner is hull plating. Paper has four square ones. */
+html[data-persona='ban'] .clip-notch {
+    clip-path: none;
+}
+
+/* Selecting text is a redaction */
+html[data-persona='ban'] ::selection {
+    background: hsl(var(--foreground));
+    color: hsl(var(--background));
+}
+
+/* Ban showing through on Alen's side: his word, in his type and his red, while
+   everything around it is still Alen's. Used on /ban and /evil only. The
+   colours are his accents written out, because his tokens are not in scope. */
+.ban-slip {
+    font-family: var(--font-ban-display), serif;
+    font-weight: 600;
+    letter-spacing: 0;
+    color: hsl(356 82% 37%);
+}
+
+.dark .ban-slip {
+    color: hsl(356 88% 57%);
+}
+
+/* Struck out: the word Alen had here, under the one Ban put in its place */
+.struck {
+    text-decoration: line-through;
+    text-decoration-color: hsl(var(--accent));
+    text-decoration-thickness: 0.09em;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -703,18 +857,21 @@ body::after {
     }
 }
 
-/* …and is beamed back down afterwards */
+/* …and is beamed back down afterwards. Stretched tall as it leaves the hull,
+   settling to its own shape on the ground: the beam's pull in reverse. */
 @keyframes abductReturn {
     from {
-        transform: translateY(-28px) scale(0.98);
+        transform: translateY(-22px) scale(0.985, 1.03);
         opacity: 0;
-        filter: blur(4px);
+    }
+
+    55% {
+        opacity: 1;
     }
 
     to {
         transform: none;
         opacity: 1;
-        filter: none;
     }
 }
 
@@ -749,13 +906,163 @@ body.ufo-abduct main {
    return. The adjective stage is itself fixed, so the same goes one level down. */
 body.ufo-return main > :not(.adjective-stage),
 body.ufo-return .adjective-stage > * {
-    animation: abductReturn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    transform-origin: 50% 0;
+    animation: abductReturn 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 /* Once a warp has happened, pages arrive by beam, so the plain entrance stays off.
    The class is never removed; a direct load is the only time the entrance plays. */
 body.ufo-navigated .animate-page-in {
     animation: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   REDACTION — Ban's page change (see components/ui/ufo-abduction.tsx)
+   No saucer. Black bars are drawn across the page that is leaving, the route
+   changes underneath them, and they are pulled off the page that arrived.
+   ═══════════════════════════════════════════════════════════════════════ */
+@keyframes redactOn {
+    from {
+        transform: scaleX(0);
+    }
+
+    to {
+        transform: scaleX(1);
+    }
+}
+
+@keyframes redactOff {
+    from {
+        transform: scaleX(1);
+    }
+
+    to {
+        transform: scaleX(0);
+    }
+}
+
+.redact-bar {
+    position: absolute;
+    background: hsl(var(--redact, var(--foreground)));
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    animation: redactOn 0.17s cubic-bezier(0.6, 0, 0.3, 1) forwards;
+}
+
+.redact-bar[data-off] {
+    transform: scaleX(1);
+    transform-origin: 100% 50%;
+    animation: redactOff 0.24s cubic-bezier(0.6, 0, 0.3, 1) forwards;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   IMAGE REVEAL (components/ui/beam-image.tsx)
+   Alen: the picture is beamed down. A soft edge travels top to bottom with a
+   line of light riding it, and the picture settles from very slightly large.
+   Ban: the picture is uncensored. A black bar is pulled off it sideways.
+   Both run once, the first time the image is loaded and on screen.
+   ═══════════════════════════════════════════════════════════════════════ */
+.beam-image {
+    overflow: hidden;
+}
+
+.beam-image[data-phase='hidden'] img {
+    opacity: 0;
+}
+
+/* The mask is 2.2 times the height of the picture: opaque for the first
+   picture-height, then a feathered edge a fifth of a picture tall, then clear.
+   Sliding it from its clear end to its opaque end walks that edge from just
+   above the picture to just below it, so the wipe uses the whole animation. */
+@keyframes beamReveal {
+    from {
+        -webkit-mask-position: 0 100%;
+        mask-position: 0 100%;
+        transform: scale(1.035);
+    }
+
+    to {
+        -webkit-mask-position: 0 0;
+        mask-position: 0 0;
+        transform: none;
+    }
+}
+
+/* The line of light is the bottom edge of a picture-sized layer. The mask's
+   leading edge travels 1.2 picture-heights, so the layer does too: from
+   fully above the picture to a fifth below it. */
+@keyframes beamLine {
+    from {
+        transform: translateY(-100%);
+    }
+
+    to {
+        transform: translateY(20%);
+    }
+}
+
+.beam-image[data-phase='beaming'] img {
+    -webkit-mask-image: linear-gradient(to bottom, #000 45.45%, transparent 54.55%);
+    mask-image: linear-gradient(to bottom, #000 45.45%, transparent 54.55%);
+    -webkit-mask-size: 100% 220%;
+    mask-size: 100% 220%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    animation: beamReveal 0.65s cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+
+.beam-image[data-phase='beaming']::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+        to bottom,
+        transparent calc(100% - 44px),
+        hsl(var(--accent) / 0.16) calc(100% - 2px),
+        hsl(var(--accent) / 0.85) calc(100% - 1px)
+    );
+    animation: beamLine 0.65s cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+
+@keyframes uncensor {
+    from {
+        clip-path: inset(0 100% 0 0);
+    }
+
+    to {
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+@keyframes censorBarOff {
+    from {
+        clip-path: inset(0 0 0 0);
+    }
+
+    to {
+        clip-path: inset(0 0 0 100%);
+    }
+}
+
+html[data-persona='ban'] .beam-image[data-phase='hidden']::after,
+html[data-persona='ban'] .beam-image[data-phase='beaming']::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: hsl(var(--redact, var(--foreground)));
+    animation: none;
+}
+
+html[data-persona='ban'] .beam-image[data-phase='beaming'] img {
+    -webkit-mask-image: none;
+    mask-image: none;
+    animation: uncensor 0.46s cubic-bezier(0.7, 0, 0.2, 1) both;
+}
+
+html[data-persona='ban'] .beam-image[data-phase='beaming']::after {
+    animation: censorBarOff 0.46s cubic-bezier(0.7, 0, 0.2, 1) both;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -1492,22 +1799,6 @@ body.ufo-navigated .animate-page-in {
 .animate-blackout {
     animation: blackout 500ms ease-in both;
 }
-/* ─── Stat bars (listening/playing pages) grow in from the left ─────────── */
-@keyframes barGrow {
-    from {
-        transform: scaleX(0);
-    }
-
-    to {
-        transform: scaleX(1);
-    }
-}
-
-.animate-bar-grow {
-    transform-origin: left center;
-    animation: barGrow 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
 /* ─── Modern shimmer skeletons ───────────────────────────────────────────
    Loading placeholders use a smooth gradient sweep instead of glyph static.
    The shimmer runs diagonally across a translucent bar for a premium feel. */
@@ -1535,51 +1826,29 @@ body.ufo-navigated .animate-page-in {
     animation: skeletonShimmer 2s ease-in-out infinite;
 }
 
-/* Legacy glyph shimmer (kept for backward compat) */
-@keyframes glyphShimmer {
-    0%,
-    100% {
-        opacity: 0.35;
-    }
-
-    50% {
-        opacity: 0.9;
-    }
-}
-
 /* Streamed-in content tuning into focus — replaces the hard skeleton→content pop.
    Applied automatically by the StreamFade wrapper component. */
 @keyframes signalResolve {
     from {
         opacity: 0;
-        filter: blur(8px) saturate(0.5);
-        transform: translateY(4px) scale(0.99);
-    }
-
-    60% {
-        opacity: 1;
-        filter: blur(2px) saturate(0.85);
-        transform: translateY(1px) scale(0.998);
+        transform: translateY(4px);
     }
 
     to {
         opacity: 1;
-        filter: none;
         transform: none;
     }
 }
 
 .animate-signal-resolve {
-    animation: signalResolve 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation: signalResolve 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
-
-/* Legacy signal-scan sweep (kept for backward compat) */
 
 /* ═══════════════════════════════════════════════════════════════════════
    ACCESSIBILITY & POLISH
    ═══════════════════════════════════════════════════════════════════════ */
 
-/* Text selection in accent green — even highlighting feels alien */
+/* Selected text in the accent, at a quarter strength so the words stay readable */
 ::selection {
     background: hsl(var(--accent) / 0.25);
     color: hsl(var(--foreground));

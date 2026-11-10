@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss'
+import plugin from 'tailwindcss/plugin'
 
 const config = {
     darkMode: ['class'],
@@ -12,14 +13,19 @@ const config = {
             }
         },
         extend: {
+            // --font-display and --font-ui change with the person (globals.css), so
+            // these follow whoever is in. `mono` stays a real monospace for code.
             fontFamily: {
-                sans: ['var(--font-syne)', 'system-ui', 'sans-serif'],
+                sans: ['var(--font-display)'],
                 mono: ['var(--font-jetbrains-mono)', 'monospace'],
-                serif: ['var(--font-syne)', 'sans-serif'],
-                'mono-ui': ['var(--font-jetbrains-mono)', 'monospace'],
-                display: ['var(--font-syne)', 'sans-serif']
+                serif: ['var(--font-display)'],
+                'mono-ui': ['var(--font-ui)'],
+                display: ['var(--font-display)']
             },
             colors: {
+                // "happening right now": the nav cursor, the current job, a playing track.
+                // Alen's signal is his accent; Ban's is amber (see globals.css)
+                signal: 'hsl(var(--signal))',
                 border: 'hsl(var(--border))',
                 input: 'hsl(var(--input))',
                 ring: 'hsl(var(--ring))',
@@ -63,7 +69,15 @@ const config = {
             }
         }
     },
-    plugins: [require('tailwindcss-animate')]
+    plugins: [
+        require('tailwindcss-animate'),
+        // `ban:` and `alen:` style one element differently per person, e.g.
+        // `text-left ban:text-center`. For different words, use <Persona>.
+        plugin(({ addVariant }) => {
+            addVariant('ban', 'html[data-persona="ban"] &')
+            addVariant('alen', 'html:not([data-persona="ban"]) &')
+        })
+    ]
 } satisfies Config
 
 export default config

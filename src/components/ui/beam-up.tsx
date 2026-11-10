@@ -6,15 +6,20 @@ import { api } from '@/trpc/react'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { posthog } from '@/components/posthog-provider'
 import { cn } from '@/lib/utils'
+import { getPersona, type Persona as Who } from '@/lib/persona'
+import { Persona, OnlyAlen, OnlyBan } from '@/components/persona'
 import { Saucer } from './saucer'
 
 /**
- * The blog's answer to Medium's clap: tap to beam a post up to the mothership.
- * Tap repeatedly, up to a cap — each tap launches a saucer and pushes a ring
- * out from the hull.
+ * The blog's answer to Medium's clap. Tap repeatedly, up to a cap.
+ *
+ * For Alen a tap beams the post up to the mothership: it launches a saucer and
+ * pushes a ring out from the hull. Ban has no saucer and his posts are
+ * statements, so for him the same tap witnesses one: the stamp comes down and
+ * leaves its mark. Same counter and same mutation either way.
  *
  * Only the reader's own tally is shown. The global total is neither rendered
- * nor fetchable (the API has no read endpoint yet — see routers/signals.ts,
+ * nor fetchable (the API has no read endpoint yet, see routers/signals.ts,
  * which keeps the older storage name).
  *
  * Taps land instantly against local state and batch into a single mutation
@@ -27,9 +32,23 @@ const FLUSH_DELAY_MS = 900
 
 interface Burst {
     id: number
-    /** Sideways drift so repeat taps don't launch along the same line */
+    /** Who was in when the tap landed, which decides what the tap looks like */
+    by: Who
+    /** Sideways drift so repeat taps don't land on the same spot */
     dx: number
     tilt: number
+}
+
+/** Ban's side of the button: a rubber stamp, handle up. Inherits currentColor. */
+function Stamp({ className }: { className?: string }) {
+    return (
+        <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
+            <circle cx="12" cy="5.5" r="3.5" />
+            <path d="M10.5 8h3l1 6h-5z" />
+            <rect x="4" y="14" width="16" height="4" />
+            <rect x="3" y="20" width="18" height="1.5" />
+        </svg>
+    )
 }
 
 export function BeamUp({ slug }: { slug: string }) {
@@ -41,7 +60,7 @@ export function BeamUp({ slug }: { slug: string }) {
     /**
      * Authoritative running tally. Reading `mine` in the click handler would
      * see the value from the last render, so a fast burst of taps would all
-     * compute the same "+1" — the ref advances synchronously instead.
+     * compute the same "+1". The ref advances synchronously instead.
      */
     const mineRef = useRef(mine)
 
@@ -86,6 +105,8 @@ export function BeamUp({ slug }: { slug: string }) {
 
         const burst: Burst = {
             id: Date.now() + Math.random(),
+            // Read at tap time: a burst only exists after a tap, so nothing can flash
+            by: getPersona(),
             dx: (Math.random() - 0.5) * 26,
             tilt: (Math.random() - 0.5) * 40
         }
@@ -101,48 +122,75 @@ export function BeamUp({ slug }: { slug: string }) {
     return (
         <div className="flex flex-col items-center gap-3">
             <div className="relative flex items-center gap-3">
-                {/* Saucers launching, and a ring pushed out from the hull */}
                 <AnimatePresence>
-                    {bursts.map((burst) => (
-                        <motion.span key={burst.id} className="pointer-events-none absolute left-3 top-0">
+                    {bursts.map((burst) =>
+                        burst.by === 'ban' ? (
+                            // The stamp comes down hard and the mark stays a moment. No glow, no flight.
                             <motion.span
-                                initial={{ opacity: 0, y: 4, x: 0, scale: 0.4, rotate: 0 }}
-                                animate={{ opacity: 1, y: -52, x: burst.dx, scale: 1, rotate: burst.tilt }}
-                                exit={{ opacity: 0, y: -70 }}
-                                transition={{ duration: 0.9, ease: 'easeOut' }}
-                                className="block text-accent"
+                                key={burst.id}
+                                initial={{ opacity: 0, scale: 1.5, x: burst.dx, rotate: burst.tilt * 0.3 }}
+                                animate={{ opacity: 1, scale: 1, x: burst.dx, rotate: burst.tilt * 0.3 }}
+                                exit={{ opacity: 0, transition: { duration: 0.3 } }}
+                                transition={{ duration: 0.12, ease: 'easeIn' }}
+                                className="pointer-events-none absolute -top-9 left-0 whitespace-nowrap border-2 border-accent px-1.5 py-0.5 font-mono-ui text-[0.6rem] font-bold uppercase tracking-[0.2em] text-accent"
                             >
-                                <Saucer className="h-4 w-4 drop-shadow-[0_0_6px_hsl(var(--accent)/0.6)]" />
+                                witnessed
                             </motion.span>
-                            <motion.span
-                                // Centring goes through framer too: its inline transform would
-                                // overwrite Tailwind's -translate-* classes and leave the ring off-centre
-                                initial={{ opacity: 0.55, scale: 0.6, x: '-50%', y: '-50%' }}
-                                animate={{ opacity: 0, scale: 2.1, x: '-50%', y: '-50%' }}
-                                transition={{ duration: 0.7, ease: 'easeOut' }}
-                                className="absolute left-1/2 top-3 h-9 w-9 rounded-full border border-accent"
-                            />
-                        </motion.span>
-                    ))}
+                        ) : (
+                            // A saucer launching, and a ring pushed out from the hull
+                            <motion.span key={burst.id} className="pointer-events-none absolute left-3 top-0">
+                                <motion.span
+                                    initial={{ opacity: 0, y: 4, x: 0, scale: 0.4, rotate: 0 }}
+                                    animate={{ opacity: 1, y: -52, x: burst.dx, scale: 1, rotate: burst.tilt }}
+                                    exit={{ opacity: 0, y: -70 }}
+                                    transition={{ duration: 0.9, ease: 'easeOut' }}
+                                    className="block text-accent"
+                                >
+                                    <Saucer className="h-4 w-4 drop-shadow-[0_0_6px_hsl(var(--accent)/0.6)]" />
+                                </motion.span>
+                                <motion.span
+                                    // Centring goes through framer too: its inline transform would
+                                    // overwrite Tailwind's -translate-* classes and leave the ring off-centre
+                                    initial={{ opacity: 0.55, scale: 0.6, x: '-50%', y: '-50%' }}
+                                    animate={{ opacity: 0, scale: 2.1, x: '-50%', y: '-50%' }}
+                                    transition={{ duration: 0.7, ease: 'easeOut' }}
+                                    className="absolute left-1/2 top-3 h-9 w-9 rounded-full border border-accent"
+                                />
+                            </motion.span>
+                        )
+                    )}
                 </AnimatePresence>
 
                 <motion.button
+                    type="button"
                     onClick={handleBeam}
                     disabled={maxed}
                     whileTap={maxed ? undefined : { scale: 0.85 }}
-                    aria-label={maxed ? 'Fully beamed up' : 'Beam this post up'}
                     className={cn(
-                        // Not transition-all: a CSS transition on `transform` fights framer's whileTap
-                        'group relative flex h-12 w-12 items-center justify-center rounded-full border transition-[color,background-color,border-color,box-shadow] duration-200',
+                        // Colour only, and never transition-all: a CSS transition on `transform`
+                        // fights framer's whileTap. Round for the saucer, square for the stamp.
+                        'relative flex h-12 w-12 items-center justify-center rounded-full border transition-colors duration-200 ban:rounded-none',
                         maxed
                             ? 'cursor-default border-accent/40 text-accent'
-                            : 'border-border/60 text-muted-foreground hover:border-accent/50 hover:text-accent hover:bg-accent/5 hover:shadow-[0_0_16px_hsl(var(--accent)/0.18)]'
+                            : 'border-border/60 text-muted-foreground hover:border-accent/50 hover:text-accent'
                     )}
                 >
-                    <Saucer className="h-6 w-6" />
+                    {/* The button's name, in words, so each of them can have his own */}
+                    <span className="sr-only">
+                        <Persona
+                            alen={maxed ? 'Fully beamed up' : 'Beam this post up'}
+                            ban={maxed ? 'The stamp is out of ink' : 'Witness this statement'}
+                        />
+                    </span>
+                    <OnlyAlen>
+                        <Saucer className="h-6 w-6" />
+                    </OnlyAlen>
+                    <OnlyBan>
+                        <Stamp className="h-6 w-6" />
+                    </OnlyBan>
                 </motion.button>
 
-                {/* The reader's own tally — the global total stays private */}
+                {/* The reader's own tally. The global total stays private */}
                 <span
                     className={cn(
                         'mono-label tabular-nums transition-colors duration-200',
@@ -153,8 +201,13 @@ export function BeamUp({ slug }: { slug: string }) {
                 </span>
             </div>
 
-            <p className="mono-label text-muted-foreground/35">
-                {maxed ? "// ok that's plenty, thanks" : '// tap to beam this up'}
+            <p className="mono-label text-muted-foreground/50">
+                <Persona
+                    alen={maxed ? "ok that's plenty, thanks" : 'tap the saucer to beam this post up'}
+                    ban={
+                        maxed ? `${MAX_BEAMS}. The stamp is out of ink.` : 'Stamp it as witnessed. I am keeping count.'
+                    }
+                />
             </p>
         </div>
     )

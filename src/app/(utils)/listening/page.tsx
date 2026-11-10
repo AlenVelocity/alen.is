@@ -1,80 +1,136 @@
 import { Suspense, cache } from 'react'
 import { Metadata } from 'next'
-import { PageTransition } from '@/components/ui/page-transition'
-import { StreamFade } from '@/components/ui/stream-fade'
-import { RepeatRing } from '@/components/ui/repeat-ring'
-import { api } from '@/trpc/server'
-import { FiHeadphones } from 'react-icons/fi'
 import Image from 'next/image'
 import Link from 'next/link'
-import { LinkButton } from '@/components/ui/link-button'
-import { SumikaDialog } from './sumika-dialog'
-import { encodeTrackParam } from '@/lib/lastfm'
-import { calculateFrequency, getStreakInfo } from '@/lib/streak'
-import { TopSignals, EqualizerBars } from './_components/top-signals'
-import { SkeletonBar, SkeletonTile, SignalRowsSkeleton } from '@/components/ui/signal-skeleton'
-import { formatDistanceToNow, parse } from 'date-fns'
-
+import { FiHeadphones } from 'react-icons/fi'
+import { formatDistanceToNowStrict, parse } from 'date-fns'
+import { api } from '@/trpc/server'
 import { constructMetadata } from '@/lib/metadata'
+import { encodeTrackParam } from '@/lib/lastfm'
+import { calculateFrequency, getStreakInfo, RING_FROM } from '@/lib/streak'
+import { Persona } from '@/components/persona'
+import { PageTransition } from '@/components/ui/page-transition'
+import { PageHeader } from '@/components/ui/page-header'
+import { StreamFade } from '@/components/ui/stream-fade'
+import { RepeatRing } from '@/components/ui/repeat-ring'
 import { BeamImage } from '@/components/ui/beam-image'
 import { EmptyState } from '@/components/ui/empty-state'
-import { PageHeader } from '@/components/ui/page-header'
+import { LinkButton } from '@/components/ui/link-button'
+import { SkeletonBar, SkeletonLine, SkeletonTile, ScrobbleRowsSkeleton } from '@/components/ui/signal-skeleton'
+import { SumikaDialog } from './sumika-dialog'
+import { TopSignals, EqualizerBars } from './_components/top-signals'
 
 export const metadata: Metadata = constructMetadata({
     title: 'Listening',
-    description: 'What I listen to',
+    description:
+        "What I'm playing right now and what I played before it, from Last.fm. Mostly video game soundtracks and Japanese rock.",
     slug: 'listening',
     ogTitle: 'Alen is Listening'
 })
 
+/** How far back the page looks. Also the number in the "most played" label */
+const SCROBBLE_WINDOW = 200
+/** Artists in the "most played" chart */
+const TOP_ARTISTS = 6
+/** Rows in the recent list, after repeats are folded together */
+const RECENT_ROWS = 20
+
+const TRUTH_URL = 'https://open.spotify.com/track/29OHAngqPMvOrDPfl3s9x7?si=ae88719df17c4c95'
+
 /**
- * One Last.fm round-trip per request, shared by every section below via
- * React cache() — each Suspense boundary awaits the same promise, so the
- * static parts of the page stream immediately while the scrobble-powered
- * sections pop in together when the API answers.
+ * One Last.fm round trip per request, shared by every section below through
+ * React cache(): each Suspense boundary awaits the same promise, so the static
+ * parts of the page go out at once and the scrobble sections arrive together.
+ * Resolves to null when Last.fm does not answer, so one section can say so
+ * and the rest of the page still renders.
  */
-const getScrobbles = cache(() => api.lastfm.getRecentTracks({ limit: 200 }))
+const getScrobbles = cache(async () => {
+    try {
+        return await api.lastfm.getRecentTracks({ limit: SCROBBLE_WINDOW })
+    } catch {
+        return null
+    }
+})
 
 export default function Listening() {
     return (
         <PageTransition>
             <div className="container max-w-3xl py-10 md:py-14">
-                <PageHeader eyebrow="what's on loop" title="Listening" titleExtra={<EqualizerBars />} />
+                <PageHeader
+                    eyebrow="what's on loop"
+                    title="Listening"
+                    banTitle="Noise"
+                    titleExtra={
+                        <Suspense fallback={null}>
+                            <LiveEqualizer />
+                        </Suspense>
+                    }
+                >
+                    <p className="text-[0.9rem] text-muted-foreground">
+                        <Persona
+                            alen="Everything I play gets scrobbled to Last.fm and ends up here."
+                            ban="Everything I play goes on record. I have nothing to hide and no plans to turn it down."
+                        />
+                    </p>
+                </PageHeader>
 
-                {/* Now playing — streams in from Last.fm */}
                 <Suspense fallback={<NowPlayingSkeleton />}>
                     <NowPlayingSection />
                 </Suspense>
 
-                {/* About — static */}
                 <section className="mb-14 space-y-4 text-muted-foreground leading-relaxed">
                     <p>
-                        Mostly video game OSTs (Persona is elite) and Japanese rock. Always down for recommendations
-                        though.
+                        <Persona
+                            alen="Mostly video game OSTs (Persona is elite) and Japanese rock. Always down for recommendations though."
+                            ban="He takes recommendations. I do not. It is video game soundtracks and Japanese rock here, and nothing beats Persona's."
+                        />
                     </p>
                     <p>
-                        There was a year where <SumikaDialog /> was basically my entire personality.
+                        <Persona
+                            alen={
+                                <>
+                                    There was a year where <SumikaDialog>only listening to sumika</SumikaDialog> was
+                                    basically my entire personality.
+                                </>
+                            }
+                            ban={
+                                <>
+                                    I played sumika for 76,178 minutes in one year and{' '}
+                                    <SumikaDialog>kept the receipt</SumikaDialog>.
+                                </>
+                            }
+                        />
                     </p>
                     <p>
-                        Now I&apos;ve{' '}
-                        <LinkButton
-                            href="https://open.spotify.com/track/29OHAngqPMvOrDPfl3s9x7?si=ae88719df17c4c95"
-                            target="_blank"
-                        >
-                            reached out to the truth
-                        </LinkButton>{' '}
-                        (iykyk)
+                        <Persona
+                            alen={
+                                <>
+                                    Now I&apos;ve{' '}
+                                    <LinkButton href={TRUTH_URL} target="_blank">
+                                        reached out to the truth
+                                    </LinkButton>{' '}
+                                    (iykyk)
+                                </>
+                            }
+                            ban={
+                                <>
+                                    Since then I have{' '}
+                                    <LinkButton href={TRUTH_URL} target="_blank">
+                                        reached out to the truth
+                                    </LinkButton>
+                                    . I am not explaining that.
+                                </>
+                            }
+                        />
                     </p>
                 </section>
 
-                {/* Most played — streams in from Last.fm */}
-                <Suspense fallback={<TopSignalsSkeleton />}>
-                    <TopSignalsSection />
+                <Suspense fallback={<MostPlayedSkeleton />}>
+                    <MostPlayedSection />
                 </Suspense>
 
-                {/* Flight recorder — streams in from Last.fm */}
-                <Suspense fallback={<FlightRecorderSkeleton />}>
-                    <FlightRecorderSection />
+                <Suspense fallback={<RecentScrobblesSkeleton />}>
+                    <RecentScrobblesSection />
                 </Suspense>
 
                 {/* A playlist, last, at the player's compact height */}
@@ -85,6 +141,7 @@ export default function Listening() {
                             allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
                             frameBorder="0"
                             height="175"
+                            loading="lazy"
                             style={{ width: '100%', overflow: 'hidden' }}
                             sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
                             src="https://embed.music.apple.com/in/playlist/writers-room/pl.u-gxblgd1Tb9VXoJA"
@@ -97,45 +154,66 @@ export default function Listening() {
     )
 }
 
-/** ── Skeleton components ───────────────────────────────────────────── */
+/** Section labels, shared by each section and the skeleton that holds its place */
+const MOST_PLAYED_LABEL = `most played, last ${SCROBBLE_WINDOW} scrobbles`
+const recentLabel = <Persona alen="recent scrobbles" ban="priors" />
+
+/** Percent-encoded on top of the slug, so a "/" or "?" in a name stays inside its path segment */
+function trackHref(track: { artist: string; name: string }) {
+    const segment = (value: string) => encodeURIComponent(encodeTrackParam(value))
+    return `/listening/to/${segment(track.artist)}/${segment(track.name)}`
+}
+
+/** "4 days ago" from Last.fm's "dd MMM yyyy, HH:mm" UTC stamp. Empty while a track is still playing */
+function scrobbledAgo(date: string | null | undefined): string {
+    if (!date) return ''
+    try {
+        const utcDate = parse(date, 'dd MMM yyyy, HH:mm', new Date())
+        const localDate = new Date(utcDate.getTime() - utcDate.getTimezoneOffset() * 60000)
+        return formatDistanceToNowStrict(localDate, { addSuffix: true })
+    } catch {
+        return ''
+    }
+}
+
+/**
+ * Skeletons. Each is built from the same boxes as the section that replaces
+ * it (same grid, same line heights, same number of rows), so nothing below it
+ * moves when Last.fm answers.
+ */
 
 function NowPlayingSkeleton() {
     return (
         <section className="mb-14" aria-hidden="true">
-            <div className="section-label mb-4">now playing</div>
-            <div className="border-b border-dashed border-border/30 py-4 flex items-center gap-4">
-                <SkeletonTile className="w-14 h-14 rounded" />
-                <div className="flex-1 min-w-0 space-y-2">
-                    <SkeletonBar width="4rem" height="0.5rem" delay={0} />
-                    <SkeletonBar width="55%" height="0.75rem" delay={0.1} />
-                    <SkeletonBar width="40%" height="0.5rem" delay={0.2} />
+            {/* Whether this is "now playing" or "last played" is not known yet */}
+            <div className="section-label mb-4">
+                <SkeletonBar width="5rem" height="0.5rem" />
+            </div>
+            <div className="flex items-center gap-4 py-4 border-b border-dashed border-border">
+                <SkeletonTile className="w-14 h-14" />
+                <div className="flex-1 min-w-0">
+                    <SkeletonLine className="mono-label mb-0.5" width="5rem" />
+                    <SkeletonLine className="font-semibold" width="55%" />
+                    <SkeletonLine className="text-sm" width="40%" />
                 </div>
             </div>
         </section>
     )
 }
 
-function TopSignalsSkeleton() {
+function MostPlayedSkeleton() {
     return (
         <section className="mb-14" aria-hidden="true">
-            <div className="section-label mb-4">most played</div>
+            <div className="section-label mb-4">{MOST_PLAYED_LABEL}</div>
             <div>
-                {[...Array(6)].map((_, i) => (
+                {[...Array(TOP_ARTISTS)].map((_, i) => (
                     <div key={i} className="grid grid-cols-[auto_1fr_auto] items-center gap-3 py-2.5">
-                        <div
-                            className="w-8 h-8 rounded-full skeleton-shimmer"
-                            style={{ animationDelay: `${i * 0.08}s` }}
-                        />
-                        <div className="min-w-0 space-y-2">
-                            <SkeletonBar width={`${45 + ((i * 13) % 35)}%`} height="0.625rem" delay={i * 0.1} />
-                            <div className="h-1 bg-muted/40 rounded-full overflow-hidden">
-                                <div
-                                    className="h-full bg-accent/15 rounded-full"
-                                    style={{ width: `${100 - i * 14}%` }}
-                                />
-                            </div>
+                        <SkeletonTile className="w-8 h-8" />
+                        <div className="min-w-0">
+                            <SkeletonLine className="text-sm mb-1" width={`${30 + ((i * 13) % 30)}%`} />
+                            <div className="h-1 bg-muted/60 rounded-sm" />
                         </div>
-                        <SkeletonBar width="2rem" height="0.5rem" delay={i * 0.1 + 0.05} />
+                        <SkeletonLine className="mono-label" width="1.5rem" />
                     </div>
                 ))}
             </div>
@@ -143,47 +221,60 @@ function TopSignalsSkeleton() {
     )
 }
 
-function FlightRecorderSkeleton() {
+function RecentScrobblesSkeleton() {
     return (
         <section aria-hidden="true">
-            <div className="section-label mb-4">recent scrobbles</div>
-            <SignalRowsSkeleton rows={6} />
+            <div className="section-label mb-4">{recentLabel}</div>
+            <ScrobbleRowsSkeleton rows={RECENT_ROWS} />
         </section>
     )
 }
 
-/** ── Streamed sections ─────────────────────────────────────────────── */
+/** Streamed sections. Each awaits the same getScrobbles() promise. */
 
+/** The equalizer beside the title. It is a live indicator, so it is only there while something plays */
+async function LiveEqualizer() {
+    const scrobbles = await getScrobbles()
+    return scrobbles?.nowPlaying ? <EqualizerBars /> : null
+}
+
+/**
+ * The top slot always holds a track, so the page keeps its shape: the one
+ * playing now, or failing that the last one played. Only a playing track gets
+ * the equalizer, the signal colour and the ring.
+ */
 async function NowPlayingSection() {
-    const lastFmData = await getScrobbles()
-    if (!lastFmData.nowPlaying) return null
+    const scrobbles = await getScrobbles()
+    const track = scrobbles?.nowPlaying ?? scrobbles?.recentlyPlayed[0]
+    if (!scrobbles || !track) return null
 
-    const nowPlayingFrequency = calculateFrequency(lastFmData.nowPlaying, lastFmData.recentlyPlayed)
-    const {
-        subtitle: nowPlayingSubtitle,
-        borderGradient,
-        shadowStyle
-    } = getStreakInfo(nowPlayingFrequency, true, 'large')
+    const isLive = !!scrobbles.nowPlaying
+    const frequency = isLive ? calculateFrequency(track, scrobbles.recentlyPlayed) : 1
+    const { subtitle, banSubtitle, borderGradient, shadowStyle } = getStreakInfo(frequency, isLive, 'large')
+    const onRepeat = frequency >= RING_FROM
+    const ago = scrobbledAgo(track.date)
 
     return (
         <StreamFade>
             <section className="mb-14">
-                <div className="section-label mb-4">now playing</div>
+                <div className="section-label mb-4">
+                    {isLive ? <Persona alen="now playing" ban="in progress" /> : 'last played'}
+                </div>
                 <RepeatRing
-                    frequency={nowPlayingFrequency}
+                    frequency={frequency}
                     gradient={borderGradient}
                     shadow={shadowStyle}
-                    className={nowPlayingFrequency >= 3 ? '' : 'border-b border-dashed border-border'}
+                    className={onRepeat ? '' : 'border-b border-dashed border-border'}
                 >
                     <Link
-                        href={`/listening/to/${encodeTrackParam(lastFmData.nowPlaying.artist)}/${encodeTrackParam(lastFmData.nowPlaying.name)}`}
-                        className={`group relative z-10 flex items-center gap-4 ${nowPlayingFrequency >= 3 ? 'bg-card p-4 rounded' : 'py-4'}`}
+                        href={trackHref(track)}
+                        className={`group relative z-10 flex items-center gap-4 ${onRepeat ? 'bg-card p-4 rounded' : 'py-4'}`}
                     >
-                        {lastFmData.nowPlaying.image ? (
+                        {track.image ? (
                             <div className="relative w-14 h-14 rounded overflow-hidden shrink-0">
                                 <BeamImage
-                                    src={lastFmData.nowPlaying.image}
-                                    alt={`${lastFmData.nowPlaying.name} album art`}
+                                    src={track.image}
+                                    alt={track.album ? `Cover of ${track.album}` : `Cover art for ${track.name}`}
                                     sizes="56px"
                                     className="object-cover"
                                 />
@@ -194,23 +285,25 @@ async function NowPlayingSection() {
                             </div>
                         )}
                         <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 mb-0.5">
-                                <EqualizerBars className="h-3 scale-75 origin-left" />
-                                <span className="mono-label text-accent">
-                                    {nowPlayingSubtitle}
-                                    {nowPlayingFrequency >= 3 && (
-                                        <span className="ml-1.5 opacity-80">×{nowPlayingFrequency}</span>
-                                    )}
-                                </span>
-                            </div>
+                            {isLive ? (
+                                <div className="flex items-center gap-2 mb-0.5">
+                                    <EqualizerBars className="h-3 scale-75 origin-left" />
+                                    <span className="mono-label text-signal">
+                                        <Persona alen={subtitle} ban={banSubtitle} />
+                                        {onRepeat && <span className="ml-1.5 opacity-80">×{frequency}</span>}
+                                    </span>
+                                </div>
+                            ) : (
+                                <p className="mono-label text-muted-foreground/60 mb-0.5">
+                                    {ago || <Persona alen={subtitle} ban={banSubtitle} />}
+                                </p>
+                            )}
                             <p className="font-semibold truncate group-hover:text-accent transition-colors">
-                                {lastFmData.nowPlaying.name}
+                                {track.name}
                             </p>
                             <p className="text-sm text-muted-foreground truncate">
-                                {lastFmData.nowPlaying.artist}
-                                {lastFmData.nowPlaying.album && (
-                                    <span className="text-muted-foreground/50"> · {lastFmData.nowPlaying.album}</span>
-                                )}
+                                {track.artist}
+                                {track.album && <span className="text-muted-foreground/50"> · {track.album}</span>}
                             </p>
                         </div>
                     </Link>
@@ -220,33 +313,33 @@ async function NowPlayingSection() {
     )
 }
 
-async function TopSignalsSection() {
-    const lastFmData = await getScrobbles()
+async function MostPlayedSection() {
+    const scrobbles = await getScrobbles()
+    if (!scrobbles) return null
 
-    // Top artists across the whole scrobble window — feeds the play-count chart
-    const artistCounts = lastFmData.recentlyPlayed.reduce((map, track) => {
+    // Plays per artist across the whole window
+    const artistCounts = scrobbles.recentlyPlayed.reduce((map, track) => {
         map.set(track.artist, (map.get(track.artist) ?? 0) + 1)
         return map
     }, new Map<string, number>())
-    const topSignals = [...artistCounts.entries()]
+    const topArtists = [...artistCounts.entries()]
         .sort((a, b) => b[1] - a[1])
-        .slice(0, 6)
+        .slice(0, TOP_ARTISTS)
         .map(([artist, count]) => ({ artist, count }))
 
-    if (topSignals.length === 0) return null
+    if (topArtists.length === 0) return null
 
-    // Fetch artist images in parallel
     let artistImages: { artist: string; image: string | null }[] = []
     try {
         artistImages = await api.lastfm.getArtistImages({
-            artists: topSignals.map((s) => s.artist)
+            artists: topArtists.map((s) => s.artist)
         })
     } catch {
-        // If artist image fetch fails, continue without images
+        // No pictures is fine: the rows fall back to the headphones tile
     }
 
     const imageMap = new Map(artistImages.map((a) => [a.artist, a.image]))
-    const signalsWithImages = topSignals.map((s) => ({
+    const signals = topArtists.map((s) => ({
         ...s,
         image: imageMap.get(s.artist) ?? null
     }))
@@ -254,30 +347,34 @@ async function TopSignalsSection() {
     return (
         <StreamFade>
             <section className="mb-14">
-                <div className="section-label mb-4">most played</div>
-                <TopSignals signals={signalsWithImages} />
+                <div className="section-label mb-4">{MOST_PLAYED_LABEL}</div>
+                <TopSignals signals={signals} />
             </section>
         </StreamFade>
     )
 }
 
-/** "4 days ago" from Last.fm's "dd MMM yyyy, HH:mm" UTC stamp; empty while a track is still playing */
-function scrobbledAgo(date: string | undefined): string {
-    if (!date) return ''
-    try {
-        const utcDate = parse(date, 'dd MMM yyyy, HH:mm', new Date())
-        const localDate = new Date(utcDate.getTime() - utcDate.getTimezoneOffset() * 60000)
-        return formatDistanceToNow(localDate, { addSuffix: true })
-    } catch {
-        return ''
+async function RecentScrobblesSection() {
+    const scrobbles = await getScrobbles()
+
+    if (!scrobbles) {
+        return (
+            <StreamFade>
+                <section>
+                    <div className="section-label mb-4">{recentLabel}</div>
+                    <EmptyState>
+                        <Persona
+                            alen="last.fm isn't answering right now."
+                            ban="No answer from Last.fm. The noise continues unrecorded."
+                        />
+                    </EmptyState>
+                </section>
+            </StreamFade>
+        )
     }
-}
 
-async function FlightRecorderSection() {
-    const lastFmData = await getScrobbles()
-
-    // Collapse consecutive repeats of the same track into one row with a ×N count
-    const groupedTracks = lastFmData.recentlyPlayed.reduce(
+    // Fold consecutive repeats of the same track into one row with a ×N count
+    const groupedTracks = scrobbles.recentlyPlayed.reduce(
         (acc, track) => {
             const key = `${track.name}:::${track.artist}`
             const last = acc[acc.length - 1]
@@ -288,15 +385,22 @@ async function FlightRecorderSection() {
             }
             return acc
         },
-        [] as ((typeof lastFmData.recentlyPlayed)[0] & { key: string; count: number })[]
+        [] as ((typeof scrobbles.recentlyPlayed)[0] & { key: string; count: number })[]
     )
-    const displayTracks = groupedTracks.slice(0, 20)
+    const displayTracks = groupedTracks.slice(0, RECENT_ROWS)
 
     if (displayTracks.length === 0) {
-        if (lastFmData.nowPlaying) return null
         return (
             <StreamFade>
-                <EmptyState>nothing scrobbled lately</EmptyState>
+                <section>
+                    <div className="section-label mb-4">{recentLabel}</div>
+                    <EmptyState>
+                        <Persona
+                            alen="nothing scrobbled lately. tracks land here as i play them."
+                            ban="Nothing on record lately. I have been quiet. It will not last."
+                        />
+                    </EmptyState>
+                </section>
             </StreamFade>
         )
     }
@@ -304,24 +408,25 @@ async function FlightRecorderSection() {
     return (
         <StreamFade>
             <section>
-                <div className="section-label mb-4">recent scrobbles</div>
+                <div className="section-label mb-4">{recentLabel}</div>
                 <div>
                     {displayTracks.map((track, index) => (
                         <Link
-                            key={`${track.name}-${index}`}
-                            href={`/listening/to/${encodeTrackParam(track.artist)}/${encodeTrackParam(track.name)}`}
+                            key={`${track.key}-${index}`}
+                            href={trackHref(track)}
                             className="group grid gap-x-8 md:grid-cols-[10rem_1fr] items-center py-2.5 border-b border-dashed border-border/50 last:border-b-0"
                         >
                             <span className="hidden md:block mono-label text-muted-foreground/40 tabular-nums">
                                 {scrobbledAgo(track.date)}
                             </span>
                             <div className="flex items-center gap-3 min-w-0">
+                                {/* Small and repeated, so a plain image, and decorative: the name is beside it */}
                                 {track.image ? (
-                                    <div className="relative w-9 h-9 rounded overflow-hidden flex-shrink-0">
-                                        <Image src={track.image} alt={track.name} fill className="object-cover" />
+                                    <div className="relative w-9 h-9 rounded overflow-hidden shrink-0">
+                                        <Image src={track.image} alt="" fill sizes="36px" className="object-cover" />
                                     </div>
                                 ) : (
-                                    <div className="w-9 h-9 rounded bg-muted flex items-center justify-center flex-shrink-0">
+                                    <div className="w-9 h-9 rounded bg-muted flex items-center justify-center shrink-0">
                                         <FiHeadphones className="w-3.5 h-3.5 text-muted-foreground" />
                                     </div>
                                 )}
@@ -331,7 +436,9 @@ async function FlightRecorderSection() {
                                             {track.name}
                                         </p>
                                         {track.count > 1 && (
-                                            <span className="shrink-0 mono-label text-accent/70">×{track.count}</span>
+                                            <span className="shrink-0 mono-label text-muted-foreground/60 tabular-nums">
+                                                ×{track.count}
+                                            </span>
                                         )}
                                     </div>
                                     <p className="text-xs text-muted-foreground truncate">{track.artist}</p>

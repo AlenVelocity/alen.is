@@ -75,7 +75,8 @@ export const lastFmRouter = createTRPCRouter({
                 }
             } catch (error) {
                 console.error('Error fetching track info:', error)
-                throw new Error('Failed to fetch track info')
+                // This is the message a client sees, so it is written for a reader
+                throw new Error("Last.fm didn't return that track.")
             }
         }),
 
@@ -148,7 +149,7 @@ export const lastFmRouter = createTRPCRouter({
                 }
             } catch (error) {
                 console.error('Error fetching Last.fm data:', error)
-                throw new Error('Failed to fetch Last.fm data')
+                throw new Error("Last.fm isn't answering right now.")
             }
         })
 })

@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { LOUD_FROM, RING_FROM } from '@/lib/streak'
 
 interface RepeatRingProps {
     /** How many times the track has come round recently. Under 3 the ring is not drawn */
@@ -18,11 +19,18 @@ interface RepeatRingProps {
  * long streak never reads as a strobe.
  */
 export function RepeatRing({ frequency, gradient, shadow, className = '', children }: RepeatRingProps) {
-    if (frequency < 3) return <div className={`relative ${className}`}>{children}</div>
+    if (frequency < RING_FROM) return <div className={`relative ${className}`}>{children}</div>
 
     return (
         <div className={`relative p-[2px] rounded overflow-visible ${className}`}>
-            {shadow && <div className="absolute inset-[2px] rounded z-[-1]" style={{ boxShadow: shadow }} />}
+            {shadow && (
+                <div
+                    // The quiet tiers glow in the accent, and nothing glows on Ban's paper.
+                    // The loud tiers are an alarm and keep their glow for both of them.
+                    className={`absolute inset-[2px] rounded z-[-1] ${frequency < LOUD_FROM ? 'ban:hidden' : ''}`}
+                    style={{ boxShadow: shadow }}
+                />
+            )}
             <div className="absolute inset-0 rounded overflow-hidden z-[-2]">
                 <div
                     className="absolute left-1/2 top-1/2 w-[1000px] h-[1000px] -ml-[500px] -mt-[500px] origin-center"

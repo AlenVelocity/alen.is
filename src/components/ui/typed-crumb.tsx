@@ -41,7 +41,8 @@ export function TypedCrumb({ text, className }: { text: string; className?: stri
             <span className="invisible">{text}</span>
             <span className="absolute left-0 top-0 text-accent">
                 {shown}
-                <span className="animate-blink" aria-hidden="true">
+                {/* The prompt is live, so its cursor takes the signal colour: green for Alen, amber for Ban */}
+                <span className="animate-blink text-signal" aria-hidden="true">
                     ▮
                 </span>
             </span>

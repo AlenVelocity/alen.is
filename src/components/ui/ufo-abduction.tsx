@@ -6,6 +6,7 @@ import { toast } from 'sonner'
 import { posthog } from '@/components/posthog-provider'
 import { isMinimalMotion } from '@/lib/motion-pref'
 import { collectPieces } from '@/lib/shred'
+import { getPersona } from '@/lib/persona'
 
 /**
  * The site's UFO abduction, in two flavors:
@@ -22,6 +23,11 @@ import { collectPieces } from '@/lib/shred'
  * The shredding splits <main> into content blocks and gives each one CSS vars
  * (--abduct-dx/--abduct-dy) pointing at the beam axis / saucer mouth; the
  * shared abductPiece keyframe rides them up the cone (see globals.css).
+ *
+ * While Ban is in there is no saucer. Navigation is a redaction instead: black
+ * bars are drawn over the leaving page, the route changes underneath, and the
+ * bars are pulled off the page that arrived. Same interception, same timers,
+ * different show (see REDACTION in globals.css).
  */
 
 const KONAMI = [
@@ -43,11 +49,69 @@ const SAUCER_TOP_VH = 0.04
 const SAUCER_MOUTH_OFFSET = 38
 
 /** How long the outgoing page has before the route actually changes, in ms */
-const WARP_OUT_MS = 520
-/** Enter phase duration — must outlast the 0.6s abductReturn animation */
-const WARP_IN_MS = 650
+const WARP_OUT_MS = 340
+/** Enter phase duration — must outlast the 0.4s abductReturn animation */
+const WARP_IN_MS = 440
 
+/** Ban's redaction: bars on, then the route changes; bars off once it has rendered */
+const REDACT_OUT_MS = 290
+const REDACT_IN_MS = 420
+/** A block taller than this is struck out line by line instead of as one slab */
+const REDACT_LINE_PX = 26
+const REDACT_GAP_PX = 9
+const REDACT_MAX_BARS = 64
+
+/** The saucer's phases. Announced on UFO_PHASE_EVENT so /alien's shader can follow along. */
 export type Phase = 'idle' | 'arrive' | 'beam' | 'swallow' | 'depart' | 'warp-out' | 'warp-in'
+
+/** Everything this component can be showing: the saucer's phases, plus Ban's redaction */
+type ShowPhase = Phase | 'redact-out' | 'redact-in'
+
+/** One black bar of a redaction, in viewport pixels */
+interface RedactBar {
+    x: number
+    y: number
+    w: number
+    h: number
+    /** Seconds before this bar moves, on and off alike */
+    delay: number
+}
+
+/**
+ * Bars for whatever of the page is on screen. Short pieces get one bar each;
+ * tall ones (a paragraph, a list) get a stack of lines with ragged right ends,
+ * which is what a struck-out paragraph looks like.
+ */
+function collectBars(main: HTMLElement): RedactBar[] {
+    const viewport = window.innerHeight
+    const bars: RedactBar[] = []
+    for (const el of collectPieces(main)) {
+        const rect = el.getBoundingClientRect()
+        if (rect.bottom < 0 || rect.top > viewport) continue
+        if (rect.height <= REDACT_LINE_PX * 2.5) {
+            bars.push({ x: rect.left, y: rect.top, w: rect.width, h: rect.height, delay: 0 })
+            continue
+        }
+        for (let y = rect.top; y + REDACT_LINE_PX / 2 < rect.bottom; y += REDACT_LINE_PX + REDACT_GAP_PX) {
+            if (y > viewport || y + REDACT_LINE_PX < 0) continue
+            bars.push({
+                x: rect.left,
+                y,
+                w: rect.width * (0.7 + Math.random() * 0.3),
+                h: Math.min(REDACT_LINE_PX, rect.bottom - y),
+                delay: 0
+            })
+        }
+    }
+    bars.sort((a, b) => a.y - b.y)
+    const kept = bars.slice(0, REDACT_MAX_BARS)
+    // Top to bottom, the whole stack inside 110ms however many bars there are
+    const step = Math.min(0.012, 0.11 / Math.max(kept.length, 1))
+    kept.forEach((bar, i) => {
+        bar.delay = i * step
+    })
+    return kept
+}
 
 /** Who asked for the abduction — each source gets its own pacing */
 export type AbductionSource = 'konami' | 'alien_page'
@@ -147,20 +211,24 @@ function prefersReducedMotion() {
 export function UfoAbduction() {
     const router = useRouter()
     const pathname = usePathname()
-    const [phase, setPhase] = useState<Phase>('idle')
-    const phaseRef = useRef<Phase>('idle')
+    const [phase, setPhase] = useState<ShowPhase>('idle')
+    const phaseRef = useRef<ShowPhase>('idle')
     const progressRef = useRef(0)
     const timersRef = useRef<ReturnType<typeof setTimeout>[]>([])
     const piecesRef = useRef<HTMLElement[]>([])
     const warpPendingRef = useRef(false)
+    const [bars, setBars] = useState<RedactBar[]>([])
     /** Pacing of the abduction currently on screen — read during render for the arrival speed */
     const timingRef = useRef<AbductionTiming>(ABDUCTION_TIMINGS.konami)
 
     /** setState + ref in one step so event handlers can read the current phase synchronously */
-    const changePhase = useCallback((p: Phase) => {
+    const changePhase = useCallback((p: ShowPhase) => {
         phaseRef.current = p
         setPhase(p)
-        window.dispatchEvent(new CustomEvent<Phase>(UFO_PHASE_EVENT, { detail: p }))
+        // A redaction has no saucer in it, so listeners for the saucer hear nothing
+        if (p !== 'redact-out' && p !== 'redact-in') {
+            window.dispatchEvent(new CustomEvent<Phase>(UFO_PHASE_EVENT, { detail: p }))
+        }
     }, [])
 
     const clearTimers = useCallback(() => {
@@ -194,23 +262,36 @@ export function UfoAbduction() {
                 router.push(href)
                 return
             }
-            posthog.capture('ufo_warp', { href })
+            const ban = getPersona() === 'ban'
+            posthog.capture('ufo_warp', { href, persona: ban ? 'ban' : 'alen' })
             clearTimers()
-            changePhase('warp-out')
+            // Start fetching the destination now, so the short out-phase is spent
+            // loading rather than waiting to start loading
+            router.prefetch(href)
+            changePhase(ban ? 'redact-out' : 'warp-out')
             document.body.classList.add('ufo-abduct')
             // Stays for the session: from here on pages arrive by beam, not by the CSS entrance
             document.body.classList.add('ufo-navigated')
             const main = document.querySelector('main')
             if (main) {
-                piecesRef.current = shredPieces(main, { duration: 0.4, step: 0.02, maxStagger: 0.08, jitter: 0.03 })
+                if (ban) setBars(collectBars(main))
+                else {
+                    piecesRef.current = shredPieces(main, {
+                        duration: 0.3,
+                        step: 0.014,
+                        maxStagger: 0.05,
+                        jitter: 0.02
+                    })
+                }
             }
             warpPendingRef.current = true
-            at(WARP_OUT_MS, () => router.push(href))
+            at(ban ? REDACT_OUT_MS : WARP_OUT_MS, () => router.push(href))
             // Safety net: if the route never changes (push failed), put the page back
             at(4000, () => {
-                if (phaseRef.current === 'warp-out') {
+                if (phaseRef.current === 'warp-out' || phaseRef.current === 'redact-out') {
                     warpPendingRef.current = false
                     restorePieces()
+                    setBars([])
                     document.body.classList.remove('ufo-abduct')
                     changePhase('idle')
                 }
@@ -219,13 +300,23 @@ export function UfoAbduction() {
         [router, changePhase, clearTimers, at, restorePieces]
     )
 
-    // The new route rendered: beam the fresh page down while the saucer departs
+    // The new route rendered: beam the fresh page down while the saucer departs,
+    // or pull the bars off it
     useEffect(() => {
-        if (phaseRef.current !== 'warp-out' || !warpPendingRef.current) return
+        const leaving = phaseRef.current
+        if ((leaving !== 'warp-out' && leaving !== 'redact-out') || !warpPendingRef.current) return
         warpPendingRef.current = false
         clearTimers()
         restorePieces() // old pieces were unmounted with the previous page; clears stale refs
         document.body.classList.remove('ufo-abduct')
+        if (leaving === 'redact-out') {
+            changePhase('redact-in')
+            at(REDACT_IN_MS, () => {
+                setBars([])
+                changePhase('idle')
+            })
+            return
+        }
         document.body.classList.add('ufo-return')
         changePhase('warp-in')
         at(WARP_IN_MS, () => {
@@ -352,20 +443,41 @@ export function UfoAbduction() {
 
     if (phase === 'idle') return null
 
+    if (phase === 'redact-out' || phase === 'redact-in') {
+        return (
+            <div className="fixed inset-0 z-[95] pointer-events-none overflow-hidden" aria-hidden="true">
+                {bars.map((bar, i) => (
+                    <span
+                        key={i}
+                        className="redact-bar"
+                        data-off={phase === 'redact-in' ? '' : undefined}
+                        style={{
+                            left: bar.x,
+                            top: bar.y,
+                            width: bar.w,
+                            height: bar.h,
+                            animationDelay: `${bar.delay.toFixed(3)}s`
+                        }}
+                    />
+                ))}
+            </div>
+        )
+    }
+
     const saucerAnimation = {
         arrive: `ufoArrive ${timingRef.current.arriveSec}s cubic-bezier(0.22, 1, 0.36, 1) forwards`,
         beam: 'ufoBob 2s ease-in-out infinite',
         swallow: 'ufoSwallow 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
         depart: 'ufoDepart 0.9s cubic-bezier(0.55, 0, 0.9, 0.4) forwards',
-        'warp-out': 'ufoArrive 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards',
-        'warp-in': 'ufoDepart 0.45s cubic-bezier(0.55, 0, 0.9, 0.4) 0.15s both'
+        'warp-out': 'ufoArrive 0.22s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+        'warp-in': 'ufoDepart 0.34s cubic-bezier(0.55, 0, 0.9, 0.4) 0.08s both'
     }[phase]
 
     const beamAnimation =
         phase === 'warp-in'
-            ? 'beamRetract 0.35s cubic-bezier(0.55, 0, 0.9, 0.4) forwards'
+            ? 'beamRetract 0.24s cubic-bezier(0.55, 0, 0.9, 0.4) forwards'
             : phase === 'warp-out'
-              ? 'beamDrop 0.25s cubic-bezier(0.22, 1, 0.36, 1) forwards, beamFlicker 1.1s ease-in-out 0.25s infinite'
+              ? 'beamDrop 0.16s cubic-bezier(0.22, 1, 0.36, 1) forwards, beamFlicker 1.1s ease-in-out 0.16s infinite'
               : 'beamDrop 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards, beamFlicker 1.1s ease-in-out 0.4s infinite'
 
     const showBeam = phase === 'beam' || phase === 'warp-out' || phase === 'warp-in'
@@ -422,7 +534,7 @@ export function UfoAbduction() {
                         cy="38"
                         rx="56"
                         ry="15"
-                        fill="hsl(200 30% 8%)"
+                        fill="hsl(var(--card))"
                         stroke="hsl(var(--accent) / 0.8)"
                         strokeWidth="1.5"
                     />

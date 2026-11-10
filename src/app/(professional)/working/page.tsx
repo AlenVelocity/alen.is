@@ -5,7 +5,9 @@ import { FiDownload } from 'react-icons/fi'
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
 import { runGetExperiences } from '@/lib/cms-db'
+import { asBanExperiences } from '@/lib/ban-content'
 import { PageHeader } from '@/components/ui/page-header'
+import { Persona } from '@/components/persona'
 
 // ─── Period parsing ──────────────────────────────────────────────────────────
 // Periods are free text in the CMS ("July 2025 - January 2026", "Dec 2021 - Sep 2022",
@@ -62,6 +64,19 @@ function formatDuration(period: string): string | null {
     return rest > 0 ? `${yearPart} ${rest} mo` : yearPart
 }
 
+/** What happened at a job, one line each. Rendered once per person inside <Persona>. */
+function Bullets({ items }: { items: string[] }) {
+    return (
+        <ul className="mt-3 space-y-1.5">
+            {items.map((item, i) => (
+                <li key={i} className="text-[0.875rem] text-muted-foreground leading-relaxed break-words">
+                    {item}
+                </li>
+            ))}
+        </ul>
+    )
+}
+
 export const metadata: Metadata = constructMetadata({
     title: 'working',
     description: "Alen's work history as a software engineer, newest first.",
@@ -75,7 +90,10 @@ metadata.alternates = { canonical: '/experience' }
 
 export default async function Experience() {
     const experiences = await runGetExperiences()
+    // The same jobs in the same order, with Ban's telling laid over them
+    const banExperiences = asBanExperiences(experiences)
 
+    // Structured data stays Alen's, like the metadata: crawlers never meet Ban
     const experienceSchema = {
         '@context': 'https://schema.org',
         '@type': 'ItemList',
@@ -99,6 +117,7 @@ export default async function Experience() {
                 <PageHeader
                     eyebrow="career"
                     title="Experience"
+                    banTitle="Record"
                     aside={
                         <a
                             href="/Alen_Resume.pdf"
@@ -106,17 +125,26 @@ export default async function Experience() {
                             className="inline-flex items-center gap-2 px-3 py-2 text-xs font-mono-ui border border-border/60 hover:text-accent transition-colors duration-200 rounded-sm shrink-0"
                         >
                             <FiDownload className="w-3 h-3" />
-                            <span>resume</span>
+                            <span>
+                                <Persona alen="resume" ban="Take the resume" />
+                            </span>
                         </a>
                     }
                 >
-                    <p className="text-[0.9rem] text-muted-foreground">Where I&apos;ve worked, newest first.</p>
+                    <p className="text-[0.9rem] text-muted-foreground">
+                        <Persona
+                            alen="Where I've worked, newest first."
+                            ban="Everyone who has paid me. They got their money's worth."
+                        />
+                    </p>
                 </PageHeader>
 
                 {/* ── Ledger: when on the left, what on the right ─── */}
                 <div className="border-t border-dashed border-border/40">
-                    {experiences.map((experience) => {
+                    {experiences.map((experience, index) => {
                         const duration = formatDuration(experience.period)
+                        // Each job renders once. Only what Ban tells differently is doubled
+                        const ban = banExperiences[index]
                         return (
                             <article
                                 key={experience.id}
@@ -124,16 +152,19 @@ export default async function Experience() {
                             >
                                 {/* When */}
                                 <div className="mono-label tabular-nums md:pt-1.5">
+                                    {/* The current job is live state, so the dot and its dates take
+                                        the signal colour. Alen's dot is a glowing beacon; nothing
+                                        glows on Ban's paper, so his only fades */}
                                     <p
                                         className={
                                             experience.current
-                                                ? 'text-accent flex items-center gap-2'
+                                                ? 'text-signal flex items-center gap-2'
                                                 : 'text-muted-foreground/70'
                                         }
                                     >
                                         {experience.current && (
                                             <span
-                                                className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse-glow shrink-0"
+                                                className="w-1.5 h-1.5 rounded-full ban:rounded-none bg-signal alen:animate-pulse-glow ban:animate-pulse shrink-0"
                                                 aria-hidden="true"
                                             />
                                         )}
@@ -154,23 +185,24 @@ export default async function Experience() {
                                                 experience.company
                                             )}
                                         </h2>
-                                        <span className="text-sm text-muted-foreground">{experience.position}</span>
+                                        <span className="text-sm text-muted-foreground">
+                                            {ban.position === experience.position ? (
+                                                experience.position
+                                            ) : (
+                                                <Persona alen={experience.position} ban={ban.position} />
+                                            )}
+                                        </span>
                                     </div>
                                     <p className="mono-label text-muted-foreground/50 mt-1">
                                         {experience.location.toLowerCase() === experience.workType
                                             ? experience.workType
                                             : `${experience.location} · ${experience.workType}`}
                                     </p>
-                                    <ul className="mt-3 space-y-1.5">
-                                        {experience.description.map((item, i) => (
-                                            <li
-                                                key={i}
-                                                className="text-[0.875rem] text-muted-foreground leading-relaxed break-words"
-                                            >
-                                                {item}
-                                            </li>
-                                        ))}
-                                    </ul>
+                                    <Persona
+                                        as="div"
+                                        alen={<Bullets items={experience.description} />}
+                                        ban={<Bullets items={ban.description} />}
+                                    />
                                 </div>
                             </article>
                         )

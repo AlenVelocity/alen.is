@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { TechStack } from '@/components/ui/tech-badge'
 import { DecodeText } from '@/components/ui/decode-text'
+import { Persona } from '@/components/persona'
+import { usePersona } from '@/hooks/use-persona'
 
 interface Project {
     id: string
@@ -18,6 +20,8 @@ interface Project {
 
 interface ProjectRowProps {
     project: Project
+    /** What Ban says this project is. Falls back to Alen's description. */
+    banDescription?: string
 }
 
 const getTypeLabel = (type: string) => {
@@ -45,30 +49,39 @@ function Leaves() {
     )
 }
 
-export function ProjectRow({ project }: ProjectRowProps) {
+export function ProjectRow({ project, banDescription }: ProjectRowProps) {
     return (
         <a
             href={project.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex items-baseline justify-between gap-4 py-3.5 border-b border-dashed border-border/50"
+            className="group block py-3.5 border-b border-dashed border-border/50"
         >
-            <h3 className="font-mono-ui text-sm font-medium min-w-0 truncate group-hover:text-accent transition-colors duration-200">
-                {project.title}
-            </h3>
+            <div className="flex items-baseline justify-between gap-4">
+                <h3 className="font-mono-ui text-sm font-medium min-w-0 truncate group-hover:text-accent transition-colors duration-200">
+                    {project.title}
+                </h3>
 
-            <span className="mono-label text-muted-foreground/40 shrink-0 tabular-nums inline-flex items-baseline gap-2">
-                <span>{getTypeLabel(project.type)}</span>
-                <span className="sm:hidden">{yearOf(project.period)}</span>
-                <span className="hidden sm:inline">{project.period}</span>
-                <Leaves />
-            </span>
+                <span className="mono-label text-muted-foreground/40 shrink-0 tabular-nums inline-flex items-baseline gap-2">
+                    <span>{getTypeLabel(project.type)}</span>
+                    <span className="sm:hidden">{yearOf(project.period)}</span>
+                    <span className="hidden sm:inline">{project.period}</span>
+                    <Leaves />
+                </span>
+            </div>
+
+            {/* A name alone does not say what the thing is */}
+            <p className="text-[0.8125rem] text-muted-foreground leading-relaxed mt-1 max-w-prose">
+                <Persona alen={project.description} ban={banDescription ?? project.description} />
+            </p>
         </a>
     )
 }
 
-export function ProjectDetail({ project }: ProjectRowProps) {
+export function ProjectDetail({ project, banDescription }: ProjectRowProps) {
     const [hovered, setHovered] = useState(false)
+    // The glyph decode is the ship's. Nothing on Ban's paper scrambles
+    const persona = usePersona()
 
     return (
         <a
@@ -84,7 +97,7 @@ export function ProjectDetail({ project }: ProjectRowProps) {
             {/* Title row: name left, when right */}
             <div className="flex items-baseline justify-between gap-4 mb-1.5">
                 <h3 className="text-display text-lg md:text-xl min-w-0 break-words group-hover:text-accent transition-colors duration-200">
-                    <DecodeText text={project.title} active={hovered} />
+                    <DecodeText text={project.title} active={hovered && persona === 'alen'} />
                 </h3>
                 <span className="mono-label text-muted-foreground/40 shrink-0 tabular-nums">
                     <span className="sm:hidden">{yearOf(project.period)}</span>
@@ -93,7 +106,7 @@ export function ProjectDetail({ project }: ProjectRowProps) {
             </div>
 
             <p className="text-[0.9rem] text-muted-foreground leading-relaxed mb-3 max-w-prose">
-                {project.description}
+                <Persona alen={project.description} ban={banDescription ?? project.description} />
             </p>
 
             {/* Stack left, destination right. Icons stay monochrome until the row is hovered */}

@@ -1,6 +1,7 @@
 import type React from 'react'
-import { Syne, JetBrains_Mono } from 'next/font/google'
+import { Syne, JetBrains_Mono, Grenze_Gotisch, Libre_Caslon_Text } from 'next/font/google'
 import ClientLayout from './ClientLayout'
+import { PERSONA_BOOT_SCRIPT } from '@/lib/persona'
 import { TRPCReactProvider } from '@/trpc/react'
 import { ThemeProvider } from '@/components/theme-provider'
 import { PostHogProvider } from '@/components/posthog-provider'
@@ -18,6 +19,23 @@ const jetbrainsMono = JetBrains_Mono({
     variable: '--font-jetbrains-mono',
     subsets: ['latin'],
     weight: ['400', '500', '600', '700']
+})
+
+// Ban's type: a blackletter masthead over a Caslon body. Not preloaded, so
+// nobody downloads them until Ban is actually in.
+const banDisplay = Grenze_Gotisch({
+    variable: '--font-ban-display',
+    subsets: ['latin'],
+    weight: ['500', '600', '700'],
+    preload: false
+})
+
+const banText = Libre_Caslon_Text({
+    variable: '--font-ban-text',
+    subsets: ['latin'],
+    weight: ['400', '700'],
+    style: ['normal', 'italic'],
+    preload: false
 })
 
 export const metadata = {
@@ -81,8 +99,22 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
-            <body className={`${syne.variable} ${jetbrainsMono.variable} font-mono-ui`}>
+        // The font variables sit on <html>, not <body>: globals.css builds
+        // --font-display / --font-ui out of them on :root, and a custom property
+        // can only see variables defined on its own element or above it
+        <html
+            lang="en"
+            suppressHydrationWarning
+            data-scroll-behavior="smooth"
+            className={`${syne.variable} ${jetbrainsMono.variable} ${banDisplay.variable} ${banText.variable}`}
+        >
+            <head>
+                {/* Decides who is in (Alen or Ban) before anything paints. See lib/persona.ts.
+                    In <head>, not <body>: posthog-js inserts its loader before the first
+                    script in <body>, which would land in front of this one mid-hydration. */}
+                <script dangerouslySetInnerHTML={{ __html: PERSONA_BOOT_SCRIPT }} />
+            </head>
+            <body className="font-mono-ui">
                 {/* Images ship hidden so they can beam in; without JavaScript they just show */}
                 <noscript>
                     <style>{`.beam-image img { opacity: 1 !important; }`}</style>

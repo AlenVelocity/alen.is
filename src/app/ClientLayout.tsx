@@ -15,12 +15,15 @@ import { CommandBar, openCommandBar } from '@/components/ui/command-bar'
 import { UfoAbduction } from '@/components/ui/ufo-abduction'
 import { DrownTrigger } from '@/components/ui/drown-trigger'
 import { TypedCrumb } from '@/components/ui/typed-crumb'
+import { Persona, OnlyAlen, OnlyBan } from '@/components/persona'
+import { usePersona } from '@/hooks/use-persona'
+import { switchPersona } from '@/lib/persona'
 
-// NAV ITEMS
+// NAV ITEMS. `ban` is what the same link is called while Ban is in.
 const NAV_ITEMS = [
-    { href: '/', label: 'alen.is', icon: null },
-    { href: '/working', label: 'exp', icon: FiBriefcase },
-    { href: '/building', label: 'projects', icon: FiCode }
+    { href: '/', label: 'alen.is', ban: 'ban.is', icon: null },
+    { href: '/working', label: 'exp', ban: 'record', icon: FiBriefcase },
+    { href: '/building', label: 'projects', ban: 'schemes', icon: FiCode }
 ]
 
 function humanize(slug: string) {
@@ -136,14 +139,17 @@ function Navigation() {
                                             <Link
                                                 href={item.href}
                                                 className={cn(
-                                                    'relative px-3 py-1.5 text-xs font-mono-ui tracking-wide block whitespace-nowrap transition-colors duration-150',
+                                                    'relative px-3 ban:max-sm:px-2 py-1.5 text-xs font-mono-ui tracking-wide block whitespace-nowrap transition-colors duration-150',
                                                     isHome ? 'font-semibold' : 'font-medium',
                                                     isActive
                                                         ? 'text-accent bg-accent/8'
                                                         : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
                                                 )}
                                             >
-                                                {isActive ? <TypedCrumb text={item.label} /> : item.label}
+                                                <Persona
+                                                    alen={isActive ? <TypedCrumb text={item.label} /> : item.label}
+                                                    ban={isActive ? <TypedCrumb text={item.ban} /> : item.ban}
+                                                />
                                             </Link>
                                         </motion.div>
                                     )
@@ -178,7 +184,11 @@ function Navigation() {
                                                         i === 0 && 'font-semibold'
                                                     )}
                                                 >
-                                                    {crumb.label}
+                                                    {i === 0 ? (
+                                                        <Persona alen={crumb.label} ban="ban.is" />
+                                                    ) : (
+                                                        crumb.label
+                                                    )}
                                                 </Link>
                                             ) : (
                                                 <TypedCrumb text={crumb.label} />
@@ -198,22 +208,40 @@ function Navigation() {
                     <button
                         onClick={toggleTheme}
                         className={cn(
-                            'px-2 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-150 whitespace-nowrap shrink-0',
+                            'px-2 ban:max-sm:px-1.5 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-150 whitespace-nowrap shrink-0',
                             !mounted && 'opacity-0 pointer-events-none'
                         )}
                         aria-label="Toggle theme"
                     >
-                        <span className="inline-block min-w-[7ch] text-center">
-                            [{resolvedTheme === 'light' ? 'dark' : 'light'}]
+                        {/* Gated on `mounted`: the server cannot know the theme, and a label
+                            that differs on the first client render fails hydration and
+                            makes React rebuild the whole document */}
+                        <span className="inline-block min-w-[7ch] ban:min-w-0 text-center">
+                            [{mounted && resolvedTheme === 'light' ? 'dark' : 'light'}]
                         </span>
                     </button>
+
+                    {/* Only while Ban is in: the way back. Nothing in the nav leads to him. */}
+                    <OnlyBan>
+                        <button
+                            onClick={() => {
+                                switchPersona('alen')
+                                posthog.capture('persona_switch', { to: 'alen', from: 'nav' })
+                            }}
+                            className="px-2 ban:max-sm:px-1.5 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-150 whitespace-nowrap shrink-0"
+                            aria-label="Switch back to Alen"
+                            title="let alen back in"
+                        >
+                            [alen]
+                        </button>
+                    </OnlyBan>
 
                     {/* Command bar trigger — the "alen.is/…" warp drive (also opens with / or Ctrl+K) */}
                     <button
                         onClick={openCommandBar}
-                        className="px-2 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-150 whitespace-nowrap shrink-0"
+                        className="px-2 ban:max-sm:px-1.5 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-150 whitespace-nowrap shrink-0"
                         aria-label="Open site navigator (press / or Ctrl+K)"
-                        title="alen.is/… — press / to warp"
+                        title="alen.is/… (press / to open)"
                     >
                         [/]
                     </button>
@@ -244,8 +272,31 @@ function Navigation() {
     )
 }
 
+/**
+ * The tab title follows whoever is in: "Alen is working" becomes "Ban is working".
+ * Not on /ban, where "Alen is Ban" is the claim the page is about, and only
+ * becomes true once Ban is in. "Ban is Ban" would answer nothing.
+ */
+function usePersonaTitle(persona: 'alen' | 'ban') {
+    useEffect(() => {
+        const [from, to] = persona === 'ban' ? [/\bAlen\b/g, 'Ban'] : [/\bBan\b/g, 'Alen']
+        const fix = () => {
+            if (persona === 'ban' && window.location.pathname.replace(/\/$/, '') === '/ban') return
+            const wanted = document.title.replace(from, to)
+            if (wanted !== document.title) document.title = wanted
+        }
+        fix()
+        // Next rewrites <title> on every navigation, so keep correcting it
+        const observer = new MutationObserver(fix)
+        observer.observe(document.head, { childList: true, subtree: true, characterData: true })
+        return () => observer.disconnect()
+    }, [persona])
+}
+
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname()
+    const persona = usePersona()
+    usePersonaTitle(persona)
     const showNavbar = !pathname.startsWith('/lost')
     const showFooter = pathname === '/' || pathname.startsWith('/working') || pathname.startsWith('/building')
 
@@ -254,7 +305,9 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         // who ask for reduced motion (the CSS side of that lives in globals.css)
         <MotionConfig reducedMotion="user">
             <div className="min-h-screen flex flex-col">
-                <AlienDataStream />
+                {/* The rain is Alen's weather. CSS hides it the moment Ban is in; the
+                    unmount that follows stops its loop. */}
+                <OnlyAlen as="div">{persona === 'alen' && <AlienDataStream />}</OnlyAlen>
                 <CommandBar />
                 <UfoAbduction />
                 <DrownTrigger />
@@ -266,7 +319,10 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
                     <footer className="relative z-10 border-t border-dashed border-border/40 py-8">
                         <div className="container max-w-4xl">
                             <p className="text-xs font-mono-ui text-muted-foreground/50 text-center tracking-wide">
-                                © {new Date().getFullYear()} alen yohannan
+                                <Persona
+                                    alen={`© ${new Date().getFullYear()} alen yohannan`}
+                                    ban={`© ${new Date().getFullYear()} ban. all rights seized.`}
+                                />
                             </p>
                         </div>
                     </footer>

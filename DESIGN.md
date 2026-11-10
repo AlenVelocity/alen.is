@@ -312,3 +312,184 @@ a tab through with the keyboard, and removing one more thing.
 
 Phases 1 and 2 are a day together and are where the visible change is. Phase 3
 is a page or two per sitting. Nothing in this plan removes a joke.
+
+## 8. November 2026: the polish pass
+
+What changed in the shared layer, and the rules that came with it. Sections 1
+to 7 still hold unless this section says otherwise.
+
+**A token for "live", not a second colour.** `--signal` means "happening right
+now": the nav cursor, the dot on the current job, a track that is playing.
+Tailwind has `text-signal`, `bg-signal`, `border-signal`. For Alen it resolves
+to the accent, so his site stays one colour. (A pink signal was tried on
+11 November 2026 and Alen did not like it: for him, "more playful" does not
+mean another hue.) The token exists so that Ban, whose accent is red, can mark
+live things in amber instead. Use it for live state and nothing else. Hard-coded
+greens (`rgba(0, 255, 0, …)`, `green-500`, `80, 255, 160`) should become
+`hsl(var(--accent) / …)` so they follow the palette.
+
+**The palettes were retuned, not replaced.** Dark is a slightly bluer, slightly
+lifted teal-black with borders you can see (13% lightness, was 10%) and muted
+text that survives `/50` opacity. Light is mint paper with green-black ink, and
+its accent is dark enough to read as text (it was 3:1, it is now about 4.5:1).
+
+**Images are beamed down, not decoded.** `BeamImage` no longer draws glyph
+static on a canvas. The picture is revealed top to bottom behind a soft edge
+with one line of light riding it, and settles from 3.5% large. It is CSS, keyed
+off `data-phase`, 650ms, once per image.
+
+**The warp is 340ms out and 440ms back** (was 520 and 650) and the destination
+is prefetched the moment the link is clicked. The numbers are still the
+constants at the top of `ufo-abduction.tsx`.
+
+**Entrances.** The page-in lost its blur. A page gets one entrance. Inside a
+content page nothing else fades or slides in on load, the home hero included
+(its four staggers are gone, which overrides section 4); streamed sections
+resolve with `StreamFade` and that is all. The toy pages keep a two-step
+entrance (`stagger-1`, `stagger-2`) that is over in about 350ms.
+
+**Renames.** The home page's "now playing" section is "listening", since the
+card under it usually says "recently played". On `/listening` the top slot
+always holds a track ("now playing" or "last played"), so nothing jumps when
+Last.fm answers, and the equalizer in the title only runs while something is
+actually playing.
+
+## 9. Two people
+
+The site has a second person on it. Alen is the default. **Ban** is the other
+one: same body, same CV, opposite manners. Think Jekyll and Hyde. He is hidden.
+Nothing in Alen's site links to him except `/evil`, which nobody links to
+either.
+
+### How it works
+
+- Who is in lives in `localStorage` (`alen-persona`) and on
+  `<html data-persona="alen|ban">`, set before first paint by an inline script
+  in `<head>` (`src/lib/persona.ts`). No cookie, no server read, so every page
+  stays static.
+- The door is `/ban` ("Alen is Ban"). `?as=ban` and `?as=alen` on any URL also switch, then
+  remove themselves from the address bar. While Ban is in, the nav grows an
+  `[alen]` button that switches back.
+- The switch itself is a view transition: the new person's page is cut in
+  across the old one on a diagonal (`switchPersona` in `lib/persona.ts`).
+- Light and dark still work for both people. That makes four palettes, all in
+  the first block of `globals.css`, all using the same role names.
+
+### Writing a page for two people
+
+```tsx
+import { Persona, OnlyAlen, OnlyBan } from '@/components/persona'
+
+<p><Persona alen="Where I've worked, newest first." ban="Everyone who has paid me. They got their money's worth." /></p>
+```
+
+`<Persona>` renders both versions and CSS shows one. It works in server and
+client components and never flashes. Rules:
+
+- **Words go through `<Persona>`.** Behaviour goes through `usePersona()`
+  (`src/hooks/use-persona.ts`, client only) or `getPersona()` at event time.
+  Never render words from the hook: the server always says "alen" and the
+  text would flash.
+- The wrappers are `display: contents`. Put `<Persona>` **inside** the element
+  being laid out (`<p><Persona … /></p>`), not around it, or the parent's
+  `space-y-*`, `first:` and `last:` rules stop working. Pass `as="div"` when
+  the content is block level.
+- `ban:` and `alen:` are Tailwind variants for per-person styling on one
+  element: `text-left ban:text-center`.
+- `PageHeader` takes `banTitle`. While Ban is in, his title replaces Alen's and
+  Alen's sits above it, struck out. That strike-through (class `struck`) is
+  Ban's mark, the way `//` is Alen's. Use it for titles and nowhere else.
+- CMS content: `asBanExperiences`, `asBanProjects`, `asBanPersonalInfo` in
+  `src/lib/ban-content.ts` lay Ban's overlay (`src/data/ban/*.json`, keyed by
+  id) over Alen's rows. Ban only overrides the telling, never the facts.
+- Metadata (`title`, `description`, OG) stays Alen's. Crawlers and link
+  previews never meet Ban. The tab title is corrected in the browser.
+
+### Ban, the brief
+
+**Subject.** The same engineer with the politeness removed. Where Alen's site
+is a terminal left running on a ship, Ban's is a charge sheet: something
+printed, stamped and pinned up. The reference is a Victorian police notice
+more than a horror poster.
+
+| | Alen | Ban |
+|---|---|---|
+| World | terminal on a ship | charge sheet, printed |
+| Accent | phosphor green | oxblood on paper, arterial red in the dark |
+| Signal ("live") | the accent | gaslight amber |
+| Display type | Syne | Grenze Gotisch (blackletter), `h1` only |
+| Body type | JetBrains Mono | Libre Caslon Text, root size up 6% |
+| Labels | `//` lowercase mono | `§`, italic Caslon marginalia |
+| Rules | dashed | solid |
+| Corners | 2px | square |
+| Glow | on the accent | none, nothing glows on paper |
+| Ambient | glyph rain, circuit grid | none: a flat page with the same faint grain |
+| Page change | saucer abducts the page | the page is redacted, bars on then off |
+| Image reveal | beamed down, soft, vertical | uncensored, hard, sideways |
+| Selecting text | green highlight | solid ink, a redaction |
+| Mark | `//` | ~~strike-through~~ |
+
+Blackletter capitals stop being letters below about 30px, so in Ban's mode
+`.text-display` is blackletter only on an `h1` (or with the class `masthead`)
+and bold Caslon everywhere else. One capital is weak at any size: the
+blackletter "I" can read as a "D" or a "J". Ban talks in the first person, so
+prefer an `h1` that does not open with "I" when another line is as good (his
+hero is "~~Alen~~ Ban."). It is a preference, not a rule: `/cool` says "I am
+cool." because Alen chose it over the alternative. Body text is Caslon and can
+start however it likes.
+
+Most of this is carried by tokens and a block of overrides under `BAN` in
+`globals.css`, so a page gets Ban's look without being touched. What a page
+owes him is his words.
+
+### The two voices
+
+**Alen.** First person, plain, a little self-deprecating. Lowercase labels and
+eyebrows. Says what the thing is, then stops. Jokes are deadpan and short, and
+he keeps his own markers ("tho", "cause", "iykyk"). He never sells. A sentence
+of his names something real: a product, a number, a year.
+
+**Ban.** First person, sentence case, full stops. Short declaratives. He takes
+the credit, blames the hardware, never apologises and never asks. He does not
+use "tho". He is contemptuous of Alen ("he", never by flattering name) and
+pleased with himself.
+
+The joke is the framing. The facts do not change. Every employer, date, product
+and number on Ban's pages is the true one from Alen's. "Built the survey system
+that thousands of contractors filled in" becomes "Made thousands of contractors
+fill in a survey." Rules for him:
+
+- His villainy is petty and domestic: pushing to main on a Friday, reading the
+  docs and telling no one, finishing your sentences. Never actual harm.
+- He never insults an employer, a client, a colleague, the reader, or any group
+  of people. He is rude about Alen and about things (a broken IEM, a backlog).
+  This is still a real person's CV and a recruiter may read it in this mode.
+- No horror vocabulary (blood, souls, darkness, doom). He is a man who does not
+  return the shopping cart, not a demon.
+- Same anti-slop rules as everything else, same ban on em dashes.
+
+### What Ban calls the pages
+
+| Route | Alen | Ban |
+|---|---|---|
+| `/` nav label | alen.is | ban.is |
+| `/working` | Experience | Record |
+| `/building` | Projects | Schemes |
+| `/using` | Gear | Arsenal |
+| `/listening` | Listening | Noise |
+| `/playing` | Playing | Conquests |
+| `/writing` | Writing | Statements |
+| `/coding` | Coding | Evidence |
+| `/meeting` | Meeting | Summons |
+| `/sharing` | Sharing | Contraband |
+| `/lifting` | Lifting | Training |
+| `/thankful` | Thankful | Debts |
+
+### Adjective pages answer differently
+
+`alen.is/<word>` is a claim, and the two of them disagree about most of them.
+`/evil`: Alen says no, Ban says obviously. `/ban` ("Alen is Ban"): Alen says
+not right now and asks you not to press the button; once Ban is in, the same
+page says he is now, and offers the way back.
+`/cool`, `/human`, `/angry` and the rest get a second answer the same way: one
+`<Persona>` around the verdict, the mechanics untouched.

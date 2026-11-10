@@ -16,6 +16,7 @@
     "db:studio": "prisma studio",
     "cms:migrate": "tsx scripts/migrate-cms-data.ts",
     "cms:seed": "npm run cms:migrate",
+    "cms:sync": "tsx scripts/sync-cms-copy.ts",
     "drowning:art": "tsx scripts/import-drowning-art.ts"
   },
   "dependencies": {
