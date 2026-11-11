@@ -33,7 +33,7 @@ const BAR_TRANSITION = { duration: 0.45, ease: 'easeOut' } as const
 
 /**
  * The yes/no poll on /cool. Alen asked, so he reads the count as an answer.
- * Ban did not ask: to him the poll is a formality, a "no" is a spoiled ballot,
+ * Ban did not ask: to him the poll changes nothing, a "no" is just wrong,
  * and a count that goes against him means the poll is broken.
  */
 export default function CoolPoll({ initialData }: CoolPollProps) {
@@ -80,7 +80,7 @@ export default function CoolPoll({ initialData }: CoolPollProps) {
             <div className="w-full min-h-[5.75rem] flex flex-col justify-center">
                 <p className={NOTE} role="status">
                     {isError ? (
-                        <Persona alen="can't reach the poll right now." ban="The poll is down. The answer stands." />
+                        <Persona alen="can't reach the poll right now." ban="The poll is down. I'm still cool." />
                     ) : (
                         <Persona alen="counting the votes" ban="Counting." />
                     )}
@@ -112,20 +112,18 @@ export default function CoolPoll({ initialData }: CoolPollProps) {
 
         if (!voteData.vote) {
             return yesLeads
-                ? { alen: 'the people have spoken.', ban: 'A formality.' }
-                : { alen: 'controversial.', ban: 'The poll is broken.' }
+                ? { alen: 'the people have spoken.', ban: "Didn't need the poll." }
+                : { alen: 'people are split.', ban: 'The poll is broken.' }
         }
         if (isClose) {
-            return { alen: "it's close.", ban: 'It is not close.' }
+            return { alen: "it's close.", ban: "It's not close." }
         }
         if (voteData.vote === 'positive') {
             return yesLeads
                 ? { alen: 'glad you think so.', ban: 'Correct.' }
-                : { alen: 'a lone voice in the crowd.', ban: 'Correct. The poll is broken.' }
+                : { alen: "thanks. you're outnumbered tho.", ban: 'Correct. The poll is broken.' }
         }
-        return yesLeads
-            ? { alen: 'noted, respectfully.', ban: 'Overruled.' }
-            : { alen: 'fair enough.', ban: 'The poll is broken.' }
+        return yesLeads ? { alen: 'ok. noted.', ban: 'Wrong.' } : { alen: 'fair enough.', ban: 'The poll is broken.' }
     }
     const verdict = getVerdict()
 
@@ -172,7 +170,7 @@ export default function CoolPoll({ initialData }: CoolPollProps) {
                         <span>
                             {negativePercentage.toFixed(0)}%{' '}
                             <span className="text-destructive ban:text-muted-foreground">
-                                <Persona alen="no" ban="spoiled" />
+                                <Persona alen="no" ban="wrong" />
                             </span>
                         </span>
                     </div>

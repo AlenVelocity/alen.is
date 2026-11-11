@@ -467,6 +467,10 @@ fill in a survey." Rules for him:
 - No horror vocabulary (blood, souls, darkness, doom). He is a man who does not
   return the shopping cart, not a demon.
 - Same anti-slop rules as everything else, same ban on em dashes.
+- Everyday words, for both of them. Ban is blunt, not fancy: "Weapons", not
+  "Arsenal"; "on purpose", not "premeditated". He uses contractions like
+  anyone else ("I don't", "it's"). If a word would make a reader stop and
+  look it up, pick the plainer one.
 
 ### What Ban calls the pages
 
@@ -475,13 +479,13 @@ fill in a survey." Rules for him:
 | `/` nav label | alen.is | ban.is |
 | `/working` | Experience | Record |
 | `/building` | Projects | Schemes |
-| `/using` | Gear | Arsenal |
+| `/using` | Gear | Weapons |
 | `/listening` | Listening | Noise |
-| `/playing` | Playing | Conquests |
+| `/playing` | Playing | Wins |
 | `/writing` | Writing | Statements |
-| `/coding` | Coding | Evidence |
-| `/meeting` | Meeting | Summons |
-| `/sharing` | Sharing | Contraband |
+| `/coding` | Coding | Proof |
+| `/meeting` | Meeting | A word |
+| `/sharing` | Sharing | Loot |
 | `/lifting` | Lifting | Training |
 | `/thankful` | Thankful | Debts |
 

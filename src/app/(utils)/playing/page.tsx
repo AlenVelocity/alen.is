@@ -35,11 +35,10 @@ const tileClassName =
  */
 function backlogStatus(ratio: number) {
     if (ratio < 0.15) return { alen: 'under control', ban: 'not a crime', tone: 'text-accent', bar: 'bg-accent' }
-    if (ratio < 0.35) return { alen: 'manageable', ban: 'not guilty', tone: 'text-accent', bar: 'bg-accent' }
-    if (ratio < 0.55) return { alen: 'concerning', ban: 'no comment', tone: 'text-yellow-500', bar: 'bg-yellow-500' }
-    if (ratio < 0.75)
-        return { alen: 'critical', ban: 'they were on sale', tone: 'text-orange-500', bar: 'bg-orange-500' }
-    return { alen: 'beyond salvation', ban: 'guilty, and pleased', tone: 'text-destructive', bar: 'bg-destructive' }
+    if (ratio < 0.35) return { alen: 'fine', ban: 'not guilty', tone: 'text-accent', bar: 'bg-accent' }
+    if (ratio < 0.55) return { alen: 'getting bad', ban: 'no comment', tone: 'text-yellow-500', bar: 'bg-yellow-500' }
+    if (ratio < 0.75) return { alen: 'bad', ban: 'they were on sale', tone: 'text-orange-500', bar: 'bg-orange-500' }
+    return { alen: 'beyond saving', ban: 'guilty, and happy about it', tone: 'text-destructive', bar: 'bg-destructive' }
 }
 
 export default async function Playing() {
@@ -104,14 +103,14 @@ export default async function Playing() {
     return (
         <PageTransition>
             <div className="container max-w-3xl py-10 md:py-14">
-                <PageHeader eyebrow="human simulation logs" title="Playing" banTitle="Conquests">
+                <PageHeader eyebrow="human simulation logs" title="Playing" banTitle="Wins">
                     {libraryCounts && (
                         <p className="font-mono-ui text-xs text-muted-foreground tabular-nums">
                             {libraryCounts}.
                             {totalHours > 0 && (
                                 <Persona
                                     alen={` ${hours} hours, which is ${totalDays} days.`}
-                                    ban={` ${hours} hours. That is ${totalDays} days and I would do it again.`}
+                                    ban={` ${hours} hours. That's ${totalDays} days and I'd do it again.`}
                                 />
                             )}
                         </p>
@@ -242,11 +241,11 @@ export default async function Playing() {
                                     <span className="mono-label text-muted-foreground/60 tabular-nums">
                                         <Persona
                                             alen={`backlog: ${unplayed} unplayed ${unplayedGames}`}
-                                            ban={`charge: ${unplayed} ${unplayedGames} owned, never played`}
+                                            ban={`${unplayed} ${unplayedGames} bought, never played`}
                                         />
                                     </span>
                                     <span className={`mono-label ${backlog.tone}`}>
-                                        <Persona alen={`status: ${backlog.alen}`} ban={`plea: ${backlog.ban}`} />
+                                        <Persona alen={`status: ${backlog.alen}`} ban={`I say: ${backlog.ban}`} />
                                     </span>
                                 </div>
                                 <div

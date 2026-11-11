@@ -138,15 +138,15 @@ export default async function TrackPage({ params }: Props) {
     ].filter((part): part is string => !!part)
     const banStats = [
         duration && `${duration} long.`,
-        plays && `I have played it ${formatPlays(plays)}.`,
+        plays && `I've played it ${formatPlays(plays)}.`,
         track.userLoved && 'The heart was his doing.'
     ].filter((part): part is string => !!part)
 
     // The eyebrow finishes the sentence the URL starts, and only claims what Last.fm backs up
     const eyebrow = isNowPlaying ? (
-        <Persona alen="// i'm listening to" ban="I am playing" />
+        <Persona alen="// i'm listening to" ban="I'm playing" />
     ) : plays ? (
-        <Persona alen="// i've listened to" ban="I have played" />
+        <Persona alen="// i've listened to" ban="I've played" />
     ) : track.userPlaycount === 0 ? (
         <Persona alen="// never played this one" ban="Not one of mine" />
     ) : (

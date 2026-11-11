@@ -49,7 +49,7 @@ export function AchievementList({ unlocked, total, pct, status, items }: Achieve
             </div>
             {status && (
                 <p className="mono-label text-muted-foreground/50 mb-6">
-                    <Persona alen="status: " ban="verdict: " />
+                    <Persona alen="status: " ban="status: " />
                     <span className={status.tone}>
                         <Persona alen={status.alen} ban={status.ban} />
                     </span>

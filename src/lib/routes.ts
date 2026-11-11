@@ -19,13 +19,13 @@ export interface SiteRoute {
 
 export const SITE_ROUTES: SiteRoute[] = [
     // work
-    { slug: 'working', description: 'where I have worked', ban: 'everyone who has paid me', group: 'work' },
-    { slug: 'building', description: 'things I have made', ban: 'things I got away with', group: 'work' },
+    { slug: 'working', description: "where I've worked", ban: "everyone who's paid me", group: 'work' },
+    { slug: 'building', description: "things I've made", ban: 'things I got away with', group: 'work' },
 
     // life
-    { slug: 'listening', description: 'what is on loop', ban: 'the same song again', group: 'life' },
-    { slug: 'playing', description: 'steam and xbox, with the backlog', ban: 'games I have beaten', group: 'life' },
-    { slug: 'using', description: 'the desk and what is on it', ban: 'what I do it with', group: 'life' },
+    { slug: 'listening', description: "what's on loop", ban: 'the same song again', group: 'life' },
+    { slug: 'playing', description: 'steam and xbox, with the backlog', ban: "games I've beaten", group: 'life' },
+    { slug: 'using', description: "the desk and what's on it", ban: 'what I do it with', group: 'life' },
     { slug: 'cool', description: 'am I cool?', ban: 'not a question', group: 'life' },
     { slug: 'writing', description: 'notes on things I had to figure out', ban: 'statements', group: 'life' },
 

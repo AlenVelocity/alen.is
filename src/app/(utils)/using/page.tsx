@@ -276,7 +276,7 @@ const STATE_PLAIN = 'text-muted-foreground border-border/50'
 const BADGES: Record<string, { alen: string; ban: string; tone: string }> = {
     Primary: { alen: 'primary', ban: 'the favourite', tone: STATE_IN_USE },
     Secondary: { alen: 'secondary', ban: 'the other one', tone: STATE_PLAIN },
-    'Daily Driver': { alen: 'daily driver', ban: 'on my person', tone: STATE_IN_USE },
+    'Daily Driver': { alen: 'daily driver', ban: 'always on me', tone: STATE_IN_USE },
     Broken: { alen: 'broken', ban: 'quit on me', tone: 'text-destructive border-destructive/30' }
 }
 
@@ -353,7 +353,7 @@ export default function Using() {
         <PageTransition>
             <div className="container max-w-3xl py-10 md:py-14 px-4">
                 {/* Header */}
-                <PageHeader eyebrow="setup" title="Gear" banTitle="Arsenal">
+                <PageHeader eyebrow="setup" title="Gear" banTitle="Weapons">
                     <p className="text-[0.9rem] text-muted-foreground">
                         <Persona
                             alen="The desk and what's on it. Most of it still works."

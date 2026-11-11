@@ -124,7 +124,7 @@ function LanguageBar({ languages }: { languages: { name: string; color: string; 
 /** The shared header plus the profile link, which is there whether or not the numbers are */
 function Header({ username, children }: { username: string; children?: React.ReactNode }) {
     return (
-        <PageHeader eyebrow="commit history" title="Coding" banTitle="Evidence">
+        <PageHeader eyebrow="commit history" title="Coding" banTitle="Proof">
             {children}
             <a
                 href={`https://github.com/${username}`}
@@ -154,7 +154,7 @@ export default async function Coding() {
                     <EmptyState>
                         <Persona
                             alen="github isn't answering right now"
-                            ban="GitHub is not answering. No evidence, no case."
+                            ban="GitHub isn't answering. No proof, no case."
                         />
                     </EmptyState>
                 </div>
@@ -177,8 +177,8 @@ export default async function Coding() {
                     <p className="text-[0.9rem] text-muted-foreground mb-4 tabular-nums">
                         {plural(githubData.totalContributions, 'contribution')} in the last year. {counts}.{' '}
                         <Persona
-                            alen={streak > 0 ? `${streak} days in a row at the moment.` : null}
-                            ban={`${streak > 0 ? `${streak} days in a row. ` : ''}All premeditated.`}
+                            alen={streak > 0 ? `${streak} days in a row right now.` : null}
+                            ban={`${streak > 0 ? `${streak} days in a row. ` : ''}All on purpose.`}
                         />
                     </p>
                 </Header>

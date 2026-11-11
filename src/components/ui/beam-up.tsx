@@ -134,7 +134,7 @@ export function BeamUp({ slug }: { slug: string }) {
                                 transition={{ duration: 0.12, ease: 'easeIn' }}
                                 className="pointer-events-none absolute -top-9 left-0 whitespace-nowrap border-2 border-accent px-1.5 py-0.5 font-mono-ui text-[0.6rem] font-bold uppercase tracking-[0.2em] text-accent"
                             >
-                                witnessed
+                                read
                             </motion.span>
                         ) : (
                             // A saucer launching, and a ring pushed out from the hull
@@ -179,7 +179,7 @@ export function BeamUp({ slug }: { slug: string }) {
                     <span className="sr-only">
                         <Persona
                             alen={maxed ? 'Fully beamed up' : 'Beam this post up'}
-                            ban={maxed ? 'The stamp is out of ink' : 'Witness this statement'}
+                            ban={maxed ? 'The stamp is out of ink' : 'Stamp this statement'}
                         />
                     </span>
                     <OnlyAlen>
@@ -204,9 +204,7 @@ export function BeamUp({ slug }: { slug: string }) {
             <p className="mono-label text-muted-foreground/50">
                 <Persona
                     alen={maxed ? "ok that's plenty, thanks" : 'tap the saucer to beam this post up'}
-                    ban={
-                        maxed ? `${MAX_BEAMS}. The stamp is out of ink.` : 'Stamp it as witnessed. I am keeping count.'
-                    }
+                    ban={maxed ? `${MAX_BEAMS}. The stamp is out of ink.` : "Stamp it if you read it. I'm counting."}
                 />
             </p>
         </div>

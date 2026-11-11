@@ -47,7 +47,7 @@ export default async function Building() {
                     <p className="text-[0.9rem] text-muted-foreground">
                         <Persona
                             alen="Things I've built, shipped, and sometimes abandoned."
-                            ban="Things I got away with. Nothing here was abandoned. I was finished with it."
+                            ban="Things I got away with. I didn't abandon any of them. I was done."
                         />
                     </p>
                 </PageHeader>
@@ -56,7 +56,7 @@ export default async function Building() {
                 {featuredProjects.length > 0 && (
                     <section className="mb-14">
                         <div className="section-label mb-4">
-                            <Persona alen="featured" ban="grand schemes" />
+                            <Persona alen="featured" ban="big schemes" />
                         </div>
                         <div className="grid md:grid-cols-2 gap-x-10">
                             {featuredProjects.map((project) => (
@@ -74,7 +74,7 @@ export default async function Building() {
                 {otherProjects.length > 0 && (
                     <section>
                         <div className="section-label mb-4">
-                            <Persona alen="everything else" ban="petty schemes" />
+                            <Persona alen="everything else" ban="small schemes" />
                         </div>
                         <div>
                             {otherProjects.map((project) => (

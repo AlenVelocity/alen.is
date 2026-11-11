@@ -36,9 +36,9 @@ const TIERS: { from: number; alen: string; ban: string }[] = [
     { from: 50, alen: "i'm in love", ban: 'I admit nothing.' },
     { from: 25, alen: 'addicted', ban: 'The skip button is broken.' },
     { from: LOUD_FROM, alen: 'unhealthy', ban: 'The neighbours know the words.' },
-    { from: 15, alen: 'obsessed', ban: 'It is the only song now.' },
+    { from: 15, alen: 'obsessed', ban: "It's the only song now." },
     { from: 10, alen: "can't get enough", ban: 'Nobody else gets a turn.' },
-    { from: 7, alen: 'heavy rotation', ban: 'Repeat offender.' },
+    { from: 7, alen: 'heavy rotation', ban: 'Still this one.' },
     { from: 5, alen: 'running it back', ban: 'Again. On purpose.' },
     { from: RING_FROM, alen: 'on repeat', ban: 'Again.' }
 ]

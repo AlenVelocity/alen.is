@@ -40,7 +40,7 @@ const IconMap: { [key: string]: React.ComponentType<{ className?: string }> } = 
 
 /** The hero links Ban has his own name for, by social link id (DESIGN.md section 9) */
 const BAN_LINK_NAMES: Record<string, string> = {
-    meeting: 'Summons'
+    meeting: 'A word'
 }
 
 function parseTextWithLinks(text: string): React.ReactNode[] {
@@ -247,7 +247,7 @@ export default async function Home() {
                 {/* ── Contact ──────────────────────────────────────── */}
                 <section className="mb-4">
                     <div className="section-label mb-5">
-                        <Persona alen="contact" ban="last known whereabouts" />
+                        <Persona alen="contact" ban="where to find me" />
                     </div>
                     <p className="text-muted-foreground text-[0.925rem] leading-relaxed">
                         <Persona

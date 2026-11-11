@@ -551,15 +551,12 @@ export default function Lost() {
                     >
                         <div className="text-center px-4 max-w-lg">
                             <p className="mono-label text-muted-foreground/50 mb-6">
-                                <Persona
-                                    alen="// 404. there's nothing at that address"
-                                    ban="No page at that address. I checked."
-                                />
+                                <Persona alen="// 404. nothing here" ban="No page here. I checked." />
                             </p>
                             <p className="text-display text-2xl md:text-3xl mb-3">
                                 <Persona
                                     alen={<>&ldquo;Not all those who wander are lost.&rdquo;</>}
-                                    ban="He is lost. I know exactly where I am."
+                                    ban="He's lost. I know exactly where I am."
                                 />
                             </p>
                             {/* Ban quotes nobody, so his line stands without a name under it */}
@@ -569,7 +566,7 @@ export default function Lost() {
                             <p className="mono-label text-muted-foreground">
                                 <Persona
                                     alen="this is conway's game of life. draw some cells, or press seed"
-                                    ban="This is Conway's Game of Life. Draw cells or press seed. I am not cleaning up after them."
+                                    ban="This is Conway's Game of Life. Draw cells or press seed. I'm not cleaning up after them."
                                 />
                                 <span className="animate-blink text-accent ml-1">█</span>
                             </p>
@@ -585,8 +582,7 @@ export default function Lost() {
             >
                 {/* A running simulation is live, so the readout takes the signal colour */}
                 <span className={cn('tabular-nums', isPlaying && 'text-signal')}>
-                    [{isPlaying ? <Persona alen="evolving" ban="at large" /> : <Persona alen="stasis" ban="detained" />}
-                    ]
+                    [{isPlaying ? <Persona alen="running" ban="loose" /> : <Persona alen="paused" ban="caught" />}]
                 </span>
                 <span className="tabular-nums">gen {String(stats.gen).padStart(4, '0')}</span>
                 <span className="text-accent/40">·</span>
@@ -601,11 +597,11 @@ export default function Lost() {
                 >
                     {isPlaying ? (
                         <>
-                            ⏸ <Persona alen="halt" ban="detain" />
+                            ⏸ <Persona alen="pause" ban="catch" />
                         </>
                     ) : (
                         <>
-                            ▶ <Persona alen="run" ban="release" />
+                            ▶ <Persona alen="run" ban="let go" />
                         </>
                     )}
                 </button>
@@ -619,7 +615,7 @@ export default function Lost() {
                     onClick={handleClear}
                     className="px-3 py-1.5 text-xs font-mono-ui whitespace-nowrap text-muted-foreground hover:text-destructive rounded-sm transition-colors duration-150"
                 >
-                    ✕ <Persona alen="clear" ban="evict" />
+                    ✕ <Persona alen="clear" ban="wipe" />
                 </button>
             </div>
         </div>

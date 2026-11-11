@@ -326,7 +326,7 @@ export default function Bi() {
                 <p className="mono-label text-muted-foreground/50">
                     <Persona
                         alen={<TypedCaption text="(not my fault)" delay={CAPTION_DELAY_MS} />}
-                        ban={<TypedCaption text="(Entirely my fault.)" delay={CAPTION_DELAY_MS} />}
+                        ban={<TypedCaption text="(All my fault.)" delay={CAPTION_DELAY_MS} />}
                     />
                 </p>
             </div>

@@ -134,7 +134,7 @@ export default async function Experience() {
                     <p className="text-[0.9rem] text-muted-foreground">
                         <Persona
                             alen="Where I've worked, newest first."
-                            ban="Everyone who has paid me. They got their money's worth."
+                            ban="Everyone who's paid me. They got their money's worth."
                         />
                     </p>
                 </PageHeader>

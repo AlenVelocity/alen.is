@@ -82,12 +82,9 @@ export default function MeetingPage() {
     return (
         <PageTransition>
             <div className="container max-w-3xl pt-10 md:pt-14 px-4">
-                <PageHeader eyebrow="the formal route" title="Meeting" banTitle="Summons">
+                <PageHeader eyebrow="the formal route" title="Meeting" banTitle="A word">
                     <p className="text-[0.9rem] text-muted-foreground mb-4">
-                        <Persona
-                            alen="Pick a time and I'll be on the call."
-                            ban="Consider yourself summoned. Pick a time."
-                        />
+                        <Persona alen="Pick a time and I'll be on the call." ban="You're coming. Pick a time." />
                     </p>
                     {/* The same calendar without the embed, for when a blocker eats the iframe */}
                     <a

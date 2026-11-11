@@ -26,7 +26,7 @@ export default function Lifting() {
                     <p className="text-[0.9rem] text-muted-foreground">
                         <Persona
                             alen="I swear I'm actually working out. The API just doesn't believe me yet."
-                            ban="I train. The API does not believe me. That is the API's problem."
+                            ban="I train. The API doesn't believe me. That's the API's problem."
                         />
                     </p>
                 </PageHeader>

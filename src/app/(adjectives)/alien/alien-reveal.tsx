@@ -187,7 +187,7 @@ export function AlienReveal() {
                             }
                             ban={
                                 inOrbit
-                                    ? 'He shows Earth to everyone. We go back down when it notices I am not him.'
+                                    ? "He shows Earth to everyone. We go back down when it notices I'm not him."
                                     : returned
                                       ? 'That proves nothing. I still take the bus.'
                                       : 'The saucer is his. I take the bus.'

@@ -29,7 +29,7 @@ export default function Evil() {
         <CenteredPage>
             <div className="flex flex-col items-center gap-7 text-center max-w-md">
                 <p className="mono-label text-muted-foreground/40 alen:tracking-[0.25em]">
-                    <Persona alen="// character reference" ban={<span className="struck">no</span>} />
+                    <Persona alen="// who, me?" ban={<span className="struck">no</span>} />
                 </p>
 
                 <h1 className="text-display text-5xl md:text-7xl">

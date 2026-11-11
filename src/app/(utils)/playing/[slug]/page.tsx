@@ -49,11 +49,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
  * on /playing: Alen reads it as a status, Ban as a verdict on the game.
  */
 function completionStatus(pct: number) {
-    if (pct >= 100) return { alen: 'fully cleared', ban: 'conquered', tone: 'text-accent' }
-    if (pct >= 75) return { alen: 'mopping up', ban: 'nearly conquered', tone: 'text-accent' }
-    if (pct >= 40) return { alen: 'making progress', ban: 'under siege', tone: 'text-yellow-500' }
-    if (pct >= 10) return { alen: 'barely scratched', ban: 'scouted', tone: 'text-orange-500' }
-    return { alen: 'untouched', ban: 'spared', tone: 'text-muted-foreground' }
+    if (pct >= 100) return { alen: 'fully cleared', ban: 'beaten', tone: 'text-accent' }
+    if (pct >= 75) return { alen: 'mopping up', ban: 'almost beaten', tone: 'text-accent' }
+    if (pct >= 40) return { alen: 'making progress', ban: 'working on it', tone: 'text-yellow-500' }
+    if (pct >= 10) return { alen: 'barely scratched', ban: 'barely touched', tone: 'text-orange-500' }
+    return { alen: 'untouched', ban: 'not yet', tone: 'text-muted-foreground' }
 }
 
 // ─── Page ────────────────────────────────────────────────────────────────────
@@ -138,7 +138,7 @@ export default async function GamePage({ params }: Props) {
                     href="/playing"
                     className="inline-block mono-label text-muted-foreground/50 hover:text-accent transition-colors duration-150 mb-8"
                 >
-                    <Persona alen="back to playing" ban="back to conquests" />
+                    <Persona alen="back to playing" ban="back to wins" />
                 </Link>
 
                 {/* Header art, on its own. The name is the heading under it, so the picture needs no scrim and no alt */}
@@ -169,7 +169,7 @@ export default async function GamePage({ params }: Props) {
                     </h1>
                     {(neverPlayed || stats.length > 0) && (
                         <p className="font-mono-ui text-xs text-muted-foreground tabular-nums">
-                            {neverPlayed && <Persona alen="Not played yet. " ban="Spared so far. " />}
+                            {neverPlayed && <Persona alen="Not played yet. " ban="Haven't got to it. " />}
                             {stats.length > 0 && `${stats.join('. ')}.`}
                         </p>
                     )}

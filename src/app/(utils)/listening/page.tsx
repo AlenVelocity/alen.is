@@ -69,7 +69,7 @@ export default function Listening() {
                     <p className="text-[0.9rem] text-muted-foreground">
                         <Persona
                             alen="Everything I play gets scrobbled to Last.fm and ends up here."
-                            ban="Everything I play goes on record. I have nothing to hide and no plans to turn it down."
+                            ban="Everything I play gets written down. I've got nothing to hide and I'm not turning it down."
                         />
                     </p>
                 </PageHeader>
@@ -82,7 +82,7 @@ export default function Listening() {
                     <p>
                         <Persona
                             alen="Mostly video game OSTs (Persona is elite) and Japanese rock. Always down for recommendations though."
-                            ban="He takes recommendations. I do not. It is video game soundtracks and Japanese rock here, and nothing beats Persona's."
+                            ban="He takes recommendations. I don't. It's video game soundtracks and Japanese rock here, and nothing beats Persona's."
                         />
                     </p>
                     <p>
@@ -90,7 +90,7 @@ export default function Listening() {
                             alen={
                                 <>
                                     There was a year where <SumikaDialog>only listening to sumika</SumikaDialog> was
-                                    basically my entire personality.
+                                    basically my whole personality.
                                 </>
                             }
                             ban={
@@ -114,11 +114,11 @@ export default function Listening() {
                             }
                             ban={
                                 <>
-                                    Since then I have{' '}
+                                    After that I{' '}
                                     <LinkButton href={TRUTH_URL} target="_blank">
                                         reached out to the truth
                                     </LinkButton>
-                                    . I am not explaining that.
+                                    . I&apos;m not explaining that.
                                 </>
                             }
                         />
@@ -156,7 +156,7 @@ export default function Listening() {
 
 /** Section labels, shared by each section and the skeleton that holds its place */
 const MOST_PLAYED_LABEL = `most played, last ${SCROBBLE_WINDOW} scrobbles`
-const recentLabel = <Persona alen="recent scrobbles" ban="priors" />
+const recentLabel = <Persona alen="recent scrobbles" ban="played before" />
 
 /** Percent-encoded on top of the slug, so a "/" or "?" in a name stays inside its path segment */
 function trackHref(track: { artist: string; name: string }) {
@@ -258,7 +258,7 @@ async function NowPlayingSection() {
         <StreamFade>
             <section className="mb-14">
                 <div className="section-label mb-4">
-                    {isLive ? <Persona alen="now playing" ban="in progress" /> : 'last played'}
+                    {isLive ? <Persona alen="now playing" ban="playing now" /> : 'last played'}
                 </div>
                 <RepeatRing
                     frequency={frequency}
@@ -365,7 +365,7 @@ async function RecentScrobblesSection() {
                     <EmptyState>
                         <Persona
                             alen="last.fm isn't answering right now."
-                            ban="No answer from Last.fm. The noise continues unrecorded."
+                            ban="Last.fm isn't answering. I'm still playing, you just can't see it."
                         />
                     </EmptyState>
                 </section>
@@ -397,7 +397,7 @@ async function RecentScrobblesSection() {
                     <EmptyState>
                         <Persona
                             alen="nothing scrobbled lately. tracks land here as i play them."
-                            ban="Nothing on record lately. I have been quiet. It will not last."
+                            ban="Nothing played lately. I've been quiet. It won't last."
                         />
                     </EmptyState>
                 </section>

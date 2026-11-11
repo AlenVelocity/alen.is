@@ -46,7 +46,7 @@ export default function Human() {
                 >
                     <Persona
                         alen="i like uh, games and stuff, just like you and every other human. I also breathe the normal air and everything."
-                        ban="He told you he breathes the normal air. I have the paperwork, and it stays in the drawer."
+                        ban="He told you he breathes the normal air. I have the papers. You can't see them."
                     />
                 </p>
 

@@ -39,11 +39,11 @@ export default function Ban() {
                     <Persona
                         alen={
                             <>
-                                <span className="ban-slip text-[1.15em]">ban</span> is the other one. same face, none of
-                                the manners. i keep him behind this page. please don&apos;t press that.
+                                <span className="ban-slip text-[1.15em]">ban</span> is the other guy. same face, no
+                                manners. i keep him behind this page. please don&apos;t press that.
                             </>
                         }
-                        ban="He kept me behind this page and asked you nicely not to press that. You pressed it. The site is mine until somebody puts him back."
+                        ban="He kept me behind this page and asked you nicely not to press that. You pressed it. The site is mine until someone puts him back."
                     />
                 </p>
 

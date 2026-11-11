@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 // Not indexed: this is where every missing address ends up.
 export const metadata: Metadata = {
     title: 'lost',
-    description: 'Alen is lost. There is nothing at that address.',
+    description: 'Alen is lost. Nothing here.',
     robots: { index: false, follow: true }
 }
 

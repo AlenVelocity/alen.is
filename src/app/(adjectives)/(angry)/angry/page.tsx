@@ -30,7 +30,7 @@ export default function Angry() {
             <p className="text-lg text-muted-foreground text-center max-w-sm">
                 <Persona
                     alen="Don't talk to me ( ｡ •`ᴖ´• ｡)"
-                    ban="That is him sulking. I keep a list, and he is on it twice."
+                    ban="That's him sulking. I keep a list. He's on it twice."
                 />
             </p>
         </CenteredPage>

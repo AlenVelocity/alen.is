@@ -22,8 +22,8 @@
         "description": [
             "Built the Mercor Work platform, a marketplace for contract work",
             "Built its survey system, which thousands of contractors filled in",
-            "Started collecting contractors' availability, so work could go to people who were free",
-            "Added location and work authorization flows, and phone verification as a fraud signal"
+            "Asked contractors when they were free, so work could go to people who had time",
+            "Added location and work authorization steps, and phone verification to help catch fraud"
         ],
         "current": false,
         "order": 1,
@@ -38,7 +38,7 @@
         "location": "India",
         "workType": "remote",
         "description": [
-            "Commissioned by the official Valorant Discord to build Valdle, an arcade game for their community",
+            "Built Valdle, an arcade game the official Valorant Discord asked us to make for their community",
             "Built an identity management product for enterprise clients"
         ],
         "current": false,
@@ -54,8 +54,8 @@
         "location": "Mumbai, India",
         "workType": "remote",
         "description": [
-            "Worked on Frappe Cloud, mostly infrastructure automation and AWS management",
-            "Added support for custom domains, email and DNS configuration"
+            "Worked on Frappe Cloud, mostly automating infrastructure and managing AWS",
+            "Added custom domains, email and DNS setup"
         ],
         "current": false,
         "order": 3,
@@ -72,7 +72,7 @@
         "description": [
             "Built an agent platform, a course generation platform and a voice survey platform",
             "Built agents for clients",
-            "Set up the infrastructure for deploying edge apps on multiple providers"
+            "Set up deploys for edge apps on more than one provider"
         ],
         "current": false,
         "order": 4,
@@ -89,7 +89,7 @@
         "description": [
             "Built the first version of Plazza's quick commerce system",
             "Made a medicine delivery system that runs on a WhatsApp bot, for the APR region",
-            "The microservices were NestJS with RabbitMQ and PostgreSQL, running on AWS (EC2, EKS, Amazon MQ, RDS)"
+            "Built the microservices in NestJS with RabbitMQ and PostgreSQL, on AWS (EC2, EKS, Amazon MQ, RDS)"
         ],
         "current": false,
         "order": 5,
@@ -104,7 +104,7 @@
         "workType": "remote",
         "period": "May 2023 - Jan 2024",
         "description": [
-            "Wrote dataset parsers that produce LoRA training data for LLMs like Vicuna-13b and Llama-2-7b",
+            "Wrote parsers that turn datasets into LoRA training data for LLMs like Vicuna-13b and Llama-2-7b",
             "Made a faster way to fine-tune diffusion models on faces",
             "Built the chat playground UIs"
         ],
@@ -121,8 +121,8 @@
         "workType": "remote",
         "period": "Dec 2021 - Sep 2022",
         "description": [
-            "Built CRM web apps that connect several feedback and customer sources",
-            "Made proofs of concept for multi-threaded Node backends"
+            "Built CRM web apps that pull in feedback and customer data from several places",
+            "Made prototypes of multi-threaded Node backends"
         ],
         "current": false,
         "order": 7,

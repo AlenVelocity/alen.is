@@ -370,7 +370,7 @@ export function UfoAbduction() {
             // Only the Konami egg says anything — /alien abducts on every visit, so a
             // toast each time would just be noise on top of its own narration.
             if (prefersReducedMotion()) {
-                if (source === 'konami') toast('message received. the mothership sends its regards.')
+                if (source === 'konami') toast('message received. the mothership says hi.')
                 return
             }
 
@@ -401,7 +401,7 @@ export function UfoAbduction() {
             at(t.doneAt, () => {
                 document.body.classList.remove('ufo-return')
                 changePhase('idle')
-                if (source === 'konami') toast('abduction complete. subject returned mostly intact.')
+                if (source === 'konami') toast("abduction done. everything's back, mostly.")
             })
         },
         [changePhase, clearTimers, at, restorePieces]

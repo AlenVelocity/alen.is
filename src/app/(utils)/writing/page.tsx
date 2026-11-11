@@ -32,7 +32,7 @@ export default function Writing() {
                     <p className="text-[0.9rem] text-muted-foreground">
                         <Persona
                             alen="Written down so I don't have to figure it out twice."
-                            ban="Taken down in writing so he cannot deny any of it later."
+                            ban="Written down so he can't deny it later."
                         />
                     </p>
                 </PageHeader>
@@ -78,7 +78,7 @@ export default function Writing() {
                     <EmptyState>
                         <Persona
                             alen="nothing written yet. the next thing i have to figure out goes here."
-                            ban="No statements. I have said nothing and I am sticking to it."
+                            ban="No statements. I said nothing and I'm sticking to it."
                         />
                     </EmptyState>
                 )}

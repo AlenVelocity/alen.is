@@ -37,7 +37,7 @@ export default async function Cool() {
                 className="mono-label text-muted-foreground/40 alen:tracking-[0.25em] animate-fade-in-up opacity-0 stagger-1"
                 style={{ animationFillMode: 'forwards' }}
             >
-                <Persona alen="// peer review" ban={<span className="struck">am I cool?</span>} />
+                <Persona alen="// be honest" ban={<span className="struck">am I cool?</span>} />
             </p>
 
             {/* Polaroid. `rotate` is its own property, so it does not fight the entrance's transform */}
@@ -65,7 +65,7 @@ export default async function Cool() {
                         />
                     </div>
                     <p className="text-center mono-label text-muted-foreground/40 mt-4">
-                        <Persona alen="exhibit_A.jpg" ban="Exhibit A. That is not him." />
+                        <Persona alen="exhibit_A.jpg" ban="Exhibit A. That's not him." />
                     </p>
                 </div>
             </div>

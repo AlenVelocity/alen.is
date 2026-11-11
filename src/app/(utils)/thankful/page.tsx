@@ -36,7 +36,7 @@ type GratitudeSection = {
  *   { title: 'People', items: [{ name: 'Someone', note: 'talked me out of a bad rewrite' }] }
  */
 const gratitudeSections: GratitudeSection[] = [
-    { title: 'People', ban: 'Creditors', items: [] },
+    { title: 'People', ban: 'People I owe', items: [] },
     { title: 'Things', items: [] },
     { title: 'Moments', items: [] }
 ]
@@ -89,7 +89,7 @@ export default function Thankful() {
                     <p className="text-[0.9rem] text-muted-foreground">
                         <Persona
                             alen="Things and people I'm glad about. Adding to this as I go."
-                            ban="Everyone and everything I owe. He calls it gratitude."
+                            ban="Everyone and everything I owe. He calls it being thankful."
                         />
                     </p>
                 </PageHeader>

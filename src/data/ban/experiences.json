@@ -4,35 +4,35 @@
     },
     "mercor-2025": {
         "description": [
-            "Built the Mercor Work platform, a marketplace for contract work. Other people do the work. I approve of that.",
+            "Built the Mercor Work platform, a marketplace for contract work. Other people do the work. I like that.",
             "Made thousands of contractors fill in a survey.",
             "Made them say when they were free, so work could go to the ones who were.",
-            "Asked for location and work authorization, then verified the phone number. That one is a fraud signal. I don't take anyone's word for it."
+            "Asked for location and work authorization, then checked the phone number. That one catches fraud. I don't take anyone's word for it."
         ]
     },
     "kmrb-2025": {
         "description": [
-            "The official Valorant Discord wanted an arcade game for their community. They commissioned me. It is called Valdle.",
+            "The official Valorant Discord wanted an arcade game for their community. They asked me. It's called Valdle.",
             "Built an identity management product for enterprise clients. I decide who you are."
         ]
     },
     "frappe-2024": {
         "description": [
-            "Worked on Frappe Cloud, mostly infrastructure automation and AWS management. I told the servers once.",
-            "Added custom domains, email and DNS configuration. If your domain resolves, that was me. If it doesn't, that was DNS."
+            "Worked on Frappe Cloud, mostly automating infrastructure and managing AWS. I only tell the servers once.",
+            "Added custom domains, email and DNS setup. If your domain works, that was me. If it doesn't, that was DNS."
         ]
     },
     "xagi-2024": {
         "description": [
             "Built an agent platform, a course generation platform and a voice survey platform. The survey asks out loud, so nobody can say they didn't see it.",
             "Clients wanted agents. I built them agents. Agents do as they're told.",
-            "Set up the infrastructure for deploying edge apps on multiple providers. I don't commit to one."
+            "Set up deploys for edge apps on more than one provider. I don't commit to one."
         ]
     },
     "plazza-2024": {
         "description": [
-            "Built the first version of Plazza's quick commerce system. Someone has to go first. It is usually me.",
-            "Put a medicine delivery system on a WhatsApp bot for the APR region. The bot does not make small talk.",
+            "Built the first version of Plazza's quick commerce system. Someone has to go first. It's usually me.",
+            "Put a medicine delivery system on a WhatsApp bot for the APR region. The bot doesn't do small talk.",
             "NestJS microservices with RabbitMQ and PostgreSQL, running on AWS (EC2, EKS, Amazon MQ, RDS). I read the docs for all of it and told no one."
         ]
     },
@@ -46,8 +46,8 @@
     "dataequinox-2021": {
         "position": "Software Development Engineer. Intern on paper.",
         "description": [
-            "Built CRM web apps that connect several feedback and customer sources. All of the feedback, in one app. None of it was about me.",
-            "Made proofs of concept for multi-threaded Node backends. Node has one thread. I disagreed."
+            "Built CRM web apps that pull in feedback and customer data from several places. All that feedback in one app. None of it was about me.",
+            "Made prototypes of multi-threaded Node backends. Node has one thread. I disagreed."
         ]
     },
     "synthesized-infinity-2020": {
