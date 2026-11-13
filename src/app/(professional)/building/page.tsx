@@ -3,6 +3,7 @@ import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
 import { runGetProjects } from '@/lib/cms-db'
 import { asBanProjects } from '@/lib/ban-content'
+import { projectDetails } from '@/lib/project-details'
 import { ProjectDetail, ProjectRow } from './_components/ProjectCard'
 
 import { constructMetadata } from '@/lib/metadata'
@@ -64,6 +65,7 @@ export default async function Building() {
                                     key={project.id}
                                     project={project}
                                     banDescription={banDescriptions.get(project.id)}
+                                    details={projectDetails(project.id)}
                                 />
                             ))}
                         </div>
@@ -82,6 +84,7 @@ export default async function Building() {
                                     key={project.id}
                                     project={project}
                                     banDescription={banDescriptions.get(project.id)}
+                                    details={projectDetails(project.id)}
                                 />
                             ))}
                         </div>

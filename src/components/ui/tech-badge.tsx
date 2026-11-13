@@ -22,7 +22,8 @@ import {
     SiFastapi,
     SiGo,
     SiMysql,
-    SiRedis
+    SiRedis,
+    SiDotnet
 } from 'react-icons/si'
 import { TbBrandOpenai, TbSparkles } from 'react-icons/tb'
 import { BsDatabaseFill } from 'react-icons/bs'
@@ -65,6 +66,7 @@ export type TechType =
     | 'go'
     | 'mysql'
     | 'redis'
+    | 'dotnet'
 
 const techIcons: Record<TechType, React.ReactNode> = {
     typescript: <SiTypescript />,
@@ -102,7 +104,8 @@ const techIcons: Record<TechType, React.ReactNode> = {
     fastapi: <SiFastapi />,
     go: <SiGo />,
     mysql: <SiMysql />,
-    redis: <SiRedis />
+    redis: <SiRedis />,
+    dotnet: <SiDotnet />
 }
 
 const techNames: Record<TechType, string> = {
@@ -141,7 +144,8 @@ const techNames: Record<TechType, string> = {
     fastapi: 'FastAPI',
     go: 'Go',
     mysql: 'MySQL',
-    redis: 'Redis'
+    redis: 'Redis',
+    dotnet: '.NET'
 }
 
 // Active colors for each tech (shown on group hover)
@@ -181,7 +185,8 @@ const techColors: Record<TechType, string> = {
     fastapi: 'text-teal-500',
     go: 'text-cyan-500',
     mysql: 'text-blue-500',
-    redis: 'text-red-500'
+    redis: 'text-red-500',
+    dotnet: 'text-violet-500'
 }
 
 // Group-hover colors (for parent card hover activation)
@@ -221,7 +226,8 @@ const techGroupHoverColors: Record<TechType, string> = {
     fastapi: 'group-hover:text-teal-500',
     go: 'group-hover:text-cyan-500',
     mysql: 'group-hover:text-blue-500',
-    redis: 'group-hover:text-red-500'
+    redis: 'group-hover:text-red-500',
+    dotnet: 'group-hover:text-violet-500'
 }
 
 interface TechBadgeProps {

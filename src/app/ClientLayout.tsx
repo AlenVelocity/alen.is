@@ -142,14 +142,22 @@ function Navigation() {
                                                     'relative px-3 ban:max-sm:px-2 py-1.5 text-xs font-mono-ui tracking-wide block whitespace-nowrap transition-colors duration-150',
                                                     isHome ? 'font-semibold' : 'font-medium',
                                                     isActive
-                                                        ? 'text-accent bg-accent/8'
+                                                        ? 'text-accent'
                                                         : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
                                                 )}
                                             >
-                                                <Persona
-                                                    alen={isActive ? <TypedCrumb text={item.label} /> : item.label}
-                                                    ban={isActive ? <TypedCrumb text={item.ban} /> : item.ban}
-                                                />
+                                                <Persona alen={item.label} ban={item.ban} />
+                                                {/* The page you are on is underlined. One line shared by all
+                                                    three links (layoutId), so it slides to the new one
+                                                    instead of blinking in place. */}
+                                                {isActive && (
+                                                    <motion.span
+                                                        layoutId="nav-underline"
+                                                        className="absolute inset-x-3 ban:max-sm:inset-x-2 bottom-1 h-px bg-accent"
+                                                        transition={{ type: 'spring', stiffness: 500, damping: 40 }}
+                                                        aria-hidden="true"
+                                                    />
+                                                )}
                                             </Link>
                                         </motion.div>
                                     )

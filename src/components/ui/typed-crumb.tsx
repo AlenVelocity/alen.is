@@ -6,10 +6,10 @@ import { isMinimalMotion } from '@/lib/motion-pref'
 const CHAR_MS = 45
 
 /**
- * The current segment of the nav, with the prompt's cursor after it. On a
- * navigation the new segment types itself in; the first paint shows it whole
- * so nothing flashes on load. The cursor is the one blinking thing on the
- * site: the prompt is live.
+ * The current segment of the breadcrumb. On a navigation the new segment types
+ * itself in; the first paint shows it whole so nothing flashes on load. There
+ * is no cursor after it: it used to blink, and a thing flashing in the nav on
+ * every page was more than the nav needed.
  */
 export function TypedCrumb({ text, className }: { text: string; className?: string }) {
     const [shown, setShown] = useState(text)
@@ -36,16 +36,10 @@ export function TypedCrumb({ text, className }: { text: string; className?: stri
     }, [text])
 
     return (
-        <span className={`relative inline-block whitespace-nowrap pr-[0.6ch] ${className ?? ''}`}>
+        <span className={`relative inline-block whitespace-nowrap ${className ?? ''}`}>
             {/* Holds the full width so the nav does not resize while typing */}
             <span className="invisible">{text}</span>
-            <span className="absolute left-0 top-0 text-accent">
-                {shown}
-                {/* The prompt is live, so its cursor takes the signal colour: green for Alen, amber for Ban */}
-                <span className="animate-blink text-signal" aria-hidden="true">
-                    ▮
-                </span>
-            </span>
+            <span className="absolute left-0 top-0 text-accent">{shown}</span>
         </span>
     )
 }

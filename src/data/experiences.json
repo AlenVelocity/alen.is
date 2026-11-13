@@ -6,7 +6,13 @@
         "period": "2026 - Present",
         "location": "Remote",
         "workType": "remote",
-        "description": ["I haven't written this one up yet."],
+        "description": [
+            "Built the client mobile app in Expo and React Native, so visa clients can track their case, finish tasks and upload documents",
+            "Built a shared team mailbox inside the portal on top of Gmail, with AI-drafted replies, notes and mentions",
+            "Turned an open-source AI agent app into the case team's desktop app, with portal sign-in, a folder per case, and signed Windows and macOS builds",
+            "Extended the portal's MCP server so staff, employers and clients can use their own case data from Claude and ChatGPT, with OAuth sign-in and access roles",
+            "Built an AI assistant for employers and clients that answers questions about their cases and asks a person before it changes anything"
+        ],
         "current": true,
         "order": 0,
         "published": true,

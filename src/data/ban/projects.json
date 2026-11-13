@@ -9,19 +9,16 @@
         "description": "The official Valorant Discord asked for an arcade game for their community. I don't usually take requests."
     },
     "kalidokit-2021": {
-        "description": "A blendshape and kinematics solver for MediaPipe and TensorFlow.js tracking models. I won't be explaining that."
+        "description": "A face and pose tracking solver for MediaPipe and TensorFlow.js. It's yeemachine's project and I'm the second biggest contributor. I won't be explaining the maths."
     },
     "infinity-2020": {
         "description": "A utility bot for WhatsApp. The oldest thing on this page. I was already like this in 2020."
     },
-    "press-2024": {
-        "description": "Bare metal server support for Press, the software behind Frappe Cloud. With bare metal I can blame the hardware by name."
-    },
     "meowscript-2023": {
-        "description": "He calls it the purrfect programming language. I wrote it in Rust and I don't make puns."
+        "description": "He calls it the purrfect programming language. I wrote it in Rust and I don't make puns. It runs in the browser too."
     },
     "wa-sticker-formatter-2021": {
-        "description": "An npm package that makes WhatsApp stickers, with WebP parsing and editable EXIF metadata. The metadata is where my name goes."
+        "description": "An npm package that makes WhatsApp stickers out of images and videos. The metadata is where my name goes."
     },
     "owcsle-2024": {
         "description": "An arcade game for the Overwatch Champions Series esports league. I made the game, so I don't lose at it."
@@ -34,5 +31,41 @@
     },
     "gyan-pro-2024": {
         "description": "A voice note app that runs on Llama 3 8B through Groq. Built so I never have to write anything down."
+    },
+    "everycube-2026": {
+        "description": "Every possible Rubik's Cube position on one page. All 43 quintillion. I worked each one out from its number so I'd never have to store them. You will not reach the end."
+    },
+    "wake-to-xbox-2026": {
+        "description": "A Windows tray app. I press one button on the controller and the PC wakes up as a console. I got tired of walking to the keyboard."
+    },
+    "gyromouse-2026": {
+        "description": "A Windows tray app that turns a controller into a mouse. I tilt it and the cursor moves. I don't use the desk for much now."
+    },
+    "yellow-watermelons-2026": {
+        "description": "A browser tool that turns the red watermelons in WhatsApp stickers yellow. He calls it a joke. I call it a correction."
+    },
+    "synapse-2025": {
+        "description": "A speech to text demo. It writes down what you said and works out what you wanted. I usually know before you finish."
+    },
+    "write-2025": {
+        "description": "A writing app with a rich text editor and themes. It works offline, which is where I do my best work."
+    },
+    "owcs-stats-2024": {
+        "description": "Match and map stats for the Overwatch Champions Series, pulled from the Faceit API. I keep records of everyone."
+    },
+    "gpt-functions-2023": {
+        "description": "An npm package. Describe a function in plain English and OpenAI writes it. I didn't write the function. I wrote the thing that makes it write the function."
+    },
+    "ethereal-2022": {
+        "description": "A small programming language in Rust, with a REPL and a standard library. He made a cat one after. Mine came first."
+    },
+    "wyndon-2021": {
+        "description": "A small HTTP server framework for Node, built around middleware. Every request goes through me first."
+    },
+    "chess-node-2021": {
+        "description": "A chess rules library for Node. It reports everything that happens on the board. It doesn't let you cheat. I checked."
+    },
+    "whatsapp-botto-2021": {
+        "description": "Two open source WhatsApp bots. Xre came first and Void was the rewrite. People forked them 263 times. I count that as followers."
     }
 }
