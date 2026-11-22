@@ -16,7 +16,7 @@ export const mdxComponents: MDXComponents = {
     h1: (props) => <h2 className="text-display text-2xl md:text-3xl mt-12 mb-4 first:mt-0" {...props} />,
     h2: (props) => <h2 className="text-display text-2xl md:text-3xl mt-12 mb-4 first:mt-0" {...props} />,
     h3: (props) => <h3 className="text-display text-xl mt-8 mb-3 first:mt-0" {...props} />,
-    p: (props) => <p className="text-[0.95rem] text-muted-foreground leading-relaxed mb-5 break-words" {...props} />,
+    p: (props) => <p className="text-base text-muted-foreground leading-relaxed mb-5 break-words" {...props} />,
     a: ({ href, ...props }) => {
         const isInternal = href?.startsWith('/')
         // Underlined at rest so a link can be found in a paragraph. Hover changes colour and nothing else.
@@ -30,7 +30,7 @@ export const mdxComponents: MDXComponents = {
     },
     ul: (props) => (
         <ul
-            className="list-disc pl-5 mb-5 space-y-2 text-muted-foreground marker:text-muted-foreground/50"
+            className="list-disc pl-5 mb-5 space-y-2 text-muted-foreground marker:text-muted-foreground/80"
             {...props}
         />
     ),
@@ -40,7 +40,7 @@ export const mdxComponents: MDXComponents = {
             {...props}
         />
     ),
-    li: (props) => <li className="text-[0.95rem] leading-relaxed break-words" {...props} />,
+    li: (props) => <li className="text-base leading-relaxed break-words" {...props} />,
     blockquote: (props) => (
         <blockquote
             className="border-l-2 border-border pl-4 mb-5 italic text-muted-foreground [&>p:last-child]:mb-0"
@@ -55,7 +55,7 @@ export const mdxComponents: MDXComponents = {
     ),
     pre: (props) => (
         <pre
-            className="font-mono text-[0.85rem] leading-relaxed p-4 mb-5 rounded-sm bg-muted/40 border border-border/60 overflow-x-auto [&>code]:bg-transparent [&>code]:p-0 [&>code]:text-[1em]"
+            className="font-mono text-sm leading-relaxed p-4 mb-5 rounded-sm bg-muted/40 border border-border/60 overflow-x-auto [&>code]:bg-transparent [&>code]:p-0 [&>code]:text-[1em]"
             {...props}
         />
     ),

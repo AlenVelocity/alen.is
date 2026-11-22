@@ -1,0 +1,886 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-22T09:10:38+00:00",
+  "title": "Design System: alen.is",
+  "extensions": {
+    "colorMeta": {
+      "alen-dark-background": {
+        "role": "neutral",
+        "displayName": "Alen, dark: background",
+        "canonical": "hsl(172 48% 3.3%)",
+        "tonalRamp": [
+          "hsl(172 26.4% 15%)",
+          "hsl(172 36.6% 26%)",
+          "hsl(172 44.1% 38%)",
+          "hsl(172 47.7% 50%)",
+          "hsl(172 47.3% 62%)",
+          "hsl(172 43.1% 74%)",
+          "hsl(172 35.8% 85%)",
+          "hsl(172 26.4% 95%)"
+        ]
+      },
+      "alen-dark-foreground": {
+        "role": "neutral",
+        "displayName": "Alen, dark: foreground",
+        "canonical": "hsl(146 30% 89%)",
+        "tonalRamp": [
+          "hsl(146 16.5% 15%)",
+          "hsl(146 22.9% 26%)",
+          "hsl(146 27.6% 38%)",
+          "hsl(146 29.8% 50%)",
+          "hsl(146 29.6% 62%)",
+          "hsl(146 27% 74%)",
+          "hsl(146 22.4% 85%)",
+          "hsl(146 16.5% 95%)"
+        ]
+      },
+      "alen-dark-card": {
+        "role": "neutral",
+        "displayName": "Alen, dark: card",
+        "canonical": "hsl(170 40% 6%)",
+        "tonalRamp": [
+          "hsl(170 22% 15%)",
+          "hsl(170 30.5% 26%)",
+          "hsl(170 36.7% 38%)",
+          "hsl(170 39.7% 50%)",
+          "hsl(170 39.4% 62%)",
+          "hsl(170 35.9% 74%)",
+          "hsl(170 29.9% 85%)",
+          "hsl(170 22% 95%)"
+        ]
+      },
+      "alen-dark-muted": {
+        "role": "neutral",
+        "displayName": "Alen, dark: muted",
+        "canonical": "hsl(170 26% 9.5%)",
+        "tonalRamp": [
+          "hsl(170 14.3% 15%)",
+          "hsl(170 19.9% 26%)",
+          "hsl(170 23.9% 38%)",
+          "hsl(170 25.8% 50%)",
+          "hsl(170 25.6% 62%)",
+          "hsl(170 23.4% 74%)",
+          "hsl(170 19.4% 85%)",
+          "hsl(170 14.3% 95%)"
+        ]
+      },
+      "alen-dark-muted-foreground": {
+        "role": "neutral",
+        "displayName": "Alen, dark: muted foreground",
+        "canonical": "hsl(156 16% 60%)",
+        "tonalRamp": [
+          "hsl(156 8.8% 15%)",
+          "hsl(156 12.2% 26%)",
+          "hsl(156 14.7% 38%)",
+          "hsl(156 15.9% 50%)",
+          "hsl(156 15.8% 62%)",
+          "hsl(156 14.4% 74%)",
+          "hsl(156 12% 85%)",
+          "hsl(156 8.8% 95%)"
+        ]
+      },
+      "alen-dark-accent": {
+        "role": "primary",
+        "displayName": "Living green (dark)",
+        "canonical": "hsl(148 96% 66%)",
+        "tonalRamp": [
+          "hsl(148 52.8% 15%)",
+          "hsl(148 73.3% 26%)",
+          "hsl(148 88.2% 38%)",
+          "hsl(148 95.3% 50%)",
+          "hsl(148 94.7% 62%)",
+          "hsl(148 86.3% 74%)",
+          "hsl(148 71.7% 85%)",
+          "hsl(148 52.8% 95%)"
+        ]
+      },
+      "alen-dark-border": {
+        "role": "neutral",
+        "displayName": "Alen, dark: border",
+        "canonical": "hsl(166 26% 13%)",
+        "tonalRamp": [
+          "hsl(166 14.3% 15%)",
+          "hsl(166 19.9% 26%)",
+          "hsl(166 23.9% 38%)",
+          "hsl(166 25.8% 50%)",
+          "hsl(166 25.6% 62%)",
+          "hsl(166 23.4% 74%)",
+          "hsl(166 19.4% 85%)",
+          "hsl(166 14.3% 95%)"
+        ]
+      },
+      "alen-dark-destructive": {
+        "role": "neutral",
+        "displayName": "Alen, dark: destructive",
+        "canonical": "hsl(0 80% 62%)",
+        "tonalRamp": [
+          "hsl(0 44% 15%)",
+          "hsl(0 61.1% 26%)",
+          "hsl(0 73.5% 38%)",
+          "hsl(0 79.4% 50%)",
+          "hsl(0 78.9% 62%)",
+          "hsl(0 71.9% 74%)",
+          "hsl(0 59.8% 85%)",
+          "hsl(0 44% 95%)"
+        ]
+      },
+      "alen-light-background": {
+        "role": "neutral",
+        "displayName": "Alen, light: background",
+        "canonical": "hsl(144 32% 95.5%)",
+        "tonalRamp": [
+          "hsl(144 17.6% 15%)",
+          "hsl(144 24.4% 26%)",
+          "hsl(144 29.4% 38%)",
+          "hsl(144 31.8% 50%)",
+          "hsl(144 31.6% 62%)",
+          "hsl(144 28.8% 74%)",
+          "hsl(144 23.9% 85%)",
+          "hsl(144 17.6% 95%)"
+        ]
+      },
+      "alen-light-foreground": {
+        "role": "neutral",
+        "displayName": "Alen, light: foreground",
+        "canonical": "hsl(170 38% 8%)",
+        "tonalRamp": [
+          "hsl(170 20.9% 15%)",
+          "hsl(170 29% 26%)",
+          "hsl(170 34.9% 38%)",
+          "hsl(170 37.7% 50%)",
+          "hsl(170 37.5% 62%)",
+          "hsl(170 34.1% 74%)",
+          "hsl(170 28.4% 85%)",
+          "hsl(170 20.9% 95%)"
+        ]
+      },
+      "alen-light-card": {
+        "role": "neutral",
+        "displayName": "Alen, light: card",
+        "canonical": "hsl(144 26% 92%)",
+        "tonalRamp": [
+          "hsl(144 14.3% 15%)",
+          "hsl(144 19.9% 26%)",
+          "hsl(144 23.9% 38%)",
+          "hsl(144 25.8% 50%)",
+          "hsl(144 25.6% 62%)",
+          "hsl(144 23.4% 74%)",
+          "hsl(144 19.4% 85%)",
+          "hsl(144 14.3% 95%)"
+        ]
+      },
+      "alen-light-muted": {
+        "role": "neutral",
+        "displayName": "Alen, light: muted",
+        "canonical": "hsl(144 18% 88%)",
+        "tonalRamp": [
+          "hsl(144 9.9% 15%)",
+          "hsl(144 13.7% 26%)",
+          "hsl(144 16.5% 38%)",
+          "hsl(144 17.9% 50%)",
+          "hsl(144 17.8% 62%)",
+          "hsl(144 16.2% 74%)",
+          "hsl(144 13.4% 85%)",
+          "hsl(144 9.9% 95%)"
+        ]
+      },
+      "alen-light-muted-foreground": {
+        "role": "neutral",
+        "displayName": "Alen, light: muted foreground",
+        "canonical": "hsl(166 16% 33%)",
+        "tonalRamp": [
+          "hsl(166 8.8% 15%)",
+          "hsl(166 12.2% 26%)",
+          "hsl(166 14.7% 38%)",
+          "hsl(166 15.9% 50%)",
+          "hsl(166 15.8% 62%)",
+          "hsl(166 14.4% 74%)",
+          "hsl(166 12% 85%)",
+          "hsl(166 8.8% 95%)"
+        ]
+      },
+      "alen-light-accent": {
+        "role": "primary",
+        "displayName": "Living green (light)",
+        "canonical": "hsl(158 90% 24%)",
+        "tonalRamp": [
+          "hsl(158 49.5% 15%)",
+          "hsl(158 68.7% 26%)",
+          "hsl(158 82.7% 38%)",
+          "hsl(158 89.4% 50%)",
+          "hsl(158 88.8% 62%)",
+          "hsl(158 80.9% 74%)",
+          "hsl(158 67.2% 85%)",
+          "hsl(158 49.5% 95%)"
+        ]
+      },
+      "alen-light-border": {
+        "role": "neutral",
+        "displayName": "Alen, light: border",
+        "canonical": "hsl(146 18% 80%)",
+        "tonalRamp": [
+          "hsl(146 9.9% 15%)",
+          "hsl(146 13.7% 26%)",
+          "hsl(146 16.5% 38%)",
+          "hsl(146 17.9% 50%)",
+          "hsl(146 17.8% 62%)",
+          "hsl(146 16.2% 74%)",
+          "hsl(146 13.4% 85%)",
+          "hsl(146 9.9% 95%)"
+        ]
+      },
+      "alen-light-destructive": {
+        "role": "neutral",
+        "displayName": "Alen, light: destructive",
+        "canonical": "hsl(0 72% 48%)",
+        "tonalRamp": [
+          "hsl(0 39.6% 15%)",
+          "hsl(0 55% 26%)",
+          "hsl(0 66.1% 38%)",
+          "hsl(0 71.5% 50%)",
+          "hsl(0 71% 62%)",
+          "hsl(0 64.7% 74%)",
+          "hsl(0 53.8% 85%)",
+          "hsl(0 39.6% 95%)"
+        ]
+      },
+      "ban-light-background": {
+        "role": "neutral",
+        "displayName": "Ban, light: background",
+        "canonical": "hsl(40 38% 90%)",
+        "tonalRamp": [
+          "hsl(40 20.9% 15%)",
+          "hsl(40 29% 26%)",
+          "hsl(40 34.9% 38%)",
+          "hsl(40 37.7% 50%)",
+          "hsl(40 37.5% 62%)",
+          "hsl(40 34.1% 74%)",
+          "hsl(40 28.4% 85%)",
+          "hsl(40 20.9% 95%)"
+        ]
+      },
+      "ban-light-foreground": {
+        "role": "neutral",
+        "displayName": "Ban, light: foreground",
+        "canonical": "hsl(350 35% 7%)",
+        "tonalRamp": [
+          "hsl(350 19.3% 15%)",
+          "hsl(350 26.7% 26%)",
+          "hsl(350 32.2% 38%)",
+          "hsl(350 34.8% 50%)",
+          "hsl(350 34.5% 62%)",
+          "hsl(350 31.4% 74%)",
+          "hsl(350 26.1% 85%)",
+          "hsl(350 19.3% 95%)"
+        ]
+      },
+      "ban-light-card": {
+        "role": "neutral",
+        "displayName": "Ban, light: card",
+        "canonical": "hsl(40 30% 86%)",
+        "tonalRamp": [
+          "hsl(40 16.5% 15%)",
+          "hsl(40 22.9% 26%)",
+          "hsl(40 27.6% 38%)",
+          "hsl(40 29.8% 50%)",
+          "hsl(40 29.6% 62%)",
+          "hsl(40 27% 74%)",
+          "hsl(40 22.4% 85%)",
+          "hsl(40 16.5% 95%)"
+        ]
+      },
+      "ban-light-muted": {
+        "role": "neutral",
+        "displayName": "Ban, light: muted",
+        "canonical": "hsl(40 20% 82%)",
+        "tonalRamp": [
+          "hsl(40 11% 15%)",
+          "hsl(40 15.3% 26%)",
+          "hsl(40 18.4% 38%)",
+          "hsl(40 19.9% 50%)",
+          "hsl(40 19.7% 62%)",
+          "hsl(40 18% 74%)",
+          "hsl(40 14.9% 85%)",
+          "hsl(40 11% 95%)"
+        ]
+      },
+      "ban-light-muted-foreground": {
+        "role": "neutral",
+        "displayName": "Ban, light: muted foreground",
+        "canonical": "hsl(20 12% 32%)",
+        "tonalRamp": [
+          "hsl(20 6.6% 15%)",
+          "hsl(20 9.2% 26%)",
+          "hsl(20 11% 38%)",
+          "hsl(20 11.9% 50%)",
+          "hsl(20 11.8% 62%)",
+          "hsl(20 10.8% 74%)",
+          "hsl(20 9% 85%)",
+          "hsl(20 6.6% 95%)"
+        ]
+      },
+      "ban-light-accent": {
+        "role": "primary",
+        "displayName": "Oxblood",
+        "canonical": "hsl(356 82% 37%)",
+        "tonalRamp": [
+          "hsl(356 45.1% 15%)",
+          "hsl(356 62.6% 26%)",
+          "hsl(356 75.3% 38%)",
+          "hsl(356 81.4% 50%)",
+          "hsl(356 80.9% 62%)",
+          "hsl(356 73.7% 74%)",
+          "hsl(356 61.2% 85%)",
+          "hsl(356 45.1% 95%)"
+        ]
+      },
+      "ban-light-signal": {
+        "role": "secondary",
+        "displayName": "Gaslight amber (light)",
+        "canonical": "hsl(28 92% 34%)",
+        "tonalRamp": [
+          "hsl(28 50.6% 15%)",
+          "hsl(28 70.2% 26%)",
+          "hsl(28 84.5% 38%)",
+          "hsl(28 91.4% 50%)",
+          "hsl(28 90.7% 62%)",
+          "hsl(28 82.7% 74%)",
+          "hsl(28 68.7% 85%)",
+          "hsl(28 50.6% 95%)"
+        ]
+      },
+      "ban-light-border": {
+        "role": "neutral",
+        "displayName": "Ban, light: border",
+        "canonical": "hsl(36 20% 70%)",
+        "tonalRamp": [
+          "hsl(36 11% 15%)",
+          "hsl(36 15.3% 26%)",
+          "hsl(36 18.4% 38%)",
+          "hsl(36 19.9% 50%)",
+          "hsl(36 19.7% 62%)",
+          "hsl(36 18% 74%)",
+          "hsl(36 14.9% 85%)",
+          "hsl(36 11% 95%)"
+        ]
+      },
+      "ban-light-destructive": {
+        "role": "neutral",
+        "displayName": "Ban, light: destructive",
+        "canonical": "hsl(20 90% 36%)",
+        "tonalRamp": [
+          "hsl(20 49.5% 15%)",
+          "hsl(20 68.7% 26%)",
+          "hsl(20 82.7% 38%)",
+          "hsl(20 89.4% 50%)",
+          "hsl(20 88.8% 62%)",
+          "hsl(20 80.9% 74%)",
+          "hsl(20 67.2% 85%)",
+          "hsl(20 49.5% 95%)"
+        ]
+      },
+      "ban-light-redact": {
+        "role": "neutral",
+        "displayName": "Ban, light: redact",
+        "canonical": "hsl(350 35% 7%)",
+        "tonalRamp": [
+          "hsl(350 19.3% 15%)",
+          "hsl(350 26.7% 26%)",
+          "hsl(350 32.2% 38%)",
+          "hsl(350 34.8% 50%)",
+          "hsl(350 34.5% 62%)",
+          "hsl(350 31.4% 74%)",
+          "hsl(350 26.1% 85%)",
+          "hsl(350 19.3% 95%)"
+        ]
+      },
+      "ban-dark-background": {
+        "role": "neutral",
+        "displayName": "Ban, dark: background",
+        "canonical": "hsl(352 26% 3.8%)",
+        "tonalRamp": [
+          "hsl(352 14.3% 15%)",
+          "hsl(352 19.9% 26%)",
+          "hsl(352 23.9% 38%)",
+          "hsl(352 25.8% 50%)",
+          "hsl(352 25.6% 62%)",
+          "hsl(352 23.4% 74%)",
+          "hsl(352 19.4% 85%)",
+          "hsl(352 14.3% 95%)"
+        ]
+      },
+      "ban-dark-foreground": {
+        "role": "neutral",
+        "displayName": "Ban, dark: foreground",
+        "canonical": "hsl(36 30% 85%)",
+        "tonalRamp": [
+          "hsl(36 16.5% 15%)",
+          "hsl(36 22.9% 26%)",
+          "hsl(36 27.6% 38%)",
+          "hsl(36 29.8% 50%)",
+          "hsl(36 29.6% 62%)",
+          "hsl(36 27% 74%)",
+          "hsl(36 22.4% 85%)",
+          "hsl(36 16.5% 95%)"
+        ]
+      },
+      "ban-dark-card": {
+        "role": "neutral",
+        "displayName": "Ban, dark: card",
+        "canonical": "hsl(352 22% 6.4%)",
+        "tonalRamp": [
+          "hsl(352 12.1% 15%)",
+          "hsl(352 16.8% 26%)",
+          "hsl(352 20.2% 38%)",
+          "hsl(352 21.8% 50%)",
+          "hsl(352 21.7% 62%)",
+          "hsl(352 19.8% 74%)",
+          "hsl(352 16.4% 85%)",
+          "hsl(352 12.1% 95%)"
+        ]
+      },
+      "ban-dark-muted": {
+        "role": "neutral",
+        "displayName": "Ban, dark: muted",
+        "canonical": "hsl(352 14% 10%)",
+        "tonalRamp": [
+          "hsl(352 7.7% 15%)",
+          "hsl(352 10.7% 26%)",
+          "hsl(352 12.9% 38%)",
+          "hsl(352 13.9% 50%)",
+          "hsl(352 13.8% 62%)",
+          "hsl(352 12.6% 74%)",
+          "hsl(352 10.5% 85%)",
+          "hsl(352 7.7% 95%)"
+        ]
+      },
+      "ban-dark-muted-foreground": {
+        "role": "neutral",
+        "displayName": "Ban, dark: muted foreground",
+        "canonical": "hsl(24 10% 56%)",
+        "tonalRamp": [
+          "hsl(24 5.5% 15%)",
+          "hsl(24 7.6% 26%)",
+          "hsl(24 9.2% 38%)",
+          "hsl(24 9.9% 50%)",
+          "hsl(24 9.9% 62%)",
+          "hsl(24 9% 74%)",
+          "hsl(24 7.5% 85%)",
+          "hsl(24 5.5% 95%)"
+        ]
+      },
+      "ban-dark-accent": {
+        "role": "primary",
+        "displayName": "Arterial red",
+        "canonical": "hsl(356 88% 57%)",
+        "tonalRamp": [
+          "hsl(356 48.4% 15%)",
+          "hsl(356 67.2% 26%)",
+          "hsl(356 80.8% 38%)",
+          "hsl(356 87.4% 50%)",
+          "hsl(356 86.8% 62%)",
+          "hsl(356 79.1% 74%)",
+          "hsl(356 65.7% 85%)",
+          "hsl(356 48.4% 95%)"
+        ]
+      },
+      "ban-dark-signal": {
+        "role": "secondary",
+        "displayName": "Gaslight amber (dark)",
+        "canonical": "hsl(42 94% 58%)",
+        "tonalRamp": [
+          "hsl(42 51.7% 15%)",
+          "hsl(42 71.8% 26%)",
+          "hsl(42 86.4% 38%)",
+          "hsl(42 93.3% 50%)",
+          "hsl(42 92.7% 62%)",
+          "hsl(42 84.5% 74%)",
+          "hsl(42 70.2% 85%)",
+          "hsl(42 51.7% 95%)"
+        ]
+      },
+      "ban-dark-border": {
+        "role": "neutral",
+        "displayName": "Ban, dark: border",
+        "canonical": "hsl(352 14% 14.5%)",
+        "tonalRamp": [
+          "hsl(352 7.7% 15%)",
+          "hsl(352 10.7% 26%)",
+          "hsl(352 12.9% 38%)",
+          "hsl(352 13.9% 50%)",
+          "hsl(352 13.8% 62%)",
+          "hsl(352 12.6% 74%)",
+          "hsl(352 10.5% 85%)",
+          "hsl(352 7.7% 95%)"
+        ]
+      },
+      "ban-dark-destructive": {
+        "role": "neutral",
+        "displayName": "Ban, dark: destructive",
+        "canonical": "hsl(24 92% 56%)",
+        "tonalRamp": [
+          "hsl(24 50.6% 15%)",
+          "hsl(24 70.2% 26%)",
+          "hsl(24 84.5% 38%)",
+          "hsl(24 91.4% 50%)",
+          "hsl(24 90.7% 62%)",
+          "hsl(24 82.7% 74%)",
+          "hsl(24 68.7% 85%)",
+          "hsl(24 50.6% 95%)"
+        ]
+      },
+      "ban-dark-redact": {
+        "role": "neutral",
+        "displayName": "Ban, dark: redact",
+        "canonical": "hsl(356 74% 30%)",
+        "tonalRamp": [
+          "hsl(356 40.7% 15%)",
+          "hsl(356 56.5% 26%)",
+          "hsl(356 68% 38%)",
+          "hsl(356 73.5% 50%)",
+          "hsl(356 73% 62%)",
+          "hsl(356 66.5% 74%)",
+          "hsl(356 55.3% 85%)",
+          "hsl(356 40.7% 95%)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The home page h1 only."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "The title in the shared page header."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Names inside a page, such as a featured project."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Reading text, at most 64ch."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Section labels: uppercase, with the cell mark in front."
+      },
+      "data": {
+        "displayName": "Data",
+        "purpose": "Dates, counts, durations, keys, typed paths."
+      },
+      "ban-display": {
+        "displayName": "Ban's display",
+        "purpose": "Blackletter, for an h1 only."
+      },
+      "ban-body": {
+        "displayName": "Ban's body",
+        "purpose": "Everything of his that is not an h1."
+      },
+      "nav": {
+        "displayName": "Nav",
+        "purpose": "Links and controls in the nav capsule, and the capsule controls on /lost."
+      },
+      "ban-label": {
+        "displayName": "Ban label",
+        "purpose": "Ban's small print: italic Caslon where Alen has the data face."
+      },
+      "signature": {
+        "displayName": "Signature",
+        "purpose": "The handwritten name under the about text on the home page, and nothing else."
+      }
+    },
+    "shadows": [
+      {
+        "name": "membrane",
+        "value": "inset 0 0 0 1px var(--membrane-ring), var(--membrane-shadow)",
+        "purpose": "The edge of the nav capsule and of cards."
+      },
+      {
+        "name": "membrane-shadow (Alen, dark)",
+        "value": "0 12px 34px -14px hsl(172 60% 1% / 0.9)",
+        "purpose": "The shadow part of the membrane."
+      },
+      {
+        "name": "membrane-shadow (Alen, light)",
+        "value": "0 10px 30px -16px hsl(170 38% 8% / 0.35)",
+        "purpose": "The shadow part of the membrane."
+      },
+      {
+        "name": "glow-accent (Alen, dark)",
+        "value": "0 0 18px hsl(var(--accent) / 0.4)",
+        "purpose": "The nav underline, the word \"alien\", the scrollbar thumb on hover."
+      },
+      {
+        "name": "glow-accent (Alen, light)",
+        "value": "0 0 14px hsl(var(--accent) / 0.2)",
+        "purpose": "The same, fainter in daylight."
+      },
+      {
+        "name": "glow-accent-strong (Alen, dark)",
+        "value": "0 0 14px hsl(var(--accent) / 0.55), 0 0 48px hsl(var(--accent) / 0.22), 0 0 110px hsl(var(--accent) / 0.08)",
+        "purpose": "Glowing headings on toy pages and the active command bar row."
+      },
+      {
+        "name": "ship-glow",
+        "value": "drop-shadow(0 0 16px hsl(var(--accent) / 0.42))",
+        "purpose": "Around the saucer."
+      },
+      {
+        "name": "cell-glow",
+        "value": "inset 0 0 0 1.5px hsl(var(--accent)), 0 0 8px hsl(var(--accent) / 0.4)",
+        "purpose": "The cell mark."
+      },
+      {
+        "name": "ban",
+        "value": "none",
+        "purpose": "Ban's glow tokens and membrane shadow are all none."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.23, 1, 0.32, 1)",
+        "purpose": "Anything arriving. Tailwind ease-out maps to it."
+      },
+      {
+        "name": "ease-in-out",
+        "value": "cubic-bezier(0.77, 0, 0.175, 1)",
+        "purpose": "Moves on screen. Tailwind ease-in-out maps to it."
+      },
+      {
+        "name": "page-in",
+        "value": "320ms var(--ease-out), 8px up",
+        "purpose": "The one entrance on a direct load."
+      },
+      {
+        "name": "warp-out",
+        "value": "340ms",
+        "purpose": "The saucer takes the page (WARP_OUT_MS in src/components/ui/ufo-abduction.tsx)."
+      },
+      {
+        "name": "warp-in",
+        "value": "440ms",
+        "purpose": "The saucer brings the new page (WARP_IN_MS)."
+      },
+      {
+        "name": "redact-out",
+        "value": "290ms",
+        "purpose": "Ban's page change, bars on (REDACT_OUT_MS)."
+      },
+      {
+        "name": "redact-in",
+        "value": "420ms",
+        "purpose": "Ban's page change, bars off (REDACT_IN_MS)."
+      },
+      {
+        "name": "persona-tear",
+        "value": "620ms cubic-bezier(0.7, 0, 0.2, 1)",
+        "purpose": "Changing person: a hard diagonal cut."
+      },
+      {
+        "name": "beam-reveal",
+        "value": "650ms cubic-bezier(0.33, 1, 0.68, 1)",
+        "purpose": "Alen's image reveal, once per image."
+      },
+      {
+        "name": "uncensor",
+        "value": "460ms cubic-bezier(0.7, 0, 0.2, 1)",
+        "purpose": "Ban's image reveal, once per image."
+      },
+      {
+        "name": "translate-word",
+        "value": "360ms plus 16ms a letter, words 120ms apart, var(--ease-out)",
+        "purpose": "A heading turning from the script into English."
+      },
+      {
+        "name": "person-word",
+        "value": "180ms var(--ease-out), 130ms delay on the arriving word",
+        "purpose": "\"person\" swapping to \"alien\"."
+      },
+      {
+        "name": "saucer-bob",
+        "value": "7s cubic-bezier(0.45, 0, 0.55, 1) infinite, 6px",
+        "purpose": "The parked ship."
+      },
+      {
+        "name": "stream-resolve",
+        "value": "300ms cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Streamed sections arriving (StreamFade)."
+      },
+      {
+        "name": "nav-layout",
+        "value": "spring, stiffness 500, damping 35",
+        "purpose": "Every layout move in the nav."
+      },
+      {
+        "name": "press",
+        "value": "scale 0.94 to 0.99, 150ms",
+        "purpose": "Press feedback. Smaller targets shrink more."
+      },
+      {
+        "name": "stamp-down",
+        "value": "140ms cubic-bezier(0.55, 0, 1, 0.45), 700ms delay",
+        "purpose": "Ban's stamp landing (provisional)."
+      },
+      {
+        "name": "strike-draw",
+        "value": "280ms var(--ease-out), 380ms delay",
+        "purpose": "Ban's pen stroke through \"Alen\" (provisional)."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Nav capsule",
+      "kind": "nav",
+      "refersTo": "nav-capsule",
+      "description": "The fixed nav on every page: a capsule with a membrane edge, an underline on the current page, the theme toggle and the keycap that opens the command bar.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-link ds-nav-home ds-nav-active\" href=\"#\">alen.is</a><a class=\"ds-nav-link\" href=\"#\">exp</a><a class=\"ds-nav-link\" href=\"#\">projects</a><span class=\"ds-nav-sep\"></span><button class=\"ds-nav-link\" type=\"button\">light</button><kbd class=\"ds-nav-key\">/</kbd></nav>",
+      "css": ".ds-nav { display: inline-flex; align-items: center; padding: 0.25rem 0.375rem; border-radius: 9999px; background: hsl(var(--card) / 0.72); box-shadow: inset 0 0 0 1px var(--membrane-ring), var(--membrane-shadow); backdrop-filter: blur(12px); font-family: var(--font-ui); } .ds-nav-link { position: relative; padding: 0.375rem 0.75rem; font: inherit; font-size: 0.82rem; font-weight: 500; color: hsl(var(--muted-foreground)); background: none; border: 0; text-decoration: none; cursor: pointer; transition: color 150ms var(--ease-out), scale 150ms var(--ease-out); } .ds-nav-home { font-weight: 600; } .ds-nav-link:hover { color: hsl(var(--foreground)); } .ds-nav-link:active { scale: 0.96; } .ds-nav-link:focus-visible, .ds-nav-key:focus-visible { outline: 1px solid hsl(var(--ring)); outline-offset: 2px; } .ds-nav-active { color: hsl(var(--foreground)); } .ds-nav-active::after { content: \"\"; position: absolute; left: 0.75rem; right: 0.75rem; bottom: 3px; height: 1.5px; border-radius: 9999px; background: hsl(var(--accent)); box-shadow: var(--glow-accent); } .ds-nav-sep { width: 1px; height: 0.875rem; margin: 0 0.375rem; background: hsl(var(--border)); } .ds-nav-key { display: grid; place-items: center; width: 1.35rem; height: 1.35rem; margin: 0 0.375rem; border: 1px solid hsl(var(--border)); border-radius: calc(var(--radius) * 0.7); font-family: var(--font-data); font-size: 0.72rem; line-height: 1; color: hsl(var(--muted-foreground)); }"
+    },
+    {
+      "name": "Page header",
+      "kind": "custom",
+      "refersTo": "page-header-title",
+      "description": "The header every content page shares: the title, a small line after it on the same line, and one sentence under.",
+      "html": "<header class=\"ds-ph\"><div class=\"ds-ph-top\"><h1 class=\"ds-ph-title\">Projects</h1><p class=\"ds-ph-line\">work</p></div><p class=\"ds-ph-sentence\">Things I've made, newest first.</p></header>",
+      "css": ".ds-ph { font-family: var(--font-ui); color: hsl(var(--foreground)); } .ds-ph-top { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.25rem 1rem; margin-bottom: 0.625rem; } .ds-ph-title { margin: 0; font-family: var(--font-display); font-size: 3rem; font-weight: var(--display-weight); line-height: 1.02; letter-spacing: var(--display-tracking); font-variation-settings: \"wdth\" 88; } .ds-ph-line { margin: 0; font-size: 0.875rem; color: hsl(var(--muted-foreground)); } .ds-ph-sentence { margin: 0; color: hsl(var(--muted-foreground)); }"
+    },
+    {
+      "name": "Section label with the cell mark",
+      "kind": "custom",
+      "refersTo": "section-label",
+      "description": "The small uppercase label that heads a section, with the cell (a ring with a nucleus) in front.",
+      "html": "<h2 class=\"ds-label\">recent writing</h2>",
+      "css": ".ds-label { display: flex; align-items: center; gap: 0.6rem; margin: 0; font-family: var(--font-ui); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: hsl(var(--muted-foreground)); } .ds-label::before { content: \"\"; flex: none; width: 0.56rem; height: 0.56rem; border-radius: 50%; background: radial-gradient(circle, hsl(var(--accent)) 0 1.4px, transparent 2px); box-shadow: inset 0 0 0 1.5px hsl(var(--accent)), 0 0 8px hsl(var(--accent) / 0.4); }"
+    },
+    {
+      "name": "Membrane card",
+      "kind": "card",
+      "refersTo": "membrane-card",
+      "description": "A card with the membrane edge: an inset ring of the accent and one soft shadow. Used for the listening card on the home page.",
+      "html": "<a class=\"ds-card\" href=\"#\"><span class=\"ds-card-art\"></span><span class=\"ds-card-text\"><span class=\"ds-card-title\">Track name</span><span class=\"ds-card-meta\">Artist · 3 min ago</span></span></a>",
+      "css": ".ds-card { display: flex; align-items: center; gap: 1rem; max-width: 24rem; padding: 0.875rem 1.25rem 0.875rem 0.875rem; border-radius: calc(var(--radius) * 1.6); background: hsl(var(--card) / 0.72); box-shadow: inset 0 0 0 1px var(--membrane-ring), var(--membrane-shadow); font-family: var(--font-ui); color: hsl(var(--foreground)); text-decoration: none; transition: scale 150ms var(--ease-out); } .ds-card:active { scale: 0.99; } .ds-card:focus-visible { outline: 1px solid hsl(var(--ring)); outline-offset: 2px; } .ds-card-art { flex: none; width: 2.75rem; height: 2.75rem; border-radius: calc(var(--radius) * 0.7); background: hsl(var(--muted)); } .ds-card-text { display: grid; gap: 0.25rem; } .ds-card-title { font-weight: 500; transition: color 150ms var(--ease-out); } .ds-card:hover .ds-card-title { color: hsl(var(--accent)); } .ds-card-meta { font-family: var(--font-data); font-size: 0.7rem; letter-spacing: 0.02em; color: hsl(var(--muted-foreground)); }"
+    },
+    {
+      "name": "Text link",
+      "kind": "custom",
+      "refersTo": "text-link",
+      "description": "An inline link with a faint accent underline, and the drawn arrow that marks a link leaving the site.",
+      "html": "<p class=\"ds-link-row\"><a class=\"ds-link\" href=\"#\">an inline link</a> <a class=\"ds-link-plain\" href=\"#\">GitHub <svg class=\"ds-ext\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M17 7l-10 10\"/><path d=\"M8 7h9v9\"/></svg></a></p>",
+      "css": ".ds-link-row { display: flex; gap: 1.5rem; margin: 0; font-family: var(--font-ui); } .ds-link { font-weight: 500; color: hsl(var(--foreground)); text-decoration: underline; text-decoration-color: hsl(var(--accent) / 0.4); text-decoration-thickness: 1px; text-underline-offset: 4px; transition: color 200ms, text-decoration-color 200ms; } .ds-link:hover { color: hsl(var(--accent)); text-decoration-color: hsl(var(--accent)); } .ds-link-plain { display: inline-flex; align-items: center; gap: 0.375rem; font-size: 0.875rem; font-weight: 500; color: hsl(var(--foreground) / 0.75); text-decoration: none; transition: color 150ms var(--ease-out), scale 150ms var(--ease-out); } .ds-link-plain:hover { color: hsl(var(--accent)); } .ds-link-plain:active { scale: 0.97; } .ds-link:focus-visible, .ds-link-plain:focus-visible { outline: 1px solid hsl(var(--ring)); outline-offset: 2px; } .ds-ext { width: 1em; height: 1em; color: hsl(var(--muted-foreground)); }"
+    },
+    {
+      "name": "Bordered button",
+      "kind": "button",
+      "refersTo": "button-bordered",
+      "description": "The button on the toy pages, in its quiet and its accent version.",
+      "html": "<div class=\"ds-btn-row\"><button class=\"ds-btn\" type=\"button\">go back</button><button class=\"ds-btn ds-btn-accent\" type=\"button\">do it again</button></div>",
+      "css": ".ds-btn-row { display: flex; gap: 0.75rem; } .ds-btn { display: inline-flex; align-items: center; padding: 0.625rem 1rem; border: 1px solid hsl(var(--border) / 0.6); border-radius: calc(var(--radius) * 0.4); background: none; font-family: var(--font-data); font-size: 0.7rem; letter-spacing: 0.02em; color: hsl(var(--muted-foreground)); cursor: pointer; transition: color 150ms, background-color 150ms, border-color 150ms, scale 150ms; } .ds-btn:hover { color: hsl(var(--accent)); border-color: hsl(var(--accent) / 0.5); } .ds-btn:active { scale: 0.97; } .ds-btn:focus-visible { outline: 1px solid hsl(var(--ring)); outline-offset: 2px; } .ds-btn-accent { color: hsl(var(--accent)); border-color: hsl(var(--accent) / 0.4); } .ds-btn-accent:hover { background: hsl(var(--accent) / 0.1); border-color: hsl(var(--accent) / 0.4); }"
+    },
+    {
+      "name": "Keycap",
+      "kind": "button",
+      "refersTo": "keycap",
+      "description": "The command bar trigger, drawn as the key you press to open it.",
+      "html": "<button class=\"ds-key-btn\" type=\"button\" aria-label=\"Open site navigator\"><kbd class=\"ds-key\">/</kbd></button>",
+      "css": ".ds-key-btn { padding: 0.25rem 0.375rem; background: none; border: 0; cursor: pointer; transition: scale 150ms var(--ease-out); } .ds-key-btn:active { scale: 0.94; } .ds-key-btn:focus-visible { outline: 1px solid hsl(var(--ring)); outline-offset: 2px; } .ds-key { display: grid; place-items: center; width: 1.35rem; height: 1.35rem; border: 1px solid hsl(var(--border)); border-radius: calc(var(--radius) * 0.7); font-family: var(--font-data); font-size: 0.72rem; line-height: 1; color: hsl(var(--muted-foreground)); transition: color 150ms, border-color 150ms; } .ds-key-btn:hover .ds-key { color: hsl(var(--foreground)); border-color: hsl(var(--muted-foreground) / 0.6); }"
+    },
+    {
+      "name": "Ban's stamp (provisional)",
+      "kind": "custom",
+      "refersTo": "ban-stamp",
+      "description": "A rubber stamp on the corner of Ban's home masthead. Shown here on his paper with his red written out, since his tokens only exist while he is in. The live one also roughens its edges with an SVG filter.",
+      "html": "<div class=\"ds-stamp-sheet\"><div class=\"ds-stamp\">Not sorry</div></div>",
+      "css": ".ds-stamp-sheet { display: inline-block; padding: 1.5rem 2rem; background: hsl(40 38% 90%); } .ds-stamp { display: inline-block; padding: 0.6em 0.85em 0.5em; border: 3.5px solid currentColor; outline: 1.5px solid currentColor; outline-offset: 4px; font-family: var(--font-ban-text), Georgia, serif; font-size: 1.3rem; font-weight: 700; line-height: 1; letter-spacing: 0.16em; text-transform: uppercase; white-space: nowrap; color: hsl(356 82% 37%); opacity: 0.9; transform: rotate(-8deg); mix-blend-mode: multiply; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Bioluminescent",
+    "overview": "Two people share this site, and each has his own world. Alen is the default. His pages sit in deep blue-green water. The green is alive: it is light coming out of things, not ink printed on a screen. There is fine grain over the water, two faint lights in it (one from the surface, one from below), and plankton that drift on a canvas and light up near the pointer. There are no lines and no grid behind the page. He has one green and no second hue.\n\nBan is behind `/ban` or `?as=ban`. His north star is a charge sheet, printed, stamped and pinned up: a Victorian police notice more than a horror poster. Flat paper, black ink, oxblood red. Nothing glows, there is no saucer and no plankton. His corners are square and his rules are solid.\n\nBoth worlds use the same role names, so a component names a role and gets the right look for whoever is in. Each person has a light and a dark palette, which makes four. All of them are in the first block of `src/app/globals.css`. Dark is the default theme.\n\nConfirmed by Alen on 22 November 2026: his side should read as alien, not as a terminal or the Matrix. A cleaner, more minimal restyle was built and reverted on 14 November 2026 because it \"takes away the soul\". A glossy saucer was rejected as \"too shiny\".",
+    "keyCharacteristics": [
+      "One green for Alen, used as light: halos, lit rims, the cell mark, plankton.",
+      "One saucer, drawn flat and matte, that lives on the home page and does the page change.",
+      "One typeface for headings and reading text. Monospace only for data.",
+      "Soft edges for Alen, square edges for Ban, both from one `--radius` token.",
+      "One entrance per page. Only live or living things loop.",
+      "The facts are the same for both people. Only the telling and the look change."
+    ],
+    "rules": [
+      {
+        "name": "The one green rule",
+        "body": "Alen has one green and no second hue. A pink accent was tried and removed on 11 November 2026. If something needs to stand out, it gets more light, not another colour.",
+        "section": "colors"
+      },
+      {
+        "name": "The signal rule",
+        "body": "Use `--signal` (`text-signal`, `bg-signal`, `border-signal`) for live state and nothing else. It is the accent for Alen and amber for Ban.",
+        "section": "colors"
+      },
+      {
+        "name": "The light, not ink rule",
+        "body": "Alen's green shows up as glow, a lit edge or a small lit shape. It is not used for rules, grids or printed lines behind the page.",
+        "section": "colors"
+      },
+      {
+        "name": "The data rule",
+        "body": "Monospace is for things that are measured or typed: dates, counts, keys, code, paths. Reading text and headings are never monospace.",
+        "section": "typography"
+      },
+      {
+        "name": "The masthead rule",
+        "body": "In Ban's mode, blackletter is for an `h1` (or the class `masthead`). Every smaller heading that asks for the display face gets bold Caslon, because blackletter capitals stop being letters below about 30px.",
+        "section": "typography"
+      },
+      {
+        "name": "The nothing glows on paper rule",
+        "body": "Ban gets no glow and no soft shadow. If an edge needs to show on his page, rule it in ink.",
+        "section": "elevation"
+      },
+      {
+        "name": "The one saucer rule",
+        "body": "There is one saucer and one drawing of it. It is flat and matte, never glossy, and there is never a second design. A glassy version was rejected by Alen: \"too shiny\", \"looks out of place\", and it \"doesn't feel right that other UFO is taking this UFO\".",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "Do name a role (`bg-card`, `text-accent`, `border-border`) and let the palette decide the value. Write a new green as `hsl(var(--accent) / …)`.",
+      "Do use `.membrane` for the edge of anything that floats or holds content.",
+      "Do write dividers as `border-dashed` so they come out dotted for Alen and solid for Ban.",
+      "Do build radius from the Tailwind scale so Ban stays square. Add `ban:rounded-none` to `rounded-full` and `rounded`.",
+      "Do put dates, counts, keys and paths in `font-data` or `.mono-label`.",
+      "Do use `Translate` for a page's title and `PageHeader` for its header.",
+      "Do mark a link that leaves the site with `ExternalMark`.",
+      "Do keep icons in one row from one family.",
+      "Do give every data view a loading, an empty and an error state, and keep the visible focus ring (1px, 2px offset)."
+    ],
+    "donts": [
+      "Don't add a second hue to Alen's side. The pink was removed.",
+      "Don't draw a grid, rules or lines behind Alen's pages.",
+      "Don't make the saucer glossy or glassy, and don't draw a second design of it. Alen's words for the glossy one: \"too shiny\", \"looks out of place\".",
+      "Don't set reading text or headings in monospace. Alen's side should not read as a terminal.",
+      "Don't give Ban a glow, a soft shadow, a saucer or plankton.",
+      "Don't move anything in the nav unless the visitor did something.",
+      "Don't add stat chips, counters or HUD readouts.",
+      "Don't type an arrow after a link.",
+      "Don't loop an animation that is not reporting something live or alive.",
+      "Don't strip the personality for a cleaner look. That was built and reverted."
+    ]
+  }
+}

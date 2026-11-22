@@ -96,7 +96,7 @@ export default async function Sharing() {
             <div className="container max-w-3xl py-10 md:py-14 px-4">
                 {/* Header */}
                 <PageHeader eyebrow="file drop" title="Sharing" banTitle="Loot">
-                    <p className="text-[0.9rem] text-muted-foreground">
+                    <p className="text-sm text-muted-foreground">
                         <Persona
                             alen="Files I needed a link for. Open one, or download it."
                             ban="Files I left lying around. Help yourself, nobody is counting."

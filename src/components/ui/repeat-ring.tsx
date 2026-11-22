@@ -9,6 +9,8 @@ interface RepeatRingProps {
     /** From getStreakInfo: the glow for this tier, if any */
     shadow?: string
     className?: string
+    /** Corner radius class for the ring. It should be the child's radius plus the 2px the ring adds. */
+    rounded?: string
     children: ReactNode
 }
 
@@ -18,20 +20,27 @@ interface RepeatRingProps {
  * page. Spins faster the deeper the obsession, floored at 1.5s a turn so a
  * long streak never reads as a strobe.
  */
-export function RepeatRing({ frequency, gradient, shadow, className = '', children }: RepeatRingProps) {
+export function RepeatRing({
+    frequency,
+    gradient,
+    shadow,
+    className = '',
+    rounded = 'rounded',
+    children
+}: RepeatRingProps) {
     if (frequency < RING_FROM) return <div className={`relative ${className}`}>{children}</div>
 
     return (
-        <div className={`relative p-[2px] rounded overflow-visible ${className}`}>
+        <div className={`relative p-[2px] ${rounded} overflow-visible ${className}`}>
             {shadow && (
                 <div
                     // The quiet tiers glow in the accent, and nothing glows on Ban's paper.
                     // The loud tiers are an alarm and keep their glow for both of them.
-                    className={`absolute inset-[2px] rounded z-[-1] ${frequency < LOUD_FROM ? 'ban:hidden' : ''}`}
+                    className={`absolute inset-[2px] ${rounded} z-[-1] ${frequency < LOUD_FROM ? 'ban:hidden' : ''}`}
                     style={{ boxShadow: shadow }}
                 />
             )}
-            <div className="absolute inset-0 rounded overflow-hidden z-[-2]">
+            <div className={`absolute inset-0 ${rounded} overflow-hidden z-[-2]`}>
                 <div
                     className="absolute left-1/2 top-1/2 w-[1000px] h-[1000px] -ml-[500px] -mt-[500px] origin-center"
                     style={{

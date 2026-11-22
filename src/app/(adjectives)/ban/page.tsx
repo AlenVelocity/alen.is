@@ -27,15 +27,15 @@ export default function Ban() {
     return (
         <CenteredPage>
             <div className="flex flex-col items-center gap-7 text-center max-w-md">
-                <p className="mono-label text-muted-foreground/40 alen:tracking-[0.25em]">
-                    <Persona alen="// alen is ban?" ban={<span className="struck">not right now</span>} />
+                <p className="mono-label text-muted-foreground/80 alen:tracking-[0.25em]">
+                    <Persona alen="alen is ban?" ban={<span className="struck">not right now</span>} />
                 </p>
 
                 <h1 className="text-display text-4xl md:text-6xl">
                     <Persona alen="not right now" ban="He is now." />
                 </h1>
 
-                <p className="text-[0.9rem] text-muted-foreground leading-relaxed">
+                <p className="text-sm text-muted-foreground leading-relaxed">
                     <Persona
                         alen={
                             <>

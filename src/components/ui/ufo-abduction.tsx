@@ -7,13 +7,17 @@ import { posthog } from '@/components/posthog-provider'
 import { isMinimalMotion } from '@/lib/motion-pref'
 import { collectPieces } from '@/lib/shred'
 import { getPersona } from '@/lib/persona'
+import { SaucerShip, SHIP_H, SHIP_W } from './saucer'
 
 /**
  * The site's UFO abduction, in two flavors:
  *
  * 1. Page transition — every internal navigation is a quick abduction: the
  *    saucer zips in, shreds the outgoing page into its tractor beam, warps,
- *    then beams the new page down while flying off. Link clicks are
+ *    then beams the new page down while flying off. On the home page the
+ *    saucer is already there, parked in the hero, so it lifts off from that
+ *    spot instead of zipping in, and on the way back it lands on it instead
+ *    of flying off (see Handoff below). Link clicks are
  *    intercepted document-wide in the capture phase (Next's <Link> respects
  *    preventDefault), and the command bar warps via the ufoWarp() helper.
  *
@@ -60,6 +64,53 @@ const REDACT_IN_MS = 420
 const REDACT_LINE_PX = 26
 const REDACT_GAP_PX = 9
 const REDACT_MAX_BARS = 64
+
+/**
+ * The trip between the ship's spot at the top of the screen and the ship
+ * parked in the home page's hero: how far apart their centres are, and how
+ * much bigger the parked one is drawn. Fed to the ufoFromHero / ufoToHero
+ * keyframes as --hero-dx, --hero-dy and --hero-scale.
+ */
+interface Handoff {
+    dx: number
+    dy: number
+    scale: number
+}
+
+function handoffTo(box: { left: number; top: number; width: number; height: number }): Handoff {
+    return {
+        // clientWidth, not innerWidth: the layer the ship flies on is as wide as the
+        // page without its scrollbar, and its centre is what the ship is centred on
+        dx: box.left + box.width / 2 - document.documentElement.clientWidth / 2,
+        dy: box.top + box.height / 2 - (window.innerHeight * SAUCER_TOP_VH + SHIP_H / 2),
+        scale: box.width / SHIP_W
+    }
+}
+
+/** The ship parked in the hero, if this page has one and any of it is on screen */
+function parkedShip(): HTMLElement | null {
+    const ship = document.querySelector<HTMLElement>('.hero-saucer-ship')
+    if (!ship) return null
+    const rect = ship.getBoundingClientRect()
+    if (rect.width === 0 || rect.bottom < 0 || rect.top > window.innerHeight) return null
+    return ship
+}
+
+/**
+ * Where an element will sit once nothing is moving it. A page that has just
+ * arrived is still being beamed down (a transform on its ancestors) and the
+ * parked ship bobs, so its bounding rect is not where it will end up. Layout
+ * offsets ignore transforms.
+ */
+function restingBox(el: HTMLElement) {
+    let left = 0
+    let top = 0
+    for (let node: HTMLElement | null = el; node; node = node.offsetParent as HTMLElement | null) {
+        left += node.offsetLeft
+        top += node.offsetTop
+    }
+    return { left: left - window.scrollX, top: top - window.scrollY, width: el.offsetWidth, height: el.offsetHeight }
+}
 
 /** The saucer's phases. Announced on UFO_PHASE_EVENT so /alien's shader can follow along. */
 export type Phase = 'idle' | 'arrive' | 'beam' | 'swallow' | 'depart' | 'warp-out' | 'warp-in'
@@ -188,8 +239,12 @@ function shredPieces(main: HTMLElement, opts: ShredOptions): HTMLElement[] {
     const pieces = collectPieces(main)
     // Shuffle departure order so pieces don't leave strictly top-to-bottom
     const slots = [...pieces.keys()].sort(() => Math.random() - 0.5)
+    // Measure every piece before styling any of them. Measuring one right after
+    // styling another makes the browser redo its style work once per piece, and
+    // this runs on the click that starts the warp
+    const rects = pieces.map((el) => el.getBoundingClientRect())
     pieces.forEach((el, i) => {
-        const rect = el.getBoundingClientRect()
+        const rect = rects[i]
         el.style.setProperty('--abduct-dx', `${beamX - (rect.left + rect.width / 2)}px`)
         el.style.setProperty('--abduct-dy', `${mouthY - (rect.top + rect.height / 2)}px`)
         el.style.setProperty('--abduct-spin', `${((Math.random() * 2 - 1) * 35).toFixed(0)}deg`)
@@ -208,6 +263,21 @@ function prefersReducedMotion() {
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
+/** A path without its trailing slashes, so "/working/" and "/working" count as one page */
+function normPath(path: string) {
+    return path.replace(/\/+$/, '') || '/'
+}
+
+/** True when the link leads to the page that is already on screen */
+function isSamePage(href: string) {
+    try {
+        const url = new URL(href, location.href)
+        return url.origin === location.origin && normPath(url.pathname) === normPath(location.pathname)
+    } catch {
+        return false
+    }
+}
+
 export function UfoAbduction() {
     const router = useRouter()
     const pathname = usePathname()
@@ -217,9 +287,16 @@ export function UfoAbduction() {
     const timersRef = useRef<ReturnType<typeof setTimeout>[]>([])
     const piecesRef = useRef<HTMLElement[]>([])
     const warpPendingRef = useRef(false)
+    /** Where the warp in progress will land. Another click before the route changes moves it */
+    const warpTargetRef = useRef('')
+    /** Whether the warp in progress has already asked the router for its page */
+    const warpPushedRef = useRef(false)
     const [bars, setBars] = useState<RedactBar[]>([])
     /** Pacing of the abduction currently on screen — read during render for the arrival speed */
     const timingRef = useRef<AbductionTiming>(ABDUCTION_TIMINGS.konami)
+    /** Set while the ship is leaving from, or heading back to, its spot in the home page's hero */
+    const liftoffRef = useRef<Handoff | null>(null)
+    const landingRef = useRef<Handoff | null>(null)
 
     /** setState + ref in one step so event handlers can read the current phase synchronously */
     const changePhase = useCallback((p: ShowPhase) => {
@@ -256,6 +333,21 @@ export function UfoAbduction() {
 
     const warpTo = useCallback(
         (href: string) => {
+            // Already here (the command bar lists the page you are on). The route would
+            // never change, so the page would be taken apart and nothing would bring it back
+            if (isSamePage(href)) return
+            // Another link while the page is still leaving: the last click wins. Until the
+            // router has been asked, only the destination changes and the show carries on.
+            // After that, ask again and the newer request takes over, as it always did.
+            if (phaseRef.current === 'warp-out' || phaseRef.current === 'redact-out') {
+                if (warpPushedRef.current) {
+                    router.push(href)
+                } else {
+                    warpTargetRef.current = href
+                    router.prefetch(href)
+                }
+                return
+            }
             // Mid-sequence, reduced motion, or the user's minimal-motion toggle:
             // plain navigation, no light show
             if (phaseRef.current !== 'idle' || prefersReducedMotion() || isMinimalMotion()) {
@@ -268,6 +360,12 @@ export function UfoAbduction() {
             // Start fetching the destination now, so the short out-phase is spent
             // loading rather than waiting to start loading
             router.prefetch(href)
+            // If the ship is parked on this page, it is the one that goes. Measured
+            // where it is right now, bob and all, so the flying one starts on top of it
+            const parked = ban ? null : parkedShip()
+            liftoffRef.current = parked ? handoffTo(parked.getBoundingClientRect()) : null
+            landingRef.current = null
+            if (parked) document.body.classList.add('ufo-hero-away')
             changePhase(ban ? 'redact-out' : 'warp-out')
             document.body.classList.add('ufo-abduct')
             // Stays for the session: from here on pages arrive by beam, not by the CSS entrance
@@ -285,14 +383,19 @@ export function UfoAbduction() {
                 }
             }
             warpPendingRef.current = true
-            at(ban ? REDACT_OUT_MS : WARP_OUT_MS, () => router.push(href))
+            warpTargetRef.current = href
+            warpPushedRef.current = false
+            at(ban ? REDACT_OUT_MS : WARP_OUT_MS, () => {
+                warpPushedRef.current = true
+                router.push(warpTargetRef.current)
+            })
             // Safety net: if the route never changes (push failed), put the page back
             at(4000, () => {
                 if (phaseRef.current === 'warp-out' || phaseRef.current === 'redact-out') {
                     warpPendingRef.current = false
                     restorePieces()
                     setBars([])
-                    document.body.classList.remove('ufo-abduct')
+                    document.body.classList.remove('ufo-abduct', 'ufo-hero-away')
                     changePhase('idle')
                 }
             })
@@ -317,10 +420,16 @@ export function UfoAbduction() {
             })
             return
         }
+        // If the page that arrived has the ship's parking spot on it (home), the
+        // ship comes down and lands there instead of flying off. The parked copy
+        // stays hidden until it has (ufo-hero-away), then takes its place.
+        const spot = parkedShip()
+        landingRef.current = spot ? handoffTo(restingBox(spot)) : null
+        document.body.classList.toggle('ufo-hero-away', !!spot)
         document.body.classList.add('ufo-return')
         changePhase('warp-in')
         at(WARP_IN_MS, () => {
-            document.body.classList.remove('ufo-return')
+            document.body.classList.remove('ufo-return', 'ufo-hero-away')
             changePhase('idle')
         })
     }, [pathname, changePhase, clearTimers, at, restorePieces])
@@ -341,8 +450,7 @@ export function UfoAbduction() {
                 return
             }
             if (url.origin !== location.origin) return
-            const norm = (p: string) => p.replace(/\/+$/, '') || '/'
-            if (norm(url.pathname) === norm(location.pathname)) return // same page / hash link
+            if (normPath(url.pathname) === normPath(location.pathname)) return // same page / hash link
             e.preventDefault()
             warpTo(url.pathname + url.search + url.hash)
         }
@@ -379,6 +487,13 @@ export function UfoAbduction() {
             const t = ABDUCTION_TIMINGS[source]
             timingRef.current = t
 
+            // On the home page the ship is already here: it lifts off from the hero,
+            // and at the end it goes back to it
+            const parked = parkedShip()
+            liftoffRef.current = parked ? handoffTo(parked.getBoundingClientRect()) : null
+            landingRef.current = parked ? handoffTo(restingBox(parked)) : null
+            if (parked) document.body.classList.add('ufo-hero-away')
+
             changePhase('arrive')
             at(t.beamAt, () => {
                 changePhase('beam')
@@ -399,7 +514,7 @@ export function UfoAbduction() {
                 document.body.classList.add('ufo-return')
             })
             at(t.doneAt, () => {
-                document.body.classList.remove('ufo-return')
+                document.body.classList.remove('ufo-return', 'ufo-hero-away')
                 changePhase('idle')
                 if (source === 'konami') toast("abduction done. everything's back, mostly.")
             })
@@ -428,7 +543,7 @@ export function UfoAbduction() {
             window.removeEventListener('keydown', onKeyDown)
             clearTimers()
             restorePieces()
-            document.body.classList.remove('ufo-abduct', 'ufo-return')
+            document.body.classList.remove('ufo-abduct', 'ufo-return', 'ufo-hero-away')
         }
     }, [fullAbduction, clearTimers, restorePieces])
 
@@ -464,30 +579,54 @@ export function UfoAbduction() {
         )
     }
 
+    // Leaving from the hero and landing back on it. Both are moves across the
+    // screen between two resting places, so they ease in and out; the landing
+    // has to be over before the phase ends (WARP_IN_MS), when the parked ship
+    // takes over from this one.
+    const liftoff = liftoffRef.current
+    const landing = landingRef.current
+    const handoff = phase === 'arrive' || phase === 'warp-out' ? liftoff : landing
+    const flight = 'cubic-bezier(0.65, 0, 0.35, 1)'
+
     const saucerAnimation = {
-        arrive: `ufoArrive ${timingRef.current.arriveSec}s cubic-bezier(0.22, 1, 0.36, 1) forwards`,
-        beam: 'ufoBob 2s ease-in-out infinite',
+        arrive: liftoff
+            ? `ufoFromHero ${Math.min(timingRef.current.arriveSec, 0.6)}s ${flight} both`
+            : `ufoArrive ${timingRef.current.arriveSec}s cubic-bezier(0.22, 1, 0.36, 1) forwards`,
+        // One whole bob between the beam switching on and the gulp, whatever the pacing,
+        // so the saucer is back at rest when the gulp starts and does not jump
+        beam: `ufoBob ${(timingRef.current.swallowAt - timingRef.current.beamAt) / 1000}s ease-in-out infinite`,
         swallow: 'ufoSwallow 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
-        depart: 'ufoDepart 0.9s cubic-bezier(0.55, 0, 0.9, 0.4) forwards',
-        'warp-out': 'ufoArrive 0.22s cubic-bezier(0.22, 1, 0.36, 1) forwards',
-        'warp-in': 'ufoDepart 0.34s cubic-bezier(0.55, 0, 0.9, 0.4) 0.08s both'
+        depart: landing ? `ufoToHero 0.6s ${flight} both` : 'ufoDepart 0.9s cubic-bezier(0.55, 0, 0.9, 0.4) forwards',
+        'warp-out': liftoff
+            ? `ufoFromHero 0.24s ${flight} both`
+            : 'ufoArrive 0.22s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+        'warp-in': landing
+            ? `ufoToHero 0.4s ${flight} both`
+            : 'ufoDepart 0.34s cubic-bezier(0.55, 0, 0.9, 0.4) 0.08s both'
     }[phase]
 
     const beamAnimation =
         phase === 'warp-in'
             ? 'beamRetract 0.24s cubic-bezier(0.55, 0, 0.9, 0.4) forwards'
             : phase === 'warp-out'
-              ? 'beamDrop 0.16s cubic-bezier(0.22, 1, 0.36, 1) forwards, beamFlicker 1.1s ease-in-out 0.16s infinite'
+              ? liftoff
+                  ? // The beam waits for the ship to get to the top: a beam swinging across
+                    // the screen under a ship in flight is not a tractor beam
+                    'beamDrop 0.12s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both, beamFlicker 1.1s ease-in-out 0.32s infinite'
+                  : 'beamDrop 0.16s cubic-bezier(0.22, 1, 0.36, 1) forwards, beamFlicker 1.1s ease-in-out 0.16s infinite'
               : 'beamDrop 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards, beamFlicker 1.1s ease-in-out 0.4s infinite'
 
-    const showBeam = phase === 'beam' || phase === 'warp-out' || phase === 'warp-in'
+    // No beam on the way down to the hero, for the same reason
+    const showBeam = phase === 'beam' || phase === 'warp-out' || (phase === 'warp-in' && !landing)
 
     return (
         <div className="fixed inset-0 z-[95] pointer-events-none overflow-hidden" aria-hidden="true">
             {/* Green wash over the whole viewport while the beam is pulling */}
             {(phase === 'beam' || phase === 'warp-out') && (
                 <div
-                    className="absolute inset-0 animate-pulse"
+                    // The pulse takes two seconds, so it is only for the long Konami beam.
+                    // A page change is over before it would have moved
+                    className={phase === 'beam' ? 'absolute inset-0 animate-pulse' : 'absolute inset-0'}
                     style={{
                         background: 'radial-gradient(ellipse at 50% 0%, hsl(var(--accent) / 0.08), transparent 60%)'
                     }}
@@ -495,7 +634,19 @@ export function UfoAbduction() {
             )}
 
             {/* Saucer + tractor beam, positioned as one unit so the beam stays under the hull */}
-            <div className="absolute left-1/2 top-[4%] -translate-x-1/2" style={{ animation: saucerAnimation }}>
+            <div
+                className="absolute left-1/2 top-[4%] -translate-x-1/2"
+                style={
+                    {
+                        animation: saucerAnimation,
+                        // Scaled about the middle of the ship, so the hand-off lines up centre to centre
+                        transformOrigin: `50% ${SHIP_H / 2}px`,
+                        '--hero-dx': handoff ? `${handoff.dx.toFixed(1)}px` : undefined,
+                        '--hero-dy': handoff ? `${handoff.dy.toFixed(1)}px` : undefined,
+                        '--hero-scale': handoff ? handoff.scale.toFixed(4) : undefined
+                    } as React.CSSProperties
+                }
+            >
                 {/* Tractor beam */}
                 {showBeam && (
                     <div
@@ -509,47 +660,10 @@ export function UfoAbduction() {
                     />
                 )}
 
-                {/* The saucer itself */}
-                <svg
-                    width="130"
-                    height="64"
-                    viewBox="0 0 130 64"
-                    className="relative drop-shadow-[0_0_18px_hsl(var(--accent)/0.5)]"
-                >
-                    {/* Cockpit dome */}
-                    <ellipse
-                        cx="65"
-                        cy="24"
-                        rx="24"
-                        ry="17"
-                        fill="hsl(var(--accent) / 0.25)"
-                        stroke="hsl(var(--accent) / 0.7)"
-                        strokeWidth="1.5"
-                    />
-                    {/* Pilot silhouette */}
-                    <circle cx="65" cy="22" r="6" fill="hsl(var(--accent) / 0.55)" />
-                    {/* Hull */}
-                    <ellipse
-                        cx="65"
-                        cy="38"
-                        rx="56"
-                        ry="15"
-                        fill="hsl(var(--card))"
-                        stroke="hsl(var(--accent) / 0.8)"
-                        strokeWidth="1.5"
-                    />
-                    {/* Running lights — staggered blink via CSS animation delays */}
-                    {[22, 44, 65, 86, 108].map((x, i) => (
-                        <circle
-                            key={x}
-                            cx={x}
-                            cy="40"
-                            r="3"
-                            fill="hsl(var(--accent))"
-                            style={{ animation: `flicker 1.2s linear ${i * 0.18}s infinite` }}
-                        />
-                    ))}
-                </svg>
+                {/* The ship: the same drawing as the one parked in the home page's hero */}
+                <div className="relative" style={{ width: SHIP_W, height: SHIP_H }}>
+                    <SaucerShip className="w-full h-full" flicker />
+                </div>
             </div>
         </div>
     )

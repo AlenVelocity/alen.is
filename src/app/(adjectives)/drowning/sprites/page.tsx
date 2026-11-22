@@ -41,9 +41,9 @@ export default function Sprites() {
         <div className="fixed inset-x-0 bottom-0 top-[var(--navbar-height)] overflow-y-auto overscroll-contain">
             <div className="container max-w-5xl py-16">
                 <header className="mb-8 flex flex-col gap-2">
-                    <p className="mono-label tracking-[0.25em] text-accent/60">// contact sheet</p>
+                    <p className="mono-label tracking-[0.25em] text-accent/60">contact sheet</p>
                     <h1 className="text-display text-3xl md:text-4xl">drowning sprites</h1>
-                    <p className="max-w-lg text-[0.9rem] text-muted-foreground">
+                    <p className="max-w-lg text-sm text-muted-foreground">
                         Everything /drowning draws, held still. Dev only — nothing links here and it is noindex. Every
                         cell exports itself: <span className="text-accent">.svg</span> for redrawing the curves,{' '}
                         <span className="text-accent">.png</span> for tracing pixels.

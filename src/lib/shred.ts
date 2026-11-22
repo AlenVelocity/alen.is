@@ -18,6 +18,9 @@ function boxChildren(el: Element): HTMLElement[] {
     const out: HTMLElement[] = []
     for (const kid of el.children) {
         if (!(kid instanceof HTMLElement)) continue
+        // The ship parked on the home page is the one doing the abducting, so it
+        // is never one of the pieces
+        if (kid.classList.contains('hero-saucer')) continue
         if (kid.dataset.as === undefined) out.push(kid)
         else if (getComputedStyle(kid).display !== 'none') out.push(...boxChildren(kid))
     }

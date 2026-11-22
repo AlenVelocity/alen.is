@@ -29,7 +29,7 @@ export default function Writing() {
                     title="Writing"
                     banTitle="Statements"
                 >
-                    <p className="text-[0.9rem] text-muted-foreground">
+                    <p className="text-sm text-muted-foreground">
                         <Persona
                             alen="Written down so I don't have to figure it out twice."
                             ban="Written down so he can't deny it later."
@@ -47,11 +47,11 @@ export default function Writing() {
                                 className="group grid gap-x-8 gap-y-2 md:grid-cols-[10rem_1fr] py-6 border-b border-dashed border-border/40"
                             >
                                 <div className="mono-label tabular-nums md:pt-1 flex md:flex-col gap-x-3 gap-y-0.5 flex-wrap">
-                                    <span className="text-muted-foreground/30">{String(i + 1).padStart(3, '0')}</span>
+                                    <span className="text-muted-foreground/60">{String(i + 1).padStart(3, '0')}</span>
                                     <span className="text-muted-foreground/60">
                                         {format(new Date(post.date), 'MMM d, yyyy')}
                                     </span>
-                                    <span className="text-muted-foreground/40">
+                                    <span className="text-muted-foreground/80">
                                         <Persona
                                             alen={`${post.readingMinutes} min read`}
                                             ban={`${post.readingMinutes} min of your time`}
@@ -62,11 +62,11 @@ export default function Writing() {
                                     <h2 className="text-display text-lg mb-1 group-hover:text-accent transition-colors duration-200">
                                         {post.title}
                                     </h2>
-                                    <p className="text-[0.875rem] text-muted-foreground leading-relaxed line-clamp-2">
+                                    <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">
                                         {post.description}
                                     </p>
                                     {post.tags.length > 0 && (
-                                        <p className="mono-label text-muted-foreground/50 mt-2">
+                                        <p className="mono-label text-muted-foreground/80 mt-2">
                                             {post.tags.join(' · ')}
                                         </p>
                                     )}

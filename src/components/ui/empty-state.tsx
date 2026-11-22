@@ -21,7 +21,7 @@ export function EmptyState({ children }: { children: ReactNode }) {
             <OnlyBan>
                 <span className="block w-24 border-t border-foreground/40 mb-3" aria-hidden="true" />
             </OnlyBan>
-            <p className="mono-label text-muted-foreground/50 text-center ban:text-left">{children}</p>
+            <p className="mono-label text-muted-foreground/80 text-center ban:text-left">{children}</p>
         </div>
     )
 }

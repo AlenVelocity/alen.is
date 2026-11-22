@@ -1,6 +1,12 @@
 {
     "extraordinary-2026": {
-        "description": ["He was supposed to write this one up. He hasn't. I don't do his chores."]
+        "description": [
+            "Built the client mobile app in Expo and React Native. Clients track their case, finish tasks and upload documents. It sends reminders until they do.",
+            "Built a shared team mailbox inside the portal on top of Gmail, with AI-drafted replies. The AI is more polite than I am.",
+            "Took an open-source AI agent app and made it the case team's desktop app. Portal sign-in, a folder per case, signed Windows and macOS builds. I signed them.",
+            "Extended the portal's MCP server so staff, employers and clients can ask Claude and ChatGPT about their own cases. Their own, and nobody else's. I checked.",
+            "Built an AI assistant for employers and clients. It answers questions about their cases and asks a person before it changes anything. It asks. I don't."
+        ]
     },
     "mercor-2025": {
         "description": [

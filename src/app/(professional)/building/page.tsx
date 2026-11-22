@@ -3,6 +3,7 @@ import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
 import { runGetProjects } from '@/lib/cms-db'
 import { asBanProjects } from '@/lib/ban-content'
+import { projectDetails } from '@/lib/project-details'
 import { ProjectDetail, ProjectRow } from './_components/ProjectCard'
 
 import { constructMetadata } from '@/lib/metadata'
@@ -44,7 +45,7 @@ export default async function Building() {
             <div className="container max-w-3xl py-10 md:py-14 px-4">
                 {/* ── Header ───────────────────────────────────── */}
                 <PageHeader eyebrow="work" title="Projects" banTitle="Schemes">
-                    <p className="text-[0.9rem] text-muted-foreground">
+                    <p className="text-sm text-muted-foreground">
                         <Persona
                             alen="Things I've built, shipped, and sometimes abandoned."
                             ban="Things I got away with. I didn't abandon any of them. I was done."
@@ -64,6 +65,7 @@ export default async function Building() {
                                     key={project.id}
                                     project={project}
                                     banDescription={banDescriptions.get(project.id)}
+                                    details={projectDetails(project.id)}
                                 />
                             ))}
                         </div>
@@ -82,6 +84,7 @@ export default async function Building() {
                                     key={project.id}
                                     project={project}
                                     banDescription={banDescriptions.get(project.id)}
+                                    details={projectDetails(project.id)}
                                 />
                             ))}
                         </div>

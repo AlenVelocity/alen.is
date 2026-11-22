@@ -69,7 +69,7 @@ function Bullets({ items }: { items: string[] }) {
     return (
         <ul className="mt-3 space-y-1.5">
             {items.map((item, i) => (
-                <li key={i} className="text-[0.875rem] text-muted-foreground leading-relaxed break-words">
+                <li key={i} className="text-sm text-muted-foreground leading-relaxed break-words">
                     {item}
                 </li>
             ))}
@@ -122,7 +122,7 @@ export default async function Experience() {
                         <a
                             href="/Alen_Resume.pdf"
                             download
-                            className="inline-flex items-center gap-2 px-3 py-2 text-xs font-mono-ui border border-border/60 hover:text-accent transition-colors duration-200 rounded-sm shrink-0"
+                            className="inline-flex items-center gap-2 px-3 py-2 text-xs font-mono-ui border border-border/60 hover:text-accent transition-[color,background-color,border-color,scale] duration-150 active:[scale:0.97] rounded-sm shrink-0"
                         >
                             <FiDownload className="w-3 h-3" />
                             <span>
@@ -131,7 +131,7 @@ export default async function Experience() {
                         </a>
                     }
                 >
-                    <p className="text-[0.9rem] text-muted-foreground">
+                    <p className="text-sm text-muted-foreground">
                         <Persona
                             alen="Where I've worked, newest first."
                             ban="Everyone who's paid me. They got their money's worth."
@@ -170,7 +170,7 @@ export default async function Experience() {
                                         )}
                                         {shortPeriod(experience.period)}
                                     </p>
-                                    {duration && <p className="text-muted-foreground/40 mt-0.5">{duration}</p>}
+                                    {duration && <p className="text-muted-foreground/80 mt-0.5">{duration}</p>}
                                 </div>
 
                                 {/* What */}
@@ -193,7 +193,7 @@ export default async function Experience() {
                                             )}
                                         </span>
                                     </div>
-                                    <p className="mono-label text-muted-foreground/50 mt-1">
+                                    <p className="mono-label text-muted-foreground/80 mt-1">
                                         {experience.location.toLowerCase() === experience.workType
                                             ? experience.workType
                                             : `${experience.location} · ${experience.workType}`}

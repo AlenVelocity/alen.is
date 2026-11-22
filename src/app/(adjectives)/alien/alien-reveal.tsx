@@ -29,13 +29,13 @@ const ORBIT_SECONDS = 30
 
 /** Status readout during the abduction, so the long build-up reads as a sequence */
 const PHASE_STATUS: Record<Phase, string> = {
-    idle: '// i mean you found me',
-    arrive: '// something showed up',
-    beam: '// beam locked on',
-    swallow: '// yep, that happened',
-    depart: '// heading up',
-    'warp-out': '// gone',
-    'warp-in': '// landed'
+    idle: 'i mean you found me',
+    arrive: 'something showed up',
+    beam: 'beam locked on',
+    swallow: 'yep, that happened',
+    depart: 'heading up',
+    'warp-out': 'gone',
+    'warp-in': 'landed'
 }
 
 /**
@@ -135,7 +135,6 @@ export function AlienReveal() {
     }, [inOrbit])
 
     const returned = !inOrbit && remaining < ORBIT_SECONDS
-    const abducting = phase !== 'idle'
 
     const goAgain = () => {
         setRemaining(ORBIT_SECONDS)
@@ -147,14 +146,15 @@ export function AlienReveal() {
             <SpaceShader visible={inOrbit} />
             <CenteredPage className="relative z-10">
                 <div className="flex flex-col items-center gap-7 text-center">
-                    {/* Status readout. The blinking cursor is a terminal's, so it is Alen's only */}
+                    {/* Status line. Each new one surfaces out of a blur (the span is keyed on
+                        the phase, so the entrance plays again). It used to end in a blinking
+                        cursor, which was the terminal talking. */}
                     <p className="mono-label text-accent/60 alen:tracking-[0.25em]">
                         <Persona
                             alen={
-                                <>
-                                    {inOrbit ? '// somewhere up here' : PHASE_STATUS[phase]}
-                                    {(abducting || inOrbit) && <span className="animate-blink ml-1">▌</span>}
-                                </>
+                                <span key={inOrbit ? 'orbit' : phase} className="surface-in inline-block">
+                                    {inOrbit ? 'somewhere up here' : PHASE_STATUS[phase]}
+                                </span>
                             }
                             ban={
                                 inOrbit ? (
@@ -176,7 +176,7 @@ export function AlienReveal() {
                         />
                     </h1>
 
-                    <p className="text-[0.9rem] text-muted-foreground max-w-sm">
+                    <p className="text-sm text-muted-foreground max-w-sm">
                         <Persona
                             alen={
                                 inOrbit
@@ -201,7 +201,7 @@ export function AlienReveal() {
                     {inOrbit ? (
                         <button
                             onClick={() => setInOrbit(false)}
-                            className="mono-label inline-flex items-center px-4 py-2.5 border border-accent/40 rounded-sm text-accent hover:bg-accent/10 transition-colors duration-200"
+                            className="mono-label inline-flex items-center px-4 py-2.5 border border-accent/40 rounded-sm text-accent hover:bg-accent/10 transition-[color,background-color,border-color,scale] duration-150 active:[scale:0.97]"
                         >
                             <Persona alen="put me back" ban="Put me back" />
                         </button>
@@ -210,13 +210,13 @@ export function AlienReveal() {
                             <div className="flex flex-wrap items-center justify-center gap-2 animate-fade-in-up">
                                 <button
                                     onClick={goAgain}
-                                    className="mono-label inline-flex items-center px-4 py-2.5 border border-accent/40 rounded-sm text-accent hover:bg-accent/10 transition-colors duration-200"
+                                    className="mono-label inline-flex items-center px-4 py-2.5 border border-accent/40 rounded-sm text-accent hover:bg-accent/10 transition-[color,background-color,border-color,scale] duration-150 active:[scale:0.97]"
                                 >
                                     <Persona alen="again?" ban="Again" />
                                 </button>
                                 <Link
                                     href="/human"
-                                    className="mono-label inline-flex items-center px-4 py-2.5 border border-border/60 rounded-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
+                                    className="mono-label inline-flex items-center px-4 py-2.5 border border-border/60 rounded-sm text-muted-foreground hover:text-foreground transition-[color,background-color,border-color,scale] duration-150 active:[scale:0.97]"
                                 >
                                     <Persona alen="i saw nothing" ban="I saw nothing" />
                                 </Link>

@@ -7,7 +7,7 @@ import { SITE_ROUTES } from '@/lib/routes'
 import { posthog } from '@/components/posthog-provider'
 import { ufoWarp } from '@/components/ui/ufo-abduction'
 import { isMinimalMotion, setMinimalMotion } from '@/lib/motion-pref'
-import { Persona } from '@/components/persona'
+import { Persona, OnlyAlen } from '@/components/persona'
 
 /**
  * "alen.is/…" command bar — the site's alien warp drive.
@@ -201,7 +201,7 @@ export function CommandBar() {
                         className="absolute inset-0 bg-background/70 backdrop-blur-sm"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
+                        exit={{ opacity: 0, transition: { duration: 0.1 } }}
                         transition={{ duration: 0.18 }}
                         onClick={close}
                         aria-hidden="true"
@@ -210,46 +210,52 @@ export function CommandBar() {
                     {/* Panel */}
                     <motion.div
                         // Opens fast and without a blur: it answers a keypress, so it
-                        // should be there by the time the second key lands
+                        // should be there by the time the second key lands. It closes
+                        // faster still and without moving: Enter starts the page change
+                        // at once, and a slow fade would sit on top of it
                         initial={{ opacity: 0, y: -8, scale: 0.985 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -4, scale: 0.985 }}
+                        exit={{ opacity: 0, transition: { duration: 0.1 } }}
                         transition={{ duration: 0.16, ease: [0.22, 1, 0.36, 1] }}
                         className="relative w-full max-w-lg"
                     >
-                        {/* The glow lives on a drop-shadow wrapper: clip-notch clips the panel's own
-                        box-shadow away, but a drop-shadow follows the notched outline */}
+                        {/* The panel is a membrane, like the nav: a soft lit edge for Alen, a
+                            ruled box for Ban. The glow sits on a wrapper so it is not clipped
+                            by the panel's own rounded corners. */}
                         <div className="[filter:drop-shadow(0_0_20px_hsl(var(--accent)/0.14))_drop-shadow(0_20px_40px_rgba(0,0,0,0.4))] ban:[filter:drop-shadow(0_20px_40px_rgba(0,0,0,0.4))]">
-                            <div className="clip-notch border border-accent/30 bg-background/95">
+                            <div className="membrane rounded-xl overflow-hidden backdrop-blur-xl">
                                 {/* Live sentence preview — the whole point of the domain */}
                                 <p
-                                    className="px-4 pt-3 mono-label text-muted-foreground/50 select-none"
+                                    className="px-4 pt-3 mono-label text-muted-foreground/80 select-none"
                                     aria-live="polite"
                                 >
-                                    <span className="text-accent">&gt;</span> <Persona alen="alen" ban="ban" /> is{' '}
+                                    <OnlyAlen>
+                                        <span className="cell-mark mr-2 align-middle" />
+                                    </OnlyAlen>
+                                    <Persona alen="alen" ban="ban" /> is{' '}
                                     <span className="text-foreground">{active?.slug ?? (query.trim() || '…')}</span>
                                 </p>
 
                                 {/* Input row: fixed "alen.is/" prefix + query + ghost completion */}
                                 <div className="flex items-center gap-0 px-4 py-3 border-b border-border/60">
-                                    <span className="font-mono-ui text-sm text-accent glow-text select-none shrink-0">
+                                    <span className="font-data text-sm text-accent glow-text select-none shrink-0">
                                         alen.is/
                                     </span>
                                     <div className="relative flex-1 min-w-0">
                                         {/* Ghost layer sits behind the transparent-background input; mono font keeps them aligned */}
                                         <div
-                                            className="absolute inset-0 flex items-center font-mono-ui text-sm pointer-events-none whitespace-pre"
+                                            className="absolute inset-0 flex items-center font-data text-sm pointer-events-none whitespace-pre"
                                             aria-hidden="true"
                                         >
                                             <span className="invisible">{query}</span>
-                                            <span className="text-muted-foreground/40">{ghost}</span>
+                                            <span className="text-muted-foreground/80">{ghost}</span>
                                         </div>
                                         <input
                                             ref={inputRef}
                                             value={query}
                                             onChange={(e) => setQuery(e.target.value.replace(/\s/g, '-'))}
                                             onKeyDown={onInputKeyDown}
-                                            className="relative w-full bg-transparent font-mono-ui text-sm text-foreground outline-none focus-visible:outline-none placeholder:text-muted-foreground/30 caret-[hsl(var(--accent))]"
+                                            className="relative w-full bg-transparent font-data text-sm text-foreground outline-none focus-visible:outline-none placeholder:text-muted-foreground/60 caret-[hsl(var(--accent))]"
                                             placeholder="finish the sentence"
                                             role="combobox"
                                             aria-expanded={results.length > 0}
@@ -282,7 +288,9 @@ export function CommandBar() {
                                                 onMouseMove={() => setActiveIndex(i)}
                                                 onClick={() => navigate(route.slug)}
                                                 className={cn(
-                                                    'flex items-baseline gap-2.5 px-4 py-2 cursor-pointer text-sm font-mono-ui transition-colors duration-100',
+                                                    // No transition: the highlight follows the arrow keys,
+                                                    // and a fade on every step makes the list feel late
+                                                    'flex items-baseline gap-2.5 px-4 py-2 cursor-pointer text-sm font-data',
                                                     isActive
                                                         ? 'bg-accent/10 text-accent'
                                                         : 'text-muted-foreground hover:text-foreground',
@@ -292,12 +300,16 @@ export function CommandBar() {
                                             >
                                                 <span
                                                     className={cn(
-                                                        'text-accent transition-opacity duration-100 w-3 shrink-0',
+                                                        'text-accent w-3 shrink-0',
                                                         isActive ? 'opacity-100' : 'opacity-0'
                                                     )}
                                                     aria-hidden="true"
                                                 >
-                                                    {route.mystery ? '?' : '▸'}
+                                                    {route.mystery ? (
+                                                        '?'
+                                                    ) : (
+                                                        <span className="inline-block w-1.5 h-1.5 rounded-full ban:rounded-none bg-accent align-middle" />
+                                                    )}
                                                 </span>
                                                 <span
                                                     className={cn(
@@ -308,13 +320,13 @@ export function CommandBar() {
                                                 >
                                                     /{route.slug}
                                                 </span>
-                                                <span className="text-[0.68rem] text-muted-foreground/50 truncate flex-1">
+                                                <span className="text-[0.68rem] text-muted-foreground/80 truncate flex-1">
                                                     <Persona
                                                         alen={route.description}
                                                         ban={route.ban ?? route.description}
                                                     />
                                                 </span>
-                                                <span className="text-[0.6rem] uppercase tracking-widest text-muted-foreground/35 shrink-0">
+                                                <span className="text-[0.7rem] uppercase tracking-widest text-muted-foreground/35 shrink-0">
                                                     {route.group}
                                                 </span>
                                             </li>
@@ -323,7 +335,7 @@ export function CommandBar() {
                                 </ul>
 
                                 {/* Hints — keyboard shortcuts are pointless on touch, so they only show sm+ */}
-                                <footer className="flex items-center gap-3 px-4 py-2 border-t border-border/60 text-[0.62rem] font-mono-ui text-muted-foreground/40 select-none">
+                                <footer className="flex items-center gap-3 px-4 py-2 border-t border-border/60 text-[0.7rem] font-data text-muted-foreground/80 select-none">
                                     <span className="hidden sm:inline">
                                         <span className="text-accent/60">↑↓</span> navigate
                                     </span>

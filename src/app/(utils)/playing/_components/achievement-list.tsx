@@ -39,7 +39,7 @@ export function AchievementList({ unlocked, total, pct, status, items }: Achieve
         <section className="mb-12">
             <div className="flex items-baseline justify-between gap-4 mb-3">
                 <div className="section-label">achievements</div>
-                <span className="mono-label text-muted-foreground/50 tabular-nums">
+                <span className="mono-label text-muted-foreground/80 tabular-nums">
                     {unlocked}/{total}
                 </span>
             </div>
@@ -48,7 +48,7 @@ export function AchievementList({ unlocked, total, pct, status, items }: Achieve
                 <div className="h-full bg-accent rounded-full ban:rounded-none" style={{ width: `${pct}%` }} />
             </div>
             {status && (
-                <p className="mono-label text-muted-foreground/50 mb-6">
+                <p className="mono-label text-muted-foreground/80 mb-6">
                     <Persona alen="status: " ban="status: " />
                     <span className={status.tone}>
                         <Persona alen={status.alen} ban={status.ban} />
@@ -77,7 +77,7 @@ export function AchievementList({ unlocked, total, pct, status, items }: Achieve
                                 </div>
                             ) : (
                                 <div className="w-9 h-9 rounded ban:rounded-none bg-muted/30 border border-border/50 flex items-center justify-center shrink-0">
-                                    <FiCheck className="w-4 h-4 text-muted-foreground/50" />
+                                    <FiCheck className="w-4 h-4 text-muted-foreground/80" />
                                 </div>
                             )}
                             <div className="flex-1 min-w-0">
@@ -93,7 +93,7 @@ export function AchievementList({ unlocked, total, pct, status, items }: Achieve
                                     <span className="text-muted-foreground/60">{achievement.score} G</span>
                                 )}
                                 {achievement.date && (
-                                    <span className="text-muted-foreground/50 hidden sm:inline">
+                                    <span className="text-muted-foreground/80 hidden sm:inline">
                                         {formatUnlockDate(achievement.date)}
                                     </span>
                                 )}
@@ -104,7 +104,7 @@ export function AchievementList({ unlocked, total, pct, status, items }: Achieve
             )}
 
             {partial && (
-                <p className="mono-label text-muted-foreground/50 mt-3 tabular-nums">
+                <p className="mono-label text-muted-foreground/80 mt-3 tabular-nums">
                     the {items.length} most recent, of {unlocked}
                 </p>
             )}

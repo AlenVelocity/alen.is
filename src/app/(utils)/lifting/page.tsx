@@ -23,7 +23,7 @@ export default function Lifting() {
         <PageTransition>
             <div className="container max-w-3xl py-10 md:py-14 px-4">
                 <PageHeader eyebrow="gym log" title="Lifting" banTitle="Training">
-                    <p className="text-[0.9rem] text-muted-foreground">
+                    <p className="text-sm text-muted-foreground">
                         <Persona
                             alen="I swear I'm actually working out. The API just doesn't believe me yet."
                             ban="I train. The API doesn't believe me. That's the API's problem."

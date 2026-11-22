@@ -58,7 +58,7 @@ export default function LoginPage() {
                                         value={username}
                                         onChange={(e) => setUsername(e.target.value)}
                                         placeholder="Username"
-                                        className="flex h-12 w-full rounded-xl border border-border bg-muted/50 px-4 text-sm text-foreground placeholder:text-muted-foreground font-medium focus:border-accent focus:bg-muted focus:outline-none focus:ring-0 transition-all"
+                                        className="flex h-12 w-full rounded-xl border border-border bg-muted/50 px-4 text-sm text-foreground placeholder:text-muted-foreground font-medium focus:border-accent focus:bg-muted focus:outline-none focus:ring-0 transition-colors"
                                     />
                                 </motion.div>
                             )}
@@ -81,7 +81,7 @@ export default function LoginPage() {
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         placeholder="Password"
-                                        className="flex h-12 w-full rounded-xl border border-border bg-muted/50 px-4 text-sm text-foreground placeholder:text-muted-foreground font-medium focus:border-accent focus:bg-muted focus:outline-none focus:ring-0 transition-all font-mono"
+                                        className="flex h-12 w-full rounded-xl border border-border bg-muted/50 px-4 text-sm text-foreground placeholder:text-muted-foreground font-medium focus:border-accent focus:bg-muted focus:outline-none focus:ring-0 transition-colors font-mono"
                                     />
                                 </motion.div>
                             )}
@@ -90,7 +90,7 @@ export default function LoginPage() {
 
                     <button
                         type="submit"
-                        className="group relative flex h-11 w-full items-center justify-center overflow-hidden rounded-xl bg-accent font-medium text-accent-foreground transition-all hover:opacity-90 active:scale-[0.98]"
+                        className="group relative flex h-11 w-full items-center justify-center overflow-hidden rounded-xl bg-accent font-medium text-accent-foreground transition-[opacity,transform] hover:opacity-90 active:scale-[0.98]"
                     >
                         <span className="relative z-10 transition-transform group-hover:scale-105">
                             {step === 1 ? 'Continue' : 'Sign in'}

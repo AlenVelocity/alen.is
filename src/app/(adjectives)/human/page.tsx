@@ -13,8 +13,10 @@ export const metadata: Metadata = constructMetadata({
     openGraph: { description: 'Alen is human. Obviously.' }
 })
 
+// Pressing it shrinks it a touch. That is the `scale` property and not a transform,
+// because the entrance animation keeps hold of `transform` after it ends
 const LINK =
-    'mono-label inline-flex items-center px-4 py-2.5 border border-border/60 rounded-sm text-muted-foreground hover:text-accent hover:border-accent/50 transition-colors duration-200'
+    'mono-label inline-flex items-center px-4 py-2.5 border border-border/60 rounded-sm text-muted-foreground hover:text-accent hover:border-accent/50 transition-[color,background-color,border-color,scale] duration-150 active:[scale:0.97]'
 
 /**
  * First stop of /human, /definitely-human, /alien. Alen insists and gives
@@ -27,10 +29,10 @@ export default function Human() {
         <CenteredPage>
             <div className="flex flex-col items-center gap-8 text-center">
                 <p
-                    className="mono-label text-muted-foreground/40 alen:tracking-[0.25em] animate-fade-in-up opacity-0 stagger-1"
+                    className="mono-label text-muted-foreground/80 alen:tracking-[0.25em] animate-fade-in-up opacity-0 stagger-1"
                     style={{ animationFillMode: 'forwards' }}
                 >
-                    <Persona alen="// captcha" ban={<span className="struck">yes, i am</span>} />
+                    <Persona alen="captcha" ban={<span className="struck">yes, i am</span>} />
                 </p>
 
                 <h1
@@ -41,7 +43,7 @@ export default function Human() {
                 </h1>
 
                 <p
-                    className="text-[0.9rem] text-muted-foreground max-w-sm animate-fade-in-up opacity-0 stagger-2"
+                    className="text-sm text-muted-foreground max-w-sm animate-fade-in-up opacity-0 stagger-2"
                     style={{ animationFillMode: 'forwards' }}
                 >
                     <Persona

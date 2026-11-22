@@ -4,6 +4,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { CenteredPage } from '@/components/ui/centered-page'
 import { posthog } from '@/components/posthog-provider'
+import { OnlyAlen, OnlyBan } from '@/components/persona'
+import { usePersona } from '@/hooks/use-persona'
+import { getPersona } from '@/lib/persona'
 import { isMinimalMotion } from '@/lib/motion-pref'
 import { collectPieces } from '@/lib/shred'
 import { cn } from '@/lib/utils'
@@ -180,11 +183,38 @@ function DescentLog() {
             {BEATS.map((beat) => (
                 <li key={beat.name} className="flex items-baseline gap-3 py-2">
                     <span className="mono-label text-accent tabular-nums w-16 shrink-0">{beat.depth} m</span>
-                    <span className="text-[0.9rem] text-foreground">{beat.name}</span>
+                    <span className="text-sm text-foreground">{beat.name}</span>
                     <span className="mono-label text-muted-foreground/60 ml-auto text-right">{beat.caption}</span>
                 </li>
             ))}
         </ol>
+    )
+}
+
+/**
+ * What Ban has on this page. `alen.is/drowning` is a claim about Alen, and
+ * like most of them Ban does not share it: he is not drowning and has no
+ * plans to. Same shape as his answer on the other adjective pages (Alen's
+ * line struck out, then his own), and nothing on it moves.
+ */
+function BanAshore() {
+    return (
+        <div className="flex flex-col items-center gap-7 text-center">
+            <p className="mono-label text-muted-foreground/80">
+                <span className="struck">the water looks fine</span>
+            </p>
+            {/* No capital I in the heading: in his blackletter it reads as a D */}
+            <h1 className="text-display text-4xl md:text-6xl">He drowns. Not me.</h1>
+            <p className="max-w-sm text-sm text-muted-foreground">
+                Sixteen ways, getting faster, and he walks into every one. I can swim.
+            </p>
+            <Link
+                href="/"
+                className="mono-label inline-flex items-center border border-border px-4 py-2.5 text-muted-foreground transition-[color,border-color,scale] duration-150 hover:text-accent hover:border-accent/50 active:[scale:0.97]"
+            >
+                Dry land
+            </Link>
+        </div>
     )
 }
 
@@ -306,7 +336,21 @@ export function Descent() {
 
     // Kick off on arrival — unless the visitor has asked for less motion, in
     // which case they get the dive log instead of the dive.
+    //
+    // And unless Ban is in. Ban doesn't drown: nothing sinks, nothing swims up,
+    // and the page shows his answer instead (BanAshore, below). Asked at the
+    // moment it matters with getPersona(), because the hook still says "alen"
+    // on the first render. The hook is in the dependencies so that letting
+    // Alen back in from the nav starts the dive, and Ban taking over stops it.
+    const persona = usePersona()
     useEffect(() => {
+        if (getPersona() === 'ban') {
+            clearTimers()
+            restorePieces()
+            setStage('intro')
+            posthog.capture('drowning_visited', { persona: 'ban' })
+            return
+        }
         const minimal = window.matchMedia('(prefers-reduced-motion: reduce)').matches || isMinimalMotion()
         posthog.capture('drowning_visited', { minimal })
         if (minimal) {
@@ -316,7 +360,7 @@ export function Descent() {
         dive()
         const timers = timersRef.current
         return () => timers.forEach(clearTimeout)
-    }, [dive])
+    }, [dive, persona, clearTimers, restorePieces])
 
     // Ease the readout toward the current beat's depth so the number slides
     // rather than snapping between sixteen fixed values.
@@ -438,7 +482,7 @@ export function Descent() {
                     <div className="flex flex-col items-center gap-3 text-center">
                         <p
                             key={`caption-${beat}`}
-                            className="text-[0.95rem] text-foreground/80 animate-caption max-w-xs"
+                            className="text-base text-foreground/80 animate-caption max-w-xs"
                             style={{ animationDuration: `${beatMs}ms` }}
                         >
                             {current.caption}{' '}
@@ -480,47 +524,52 @@ export function Descent() {
                 <div className="fixed inset-0 z-[90] bg-black animate-blackout" aria-hidden="true" />
             )}
 
-            {/* The page proper — sinks away on arrival, comes back once you wash up */}
+            {/* The page proper — sinks away on arrival, comes back once you wash up.
+                That is Alen's. Ban's is one screen that never goes anywhere. */}
             <CenteredPage className="relative z-10">
-                {stage === 'surfaced' ? (
-                    <div className="flex flex-col items-center gap-7 text-center animate-fade-in-up">
-                        <p className="mono-label text-accent/60 tracking-[0.25em]">// washed up</p>
-                        <h1 className="text-display text-4xl md:text-6xl glow-text">you&apos;re back</h1>
-                        <div className="flex flex-wrap items-center justify-center gap-2">
-                            <button
-                                onClick={dive}
-                                className="mono-label inline-flex items-center rounded-sm border border-accent/40 px-4 py-2.5 text-accent transition-colors duration-200 hover:bg-accent/10"
-                            >
-                                again?
-                            </button>
-                            <Link
-                                href="/"
-                                className="mono-label inline-flex items-center rounded-sm border border-border/60 px-4 py-2.5 text-muted-foreground transition-colors duration-200 hover:text-foreground"
-                            >
-                                dry land
-                            </Link>
+                <OnlyBan as="div">
+                    <BanAshore />
+                </OnlyBan>
+                <OnlyAlen as="div">
+                    {stage === 'surfaced' ? (
+                        <div className="flex flex-col items-center gap-7 text-center animate-fade-in-up">
+                            <p className="mono-label text-accent/60 tracking-[0.25em]">washed up</p>
+                            <h1 className="text-display text-4xl md:text-6xl glow-text">you&apos;re back</h1>
+                            <div className="flex flex-wrap items-center justify-center gap-2">
+                                <button
+                                    onClick={dive}
+                                    className="mono-label inline-flex items-center rounded-sm border border-accent/40 px-4 py-2.5 text-accent transition-colors duration-200 hover:bg-accent/10"
+                                >
+                                    again?
+                                </button>
+                                <Link
+                                    href="/"
+                                    className="mono-label inline-flex items-center rounded-sm border border-border/60 px-4 py-2.5 text-muted-foreground transition-colors duration-200 hover:text-foreground"
+                                >
+                                    dry land
+                                </Link>
+                            </div>
                         </div>
-                    </div>
-                ) : staticLog ? (
-                    <div className="flex flex-col items-center gap-7 py-16">
-                        <p className="mono-label tracking-[0.25em] text-accent/60">// dive log</p>
-                        <h1 className="text-display text-4xl md:text-5xl glow-text">it went badly</h1>
-                        <p className="max-w-sm text-center text-[0.9rem] text-muted-foreground">
-                            you asked for less motion, so here is the descent as a list. sixteen entries. it does not
-                            improve.
-                        </p>
-                        <DescentLog />
-                    </div>
-                ) : (
-                    <div className="flex flex-col items-center gap-7 text-center">
-                        <p className="mono-label tracking-[0.25em] text-accent/60">
-                            // something down there is singing
-                            <span className="animate-blink ml-1">▌</span>
-                        </p>
-                        <h1 className="text-display text-4xl md:text-6xl glow-text">the water looks fine</h1>
-                        <p className="max-w-sm text-[0.9rem] text-muted-foreground">or does it?</p>
-                    </div>
-                )}
+                    ) : staticLog ? (
+                        <div className="flex flex-col items-center gap-7 py-16">
+                            <p className="mono-label tracking-[0.25em] text-accent/60">dive log</p>
+                            <h1 className="text-display text-4xl md:text-5xl glow-text">it went badly</h1>
+                            <p className="max-w-sm text-center text-sm text-muted-foreground">
+                                you asked for less motion, so here is the descent as a list. sixteen entries. it does
+                                not improve.
+                            </p>
+                            <DescentLog />
+                        </div>
+                    ) : (
+                        <div className="flex flex-col items-center gap-7 text-center">
+                            <p className="mono-label tracking-[0.25em] text-accent/60">
+                                something down there is singing
+                            </p>
+                            <h1 className="text-display text-4xl md:text-6xl glow-text">the water looks fine</h1>
+                            <p className="max-w-sm text-sm text-muted-foreground">or does it?</p>
+                        </div>
+                    )}
+                </OnlyAlen>
             </CenteredPage>
 
             {/* Credit where the bridge came from. data-no-sink keeps it out of the

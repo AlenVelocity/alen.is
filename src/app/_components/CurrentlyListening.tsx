@@ -18,9 +18,9 @@ import { Persona } from '@/components/persona'
 function ListeningSection({ children }: { children: React.ReactNode }) {
     return (
         <section className="mb-20">
-            <div className="section-label mb-5">
+            <h2 className="section-label mb-5">
                 <Persona alen="listening" ban="noise" />
-            </div>
+            </h2>
             {children}
         </section>
     )
@@ -33,13 +33,13 @@ function ListeningSection({ children }: { children: React.ReactNode }) {
 export function CurrentlyListeningSkeleton() {
     return (
         <ListeningSection>
-            <div className="border-l-2 border-accent/20 bg-card/60 p-4 flex items-center gap-4" aria-hidden="true">
-                <SkeletonTile className="w-10 h-10" />
-                <div className="flex-1 min-w-0 space-y-2">
-                    <SkeletonBar width="5.5rem" height="0.5rem" delay={0} />
-                    <SkeletonBar width="60%" height="0.625rem" delay={0.1} />
-                    <SkeletonBar width="35%" height="0.5rem" delay={0.2} />
+            <div className="membrane rounded-xl p-3.5 flex items-center gap-4" aria-hidden="true">
+                <SkeletonTile className="w-11 h-11" />
+                <div className="flex-1 min-w-0 space-y-2.5">
+                    <SkeletonBar width="45%" height="0.7rem" delay={0} />
+                    <SkeletonBar width="28%" height="0.55rem" delay={0.1} />
                 </div>
+                <SkeletonBar width="4.5rem" height="0.5rem" delay={0.2} className="shrink-0 mr-1.5" />
             </div>
         </ListeningSection>
     )
@@ -73,16 +73,23 @@ export async function CurrentlyListening() {
     return (
         <ListeningSection>
             <StreamFade>
-                <RepeatRing frequency={frequency} gradient={borderGradient} shadow={shadowStyle}>
+                <RepeatRing
+                    frequency={frequency}
+                    gradient={borderGradient}
+                    shadow={shadowStyle}
+                    rounded="rounded-[calc(var(--radius)*1.6+2px)]"
+                >
+                    {/* On repeat the ring is the edge, so the card under it is solid.
+                        Otherwise it has the soft edge every card has. */}
                     <Link
                         href="/listening"
-                        className={`group relative z-10 flex items-center gap-4 p-4 bg-card border-l-2 ${
-                            onRepeat ? 'border-accent' : 'border-border'
+                        className={`group relative z-10 flex items-center gap-4 p-3.5 pr-5 rounded-xl transition-[scale] duration-150 ease-out active:[scale:0.99] ${
+                            onRepeat ? 'bg-card' : 'membrane'
                         }`}
                     >
                         {/* Album art or fallback */}
                         {currentTrack.image ? (
-                            <div className="relative w-10 h-10 rounded-sm overflow-hidden shrink-0">
+                            <div className="relative w-11 h-11 rounded-md overflow-hidden shrink-0">
                                 <Image
                                     src={currentTrack.image}
                                     alt={`${currentTrack.name} album art`}
@@ -91,36 +98,39 @@ export async function CurrentlyListening() {
                                 />
                             </div>
                         ) : (
-                            <div className="w-10 h-10 bg-muted flex items-center justify-center shrink-0 rounded-sm">
+                            <div className="w-11 h-11 bg-muted flex items-center justify-center shrink-0 rounded-md">
                                 <FiHeadphones className="w-4 h-4 text-muted-foreground" />
                             </div>
                         )}
 
                         <div className="flex-1 min-w-0">
-                            {/* Status. Playing right now is live, so it takes the signal colour;
-                                a track that has finished does not */}
-                            <div className="flex items-center gap-2 mb-0.5">
-                                {isNowPlaying && (
-                                    <span
-                                        className="inline-block w-1.5 h-1.5 rounded-full ban:rounded-none bg-signal shrink-0"
-                                        aria-hidden="true"
-                                    />
-                                )}
-                                <span
-                                    className={`mono-label ${isNowPlaying ? 'text-signal' : 'text-muted-foreground/60'}`}
-                                >
-                                    <Persona alen={subtitle} ban={banSubtitle} />
-                                    {onRepeat && <span className="ml-1.5 opacity-80">×{frequency}</span>}
-                                </span>
-                            </div>
-
                             {/* Track name */}
-                            <p className="text-display text-sm truncate group-hover:text-accent transition-colors duration-200">
+                            <p className="font-semibold truncate group-hover:text-accent transition-colors duration-150">
                                 {currentTrack.name}
                             </p>
 
                             {/* Artist */}
-                            <p className="mono-label text-muted-foreground truncate mt-0.5">{currentTrack.artist}</p>
+                            <p className="text-sm text-muted-foreground truncate">{currentTrack.artist}</p>
+                        </div>
+
+                        {/* Status, after the track and not over it. Playing right now is live,
+                            so it takes the signal colour; a track that has finished does not.
+                            The repeat count is a number, so it alone is in the data face. */}
+                        <div
+                            className={`flex items-center gap-2 shrink-0 text-xs font-medium ${
+                                isNowPlaying ? 'text-signal' : 'text-muted-foreground'
+                            }`}
+                        >
+                            {isNowPlaying && (
+                                <span
+                                    className="inline-block w-1.5 h-1.5 rounded-full ban:rounded-none bg-signal shrink-0"
+                                    aria-hidden="true"
+                                />
+                            )}
+                            <span>
+                                <Persona alen={subtitle} ban={banSubtitle} />
+                                {onRepeat && <span className="ml-1.5 font-data opacity-80">×{frequency}</span>}
+                            </span>
                         </div>
                     </Link>
                 </RepeatRing>

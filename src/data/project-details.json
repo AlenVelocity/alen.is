@@ -1,0 +1,39 @@
+{
+    "everycube-2026": {
+        "repo": "https://github.com/AlenVelocity/everycube",
+        "facts": ["43 stars"]
+    },
+    "wa-sticker-formatter-2021": {
+        "repo": "https://github.com/AlenVelocity/wa-sticker-formatter",
+        "facts": ["39k downloads a week", "116 stars"]
+    },
+    "meowscript-2023": {
+        "repo": "https://github.com/AlenVelocity/MeowScript",
+        "facts": ["50 stars"]
+    },
+    "wake-to-xbox-2026": {
+        "writeup": "/writing/about/console-mode-controller-wake"
+    },
+    "kalidokit-2021": {
+        "facts": ["5.7k stars", "51 commits of mine"]
+    },
+    "whatsapp-botto-2021": {
+        "repo": "https://github.com/Synthesized-Infinity/Whatsapp-Botto-Void",
+        "facts": ["239 stars across the two"]
+    },
+    "langchain-llama-2023": {
+        "facts": ["39 stars"]
+    },
+    "aureolin-2021": {
+        "facts": ["24 stars"]
+    },
+    "ethereal-2022": {
+        "facts": ["22 stars"]
+    },
+    "owcsle-2024": {
+        "offline": true
+    },
+    "gyan-pro-2024": {
+        "offline": true
+    }
+}

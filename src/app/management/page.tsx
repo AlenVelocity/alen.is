@@ -123,7 +123,7 @@ const ReviewForm = memo(function ReviewForm({
                                 placeholder="/ 10"
                                 value={rating}
                                 onChange={(e) => setRating(e.target.value === '' ? '' : parseInt(e.target.value))}
-                                className="bg-background border border-border rounded-lg px-3 py-2 w-24 focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-all text-sm font-medium"
+                                className="bg-background border border-border rounded-lg px-3 py-2 w-24 focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-colors text-sm font-medium"
                             />
                         </div>
 
@@ -131,14 +131,14 @@ const ReviewForm = memo(function ReviewForm({
                             placeholder="What's the verdict?"
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
-                            className="w-full bg-background border border-border rounded-lg px-3 py-2.5 min-h-[80px] resize-y focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-all text-sm leading-relaxed"
+                            className="w-full bg-background border border-border rounded-lg px-3 py-2.5 min-h-[80px] resize-y focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-colors text-sm leading-relaxed"
                         />
 
                         <div className="flex items-center gap-2.5">
                             <button
                                 onClick={handleSave}
                                 disabled={upsertMutation.isPending}
-                                className="flex items-center gap-2 bg-accent text-accent-foreground px-4 py-2 rounded-lg text-sm font-semibold hover-lift transition-all"
+                                className="flex items-center gap-2 bg-accent text-accent-foreground px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
                             >
                                 <FiSave className={upsertMutation.isPending ? 'animate-spin' : ''} />
                                 {upsertMutation.isPending ? 'Saving...' : review ? 'Update' : 'Publish'}
@@ -182,15 +182,15 @@ const ItemRow = memo(function ItemRow({
     return (
         <button
             onClick={() => onSelect(item)}
-            className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all text-left group ${isSelected ? 'bg-accent/10 border border-accent/20' : 'hover:bg-muted/40 border border-transparent'}`}
+            className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-colors text-left group ${isSelected ? 'bg-accent/10 border border-accent/20' : 'hover:bg-muted/40 border border-transparent'}`}
         >
             {item.image ? (
                 type === 'GAME' ? (
-                    <div className="relative w-20 h-9 rounded overflow-hidden flex-shrink-0 ring-1 ring-border/50 group-hover:ring-accent/30 transition-all">
+                    <div className="relative w-20 h-9 rounded overflow-hidden flex-shrink-0 ring-1 ring-border/50 group-hover:ring-accent/30 transition-shadow">
                         <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                     </div>
                 ) : (
-                    <div className="w-9 h-9 rounded overflow-hidden flex-shrink-0 ring-1 ring-border/50 group-hover:ring-accent/30 transition-all">
+                    <div className="w-9 h-9 rounded overflow-hidden flex-shrink-0 ring-1 ring-border/50 group-hover:ring-accent/30 transition-shadow">
                         <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                     </div>
                 )
@@ -214,7 +214,7 @@ const ItemRow = memo(function ItemRow({
                 {item.subtitle && <p className="text-xs text-muted-foreground/60 truncate">{item.subtitle}</p>}
             </div>
             <FiChevronRight
-                className={`w-4 h-4 shrink-0 transition-all ${isSelected ? 'text-accent' : 'text-muted-foreground/30 group-hover:text-accent/60 -translate-x-1 group-hover:translate-x-0 opacity-0 group-hover:opacity-100'}`}
+                className={`w-4 h-4 shrink-0 transition-[color,opacity,transform] ${isSelected ? 'text-accent' : 'text-muted-foreground/30 group-hover:text-accent/60 -translate-x-1 group-hover:translate-x-0 opacity-0 group-hover:opacity-100'}`}
             />
         </button>
     )
@@ -334,7 +334,7 @@ function AdminDashboard() {
                     <button
                         key={t}
                         onClick={() => handleTabChange(t)}
-                        className={`relative flex-1 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${tab === t ? 'text-foreground' : 'text-muted-foreground hover:text-foreground/80'}`}
+                        className={`relative flex-1 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${tab === t ? 'text-foreground' : 'text-muted-foreground hover:text-foreground/80'}`}
                     >
                         {tab === t && (
                             <motion.div
@@ -368,7 +368,7 @@ function AdminDashboard() {
                         }
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full bg-card border border-border rounded-lg pl-9 pr-20 py-2.5 text-sm focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-all placeholder:text-muted-foreground/40"
+                        className="w-full bg-card border border-border rounded-lg pl-9 pr-20 py-2.5 text-sm focus:border-accent focus:ring-1 focus:ring-accent outline-none transition-colors placeholder:text-muted-foreground/40"
                     />
                     <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
                         {searchQuery && (

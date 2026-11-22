@@ -1,3 +1,4 @@
+import { ExternalMark } from '@/components/ui/external-mark'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { PageTransition } from '@/components/ui/page-transition'
@@ -136,7 +137,7 @@ export default async function GamePage({ params }: Props) {
                 {/* Back link */}
                 <Link
                     href="/playing"
-                    className="inline-block mono-label text-muted-foreground/50 hover:text-accent transition-colors duration-150 mb-8"
+                    className="inline-block mono-label text-muted-foreground/80 hover:text-accent transition-colors duration-150 mb-8"
                 >
                     <Persona alen="back to playing" ban="back to wins" />
                 </Link>
@@ -156,7 +157,7 @@ export default async function GamePage({ params }: Props) {
 
                 {/* Same order as PageHeader: where it is from, what it is, the numbers */}
                 <div className="mb-12">
-                    <p className="mono-label text-muted-foreground/50 mb-3">
+                    <p className="mono-label text-muted-foreground/80 mb-3">
                         <Persona
                             alen={`// on ${isSteam ? 'steam' : 'xbox'}`}
                             ban={`On ${isSteam ? 'Steam' : 'Xbox'}.`}
@@ -186,7 +187,7 @@ export default async function GamePage({ params }: Props) {
                                 <div className="flex items-center gap-1.5 text-accent font-mono-ui text-sm">
                                     <FiStar className="fill-current w-3.5 h-3.5" />
                                     {reviewData.rating}
-                                    <span className="text-muted-foreground/50">/10</span>
+                                    <span className="text-muted-foreground/80">/10</span>
                                 </div>
                             )}
                             <p className="text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed">
@@ -238,8 +239,8 @@ export default async function GamePage({ params }: Props) {
                         className="inline-flex items-center gap-1.5 mono-label text-muted-foreground/60 hover:text-accent transition-colors duration-150"
                     >
                         view on steam
-                        <span className="text-muted-foreground/40" aria-hidden="true">
-                            ↗
+                        <span className="text-muted-foreground/80" aria-hidden="true">
+                            <ExternalMark />
                         </span>
                     </a>
                 )}

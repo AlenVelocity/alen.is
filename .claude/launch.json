@@ -11,7 +11,18 @@
         {
             "name": "dev-json",
             "runtimeExecutable": "powershell",
-            "runtimeArgs": ["-NoProfile", "-Command", "$env:CMS_SOURCE='json'; pnpm dev"],
+            "runtimeArgs": [
+                "-NoProfile",
+                "-Command",
+                "$env:CMS_SOURCE='json'; node node_modules/next/dist/bin/next dev --turbopack"
+            ],
+            "port": 3000,
+            "autoPort": true
+        },
+        {
+            "name": "dev-direct",
+            "runtimeExecutable": "node",
+            "runtimeArgs": ["node_modules/next/dist/bin/next", "dev", "--turbopack"],
             "port": 3000,
             "autoPort": true
         }

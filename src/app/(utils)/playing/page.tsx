@@ -148,7 +148,7 @@ export default async function Playing() {
                                         </div>
                                     ) : (
                                         <div className="w-28 h-[52px] rounded ban:rounded-none bg-muted flex items-center justify-center flex-shrink-0 border border-border/50">
-                                            <GiGamepad className="w-5 h-5 text-muted-foreground/40" />
+                                            <GiGamepad className="w-5 h-5 text-muted-foreground/80" />
                                         </div>
                                     )}
                                     <div className="flex-1 min-w-0">
@@ -175,7 +175,7 @@ export default async function Playing() {
                     <section className="mb-14">
                         <div className="flex items-baseline justify-between gap-4 mb-4">
                             <div className="section-label">recently played</div>
-                            <span className="mono-label text-muted-foreground/50 shrink-0">steam · past 2 weeks</span>
+                            <span className="mono-label text-muted-foreground/80 shrink-0">steam · past 2 weeks</span>
                         </div>
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
                             {recentGames.map((game, i) => (
@@ -195,7 +195,7 @@ export default async function Playing() {
                                         </p>
                                     )}
                                     {game.playtime_forever_hours > 0 && (
-                                        <p className="mono-label text-muted-foreground/50 tabular-nums truncate">
+                                        <p className="mono-label text-muted-foreground/80 tabular-nums truncate">
                                             {formatHours(game.playtime_forever_hours)} total
                                         </p>
                                     )}
@@ -210,7 +210,7 @@ export default async function Playing() {
                     <section className="mb-14">
                         <div className="flex items-baseline justify-between gap-4 mb-4">
                             <div className="section-label">steam library</div>
-                            <span className="mono-label text-muted-foreground/50 shrink-0">ranked by hours</span>
+                            <span className="mono-label text-muted-foreground/80 shrink-0">ranked by hours</span>
                         </div>
                         <div className="grid grid-cols-3 sm:grid-cols-5 gap-2.5 sm:gap-3">
                             {libraryGames.map((game) => (
@@ -225,7 +225,7 @@ export default async function Playing() {
                                     </div>
                                     <p className="mt-1.5 text-xs font-medium truncate">{game.name}</p>
                                     {/* A minute or two rounds to 0.0 hours, so those are given in minutes */}
-                                    <p className="mono-label text-muted-foreground/50 tabular-nums">
+                                    <p className="mono-label text-muted-foreground/80 tabular-nums">
                                         {game.playtime_forever_hours > 0
                                             ? formatHours(game.playtime_forever_hours)
                                             : `${game.playtime_forever} min`}
@@ -257,7 +257,7 @@ export default async function Playing() {
                                         style={{ width: `${backlogPct}%` }}
                                     />
                                 </div>
-                                <p className="mono-label text-muted-foreground/50 mt-2 tabular-nums">
+                                <p className="mono-label text-muted-foreground/80 mt-2 tabular-nums">
                                     <Persona
                                         alen={`${backlogPct}% of the library, never opened.`}
                                         ban={`${backlogPct}% of the library. He bought them.`}
@@ -273,7 +273,7 @@ export default async function Playing() {
                     <section className="mb-12">
                         <div className="flex items-baseline justify-between gap-4 mb-4">
                             <div className="section-label">xbox library</div>
-                            <span className="mono-label text-muted-foreground/50 shrink-0">by last played</span>
+                            <span className="mono-label text-muted-foreground/80 shrink-0">by last played</span>
                         </div>
                         <div>
                             {xboxOnly.map((game) => (
@@ -289,7 +289,7 @@ export default async function Playing() {
                                         </div>
                                     ) : (
                                         <div className="w-10 h-10 rounded ban:rounded-none border border-border/50 bg-muted/30 flex items-center justify-center flex-shrink-0">
-                                            <FaXbox className="w-3.5 h-3.5 text-muted-foreground/50" />
+                                            <FaXbox className="w-3.5 h-3.5 text-muted-foreground/80" />
                                         </div>
                                     )}
                                     <p className="flex-1 min-w-0 text-sm font-medium truncate group-hover:text-accent transition-colors duration-150">
@@ -298,7 +298,7 @@ export default async function Playing() {
                                     {game.maxGamerscore > 0 && (
                                         <span className="font-mono-ui text-xs tabular-nums text-muted-foreground/60 shrink-0">
                                             {game.currentGamerscore}
-                                            <span className="text-muted-foreground/50">/{game.maxGamerscore} G</span>
+                                            <span className="text-muted-foreground/80">/{game.maxGamerscore} G</span>
                                         </span>
                                     )}
                                 </Link>

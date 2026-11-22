@@ -5,8 +5,9 @@ import { Persona } from '@/components/persona'
 import { switchPersona, type Persona as Who } from '@/lib/persona'
 import { posthog } from '@/components/posthog-provider'
 
+// Pressing it shrinks it a touch (the `scale` property, as on the other adjective pages)
 const BUTTON =
-    'mono-label inline-flex items-center px-4 py-2.5 border border-border/60 rounded-sm text-muted-foreground hover:text-accent hover:border-accent/50 transition-colors duration-200'
+    'mono-label inline-flex items-center px-4 py-2.5 border border-border/60 rounded-sm text-muted-foreground hover:text-accent hover:border-accent/50 transition-[color,background-color,border-color,scale] duration-150 active:[scale:0.97]'
 
 /** The one control on /ban: lets Ban out, and once he is out, puts him back. */
 export function BanDoor() {
@@ -30,7 +31,7 @@ export function BanDoor() {
                     </Link>
                     <button
                         onClick={() => letIn('alen')}
-                        className="mono-label text-muted-foreground/50 hover:text-accent transition-colors duration-200"
+                        className="mono-label text-muted-foreground/80 hover:text-accent transition-colors duration-200"
                     >
                         Put him back
                     </button>

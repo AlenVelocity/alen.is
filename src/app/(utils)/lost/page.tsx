@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useCallback, useImperativeHandle, forwardR
 import Link from 'next/link'
 import { useTheme } from 'next-themes'
 import { FiArrowRight } from 'react-icons/fi'
+import { TbDice5, TbPlayerPause, TbPlayerPlay, TbX } from 'react-icons/tb'
 import { cn } from '@/lib/utils'
 import { motion, AnimatePresence } from 'framer-motion'
 import { posthog } from '@/components/posthog-provider'
@@ -24,7 +25,8 @@ const SEED_DENSITY = 0.12 // fraction of cells alive after pressing seed
 interface Palette {
     background: string
     cell: string
-    grid: string
+    /** Alen's cells are round, like something alive. Ban's are square, like ink in a box. */
+    round: boolean
 }
 
 /**
@@ -43,7 +45,7 @@ function readPalette(): Palette {
     return {
         background: `hsl(${background})`,
         cell: `hsl(${accent} / ${isDark ? 0.85 : 0.9})`,
-        grid: `hsl(${accent} / ${isDark ? 0.05 : 0.07})`
+        round: root.dataset.persona !== 'ban'
     }
 }
 
@@ -134,7 +136,9 @@ const GameOfLife = forwardRef<
         const w = canvas.clientWidth
         const h = canvas.clientHeight
 
-        // Page background, the colony in the accent, and a faint accent grid.
+        // Page background and the colony in the accent. There are no grid lines:
+        // the board used to be ruled like graph paper, which was the same grid the
+        // rest of the site lost. The cells line up on their own.
         // Read once and kept until the theme or the person changes (see below).
         const palette = (paletteRef.current ??= readPalette())
         ctx.fillStyle = palette.background
@@ -142,32 +146,10 @@ const GameOfLife = forwardRef<
 
         const currentOffset = offsetRef.current
 
-        // Draw grid lines with offset
-        ctx.strokeStyle = palette.grid
-        ctx.lineWidth = 1
-
-        const startRow = Math.floor(-currentOffset.y / CELL_SIZE)
-        const endRow = Math.ceil((h - currentOffset.y) / CELL_SIZE)
-        const startCol = Math.floor(-currentOffset.x / CELL_SIZE)
-        const endCol = Math.ceil((w - currentOffset.x) / CELL_SIZE)
-
-        for (let i = startRow; i <= endRow; i++) {
-            const y = i * CELL_SIZE + currentOffset.y
-            ctx.beginPath()
-            ctx.moveTo(0, y)
-            ctx.lineTo(w, y)
-            ctx.stroke()
-        }
-        for (let j = startCol; j <= endCol; j++) {
-            const x = j * CELL_SIZE + currentOffset.x
-            ctx.beginPath()
-            ctx.moveTo(x, 0)
-            ctx.lineTo(x, h)
-            ctx.stroke()
-        }
-
-        // Draw cells with offset
+        // Draw cells with offset. One path for the whole colony, filled once.
         ctx.fillStyle = palette.cell
+        ctx.beginPath()
+        const half = CELL_SIZE / 2
         grid.forEach((row, i) => {
             row.forEach((cell, j) => {
                 if (cell) {
@@ -175,11 +157,17 @@ const GameOfLife = forwardRef<
                     const y = i * CELL_SIZE + currentOffset.y
                     // Only draw if visible
                     if (x + CELL_SIZE > 0 && x < w && y + CELL_SIZE > 0 && y < h) {
-                        ctx.fillRect(x + 1, y + 1, CELL_SIZE - 2, CELL_SIZE - 2)
+                        if (palette.round) {
+                            ctx.moveTo(x + half + half - 1.5, y + half)
+                            ctx.arc(x + half, y + half, half - 1.5, 0, Math.PI * 2)
+                        } else {
+                            ctx.rect(x + 1, y + 1, CELL_SIZE - 2, CELL_SIZE - 2)
+                        }
                     }
                 }
             })
         })
+        ctx.fill()
 
         // Telemetry readout for the HUD
         onStatsRef.current(generationRef.current, countPopulation(grid))
@@ -404,30 +392,31 @@ function ExpandedNav({ isPlaying }: { isPlaying: boolean }) {
             transition={{ type: 'spring', stiffness: 400, damping: 30 }}
             className="fixed top-4 left-1/2 -translate-x-1/2 z-50"
         >
-            <nav className="flex items-center gap-0 px-1 py-1 rounded-sm border border-border/60 bg-background/90 backdrop-blur-md shadow-lg shadow-background/20">
+            {/* The same capsule as the site nav (a ruled box for Ban), since this page hides that one */}
+            <nav className="membrane flex items-center gap-0 px-1.5 py-1 rounded-full ban:rounded-none backdrop-blur-md">
                 <Link
                     href="/"
-                    className="px-3 py-1.5 text-xs font-mono-ui tracking-wide text-muted-foreground hover:text-foreground transition-colors duration-150"
+                    className="px-3 py-1.5 text-[0.82rem] font-mono-ui text-muted-foreground hover:text-foreground transition-colors duration-150"
                 >
                     <span className="font-semibold">
                         <Persona alen="alen.is" ban="ban.is" />
                     </span>
-                    <span className="text-accent font-bold mx-1.5">/</span>
-                    <span className="text-foreground">lost</span>
+                    <span className="text-accent/70 mx-2">/</span>
+                    <span className="text-accent">lost</span>
                 </Link>
 
-                <div className="w-px h-3 bg-border mx-1" />
+                <div className="w-px h-3.5 bg-border mx-1.5" />
 
                 {mounted ? (
                     <button
                         onClick={toggleTheme}
-                        className="px-2 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-150 whitespace-nowrap"
+                        className="px-2 py-1.5 text-[0.82rem] font-mono-ui text-muted-foreground hover:text-foreground transition-[color,scale] duration-150 ease-out active:[scale:0.96] whitespace-nowrap"
                         aria-label="Toggle theme"
                     >
-                        [{theme === 'dark' ? 'light' : 'dark'}]
+                        {theme === 'dark' ? 'light' : 'dark'}
                     </button>
                 ) : (
-                    <div className="px-2 py-1.5 text-xs opacity-0 select-none">[dark]</div>
+                    <div className="px-2 py-1.5 text-[0.82rem] opacity-0 select-none">dark</div>
                 )}
 
                 {/* The site nav is hidden on this page, so the way back from Ban is offered here too */}
@@ -540,18 +529,23 @@ export default function Lost() {
                 )}
             </AnimatePresence>
 
-            <AnimatePresence>
+            {/* initial={false}: on arrival the words are simply there. They are in the
+                server's HTML, and an entrance would keep them hidden until the script had
+                loaded. They still rise in when "clear" brings them back. */}
+            <AnimatePresence initial={false}>
                 {showQuote && (
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
+                        // Gone quickly and without moving: they leave because the visitor
+                        // has started drawing on the canvas underneath
+                        exit={{ opacity: 0, transition: { duration: 0.15 } }}
                         transition={{ duration: 0.5 }}
                         className="fixed inset-0 z-10 flex flex-col items-center justify-center pointer-events-none"
                     >
                         <div className="text-center px-4 max-w-lg">
-                            <p className="mono-label text-muted-foreground/50 mb-6">
-                                <Persona alen="// 404. nothing here" ban="No page here. I checked." />
+                            <p className="mono-label text-muted-foreground/80 mb-6">
+                                <Persona alen="404. nothing here" ban="No page here. I checked." />
                             </p>
                             <p className="text-display text-2xl md:text-3xl mb-3">
                                 <Persona
@@ -560,7 +554,7 @@ export default function Lost() {
                                 />
                             </p>
                             {/* Ban quotes nobody, so his line stands without a name under it */}
-                            <p className="mono-label text-muted-foreground/50 mb-10">
+                            <p className="mono-label text-muted-foreground/80 mb-10">
                                 <Persona alen="j.r.r. tolkien" ban={null} />
                             </p>
                             <p className="mono-label text-muted-foreground">
@@ -568,7 +562,6 @@ export default function Lost() {
                                     alen="this is conway's game of life. draw some cells, or press seed"
                                     ban="This is Conway's Game of Life. Draw cells or press seed. I'm not cleaning up after them."
                                 />
-                                <span className="animate-blink text-accent ml-1">█</span>
                             </p>
                         </div>
                     </motion.div>
@@ -577,12 +570,12 @@ export default function Lost() {
 
             {/* Telemetry HUD */}
             <div
-                className="fixed bottom-4 left-4 z-50 hidden sm:flex items-center gap-2 mono-label text-muted-foreground/50 select-none"
+                className="fixed bottom-4 left-4 z-50 hidden sm:flex items-center gap-2 mono-label text-muted-foreground/80 select-none"
                 aria-live="off"
             >
                 {/* A running simulation is live, so the readout takes the signal colour */}
                 <span className={cn('tabular-nums', isPlaying && 'text-signal')}>
-                    [{isPlaying ? <Persona alen="running" ban="loose" /> : <Persona alen="paused" ban="caught" />}]
+                    {isPlaying ? <Persona alen="running" ban="loose" /> : <Persona alen="paused" ban="caught" />}
                 </span>
                 <span className="tabular-nums">gen {String(stats.gen).padStart(4, '0')}</span>
                 <span className="text-accent/40">·</span>
@@ -590,32 +583,36 @@ export default function Lost() {
             </div>
 
             {/* Controls */}
-            <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 px-1 py-1 rounded-sm border border-border/60 bg-background/90 backdrop-blur-md shadow-lg shadow-background/20">
+            <div className="membrane fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1 px-1.5 py-1.5 rounded-full ban:rounded-none backdrop-blur-md">
                 <button
                     onClick={isPlaying ? handlePause : handlePlay}
-                    className="px-3 py-1.5 text-xs font-mono-ui whitespace-nowrap bg-accent/10 text-accent hover:bg-accent/20 rounded-sm transition-colors duration-150"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-[0.82rem] font-medium font-mono-ui whitespace-nowrap bg-accent/10 text-accent hover:bg-accent/20 rounded-full ban:rounded-none transition-[color,background-color,scale] duration-150 ease-out active:[scale:0.97]"
                 >
                     {isPlaying ? (
                         <>
-                            ⏸ <Persona alen="pause" ban="catch" />
+                            <TbPlayerPause className="w-3.5 h-3.5" aria-hidden="true" />
+                            <Persona alen="pause" ban="catch" />
                         </>
                     ) : (
                         <>
-                            ▶ <Persona alen="run" ban="let go" />
+                            <TbPlayerPlay className="w-3.5 h-3.5" aria-hidden="true" />
+                            <Persona alen="run" ban="let go" />
                         </>
                     )}
                 </button>
                 <button
                     onClick={handleSeed}
-                    className="px-3 py-1.5 text-xs font-mono-ui whitespace-nowrap text-muted-foreground hover:text-accent rounded-sm transition-colors duration-150"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[0.82rem] font-mono-ui whitespace-nowrap text-muted-foreground hover:text-foreground rounded-full ban:rounded-none transition-[color,scale] duration-150 ease-out active:[scale:0.97]"
                 >
-                    ⚄ seed
+                    <TbDice5 className="w-3.5 h-3.5" aria-hidden="true" />
+                    seed
                 </button>
                 <button
                     onClick={handleClear}
-                    className="px-3 py-1.5 text-xs font-mono-ui whitespace-nowrap text-muted-foreground hover:text-destructive rounded-sm transition-colors duration-150"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[0.82rem] font-mono-ui whitespace-nowrap text-muted-foreground hover:text-destructive rounded-full ban:rounded-none transition-[color,scale] duration-150 ease-out active:[scale:0.97]"
                 >
-                    ✕ <Persona alen="clear" ban="wipe" />
+                    <TbX className="w-3.5 h-3.5" aria-hidden="true" />
+                    <Persona alen="clear" ban="wipe" />
                 </button>
             </div>
         </div>

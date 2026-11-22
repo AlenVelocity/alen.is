@@ -25,8 +25,10 @@ const CREDENTIALS = [
     'photosynthesizes to sumika songs'
 ]
 
+// Pressing it shrinks it a touch. That is the `scale` property and not a transform,
+// because the entrance animation keeps hold of `transform` after it ends
 const LINK =
-    'mono-label inline-flex items-center px-4 py-2.5 border border-border/60 rounded-sm text-muted-foreground hover:text-accent hover:border-accent/50 transition-colors duration-200'
+    'mono-label inline-flex items-center px-4 py-2.5 border border-border/60 rounded-sm text-muted-foreground hover:text-accent hover:border-accent/50 transition-[color,background-color,border-color,scale] duration-150 active:[scale:0.97]'
 
 /**
  * Second stop of /human, /definitely-human, /alien. Alen doubles down with a
@@ -39,10 +41,10 @@ export default function DefinitelyHuman() {
         <CenteredPage>
             <div className="flex flex-col items-center gap-7 text-center">
                 <p
-                    className="mono-label text-muted-foreground/40 alen:tracking-[0.25em] animate-fade-in-up opacity-0 stagger-1"
+                    className="mono-label text-muted-foreground/80 alen:tracking-[0.25em] animate-fade-in-up opacity-0 stagger-1"
                     style={{ animationFillMode: 'forwards' }}
                 >
-                    <Persona alen="// captcha, second attempt" ban={<span className="struck">trust me</span>} />
+                    <Persona alen="captcha, second attempt" ban={<span className="struck">trust me</span>} />
                 </p>
 
                 <h1
@@ -54,7 +56,7 @@ export default function DefinitelyHuman() {
 
                 <OnlyBan as="div">
                     <p
-                        className="text-[0.9rem] text-muted-foreground max-w-sm animate-fade-in-up opacity-0 stagger-2"
+                        className="text-sm text-muted-foreground max-w-sm animate-fade-in-up opacity-0 stagger-2"
                         style={{ animationFillMode: 'forwards' }}
                     >
                         He wrote this list himself. Nobody who drinks water writes it down.
@@ -67,7 +69,7 @@ export default function DefinitelyHuman() {
                     style={{ animationFillMode: 'forwards' }}
                 >
                     {CREDENTIALS.map((line) => (
-                        <li key={line} className="mono-label text-muted-foreground/50 flex items-center gap-2">
+                        <li key={line} className="mono-label text-muted-foreground/80 flex items-center gap-2">
                             <span className="text-accent/60">✓</span>
                             {line}
                         </li>
