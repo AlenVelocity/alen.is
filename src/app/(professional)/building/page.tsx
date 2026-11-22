@@ -45,7 +45,7 @@ export default async function Building() {
             <div className="container max-w-3xl py-10 md:py-14 px-4">
                 {/* ── Header ───────────────────────────────────── */}
                 <PageHeader eyebrow="work" title="Projects" banTitle="Schemes">
-                    <p className="text-[0.9rem] text-muted-foreground">
+                    <p className="text-sm text-muted-foreground">
                         <Persona
                             alen="Things I've built, shipped, and sometimes abandoned."
                             ban="Things I got away with. I didn't abandon any of them. I was done."

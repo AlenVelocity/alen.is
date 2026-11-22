@@ -1,3 +1,4 @@
+import { ExternalMark } from '@/components/ui/external-mark'
 import { Metadata } from 'next'
 import Image from 'next/image'
 import { PageTransition } from '@/components/ui/page-transition'
@@ -315,12 +316,12 @@ function GearRow({ item }: { item: GearItem }) {
                         </span>
                     )}
                     {item.href && (
-                        <span className="mono-label text-muted-foreground/40 shrink-0" aria-hidden="true">
-                            ↗
+                        <span className="mono-label text-muted-foreground/80 shrink-0" aria-hidden="true">
+                            <ExternalMark />
                         </span>
                     )}
                 </div>
-                <p className="mono-label text-muted-foreground/50 mt-0.5">{item.specs}</p>
+                <p className="mono-label text-muted-foreground/80 mt-0.5">{item.specs}</p>
             </div>
 
             {/* Product photo, on hover or keyboard focus. It floats, so it keeps a shadow; it fades and does not move */}
@@ -354,7 +355,7 @@ export default function Using() {
             <div className="container max-w-3xl py-10 md:py-14 px-4">
                 {/* Header */}
                 <PageHeader eyebrow="setup" title="Gear" banTitle="Weapons">
-                    <p className="text-[0.9rem] text-muted-foreground">
+                    <p className="text-sm text-muted-foreground">
                         <Persona
                             alen="The desk and what's on it. Most of it still works."
                             ban="What I do it with. Some of it quit on me."

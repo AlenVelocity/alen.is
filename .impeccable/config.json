@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-color",
+        "value": "#000",
+        "createdAt": "2026-11-22T09:10:22.438Z",
+        "reason": "mask alpha stops in mask-image gradients, not a painted colour"
+      },
+      {
+        "rule": "bounce-easing",
+        "value": "cubic-bezier(0.5, -0.2, 0.7, 0.3)",
+        "createdAt": "2026-11-22T09:10:22.517Z",
+        "reason": "user confirmed 22 Nov 2026: the saucer abduction stays as it is; this is its cartoon wind-up"
+      },
+      {
+        "rule": "bounce-easing",
+        "value": "cubic-bezier(0.34, 1.56, 0.64, 1)",
+        "createdAt": "2026-11-22T09:10:22.607Z",
+        "reason": "user confirmed 22 Nov 2026: the saucer abduction stays as it is; this is the saucer's gulp"
+      }
+    ]
+  }
+}

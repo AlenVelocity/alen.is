@@ -1,3 +1,4 @@
+import { ExternalMark } from '@/components/ui/external-mark'
 import { Metadata } from 'next'
 import { PageTransition } from '@/components/ui/page-transition'
 import { constructMetadata } from '@/lib/metadata'
@@ -50,15 +51,15 @@ function GratitudeRow({ item }: { item: Gratitude }) {
             >
                 {item.name}
                 {item.link && (
-                    <span className="mono-label text-muted-foreground/40 ml-2" aria-hidden="true">
-                        ↗
+                    <span className="mono-label text-muted-foreground/80 ml-2" aria-hidden="true">
+                        <ExternalMark />
                     </span>
                 )}
             </span>
             {item.note && (
                 <>
                     <span className="flex-1 border-b border-dotted border-muted-foreground/10 translate-y-[-4px] hidden md:block" />
-                    <span className="mono-label text-muted-foreground/50 sm:text-right sm:ml-auto md:ml-0 sm:shrink-0 sm:max-w-[280px]">
+                    <span className="mono-label text-muted-foreground/80 sm:text-right sm:ml-auto md:ml-0 sm:shrink-0 sm:max-w-[280px]">
                         {item.note}
                     </span>
                 </>
@@ -86,7 +87,7 @@ export default function Thankful() {
             <div className="container max-w-3xl py-10 md:py-14 px-4">
                 {/* Header */}
                 <PageHeader eyebrow="keeping track" title="Thankful" banTitle="Debts">
-                    <p className="text-[0.9rem] text-muted-foreground">
+                    <p className="text-sm text-muted-foreground">
                         <Persona
                             alen="Things and people I'm glad about. Adding to this as I go."
                             ban="Everyone and everything I owe. He calls it being thankful."

@@ -44,12 +44,12 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             <div className="container max-w-2xl py-12 md:py-20 px-4">
                 <Link
                     href="/writing"
-                    className="inline-block mono-label text-muted-foreground/50 hover:text-accent transition-colors mb-10"
+                    className="inline-block mono-label text-muted-foreground/80 hover:text-accent transition-colors mb-10"
                 >
                     <Persona alen="all posts" ban="all statements" />
                 </Link>
 
-                <p className="mono-label text-muted-foreground/50 mb-4">
+                <p className="mono-label text-muted-foreground/80 mb-4">
                     <Persona alen={`// post ${entryNumber}`} ban={`Statement ${entryNumber}`} />
                 </p>
                 {/* A post title runs to a sentence or more, which is too long for Ban's blackletter:
@@ -58,16 +58,16 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
                     {post.meta.title}
                 </h1>
 
-                <p className="mono-label text-muted-foreground/50 mb-12">
+                <p className="mono-label text-muted-foreground/80 mb-12">
                     {format(new Date(post.meta.date), 'MMM d, yyyy')}
-                    <span className="mx-2 text-muted-foreground/30">·</span>
+                    <span className="mx-2 text-muted-foreground/60">·</span>
                     <Persona
                         alen={`${post.meta.readingMinutes} min read`}
                         ban={`${post.meta.readingMinutes} min of your time`}
                     />
                     {post.meta.tags.length > 0 && (
                         <>
-                            <span className="mx-2 text-muted-foreground/30">·</span>
+                            <span className="mx-2 text-muted-foreground/60">·</span>
                             {post.meta.tags.join(', ')}
                         </>
                     )}

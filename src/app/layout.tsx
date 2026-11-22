@@ -1,5 +1,5 @@
 import type React from 'react'
-import { Syne, JetBrains_Mono, Grenze_Gotisch, Libre_Caslon_Text } from 'next/font/google'
+import { Bricolage_Grotesque, JetBrains_Mono, Grenze_Gotisch, Libre_Caslon_Text } from 'next/font/google'
 import ClientLayout from './ClientLayout'
 import { PERSONA_BOOT_SCRIPT } from '@/lib/persona'
 import { TRPCReactProvider } from '@/trpc/react'
@@ -9,12 +9,16 @@ import { Databuddy } from '@databuddy/sdk'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
-const syne = Syne({
-    variable: '--font-syne',
+// Alen's type: one family for headings and reading text. The optical-size axis
+// gives the big sizes their odd, grown shapes and keeps the small sizes plain;
+// the width axis lets headings sit a little narrow.
+const bricolage = Bricolage_Grotesque({
+    variable: '--font-bricolage',
     subsets: ['latin'],
-    weight: ['400', '500', '600', '700', '800']
+    axes: ['opsz', 'wdth']
 })
 
+// Monospace is for data only now: dates, counts, code, keys.
 const jetbrainsMono = JetBrains_Mono({
     variable: '--font-jetbrains-mono',
     subsets: ['latin'],
@@ -106,7 +110,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             lang="en"
             suppressHydrationWarning
             data-scroll-behavior="smooth"
-            className={`${syne.variable} ${jetbrainsMono.variable} ${banDisplay.variable} ${banText.variable}`}
+            className={`${bricolage.variable} ${jetbrainsMono.variable} ${banDisplay.variable} ${banText.variable}`}
         >
             <head>
                 {/* Decides who is in (Alen or Ban) before anything paints. See lib/persona.ts.

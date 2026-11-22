@@ -1,3 +1,4 @@
+import { ExternalMark } from '@/components/ui/external-mark'
 import { Metadata } from 'next'
 import { PageTransition } from '@/components/ui/page-transition'
 import { api } from '@/trpc/server'
@@ -113,7 +114,7 @@ function LanguageBar({ languages }: { languages: { name: string; color: string; 
                             style={{ backgroundColor: colorOf(lang) }}
                         />
                         <span className="text-muted-foreground">{lang.name}</span>
-                        <span className="text-muted-foreground/50 tabular-nums">{lang.percentage}%</span>
+                        <span className="text-muted-foreground/80 tabular-nums">{lang.percentage}%</span>
                     </div>
                 ))}
             </div>
@@ -133,8 +134,8 @@ function Header({ username, children }: { username: string; children?: React.Rea
                 className="inline-flex items-center gap-1.5 font-mono-ui text-xs text-muted-foreground hover:text-accent transition-colors duration-150"
             >
                 github.com/{username}
-                <span className="text-muted-foreground/40" aria-hidden="true">
-                    ↗
+                <span className="text-muted-foreground/80" aria-hidden="true">
+                    <ExternalMark />
                 </span>
             </a>
         </PageHeader>
@@ -174,7 +175,7 @@ export default async function Coding() {
         <PageTransition>
             <div className="container max-w-3xl py-10 md:py-14 px-4">
                 <Header username={githubData.username}>
-                    <p className="text-[0.9rem] text-muted-foreground mb-4 tabular-nums">
+                    <p className="text-sm text-muted-foreground mb-4 tabular-nums">
                         {plural(githubData.totalContributions, 'contribution')} in the last year. {counts}.{' '}
                         <Persona
                             alen={streak > 0 ? `${streak} days in a row right now.` : null}
@@ -190,7 +191,7 @@ export default async function Coding() {
                             <Persona alen="contributions" ban="every day I did it" />
                         </div>
                         {/* A phone has room for twenty weeks, not fifty-three */}
-                        <span className="mono-label text-muted-foreground/50 shrink-0">
+                        <span className="mono-label text-muted-foreground/80 shrink-0">
                             <span className="sm:hidden">last 20 weeks</span>
                             <span className="hidden sm:inline">last 12 months</span>
                         </span>
@@ -204,7 +205,7 @@ export default async function Coding() {
                         <div className="section-label">
                             <Persona alen="languages" ban="methods" />
                         </div>
-                        <span className="mono-label text-muted-foreground/50 shrink-0">public repos, by size</span>
+                        <span className="mono-label text-muted-foreground/80 shrink-0">public repos, by size</span>
                     </div>
                     <LanguageBar languages={githubData.topLanguages} />
                 </section>

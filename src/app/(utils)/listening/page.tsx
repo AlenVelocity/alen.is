@@ -66,7 +66,7 @@ export default function Listening() {
                         </Suspense>
                     }
                 >
-                    <p className="text-[0.9rem] text-muted-foreground">
+                    <p className="text-sm text-muted-foreground">
                         <Persona
                             alen="Everything I play gets scrobbled to Last.fm and ends up here."
                             ban="Everything I play gets written down. I've got nothing to hide and I'm not turning it down."
@@ -303,7 +303,7 @@ async function NowPlayingSection() {
                             </p>
                             <p className="text-sm text-muted-foreground truncate">
                                 {track.artist}
-                                {track.album && <span className="text-muted-foreground/50"> · {track.album}</span>}
+                                {track.album && <span className="text-muted-foreground/80"> · {track.album}</span>}
                             </p>
                         </div>
                     </Link>
@@ -416,7 +416,7 @@ async function RecentScrobblesSection() {
                             href={trackHref(track)}
                             className="group grid gap-x-8 md:grid-cols-[10rem_1fr] items-center py-2.5 border-b border-dashed border-border/50 last:border-b-0"
                         >
-                            <span className="hidden md:block mono-label text-muted-foreground/40 tabular-nums">
+                            <span className="hidden md:block mono-label text-muted-foreground/80 tabular-nums">
                                 {scrobbledAgo(track.date)}
                             </span>
                             <div className="flex items-center gap-3 min-w-0">
@@ -443,7 +443,7 @@ async function RecentScrobblesSection() {
                                     </div>
                                     <p className="text-xs text-muted-foreground truncate">{track.artist}</p>
                                 </div>
-                                <span className="md:hidden mono-label text-muted-foreground/40 shrink-0 tabular-nums">
+                                <span className="md:hidden mono-label text-muted-foreground/80 shrink-0 tabular-nums">
                                     {scrobbledAgo(track.date)}
                                 </span>
                             </div>

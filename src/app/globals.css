@@ -29,64 +29,80 @@
              is not ink or red.
    ──────────────────────────────────────────────────────────────────── */
 @layer base {
-    /* Alen, light: mint paper, ink with a little green in it */
+    /* Alen, light: the same water at noon. Pale and clear, ink with green in it.
+       Nothing glows much in daylight, so the glows are faint here. */
     :root {
-        --background: 138 26% 96%;
-        --foreground: 170 32% 8%;
-        --card: 138 20% 92.5%;
-        --card-foreground: 170 32% 8%;
-        --popover: 138 20% 92.5%;
-        --popover-foreground: 170 32% 8%;
-        --primary: 170 32% 8%;
-        --primary-foreground: 138 26% 96%;
-        --secondary: 138 16% 89%;
-        --secondary-foreground: 170 32% 8%;
-        --muted: 138 14% 88.5%;
-        --muted-foreground: 165 12% 36%;
-        --accent: 154 92% 27%;
-        --accent-foreground: 138 26% 96%;
+        --background: 144 32% 95.5%;
+        --foreground: 170 38% 8%;
+        --card: 144 26% 92%;
+        --card-foreground: 170 38% 8%;
+        --popover: 144 26% 92%;
+        --popover-foreground: 170 38% 8%;
+        --primary: 170 38% 8%;
+        --primary-foreground: 144 32% 95.5%;
+        --secondary: 144 20% 88.5%;
+        --secondary-foreground: 170 38% 8%;
+        --muted: 144 18% 88%;
+        --muted-foreground: 166 16% 33%;
+        --accent: 158 90% 24%;
+        --accent-foreground: 144 32% 95.5%;
         --signal: var(--accent);
         --destructive: 0 72% 48%;
         --destructive-foreground: 0 0% 98%;
-        --border: 140 14% 81%;
-        --input: 140 14% 81%;
-        --ring: 154 92% 27%;
-        --radius: 0.125rem;
-        --glow-accent: 0 0 12px hsl(var(--accent) / 0.3);
-        --glow-accent-strong: 0 0 24px hsl(var(--accent) / 0.5), 0 0 48px hsl(var(--accent) / 0.2);
+        --border: 146 18% 80%;
+        --input: 146 18% 80%;
+        --ring: 158 90% 24%;
+        --radius: 0.625rem;
+        --glow-accent: 0 0 14px hsl(var(--accent) / 0.2);
+        --glow-accent-strong: 0 0 22px hsl(var(--accent) / 0.28), 0 0 56px hsl(var(--accent) / 0.1);
+        /* The edge of a soft thing (nav, cards, the command bar): a faint ring of
+           the accent inside, a shadow underneath */
+        --membrane-ring: hsl(var(--accent) / 0.2);
+        --membrane-shadow: 0 10px 30px -16px hsl(170 38% 8% / 0.35);
 
-        /* Type and shape, per person. Classes read these, never a font directly. */
-        --font-display: var(--font-syne), sans-serif;
-        --font-ui: var(--font-jetbrains-mono), monospace;
-        --display-weight: 700;
-        --display-tracking: -0.02em;
-        --label-mark: '//';
+        /* Type and shape, per person. Classes read these, never a font directly.
+           --font-data is for things that are measured or typed: dates, counts,
+           keys, code. Alen's is a monospace; Ban has no separate one. */
+        --font-display: var(--font-bricolage), system-ui, sans-serif;
+        --font-ui: var(--font-bricolage), system-ui, sans-serif;
+        --font-data: var(--font-jetbrains-mono), ui-monospace, monospace;
+        --display-weight: 720;
+        --display-tracking: -0.028em;
+        --label-mark: '';
+
+        /* Motion. Things arrive on --ease-out and move on --ease-in-out; the
+           built-in curves are too soft to read as deliberate. */
+        --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+        --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
     }
 
-    /* Alen, dark: the ship at night. Teal-black and phosphor green. */
+    /* Alen, dark: deep water. Blue-green black, and a green that is light
+       coming out of things, not ink printed on them. */
     .dark {
-        --background: 196 42% 3.6%;
-        --foreground: 150 28% 87%;
-        --card: 196 36% 6.2%;
-        --card-foreground: 150 28% 87%;
-        --popover: 196 36% 6.2%;
-        --popover-foreground: 150 28% 87%;
-        --primary: 150 28% 87%;
-        --primary-foreground: 196 42% 3.6%;
-        --secondary: 196 28% 8.5%;
-        --secondary-foreground: 150 28% 87%;
-        --muted: 196 24% 9.5%;
-        --muted-foreground: 172 14% 54%;
-        --accent: 152 100% 50%;
-        --accent-foreground: 196 42% 3.6%;
-        --destructive: 0 80% 58%;
+        --background: 172 48% 3.3%;
+        --foreground: 146 30% 89%;
+        --card: 170 40% 6%;
+        --card-foreground: 146 30% 89%;
+        --popover: 170 40% 6%;
+        --popover-foreground: 146 30% 89%;
+        --primary: 146 30% 89%;
+        --primary-foreground: 172 48% 3.3%;
+        --secondary: 170 30% 8.5%;
+        --secondary-foreground: 146 30% 89%;
+        --muted: 170 26% 9.5%;
+        --muted-foreground: 156 16% 60%;
+        --accent: 148 96% 66%;
+        --accent-foreground: 172 48% 3.3%;
+        --destructive: 0 80% 62%;
         --destructive-foreground: 0 0% 98%;
-        --border: 196 24% 13%;
-        --input: 196 24% 13%;
-        --ring: 152 100% 50%;
-        --glow-accent: 0 0 16px hsl(var(--accent) / 0.35);
+        --border: 166 26% 13%;
+        --input: 166 26% 13%;
+        --ring: 148 96% 66%;
+        --glow-accent: 0 0 18px hsl(var(--accent) / 0.4);
         --glow-accent-strong:
-            0 0 20px hsl(var(--accent) / 0.5), 0 0 60px hsl(var(--accent) / 0.15), 0 0 120px hsl(var(--accent) / 0.04);
+            0 0 14px hsl(var(--accent) / 0.55), 0 0 48px hsl(var(--accent) / 0.22), 0 0 110px hsl(var(--accent) / 0.08);
+        --membrane-ring: hsl(var(--accent) / 0.14);
+        --membrane-shadow: 0 12px 34px -14px hsl(172 60% 1% / 0.9);
     }
 
     /* Ban, light: a charge sheet. Cheap paper, black ink, oxblood stamp. */
@@ -119,9 +135,13 @@
 
         --font-display: var(--font-ban-display), 'Times New Roman', serif;
         --font-ui: var(--font-ban-text), Georgia, serif;
+        --font-data: var(--font-ui);
         --display-weight: 600;
         --display-tracking: 0;
         --label-mark: '§';
+        /* A ruled box: ink, not a tint of the paper, so it shows in the light */
+        --membrane-ring: hsl(var(--foreground) / 0.32);
+        --membrane-shadow: none;
     }
 
     /* Ban, dark: the same sheet read by gaslight. Dried-blood black, bone, arterial red. */
@@ -177,6 +197,8 @@ html[data-persona='ban'] [data-as='ban'] {
 
     body {
         @apply bg-background text-foreground antialiased;
+        caret-color: hsl(var(--accent));
+        text-underline-offset: 0.2em;
     }
 
     h1,
@@ -208,7 +230,7 @@ html {
 
 ::-webkit-scrollbar-thumb {
     background: hsl(var(--accent) / 0.3);
-    border-radius: 0;
+    border-radius: var(--radius);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -232,72 +254,88 @@ html {
     }
 }
 
-/* Music bars */
+/* Music bars. Every bar is full height and is scaled from its foot: a scale
+   costs nothing per frame, where animating the height re-laid-out the row for
+   as long as a track played. Each bar's resting scale is its first keyframe,
+   so under reduced motion it stands still instead of collapsing to nothing. */
 @keyframes musicBar1 {
     0%,
     100% {
-        height: 0.75rem;
+        transform: scaleY(0.5);
     }
 
     50% {
-        height: 1.25rem;
+        transform: scaleY(0.833);
     }
 }
 
 @keyframes musicBar2 {
     0%,
     100% {
-        height: 1rem;
+        transform: scaleY(0.667);
     }
 
     50% {
-        height: 0.5rem;
+        transform: scaleY(0.333);
     }
 }
 
 @keyframes musicBar3 {
     0%,
     100% {
-        height: 0.5rem;
+        transform: scaleY(0.333);
     }
 
     50% {
-        height: 1.5rem;
+        transform: scaleY(1);
     }
 }
 
 @keyframes musicBar4 {
     0%,
     100% {
-        height: 1.25rem;
+        transform: scaleY(0.833);
     }
 
     50% {
-        height: 0.75rem;
+        transform: scaleY(0.5);
     }
 }
 
+.animate-music-bar-1,
+.animate-music-bar-2,
+.animate-music-bar-3,
+.animate-music-bar-4 {
+    height: 1.5rem;
+    transform-origin: bottom;
+}
+
 .animate-music-bar-1 {
+    transform: scaleY(0.5);
     animation: musicBar1 1s ease-in-out infinite;
 }
 
 .animate-music-bar-2 {
+    transform: scaleY(0.667);
     animation: musicBar2 1.2s ease-in-out infinite;
 }
 
 .animate-music-bar-3 {
+    transform: scaleY(0.333);
     animation: musicBar3 0.8s ease-in-out infinite;
 }
 
 .animate-music-bar-4 {
+    transform: scaleY(0.833);
     animation: musicBar4 1.5s ease-in-out infinite;
 }
 
-/* Fade in up */
+/* Fade in up: the two-step entrance on the toy pages. Same distance and
+   curve as the page's own entrance, so the two read as one move. */
 @keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(14px);
+        transform: translateY(8px);
     }
 
     to {
@@ -319,18 +357,6 @@ html {
     to {
         opacity: 1;
         transform: none;
-    }
-}
-
-/* Blink cursor */
-@keyframes blink {
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0;
     }
 }
 
@@ -388,17 +414,12 @@ html {
     }
 }
 
-/* Glow pulse: the beacon on something live (the current job) */
+/* Glow pulse: the beacon on something live (the current job). The big glow
+   is drawn once on a layer of its own and only its opacity moves; animating
+   the box-shadow itself repainted it on every frame, forever. */
 @keyframes pulseGlow {
-    0%,
-    100% {
-        box-shadow: 0 0 6px hsl(var(--signal) / 0.4);
-    }
-
     50% {
-        box-shadow:
-            0 0 20px hsl(var(--signal) / 0.7),
-            0 0 40px hsl(var(--signal) / 0.2);
+        opacity: 1;
     }
 }
 
@@ -415,19 +436,33 @@ html {
    ANIMATION CLASSES
    ═══════════════════════════════════════════════════════════════════════ */
 .animate-fade-in-up {
-    animation: fadeInUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation: fadeInUp 0.25s var(--ease-out) forwards;
 }
 
 .animate-page-in {
-    animation: pageIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation: pageIn 0.32s var(--ease-out) both;
 }
 
-.animate-blink {
-    animation: blink 1s step-end infinite;
-}
+/* In the utilities layer so Tailwind can make variants of it: it is used as
+   `alen:animate-pulse-glow`, and a class outside a layer gets no variants, so
+   Alen's beacon never actually pulsed. */
+@layer utilities {
+    .animate-pulse-glow {
+        position: relative;
+        box-shadow: 0 0 6px hsl(var(--signal) / 0.4);
+    }
 
-.animate-pulse-glow {
-    animation: pulseGlow 2s ease-in-out infinite;
+    .animate-pulse-glow::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        opacity: 0;
+        box-shadow:
+            0 0 20px hsl(var(--signal) / 0.7),
+            0 0 40px hsl(var(--signal) / 0.2);
+        animation: pulseGlow 2s ease-in-out infinite;
+    }
 }
 
 /* Stagger delays */
@@ -439,15 +474,7 @@ html {
     animation-delay: 0.1s;
 }
 
-.stagger-3 {
-    animation-delay: 0.18s;
-}
-
 /* ─── View Transitions ───────────────────────────────────────────────── */
-::view-transition-group(root) {
-    animation-timing-function: cubic-bezier(0.7, 0, 0.84, 0);
-}
-
 ::view-transition-new(root) {
     mask: url('/ufosheens.png') center / 0 no-repeat;
     animation: scale 0.6s;
@@ -491,46 +518,46 @@ html[data-persona='ban']:not([data-vt])::view-transition-new(root) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
-   ALIEN BACKGROUND LAYERS
+   BACKGROUND LAYERS
+   Alen's page is deep water: a little light coming down from the surface and
+   a little coming up from below, with grain over both. No lines of any kind.
+   The plankton that drift in it are a canvas (components/ui/alien-ambience).
    ═══════════════════════════════════════════════════════════════════════ */
 
-/* Layer 1: Static noise */
+/* Layer 1: the light in the water. Kept under 7% so it never bands, and the
+   grain sits on top of it to break up what banding there is. */
 body::before {
     content: '';
     position: fixed;
     inset: 0;
     z-index: -2;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-    opacity: 0.04;
     pointer-events: none;
+    background:
+        radial-gradient(120% 55% at 50% -12%, hsl(var(--accent) / 0.065), transparent 62%),
+        radial-gradient(80% 45% at 50% 112%, hsl(var(--accent) / 0.04), transparent 68%);
 }
 
-/* Layer 2: Circuit grid */
+/* Layer 2: static grain. The tile is drawn at its own size on purpose: an
+   SVG with no width or height is stretched to fit the window, and stretched
+   noise lines up into a regular grid of dots. It is also desaturated, so it
+   reads as grain and not as coloured speckle. */
 body::after {
     content: '';
     position: fixed;
     inset: 0;
     z-index: -1;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' width='256' height='256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+    opacity: 0.05;
     pointer-events: none;
-    opacity: 0.045;
-    background-image:
-        linear-gradient(hsl(var(--accent)) 1px, transparent 1px),
-        linear-gradient(90deg, hsl(var(--accent)) 1px, transparent 1px),
-        linear-gradient(hsl(var(--accent) / 0.35) 1px, transparent 1px),
-        linear-gradient(90deg, hsl(var(--accent) / 0.35) 1px, transparent 1px);
-    background-size:
-        96px 96px,
-        96px 96px,
-        24px 24px,
-        24px 24px;
 }
 
-/* Ban has no ship, so no circuit grid: his page is flat, with the same faint
+/* Ban has no water and no light in it: his page is flat, with the same faint
    grain Alen's has. A heavier grain and a red glow from the top were tried and
    read as dirt on a large screen (the noise tile is coloured and repeats every
    256px, and a 9% gradient bands across 1900px). */
-html[data-persona='ban'] body::after {
-    background-image: none;
+html[data-persona='ban'] body::before {
+    background: none;
 }
 
 /* ─── Scanlines on hover ─────────────────────────────────────────────── */
@@ -552,12 +579,15 @@ html[data-persona='ban'] body::after {
     );
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.3s;
+    transition: opacity 0.2s ease;
     z-index: 1;
 }
 
-.scanline-hover:hover::before {
-    opacity: 1;
+/* Only where there is a real hover: on a touch screen it stuck after a tap */
+@media (hover: hover) and (pointer: fine) {
+    .scanline-hover:hover::before {
+        opacity: 1;
+    }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -567,21 +597,51 @@ html[data-persona='ban'] body::after {
 /* Section label */
 .section-label {
     font-family: var(--font-ui);
-    font-size: 0.65rem;
-    font-weight: 500;
-    letter-spacing: 0.18em;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: hsl(var(--muted-foreground));
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.6rem;
 }
 
 .section-label::before {
     content: var(--label-mark);
     color: hsl(var(--accent));
     font-weight: 700;
-    text-shadow: var(--glow-accent);
+}
+
+/* Alen's mark is a cell: a ring with a nucleus, lit from inside. It stands
+   where `//` used to. `.cell-mark` is the same thing for use in running text. */
+html:not([data-persona='ban']) .section-label::before,
+.cell-mark {
+    content: '';
+    display: inline-block;
+    flex: none;
+    width: 0.56rem;
+    height: 0.56rem;
+    border-radius: 50%;
+    background: radial-gradient(circle, hsl(var(--accent)) 0 1.4px, transparent 2px);
+    box-shadow:
+        inset 0 0 0 1.5px hsl(var(--accent)),
+        0 0 8px hsl(var(--accent) / 0.4);
+}
+
+/* A soft thing with an edge: the nav, a card, the command bar. For Alen the
+   edge is a faint ring of light on the inside; for Ban it is a ruled line. */
+.membrane {
+    background: hsl(var(--card) / 0.72);
+    box-shadow:
+        inset 0 0 0 1px var(--membrane-ring),
+        var(--membrane-shadow);
+}
+
+/* Rules between rows. Alen's are a line of dots, like something left a trail;
+   Ban's are ruled solid (see BAN below). */
+html:not([data-persona='ban']) .border-dashed {
+    border-style: dotted;
 }
 
 /* Glowing accent text */
@@ -607,29 +667,28 @@ html[data-persona='ban'] body::after {
         0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
-/* Hover lift */
-.hover-lift {
-    @apply transition-all duration-300 hover:-translate-y-px;
-}
-
-/* Cyber-organic panel: notched corners, like a cut piece of alien hull plating */
-.clip-notch {
-    clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
-}
-
 /* Typography. Every class goes through --font-display / --font-ui, so the
    whole site changes hands when the person does. */
+
+/* Small print for things that are measured: a date, a count, a duration */
 .mono-label {
-    font-family: var(--font-ui);
-    font-size: 0.68rem;
-    letter-spacing: 0.05em;
+    font-family: var(--font-data);
+    font-size: 0.7rem;
+    letter-spacing: 0.02em;
 }
 
 .text-display {
     font-family: var(--font-display);
     font-weight: var(--display-weight);
-    line-height: 1.05;
+    line-height: 1.02;
     letter-spacing: var(--display-tracking);
+    text-wrap: balance;
+}
+
+/* Alen's headings sit a little narrow, which is where the face looks least
+   like anyone else's */
+html:not([data-persona='ban']) .text-display {
+    font-variation-settings: 'wdth' 88;
 }
 
 .font-display {
@@ -713,9 +772,9 @@ html[data-persona='ban'] .rounded {
     border-radius: 0;
 }
 
-/* The notched corner is hull plating. Paper has four square ones. */
-html[data-persona='ban'] .clip-notch {
-    clip-path: none;
+/* Where Alen has a soft glowing edge, Ban has a ruled one */
+html[data-persona='ban'] .membrane {
+    background: hsl(var(--background) / 0.94);
 }
 
 /* Selecting text is a redaction */
@@ -745,6 +804,131 @@ html[data-persona='ban'] ::selection {
     text-decoration-thickness: 0.09em;
 }
 
+/* ─── Ban's home page ─────────────────────────────────────────────────────
+   Where Alen's hero has light and a ship, Ban's has what a printed sheet has:
+   a masthead rule over the name, the name he crossed out by hand, and his
+   stamp across the corner. It arrives in that order: the page, the pen, the
+   stamp. */
+
+/* The masthead: a heavy rule and a fine one over the name, a fine one under
+   the lot */
+html[data-persona='ban'] .hero {
+    padding-top: 2.5rem;
+    padding-bottom: 2.25rem;
+    border-bottom: 1px solid hsl(var(--foreground) / 0.3);
+}
+
+/* Every other page of his opens under the same rule (.page-header is the
+   shared header in components/ui/page-header.tsx) */
+html[data-persona='ban'] .page-header {
+    position: relative;
+    padding-top: 2.25rem;
+}
+
+html[data-persona='ban'] .hero::before,
+html[data-persona='ban'] .page-header::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 7px;
+    border-top: 3px solid hsl(var(--foreground));
+    border-bottom: 1px solid hsl(var(--foreground));
+}
+
+/* "Alen", crossed out. Not the tidy line-through the small titles get
+   (.struck): this one is a stroke of the pen, heavier where it starts and
+   lifting off at the end, and it is drawn across as you watch. The stroke is
+   a mask, so it takes his red from the token. */
+.struck-drawn {
+    position: relative;
+    display: inline-block;
+}
+
+.struck-drawn::after {
+    content: '';
+    position: absolute;
+    left: -4%;
+    right: -6%;
+    top: 44%;
+    height: 0.3em;
+    background: hsl(var(--accent));
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 12' preserveAspectRatio='none'%3E%3Cpath d='M0 7.5C18 4 40 8.5 62 5.5S92 3 100 4.5L100 7C90 6 78 8.5 60 9S22 6.5 0 10Z'/%3E%3C/svg%3E")
+        center / 100% 100% no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 12' preserveAspectRatio='none'%3E%3Cpath d='M0 7.5C18 4 40 8.5 62 5.5S92 3 100 4.5L100 7C90 6 78 8.5 60 9S22 6.5 0 10Z'/%3E%3C/svg%3E")
+        center / 100% 100% no-repeat;
+    transform: rotate(-2.5deg);
+    animation: strikeDraw 280ms var(--ease-out) 380ms both;
+}
+
+@keyframes strikeDraw {
+    from {
+        clip-path: inset(-40% 100% -40% 0);
+    }
+
+    to {
+        clip-path: inset(-40% 0 -40% 0);
+    }
+}
+
+/* The stamp (components/ui/ban-stamp.tsx). It comes down fast and stops dead:
+   easing in, no settle, because that is how a stamp lands. */
+.ban-stamp {
+    position: absolute;
+    right: -0.25rem;
+    top: 1.5rem;
+    pointer-events: none;
+    transform: rotate(-8deg);
+    animation: stampDown 140ms cubic-bezier(0.55, 0, 1, 0.45) 700ms both;
+}
+
+.ban-stamp-mark {
+    padding: 0.6em 0.85em 0.5em;
+    border: 2.5px solid currentColor;
+    outline: 1px solid currentColor;
+    outline-offset: 3px;
+    font-family: var(--font-ui);
+    font-size: 0.72rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: hsl(var(--accent));
+    opacity: 0.9;
+    filter: url(#ban-stamp-ink);
+}
+
+/* On paper, ink soaks in and what is under it shows through */
+html[data-persona='ban']:not(.dark) .ban-stamp-mark {
+    mix-blend-mode: multiply;
+}
+
+@media (min-width: 768px) {
+    .ban-stamp {
+        right: 1.5rem;
+        top: 2.75rem;
+    }
+
+    .ban-stamp-mark {
+        border-width: 3.5px;
+        outline-width: 1.5px;
+        outline-offset: 4px;
+        font-size: 1.25rem;
+    }
+}
+
+@keyframes stampDown {
+    from {
+        opacity: 0;
+        transform: rotate(-8deg) scale(1.7);
+    }
+
+    to {
+        opacity: 1;
+        transform: rotate(-8deg) scale(1);
+    }
+}
+
 /* ═══════════════════════════════════════════════════════════════════════
    UFO ABDUCTION (Konami code easter egg — see components/ui/konami-ufo.tsx)
    ═══════════════════════════════════════════════════════════════════════ */
@@ -771,6 +955,31 @@ html[data-persona='ban'] ::selection {
     to {
         transform: translate(60vw, -30vh) rotate(12deg);
         opacity: 0;
+    }
+}
+
+/* On the home page the ship does not arrive from off screen: it is already
+   there, parked in the hero. It lifts off from that spot to the top of the
+   screen, and on the way back it comes down and parks on it. --hero-dx/dy are
+   the distance between the two spots (centre to centre) and --hero-scale is
+   how much bigger it is drawn in the hero; ufo-abduction.tsx measures them. */
+@keyframes ufoFromHero {
+    from {
+        transform: translate(calc(-50% + var(--hero-dx)), var(--hero-dy)) scale(var(--hero-scale));
+    }
+
+    to {
+        transform: translate(-50%, 0) scale(1);
+    }
+}
+
+@keyframes ufoToHero {
+    from {
+        transform: translate(-50%, 0) scale(1);
+    }
+
+    to {
+        transform: translate(calc(-50% + var(--hero-dx)), var(--hero-dy)) scale(var(--hero-scale));
     }
 }
 
@@ -914,6 +1123,40 @@ body.ufo-return .adjective-stage > * {
    The class is never removed; a direct load is the only time the entrance plays. */
 body.ufo-navigated .animate-page-in {
     animation: none;
+}
+
+/* The current page's name in the nav (components/ui/typed-crumb.tsx). After
+   a page change it surfaces out of a blur. Not on a direct load, where
+   nothing in the nav should move. */
+@keyframes crumbIn {
+    from {
+        opacity: 0;
+        filter: blur(4px);
+    }
+
+    to {
+        opacity: 1;
+        filter: none;
+    }
+}
+
+body.ufo-navigated .crumb-in {
+    animation: crumbIn 260ms var(--ease-out) both;
+}
+
+/* The same entrance for any small line of words that turns up after the page
+   has (a status on /alien, the late caption on /bi). It is what typing a line
+   in letter by letter used to be for. */
+.surface-in {
+    animation: crumbIn 260ms var(--ease-out) both;
+}
+
+/* The same goes for the toy pages' own two-step entrance, which was running
+   on top of the beam (down 22px while it went up 14px). `.opacity-0` keeps
+   this off the places that use the class to show a change of state. */
+body.ufo-navigated .animate-fade-in-up.opacity-0 {
+    animation: none;
+    opacity: 1;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -1845,6 +2088,431 @@ html[data-persona='ban'] .beam-image[data-phase='beaming']::after {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
+   ALIEN SCRIPT (components/ui/translate.tsx, alien-script.tsx)
+   A heading arrives written in his script and turns into English, a word at
+   a time, left to right. The English is the real text and is in the page
+   from the start; the glyphs are a layer over it that dissolves. Runs once.
+   ═══════════════════════════════════════════════════════════════════════ */
+.xl-word {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+/* The mask is two and a half words wide: solid for the first two fifths, then
+   a soft edge, then clear. Sliding it from its clear end to its solid end
+   walks that edge across the word from left to right. The padding gives
+   descenders and overshoot room, so the mask does not shave them. */
+.xl-text {
+    display: inline-block;
+    padding: 0.16em 0.06em;
+    margin: -0.16em -0.06em;
+    -webkit-mask-image: linear-gradient(90deg, #000 42%, transparent 58%);
+    mask-image: linear-gradient(90deg, #000 42%, transparent 58%);
+    -webkit-mask-size: 250% 100%;
+    mask-size: 250% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    animation: xlTextIn var(--xl-dur, 460ms) var(--ease-out) var(--xl-at, 0ms) both;
+}
+
+@keyframes xlTextIn {
+    from {
+        -webkit-mask-position: 100% 0;
+        mask-position: 100% 0;
+        filter: blur(5px);
+    }
+
+    to {
+        -webkit-mask-position: 0 0;
+        mask-position: 0 0;
+        filter: none;
+    }
+}
+
+.xl-glyphs {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    color: hsl(var(--accent));
+    pointer-events: none;
+}
+
+.xl-glyphs svg {
+    flex: none;
+    width: 0.5em;
+    height: 0.5em;
+    overflow: visible;
+    filter: drop-shadow(0 0 0.09em hsl(var(--accent) / 0.7));
+    animation: xlGlyphOut 260ms var(--ease-out) var(--xl-at, 0ms) both;
+}
+
+@keyframes xlGlyphOut {
+    from {
+        opacity: 1;
+        transform: none;
+    }
+
+    to {
+        opacity: 0;
+        transform: scale(0.6);
+    }
+}
+
+/* "person" on the home page, which is "alien" when you look closely
+   (components/ui/glitch-word.tsx). The two words swap through a blur, with a
+   flash of his script in between. Transitions, not keyframes, so a quick
+   in-and-out reverses from wherever it had got to. */
+.person-word {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+/* A dotted line under it, the way a word with a translation is marked. On the
+   words themselves: a decoration does not reach an inline-block child. */
+.person-word-human,
+.person-word-alien {
+    text-decoration: underline dotted hsl(var(--accent) / 0.6);
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 0.3em;
+}
+
+.person-word > span {
+    transition:
+        opacity 180ms var(--ease-out),
+        filter 180ms var(--ease-out);
+}
+
+.person-word-human {
+    display: inline-block;
+}
+
+.person-word-alien {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    filter: blur(4px);
+    color: hsl(var(--accent));
+    text-shadow: var(--glow-accent);
+}
+
+.person-word[data-alien='true'] .person-word-human {
+    opacity: 0;
+    filter: blur(4px);
+}
+
+/* The word arriving waits for the one leaving to get out of the way */
+.person-word[data-alien='true'] .person-word-alien {
+    opacity: 1;
+    filter: none;
+    transition-delay: 130ms;
+}
+
+.person-word[data-alien='false'] .person-word-human {
+    transition-delay: 130ms;
+}
+
+.person-word-glyphs {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    color: hsl(var(--accent));
+    opacity: 0;
+    pointer-events: none;
+}
+
+.person-word-glyphs svg {
+    width: 0.8em;
+    height: 0.8em;
+    flex: none;
+}
+
+.person-word-glyphs[data-flash] {
+    animation: glyphFlash 360ms var(--ease-out);
+}
+
+@keyframes glyphFlash {
+    0%,
+    100% {
+        opacity: 0;
+        filter: blur(3px);
+    }
+
+    40% {
+        opacity: 1;
+        filter: none;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   THE SHIP ON THE HOME PAGE (components/ui/hero-saucer.tsx)
+   The same ship that changes the page, parked at the top right of the hero
+   with its beam on and the links in it. Two things move, both slowly: it
+   bobs, and motes drift up the beam.
+   The sizes live on .hero because the links are laid out inside the beam and
+   need the same numbers. The ship is 130 by 64, so its hull ends 0.41 of its
+   width down from its top.
+   ═══════════════════════════════════════════════════════════════════════ */
+.hero {
+    --saucer-w: 8.5rem;
+    --saucer-right: 0rem;
+    --beam-h: 7rem;
+}
+
+/* On a phone the ship hangs above the name, so Alen's hero starts lower */
+html:not([data-persona='ban']) .hero {
+    padding-top: 6.25rem;
+}
+
+/* Light behind the name: a pool of the accent in the water, as if the name
+   were giving some off. It belongs to the hero and scrolls away with it. The
+   grain is drawn into it and the whole thing is faded out by a mask, so it
+   neither bands nor shows an edge. */
+html:not([data-persona='ban']) .hero::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    left: -35%;
+    top: 4%;
+    width: 150%;
+    height: 96%;
+    pointer-events: none;
+    background:
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' width='256' height='256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"),
+        hsl(var(--accent) / var(--pool, 0.07));
+    -webkit-mask-image: radial-gradient(closest-side, #000 12%, transparent);
+    mask-image: radial-gradient(closest-side, #000 12%, transparent);
+}
+
+.dark .hero {
+    --pool: 0.13;
+}
+
+@media (min-width: 768px) {
+    .hero {
+        --saucer-w: 14rem;
+        --saucer-right: 0.75rem;
+        --beam-h: 17rem;
+    }
+
+    /* From here up the ship sits beside the name, and the hero is as tall as
+       the ship and its beam, with the words centred against them */
+    html:not([data-persona='ban']) .hero {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 25rem;
+        margin-bottom: 3.5rem;
+        padding-top: 0;
+        padding-bottom: 2.5rem;
+    }
+
+    html:not([data-persona='ban']) .hero-copy {
+        max-width: 58%;
+    }
+
+    html:not([data-persona='ban']) .hero::before {
+        left: -22%;
+        top: -18%;
+        width: 92%;
+        height: 132%;
+    }
+
+    /* The links hang in the beam, one under another. The list is centred on
+       the ship as a block and its rows start on one line, so the icons make
+       a column. */
+    html:not([data-persona='ban']) .hero-links {
+        position: absolute;
+        top: calc(var(--saucer-w) * 0.41 + 2.25rem);
+        right: var(--saucer-right);
+        width: var(--saucer-w);
+        margin-top: 0;
+        display: grid;
+        justify-content: center;
+        justify-items: start;
+    }
+}
+
+@media (min-width: 1024px) {
+    .hero {
+        --saucer-w: 16rem;
+        --saucer-right: -4rem;
+        --beam-h: 18rem;
+    }
+
+    html:not([data-persona='ban']) .hero {
+        min-height: 26rem;
+    }
+}
+
+.hero-saucer {
+    position: absolute;
+    top: 0;
+    right: var(--saucer-right);
+    width: var(--saucer-w);
+    pointer-events: none;
+    animation: saucerBob 7s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+@keyframes saucerBob {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+.hero-saucer-ship {
+    position: relative;
+}
+
+/* The beam starts inside the hull, which is solid and hides where it begins */
+.hero-saucer-beam {
+    position: absolute;
+    left: 50%;
+    top: calc(var(--saucer-w) * 0.33);
+    width: 150%;
+    height: var(--beam-h);
+    transform: translateX(-50%);
+    filter: blur(5px);
+    opacity: 0.85;
+    transition: opacity 400ms var(--ease-out);
+}
+
+.hero-saucer-beam > div {
+    width: 100%;
+    height: 100%;
+    clip-path: polygon(36% 0, 64% 0, 100% 100%, 0 100%);
+    background: linear-gradient(to bottom, hsl(var(--accent) / 0.22), hsl(var(--accent) / 0.07) 58%, transparent);
+}
+
+/* Motes being drawn up the beam. Each one climbs along one side of the cone,
+   starting wide and closing in as the cone narrows, so none of them ever
+   crosses the column of links in the middle (a bright speck beside a label
+   reads as punctuation). They are soft, like the plankton, not points.
+   Constant speed: they are drifting, not arriving. Under reduced motion they
+   stay at their first frame, unseen. */
+.hero-saucer-motes {
+    position: absolute;
+    left: 50%;
+    top: calc(var(--saucer-w) * 0.33);
+    width: 0;
+    height: var(--beam-h);
+    transition: opacity 400ms var(--ease-out);
+}
+
+.hero-saucer-motes span {
+    --side: 1;
+    position: absolute;
+    left: 0;
+    bottom: 12%;
+    width: 5px;
+    height: 5px;
+    margin-left: -2.5px;
+    border-radius: 50%;
+    background: radial-gradient(circle, hsl(var(--accent) / 0.9), hsl(var(--accent) / 0.25) 55%, transparent 72%);
+    opacity: 0;
+    animation: moteRise 9s linear infinite;
+}
+
+.hero-saucer-motes span:nth-child(1) {
+    animation-duration: 8.5s;
+    animation-delay: -1.2s;
+}
+
+.hero-saucer-motes span:nth-child(2) {
+    --side: -1;
+    animation-duration: 10.5s;
+    animation-delay: -5.4s;
+}
+
+.hero-saucer-motes span:nth-child(3) {
+    animation-duration: 7.6s;
+    animation-delay: -4.6s;
+}
+
+.hero-saucer-motes span:nth-child(4) {
+    --side: -1;
+    animation-duration: 9.4s;
+    animation-delay: -8s;
+}
+
+/* From 58% of the ship's width out from the centre line, at the foot of the
+   beam, to 34% near the top: inside the cone's edge the whole way, and outside
+   the links */
+@keyframes moteRise {
+    0% {
+        transform: translate(calc(var(--saucer-w) * 0.58 * var(--side)), 0) scale(0.6);
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 0.55;
+    }
+
+    75% {
+        opacity: 0.4;
+    }
+
+    100% {
+        transform: translate(calc(var(--saucer-w) * 0.34 * var(--side)), calc(var(--beam-h) * -0.66)) scale(1);
+        opacity: 0;
+    }
+}
+
+/* The ship notices when "person" gives itself away: a light comes up behind
+   it and the beam brightens */
+.hero-saucer-flare {
+    position: absolute;
+    left: 50%;
+    top: calc(var(--saucer-w) * 0.27);
+    width: 170%;
+    aspect-ratio: 2.4;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(closest-side, hsl(var(--accent) / 0.26), transparent);
+    opacity: 0;
+    transition: opacity 400ms var(--ease-out);
+}
+
+.hero:has(.person-word[data-alien='true']) .hero-saucer-flare,
+.hero:has(.person-word[data-alien='true']) .hero-saucer-beam {
+    opacity: 1;
+}
+
+html:not(.dark) .hero-saucer-flare {
+    background: radial-gradient(closest-side, hsl(var(--accent) / 0.14), transparent);
+}
+
+/* While the page is changing, the ship is out: the page-change layer draws it
+   flying, starting from exactly where this one sits and ending back on it.
+   So this copy steps aside for as long as that takes. `ufo-abduct` covers the
+   first frame of a page that has just arrived, before the script has run. The
+   ship goes at once (the flying one is already in its place); the beam and
+   the motes fade, and fade back in when it has landed. */
+body.ufo-hero-away .hero-saucer-ship,
+body.ufo-abduct .hero-saucer-ship {
+    opacity: 0;
+}
+
+body.ufo-hero-away .hero-saucer-beam,
+body.ufo-abduct .hero-saucer-beam,
+body.ufo-hero-away .hero-saucer-motes,
+body.ufo-abduct .hero-saucer-motes,
+body.ufo-hero-away .hero-saucer-flare,
+body.ufo-abduct .hero-saucer-flare {
+    opacity: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
    ACCESSIBILITY & POLISH
    ═══════════════════════════════════════════════════════════════════════ */
 
@@ -1858,7 +2526,7 @@ html[data-persona='ban'] .beam-image[data-phase='beaming']::after {
 :focus-visible {
     outline: 1px solid hsl(var(--ring));
     outline-offset: 2px;
-    border-radius: 2px;
+    border-radius: calc(var(--radius) * 0.4);
 }
 
 /* Honor prefers-reduced-motion: collapse all animation/transition to a single

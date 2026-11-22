@@ -7,14 +7,14 @@ import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { Toaster } from '@/components/ui/sonner'
 import { useTheme } from 'next-themes'
-import { FiBriefcase, FiCode } from 'react-icons/fi'
+import { FiBriefcase, FiCode, FiArrowUp } from 'react-icons/fi'
 import { motion, AnimatePresence, MotionConfig } from 'framer-motion'
 import { posthog } from '@/components/posthog-provider'
-import { AlienDataStream } from '@/components/ui/alien-ambience'
+import { Plankton } from '@/components/ui/alien-ambience'
 import { CommandBar, openCommandBar } from '@/components/ui/command-bar'
 import { UfoAbduction } from '@/components/ui/ufo-abduction'
 import { DrownTrigger } from '@/components/ui/drown-trigger'
-import { TypedCrumb } from '@/components/ui/typed-crumb'
+import { CurrentCrumb } from '@/components/ui/typed-crumb'
 import { Persona, OnlyAlen, OnlyBan } from '@/components/persona'
 import { usePersona } from '@/hooks/use-persona'
 import { switchPersona } from '@/lib/persona'
@@ -25,6 +25,13 @@ const NAV_ITEMS = [
     { href: '/working', label: 'exp', ban: 'record', icon: FiBriefcase },
     { href: '/building', label: 'projects', ban: 'schemes', icon: FiCode }
 ]
+
+/**
+ * One spring for every layout move in the nav (the pill resizing, the links
+ * sliding along as one drops out). The pill and what is inside it used to run
+ * on different curves, so the contents arrived before the box did.
+ */
+const NAV_LAYOUT = { type: 'spring', stiffness: 500, damping: 35 } as const
 
 function humanize(slug: string) {
     return slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
@@ -96,18 +103,23 @@ function Navigation() {
         posthog.capture('theme_toggle', { theme: newTheme })
     }
 
-    const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
+    // An explicit `behavior` beats the reduced-motion rule in globals.css, so ask here
+    const scrollToTop = () =>
+        window.scrollTo({
+            top: 0,
+            behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+        })
 
     return (
-        <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50 max-w-[calc(100vw-2rem)]">
+        // layoutScroll: the header is fixed, and without it framer measures the nav in
+        // page coordinates, so a navigation from a scrolled page made the pill start
+        // that many pixels low and spring back up
+        <motion.header layoutScroll className="fixed top-4 left-1/2 -translate-x-1/2 z-50 max-w-[calc(100vw-2rem)]">
             <motion.nav
                 layout
-                transition={{ layout: { type: 'spring', stiffness: 500, damping: 35 } }}
-                className={cn(
-                    'relative flex items-center gap-0 px-1 py-1 border border-border/60 max-w-full',
-                    'bg-background/90 backdrop-blur-md shadow-lg shadow-background/20',
-                    'rounded-sm'
-                )}
+                transition={{ layout: NAV_LAYOUT }}
+                // Alen's is a capsule with a soft lit edge; Ban's is a ruled box (.membrane)
+                className="membrane relative flex items-center gap-0 px-1.5 py-1 max-w-full overflow-hidden backdrop-blur-md rounded-full ban:rounded-none"
             >
                 {/* Every direct child carries `layout`: the nav resizes with a scale transform,
                     and only layout children get counter-scaled instead of stretched with it */}
@@ -115,12 +127,12 @@ function Navigation() {
                     {isMainNav ? (
                         <motion.div
                             key="main-nav"
-                            layout
+                            layout="position"
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95 }}
-                            transition={{ duration: 0.15 }}
-                            className="flex items-center gap-0"
+                            transition={{ duration: 0.15, layout: NAV_LAYOUT }}
+                            className="relative flex items-center gap-0"
                         >
                             <AnimatePresence mode="popLayout" initial={false}>
                                 {visibleNavItems.map((item) => {
@@ -134,16 +146,16 @@ function Navigation() {
                                             initial={{ opacity: 0, x: -4 }}
                                             animate={{ opacity: 1, x: 0 }}
                                             exit={{ opacity: 0, x: -4 }}
-                                            transition={{ duration: 0.15 }}
+                                            transition={{ duration: 0.15, layout: NAV_LAYOUT }}
                                         >
                                             <Link
                                                 href={item.href}
                                                 className={cn(
-                                                    'relative px-3 ban:max-sm:px-2 py-1.5 text-xs font-mono-ui tracking-wide block whitespace-nowrap transition-colors duration-150',
+                                                    'relative px-3 max-sm:px-2.5 py-1.5 text-[0.82rem] font-mono-ui block whitespace-nowrap transition-colors duration-150',
                                                     isHome ? 'font-semibold' : 'font-medium',
                                                     isActive
-                                                        ? 'text-accent'
-                                                        : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
+                                                        ? 'text-foreground ban:text-accent'
+                                                        : 'text-muted-foreground hover:text-foreground'
                                                 )}
                                             >
                                                 <Persona alen={item.label} ban={item.ban} />
@@ -153,7 +165,8 @@ function Navigation() {
                                                 {isActive && (
                                                     <motion.span
                                                         layoutId="nav-underline"
-                                                        className="absolute inset-x-3 ban:max-sm:inset-x-2 bottom-1 h-px bg-accent"
+                                                        // A line of light for Alen, a ruled line for Ban
+                                                        className="absolute inset-x-3 max-sm:inset-x-2.5 bottom-[3px] h-[1.5px] rounded-full bg-accent shadow-[var(--glow-accent)] ban:h-px ban:shadow-none"
                                                         transition={{ type: 'spring', stiffness: 500, damping: 40 }}
                                                         aria-hidden="true"
                                                     />
@@ -167,23 +180,25 @@ function Navigation() {
                     ) : (
                         <motion.div
                             key="breadcrumb"
-                            layout
+                            // "position": plain `layout` scales the box, and the crumb text in it
+                            // is not a layout child, so it squashed whenever the path changed length
+                            layout="position"
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95 }}
-                            transition={{ duration: 0.15 }}
+                            transition={{ duration: 0.15, layout: NAV_LAYOUT }}
                             className="min-w-0"
                         >
                             <nav
                                 ref={breadcrumbRef}
                                 aria-label="Breadcrumb"
-                                className="no-scrollbar flex items-center px-3 py-1.5 text-xs font-mono-ui tracking-wide gap-2 overflow-x-auto min-w-0"
+                                className="no-scrollbar flex items-center px-3 py-1.5 text-[0.82rem] font-mono-ui gap-2 overflow-x-auto min-w-0"
                             >
                                 {breadcrumbs.map((crumb, i) => {
                                     const isLast = i === breadcrumbs.length - 1
                                     return (
                                         <React.Fragment key={crumb.href}>
-                                            {i !== 0 && <span className="text-accent font-bold">/</span>}
+                                            {i !== 0 && <span className="text-accent/70">/</span>}
                                             {!isLast ? (
                                                 <Link
                                                     href={crumb.href}
@@ -199,7 +214,7 @@ function Navigation() {
                                                     )}
                                                 </Link>
                                             ) : (
-                                                <TypedCrumb text={crumb.label} />
+                                                <CurrentCrumb text={crumb.label} />
                                             )}
                                         </React.Fragment>
                                     )
@@ -209,14 +224,18 @@ function Navigation() {
                     )}
                 </AnimatePresence>
 
-                <motion.div layout className="flex items-center shrink-0">
-                    <div className="w-px h-3 bg-border mx-1 shrink-0" />
+                <motion.div
+                    layout="position"
+                    transition={{ layout: NAV_LAYOUT }}
+                    className="flex items-center shrink-0"
+                >
+                    <div className="w-px h-3.5 bg-border mx-1.5 shrink-0" />
 
                     {/* Theme toggle — text style. Fixed width so [light]/[dark] never nudges the nav */}
                     <button
                         onClick={toggleTheme}
                         className={cn(
-                            'px-2 ban:max-sm:px-1.5 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-150 whitespace-nowrap shrink-0',
+                            'px-2 max-sm:px-1.5 py-1.5 text-[0.82rem] font-mono-ui text-muted-foreground hover:text-foreground transition-[color,scale] duration-150 ease-out active:[scale:0.96] whitespace-nowrap shrink-0',
                             !mounted && 'opacity-0 pointer-events-none'
                         )}
                         aria-label="Toggle theme"
@@ -224,8 +243,15 @@ function Navigation() {
                         {/* Gated on `mounted`: the server cannot know the theme, and a label
                             that differs on the first client render fails hydration and
                             makes React rebuild the whole document */}
-                        <span className="inline-block min-w-[7ch] ban:min-w-0 text-center">
-                            [{mounted && resolvedTheme === 'light' ? 'dark' : 'light'}]
+                        {/* Both words are in the box, stacked, so it is as wide as the wider
+                            one in whichever face is in use and never nudges the nav */}
+                        <span className="inline-grid text-center">
+                            <span className="col-start-1 row-start-1 invisible" aria-hidden="true">
+                                light
+                            </span>
+                            <span className="col-start-1 row-start-1">
+                                {mounted && resolvedTheme === 'light' ? 'dark' : 'light'}
+                            </span>
                         </span>
                     </button>
 
@@ -236,22 +262,25 @@ function Navigation() {
                                 switchPersona('alen')
                                 posthog.capture('persona_switch', { to: 'alen', from: 'nav' })
                             }}
-                            className="px-2 ban:max-sm:px-1.5 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-150 whitespace-nowrap shrink-0"
+                            className="px-2 max-sm:px-1.5 py-1.5 text-[0.82rem] font-mono-ui text-muted-foreground hover:text-foreground transition-[color,scale] duration-150 ease-out active:[scale:0.96] whitespace-nowrap shrink-0"
                             aria-label="Switch back to Alen"
                             title="let alen back in"
                         >
-                            [alen]
+                            alen
                         </button>
                     </OnlyBan>
 
                     {/* Command bar trigger — the "alen.is/…" warp drive (also opens with / or Ctrl+K) */}
                     <button
                         onClick={openCommandBar}
-                        className="px-2 ban:max-sm:px-1.5 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-150 whitespace-nowrap shrink-0"
+                        className="group/key px-1.5 py-1 mr-0.5 shrink-0 transition-[scale] duration-150 ease-out active:[scale:0.94]"
                         aria-label="Open site navigator (press / or Ctrl+K)"
                         title="alen.is/… (press / to open)"
                     >
-                        [/]
+                        {/* Drawn as the key you press to open it */}
+                        <kbd className="grid place-items-center w-[1.35rem] h-[1.35rem] rounded-md ban:rounded-none border border-border text-[0.72rem] leading-none font-data text-muted-foreground group-hover/key:text-foreground group-hover/key:border-muted-foreground/60 transition-colors duration-150">
+                            /
+                        </kbd>
                     </button>
                 </motion.div>
 
@@ -263,20 +292,20 @@ function Navigation() {
                             initial={{ opacity: 0, x: -4 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: -4 }}
-                            transition={{ duration: 0.15 }}
+                            transition={{ duration: 0.15, layout: NAV_LAYOUT }}
                         >
                             <button
                                 onClick={scrollToTop}
-                                className="px-2 py-1.5 text-xs font-mono-ui text-muted-foreground hover:text-accent transition-colors duration-150"
+                                className="px-2 py-1.5 text-[0.82rem] font-mono-ui text-muted-foreground hover:text-foreground transition-[color,scale] duration-150 ease-out active:[scale:0.94]"
                                 aria-label="Scroll to top"
                             >
-                                ↑
+                                <FiArrowUp className="w-3.5 h-3.5" aria-hidden="true" />
                             </button>
                         </motion.div>
                     )}
                 </AnimatePresence>
             </motion.nav>
-        </header>
+        </motion.header>
     )
 }
 
@@ -289,7 +318,10 @@ function usePersonaTitle(persona: 'alen' | 'ban') {
     useEffect(() => {
         const [from, to] = persona === 'ban' ? [/\bAlen\b/g, 'Ban'] : [/\bBan\b/g, 'Alen']
         const fix = () => {
-            if (persona === 'ban' && window.location.pathname.replace(/\/$/, '') === '/ban') return
+            const path = window.location.pathname.replace(/\/$/, '')
+            // Nor on /drowning: that claim stays Alen's. Ban doesn't drown, and
+            // "Ban is drowning" in the tab would say he does.
+            if (persona === 'ban' && (path === '/ban' || path === '/drowning')) return
             const wanted = document.title.replace(from, to)
             if (wanted !== document.title) document.title = wanted
         }
@@ -313,20 +345,23 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         // who ask for reduced motion (the CSS side of that lives in globals.css)
         <MotionConfig reducedMotion="user">
             <div className="min-h-screen flex flex-col">
-                {/* The rain is Alen's weather. CSS hides it the moment Ban is in; the
-                    unmount that follows stops its loop. */}
-                <OnlyAlen as="div">{persona === 'alen' && <AlienDataStream />}</OnlyAlen>
+                {/* The water and what drifts in it are Alen's. CSS hides them the moment
+                    Ban is in; the unmount that follows stops the loop. */}
+                <OnlyAlen as="div">{persona === 'alen' && <Plankton />}</OnlyAlen>
                 <CommandBar />
                 <UfoAbduction />
                 <DrownTrigger />
                 {showNavbar && <Navigation />}
-                <main className={cn('flex-1 relative z-10', showNavbar && 'pt-[var(--navbar-height)]')}>
+                {/* overflow-x-clip: the home page's saucer hangs past the column, and its
+                    glow would otherwise give a phone a sideways scroll. `clip` and not
+                    `hidden`, which would make main a scroll container. */}
+                <main className={cn('flex-1 relative z-10 overflow-x-clip', showNavbar && 'pt-[var(--navbar-height)]')}>
                     {children}
                 </main>
                 {showFooter && (
-                    <footer className="relative z-10 border-t border-dashed border-border/40 py-8">
+                    <footer className="relative z-10 border-t border-dashed border-border py-8">
                         <div className="container max-w-4xl">
-                            <p className="text-xs font-mono-ui text-muted-foreground/50 text-center tracking-wide">
+                            <p className="text-xs font-mono-ui text-muted-foreground text-center">
                                 <Persona
                                     alen={`© ${new Date().getFullYear()} alen yohannan`}
                                     ban={`© ${new Date().getFullYear()} ban. all rights seized.`}

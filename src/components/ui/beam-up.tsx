@@ -132,7 +132,7 @@ export function BeamUp({ slug }: { slug: string }) {
                                 animate={{ opacity: 1, scale: 1, x: burst.dx, rotate: burst.tilt * 0.3 }}
                                 exit={{ opacity: 0, transition: { duration: 0.3 } }}
                                 transition={{ duration: 0.12, ease: 'easeIn' }}
-                                className="pointer-events-none absolute -top-9 left-0 whitespace-nowrap border-2 border-accent px-1.5 py-0.5 font-mono-ui text-[0.6rem] font-bold uppercase tracking-[0.2em] text-accent"
+                                className="pointer-events-none absolute -top-9 left-0 whitespace-nowrap border-2 border-accent px-1.5 py-0.5 font-mono-ui text-[0.7rem] font-bold uppercase tracking-[0.2em] text-accent"
                             >
                                 read
                             </motion.span>
@@ -165,7 +165,7 @@ export function BeamUp({ slug }: { slug: string }) {
                     type="button"
                     onClick={handleBeam}
                     disabled={maxed}
-                    whileTap={maxed ? undefined : { scale: 0.85 }}
+                    whileTap={maxed ? undefined : { scale: 0.94 }}
                     className={cn(
                         // Colour only, and never transition-all: a CSS transition on `transform`
                         // fights framer's whileTap. Round for the saucer, square for the stamp.
@@ -194,14 +194,14 @@ export function BeamUp({ slug }: { slug: string }) {
                 <span
                     className={cn(
                         'mono-label tabular-nums transition-colors duration-200',
-                        mine > 0 ? 'text-accent' : 'text-muted-foreground/30'
+                        mine > 0 ? 'text-accent' : 'text-muted-foreground/60'
                     )}
                 >
                     ×{mine}
                 </span>
             </div>
 
-            <p className="mono-label text-muted-foreground/50">
+            <p className="mono-label text-muted-foreground/80">
                 <Persona
                     alen={maxed ? "ok that's plenty, thanks" : 'tap the saucer to beam this post up'}
                     ban={maxed ? `${MAX_BEAMS}. The stamp is out of ink.` : "Stamp it if you read it. I'm counting."}

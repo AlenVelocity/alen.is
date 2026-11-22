@@ -3,6 +3,9 @@ import plugin from 'tailwindcss/plugin'
 
 const config = {
     darkMode: ['class'],
+    // `hover:` only applies where there is a real hover. On a touch screen a tap
+    // used to leave links and rows stuck in their hover colour until the next tap.
+    future: { hoverOnlyWhenSupported: true },
     content: ['./pages/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './app/**/*.{ts,tsx}', './src/**/*.{ts,tsx}'],
     theme: {
         container: {
@@ -15,11 +18,16 @@ const config = {
         extend: {
             // --font-display and --font-ui change with the person (globals.css), so
             // these follow whoever is in. `mono` stays a real monospace for code.
+            // (`mono-ui` is the reading face. The name is from when Alen's was a
+            // monospace; it is used in too many places to be worth renaming.)
             fontFamily: {
                 sans: ['var(--font-display)'],
                 mono: ['var(--font-jetbrains-mono)', 'monospace'],
                 serif: ['var(--font-display)'],
                 'mono-ui': ['var(--font-ui)'],
+                // Things that are measured or typed: dates, counts, keys, paths.
+                // Alen's is the monospace; Ban's is his text face.
+                data: ['var(--font-data)'],
                 display: ['var(--font-display)']
             },
             colors: {
@@ -60,12 +68,18 @@ const config = {
                     foreground: 'hsl(var(--card-foreground))'
                 }
             },
+            // Everything scales from --radius, so Ban (whose radius is 0) is square
+            // at every size without a single override
             borderRadius: {
+                sm: 'calc(var(--radius) * 0.4)',
+                md: 'calc(var(--radius) * 0.7)',
                 lg: 'var(--radius)',
-                md: 'calc(var(--radius))',
-                sm: 'calc(var(--radius))',
-                xl: 'calc(var(--radius) + 4px)',
-                '2xl': 'calc(var(--radius) + 8px)'
+                xl: 'calc(var(--radius) * 1.6)',
+                '2xl': 'calc(var(--radius) * 2.4)'
+            },
+            transitionTimingFunction: {
+                out: 'var(--ease-out)',
+                'in-out': 'var(--ease-in-out)'
             }
         }
     },

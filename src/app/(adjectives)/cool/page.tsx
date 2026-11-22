@@ -34,10 +34,10 @@ export default async function Cool() {
     return (
         <div className="flex flex-col items-center justify-center gap-8 px-4 py-8 min-h-full w-full">
             <p
-                className="mono-label text-muted-foreground/40 alen:tracking-[0.25em] animate-fade-in-up opacity-0 stagger-1"
+                className="mono-label text-muted-foreground/80 alen:tracking-[0.25em] animate-fade-in-up opacity-0 stagger-1"
                 style={{ animationFillMode: 'forwards' }}
             >
-                <Persona alen="// be honest" ban={<span className="struck">am I cool?</span>} />
+                <Persona alen="be honest" ban={<span className="struck">am I cool?</span>} />
             </p>
 
             {/* Polaroid. `rotate` is its own property, so it does not fight the entrance's transform */}
@@ -64,7 +64,7 @@ export default async function Cool() {
                             priority
                         />
                     </div>
-                    <p className="text-center mono-label text-muted-foreground/40 mt-4">
+                    <p className="text-center mono-label text-muted-foreground/80 mt-4">
                         <Persona alen="exhibit_A.jpg" ban="Exhibit A. That's not him." />
                     </p>
                 </div>

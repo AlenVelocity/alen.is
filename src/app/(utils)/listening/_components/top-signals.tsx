@@ -31,7 +31,7 @@ export function TopSignals({ signals }: { signals: ArtistSignal[] }) {
                             </div>
                         ) : (
                             <div className="w-8 h-8 rounded bg-muted flex items-center justify-center shrink-0">
-                                <FiHeadphones className="w-3.5 h-3.5 text-muted-foreground/40" />
+                                <FiHeadphones className="w-3.5 h-3.5 text-muted-foreground/80" />
                             </div>
                         )}
 
@@ -45,7 +45,7 @@ export function TopSignals({ signals }: { signals: ArtistSignal[] }) {
                             </div>
                         </div>
 
-                        <span className="mono-label text-right text-muted-foreground/50 tabular-nums">
+                        <span className="mono-label text-right text-muted-foreground/80 tabular-nums">
                             ×{signal.count}
                         </span>
                     </li>

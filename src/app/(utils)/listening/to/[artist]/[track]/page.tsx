@@ -1,3 +1,4 @@
+import { ExternalMark } from '@/components/ui/external-mark'
 import { cache } from 'react'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
@@ -144,13 +145,13 @@ export default async function TrackPage({ params }: Props) {
 
     // The eyebrow finishes the sentence the URL starts, and only claims what Last.fm backs up
     const eyebrow = isNowPlaying ? (
-        <Persona alen="// i'm listening to" ban="I'm playing" />
+        <Persona alen="i'm listening to" ban="I'm playing" />
     ) : plays ? (
-        <Persona alen="// i've listened to" ban="I've played" />
+        <Persona alen="i've listened to" ban="I've played" />
     ) : track.userPlaycount === 0 ? (
-        <Persona alen="// never played this one" ban="Not one of mine" />
+        <Persona alen="never played this one" ban="Not one of mine" />
     ) : (
-        <Persona alen="// a track on last.fm" ban="A track on Last.fm" />
+        <Persona alen="a track on last.fm" ban="A track on Last.fm" />
     )
 
     const searchQuery = encodeURIComponent(`${track.artist} ${track.name}`)
@@ -168,7 +169,7 @@ export default async function TrackPage({ params }: Props) {
             <div className="container max-w-3xl py-10 md:py-14">
                 <Link
                     href="/listening"
-                    className="inline-block mono-label text-muted-foreground/50 hover:text-accent transition-colors mb-10"
+                    className="inline-block mono-label text-muted-foreground/80 hover:text-accent transition-colors mb-10"
                 >
                     <Persona alen="back to listening" ban="back to the noise" />
                 </Link>
@@ -186,12 +187,12 @@ export default async function TrackPage({ params }: Props) {
                         </div>
                     ) : (
                         <div className="w-full aspect-square bg-muted flex items-center justify-center rounded">
-                            <FiHeadphones className="w-12 h-12 text-muted-foreground/30" />
+                            <FiHeadphones className="w-12 h-12 text-muted-foreground/60" />
                         </div>
                     )}
                 </RepeatRing>
 
-                <p className="mono-label text-muted-foreground/50 mb-4">{eyebrow}</p>
+                <p className="mono-label text-muted-foreground/80 mb-4">{eyebrow}</p>
                 <h1 className="text-display text-3xl md:text-4xl mb-1 break-words">{track.name}</h1>
                 <p className="text-lg text-muted-foreground mb-4">{track.artist}</p>
 
@@ -222,7 +223,7 @@ export default async function TrackPage({ params }: Props) {
                                 {reviewData.rating && (
                                     <p className="font-mono-ui text-sm tabular-nums">
                                         {reviewData.rating}
-                                        <span className="text-muted-foreground/50">/10</span>
+                                        <span className="text-muted-foreground/80">/10</span>
                                     </p>
                                 )}
                                 <p className="text-sm text-muted-foreground whitespace-pre-wrap leading-relaxed">
@@ -243,8 +244,8 @@ export default async function TrackPage({ params }: Props) {
                                     className="text-sm font-medium hover:text-accent transition-colors"
                                 >
                                     {track.album}
-                                    <span className="ml-1 text-muted-foreground/40" aria-hidden="true">
-                                        ↗
+                                    <span className="ml-1 text-muted-foreground/80" aria-hidden="true">
+                                        <ExternalMark />
                                     </span>
                                 </a>
                             ) : (
@@ -283,8 +284,8 @@ export default async function TrackPage({ params }: Props) {
                                         className="flex items-center justify-between py-2.5 mono-label text-muted-foreground/60 hover:text-accent transition-colors"
                                     >
                                         {link.label}
-                                        <span className="text-muted-foreground/40" aria-hidden="true">
-                                            ↗
+                                        <span className="text-muted-foreground/80" aria-hidden="true">
+                                            <ExternalMark />
                                         </span>
                                     </a>
                                 </li>

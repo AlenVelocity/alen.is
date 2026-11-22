@@ -29,7 +29,8 @@ const WEEK_IN_MS = 7 * 24 * 60 * 60 * 1000
 /** One plain line, for when there is something to say instead of (or under) the poll */
 const NOTE = 'mono-label text-muted-foreground/60 text-center'
 
-const BAR_TRANSITION = { duration: 0.45, ease: 'easeOut' } as const
+/** The site's ease-out (--ease-out in globals.css), written out because framer wants numbers */
+const BAR_TRANSITION = { duration: 0.45, ease: [0.23, 1, 0.32, 1] } as const
 
 /**
  * The yes/no poll on /cool. Alen asked, so he reads the count as an answer.
@@ -176,18 +177,22 @@ export default function CoolPoll({ initialData }: CoolPollProps) {
                     </div>
 
                     {/* Both bars are absolute inside a fixed-height track, so growing them moves nothing else.
+                        Each is already its full width and grows by scaling out from its own end: the
+                        browser lays nothing out again while it grows, and reduced motion skips it.
                         Ban's red and his rust sit too close to tell apart, so his "no" is ink grey */}
                     <div className="relative h-6 bg-muted overflow-hidden rounded-sm">
                         <motion.div
                             className="absolute h-full bg-accent left-0"
-                            initial={{ width: '0%' }}
-                            animate={{ width: `${positivePercentage}%` }}
+                            style={{ width: `${positivePercentage}%`, originX: 0 }}
+                            initial={{ scaleX: 0 }}
+                            animate={{ scaleX: 1 }}
                             transition={BAR_TRANSITION}
                         />
                         <motion.div
                             className="absolute h-full bg-destructive/70 ban:bg-foreground/25 right-0"
-                            initial={{ width: '0%' }}
-                            animate={{ width: `${negativePercentage}%` }}
+                            style={{ width: `${negativePercentage}%`, originX: 1 }}
+                            initial={{ scaleX: 0 }}
+                            animate={{ scaleX: 1 }}
                             transition={BAR_TRANSITION}
                         />
                     </div>

@@ -1,45 +1,21 @@
-'use client'
-
-import { useEffect, useRef, useState } from 'react'
-import { isMinimalMotion } from '@/lib/motion-pref'
-
-const CHAR_MS = 45
-
 /**
- * The current segment of the breadcrumb. On a navigation the new segment types
- * itself in; the first paint shows it whole so nothing flashes on load. There
- * is no cursor after it: it used to blink, and a thing flashing in the nav on
- * every page was more than the nav needed.
+ * The current segment of the breadcrumb. After a page change it comes up out
+ * of a blur, like something surfacing; on a direct load it is simply there.
+ *
+ * It used to type itself in, a letter at a time. That is how a terminal says
+ * a word, and this is not a terminal any more. Before that it had a blinking
+ * cursor, which was more than the nav needed.
+ *
+ * The entrance is CSS (`.crumb-in` in globals.css) and only runs once the body
+ * has `ufo-navigated`, the class a page change leaves behind. The inner span
+ * is keyed on the text, so a new segment is a new element and plays it again.
  */
-export function TypedCrumb({ text, className }: { text: string; className?: string }) {
-    const [shown, setShown] = useState(text)
-    const previous = useRef(text)
-
-    useEffect(() => {
-        // Type on a change of segment, or on mounting after a warp (the body keeps
-        // that class for the session). A plain first load shows the word whole.
-        const changed = previous.current !== text
-        previous.current = text
-        const arrived = changed || document.body.classList.contains('ufo-navigated')
-        if (!arrived || isMinimalMotion() || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            setShown(text)
-            return
-        }
-        let i = 0
-        setShown('')
-        const id = setInterval(() => {
-            i += 1
-            setShown(text.slice(0, i))
-            if (i >= text.length) clearInterval(id)
-        }, CHAR_MS)
-        return () => clearInterval(id)
-    }, [text])
-
+export function CurrentCrumb({ text, className }: { text: string; className?: string }) {
     return (
-        <span className={`relative inline-block whitespace-nowrap ${className ?? ''}`}>
-            {/* Holds the full width so the nav does not resize while typing */}
-            <span className="invisible">{text}</span>
-            <span className="absolute left-0 top-0 text-accent">{shown}</span>
+        <span className={`inline-block whitespace-nowrap text-accent ${className ?? ''}`}>
+            <span key={text} className="crumb-in inline-block">
+                {text}
+            </span>
         </span>
     )
 }

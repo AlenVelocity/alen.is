@@ -63,11 +63,13 @@ export function Signature({ name, banName, className }: SignatureProps) {
                 <span className={cn('relative', !written && 'opacity-0 dark:opacity-100')}>
                     <Persona alen={name} ban={banName ?? name} />
                 </span>
-                {/* The cover. Anchored right and shrinking, so the name appears from the left */}
+                {/* The cover. Anchored right and shrinking, so the name appears from the left.
+                    It is squeezed with a scale and not made narrower: the same picture, without
+                    the browser laying the line out again on every frame of the 1.8 seconds */}
                 <span
-                    className="absolute top-0 right-0 h-full bg-background transition-[width] dark:hidden"
+                    className="absolute top-0 right-0 h-full w-full origin-right bg-background transition-transform dark:hidden"
                     style={{
-                        width: written ? '0%' : '100%',
+                        transform: written ? 'scaleX(0)' : 'scaleX(1)',
                         transitionDuration: `${WRITE_SECONDS}s`,
                         transitionTimingFunction: WRITE_EASE
                     }}

@@ -1,5 +1,6 @@
 'use client'
 
+import { ExternalMark } from '@/components/ui/external-mark'
 import { useState } from 'react'
 import Link from 'next/link'
 import { TechStack } from '@/components/ui/tech-badge'
@@ -49,8 +50,8 @@ const yearOf = (period: string) => period.trim().split(' ').pop()
 /** Every project link leaves the site, so each row ends with the same quiet mark */
 function Leaves() {
     return (
-        <span className="text-muted-foreground/40" aria-hidden="true">
-            ↗
+        <span className="text-muted-foreground/80" aria-hidden="true">
+            <ExternalMark />
         </span>
     )
 }
@@ -120,7 +121,7 @@ export function ProjectRow({ project, banDescription, details }: ProjectRowProps
                     </Title>
                 </h3>
 
-                <span className="mono-label text-muted-foreground/40 shrink-0 tabular-nums inline-flex items-baseline gap-2">
+                <span className="mono-label text-muted-foreground/80 shrink-0 tabular-nums inline-flex items-baseline gap-2">
                     <span>
                         <Destination project={project} offline={details.offline} />
                     </span>
@@ -131,7 +132,7 @@ export function ProjectRow({ project, banDescription, details }: ProjectRowProps
             </div>
 
             {/* A name alone does not say what the thing is */}
-            <p className="text-[0.8125rem] text-muted-foreground leading-relaxed mt-1 max-w-prose">
+            <p className="text-sm text-muted-foreground leading-relaxed mt-1 max-w-prose">
                 <Persona alen={project.description} ban={banDescription ?? project.description} />
             </p>
 
@@ -160,13 +161,13 @@ export function ProjectDetail({ project, banDescription, details }: ProjectRowPr
                         <DecodeText text={project.title} active={hovered && persona === 'alen'} />
                     </Title>
                 </h3>
-                <span className="mono-label text-muted-foreground/40 shrink-0 tabular-nums">
+                <span className="mono-label text-muted-foreground/80 shrink-0 tabular-nums">
                     <span className="sm:hidden">{yearOf(project.period)}</span>
                     <span className="hidden sm:inline">{project.period}</span>
                 </span>
             </div>
 
-            <p className="text-[0.9rem] text-muted-foreground leading-relaxed mb-3 max-w-prose">
+            <p className="text-sm text-muted-foreground leading-relaxed mb-3 max-w-prose">
                 <Persona alen={project.description} ban={banDescription ?? project.description} />
             </p>
 
@@ -175,7 +176,7 @@ export function ProjectDetail({ project, banDescription, details }: ProjectRowPr
             {/* Stack left, destination right. Icons stay monochrome until the row is hovered */}
             <div className="flex items-center justify-between gap-4">
                 <TechStack technologies={project.technologies.slice(0, 6)} colorOnGroupHover />
-                <span className="mono-label text-muted-foreground/40 shrink-0 inline-flex items-baseline gap-1.5">
+                <span className="mono-label text-muted-foreground/80 shrink-0 inline-flex items-baseline gap-1.5">
                     <Destination project={project} offline={details.offline} />
                     {!details.offline && <Leaves />}
                 </span>

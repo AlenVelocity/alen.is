@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { Persona } from '@/components/persona'
+import { Translate } from '@/components/ui/translate'
 
 // Bisexual flag colors
 const BI_COLORS = {
@@ -30,6 +31,8 @@ function BiParticles() {
         if (!canvas) return
         const ctx = canvas.getContext('2d')
         if (!ctx) return
+        // Reduced motion: no drifting dots and no bursts. The flag and the words are the page
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
         const resize = () => {
             canvas.width = canvas.offsetWidth
@@ -180,6 +183,9 @@ function Stripe({
                 // `scale`, not a scale-x transform: the fade-in holds `transform` with fill-mode
                 // forwards, which would silently override a transform-based hover
                 'transition-[scale,box-shadow] duration-200 hover:[scale:1.04_1] focus-visible:[scale:1.04_1]',
+                // The cat comes up over the stripes on focus, so the focused one sits above it
+                // and keeps its focus ring where it can be seen
+                'focus-visible:z-10',
                 selected && '[scale:1.04_1]'
             )}
             style={{
@@ -204,38 +210,31 @@ function Stripe({
     )
 }
 
-// The typed-out caption
-function TypedCaption({ text, delay }: { text: string; delay: number }) {
-    const [displayed, setDisplayed] = useState('')
-    const [started, setStarted] = useState(false)
+/**
+ * The caption that comes a beat late. It used to type itself in behind a
+ * blinking cursor, which is how a terminal says a thing. Now it waits its
+ * beat and surfaces: Alen's arrives in his script and turns into English,
+ * Ban's is simply there.
+ *
+ * The words sit invisibly in the same grid cell from the start to hold their
+ * width, so the centred line does not shift when they appear.
+ */
+function LateCaption({ text, delay, script = false }: { text: string; delay: number; script?: boolean }) {
+    const [shown, setShown] = useState(false)
 
     useEffect(() => {
-        const t = setTimeout(() => setStarted(true), delay)
+        const t = setTimeout(() => setShown(true), delay)
         return () => clearTimeout(t)
     }, [delay])
 
-    useEffect(() => {
-        if (!started) return
-        let i = 0
-        const interval = setInterval(() => {
-            setDisplayed(text.slice(0, i + 1))
-            i++
-            if (i >= text.length) clearInterval(interval)
-        }, 45)
-        return () => clearInterval(interval)
-    }, [started, text])
-
-    // The full caption sits invisibly in the same grid cell to reserve its width,
-    // so the centred line doesn't re-centre on every typed character
     return (
         <span className="inline-grid">
             <span className="invisible col-start-1 row-start-1" aria-hidden="true">
-                {text}▌
+                {text}
             </span>
-            <span className="col-start-1 row-start-1 text-left">
-                {displayed}
-                {displayed.length < text.length && <span className="animate-blink text-accent">▌</span>}
-            </span>
+            {shown && (
+                <span className="col-start-1 row-start-1 surface-in">{script ? <Translate text={text} /> : text}</span>
+            )}
         </span>
     )
 }
@@ -249,10 +248,10 @@ export default function Bi() {
 
             {/* Eyebrow. This is the one claim the two of them agree on, so Ban strikes nothing out */}
             <p
-                className="mono-label text-muted-foreground/40 animate-fade-in-up opacity-0 stagger-1 alen:tracking-[0.25em] relative z-10"
+                className="mono-label text-muted-foreground/80 animate-fade-in-up opacity-0 stagger-1 alen:tracking-[0.25em] relative z-10"
                 style={{ animationFillMode: 'forwards' }}
             >
-                <Persona alen="// yep" ban="Also yes." />
+                <Persona alen="yep" ban="Also yes." />
             </p>
 
             {/* Flag. The stripes are the entrance: one after another, done inside 180ms.
@@ -289,9 +288,14 @@ export default function Bi() {
                 />
 
                 {/* Hovering the flag reveals the cat, framed like the polaroid on /cool.
-                    No pointer events, so it never steals the hover */}
+                    No pointer events, so it never steals the hover. A phone has no hover and
+                    a keyboard has no pointer, so it also shows while a stripe is picked or
+                    has keyboard focus */}
                 <div
-                    className="absolute -left-2 -right-2 top-1/2 -translate-y-1/2 scale-95 opacity-0 pointer-events-none transition-[opacity,transform] duration-300 group-hover:scale-100 group-hover:opacity-100 bg-card border border-foreground/25 p-1.5"
+                    className={cn(
+                        'absolute -left-2 -right-2 top-1/2 -translate-y-1/2 scale-95 opacity-0 pointer-events-none transition-[opacity,transform] duration-300 group-hover:scale-100 group-hover:opacity-100 group-has-[:focus-visible]:scale-100 group-has-[:focus-visible]:opacity-100 bg-card border border-foreground/25 p-1.5',
+                        selected && 'scale-100 opacity-100'
+                    )}
                     style={{ boxShadow: `4px 4px 0 ${BI_COLORS.purple}99` }}
                 >
                     <Image
@@ -306,7 +310,7 @@ export default function Bi() {
 
             {/* Main text */}
             <div
-                className="text-center space-y-2 relative z-10 animate-fade-in-up opacity-0 stagger-3"
+                className="text-center space-y-2 relative z-10 animate-fade-in-up opacity-0 stagger-2"
                 style={{ animationFillMode: 'forwards' }}
             >
                 <h1 className="text-display text-3xl md:text-4xl">
@@ -323,10 +327,10 @@ export default function Bi() {
                     </span>
                 </h1>
                 {/* The caption waits a beat after the heading lands. That pause is the joke's timing */}
-                <p className="mono-label text-muted-foreground/50">
+                <p className="mono-label text-muted-foreground/80">
                     <Persona
-                        alen={<TypedCaption text="(not my fault)" delay={CAPTION_DELAY_MS} />}
-                        ban={<TypedCaption text="(All my fault.)" delay={CAPTION_DELAY_MS} />}
+                        alen={<LateCaption text="(not my fault)" delay={CAPTION_DELAY_MS} script />}
+                        ban={<LateCaption text="(All my fault.)" delay={CAPTION_DELAY_MS} />}
                     />
                 </p>
             </div>
